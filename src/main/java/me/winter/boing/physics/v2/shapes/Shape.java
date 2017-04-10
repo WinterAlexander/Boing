@@ -1,6 +1,5 @@
 package me.winter.boing.physics.v2.shapes;
 
-import me.winter.boing.physics.v2.Collider;
 import me.winter.boing.physics.v2.Collision;
 
 /**
@@ -11,5 +10,4 @@ import me.winter.boing.physics.v2.Collision;
 public interface Shape
 {
 	Collision collides(Shape shape);
-	Collision collidesContinuous(Shape shape);
 }

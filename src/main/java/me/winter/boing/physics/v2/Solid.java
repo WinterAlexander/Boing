@@ -10,8 +10,9 @@ import com.badlogic.gdx.utils.Array;
  */
 public interface Solid
 {
+	World getWorld();
+
 	Vector2 getPosition();
-	Vector2 getVelocity();
 
 	Array<Collider> getColliders();
 }

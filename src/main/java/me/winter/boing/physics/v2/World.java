@@ -1,7 +1,7 @@
 package me.winter.boing.physics.v2;
 
 import com.badlogic.gdx.utils.Array;
-import me.winter.boing.physics.v2.response.CollisionResponse;
+import com.badlogic.gdx.utils.Pool;
 
 /**
  * Undocumented :(
@@ -11,6 +11,15 @@ import me.winter.boing.physics.v2.response.CollisionResponse;
 public class World
 {
 	private Array<Solid> solids = new Array<>();
+	private Array<Collision> collisions = new Array<>();
+
+	public final Pool<Collision> collisionPool = new Pool<Collision>() {
+		@Override
+		protected Collision newObject()
+		{
+			return new Collision();
+		}
+	};
 
 	public void step(float delta)
 	{
@@ -19,8 +28,10 @@ public class World
 			if(!(solid instanceof DynamicSolid))
 				continue;
 
-			((DynamicSolid)solid).getMovement().set(solid.getVelocity()).scl(delta);
-			solid.getPosition().add(((DynamicSolid)solid).getMovement());
+			DynamicSolid dynamic = (DynamicSolid)solid;
+
+			dynamic.getMovement().set(dynamic.getVelocity()).scl(delta);
+			solid.getPosition().add(dynamic.getMovement());
 		}
 
 		int size = solids.size;
@@ -44,37 +55,19 @@ public class World
 
 					for(Collider colliderB : solidB.getColliders())
 					{
-						if(aDyn)
+						Collision collision = colliderA.collides(colliderB);
+
+						if(collision != null)
 						{
-							CollisionResponse responseB = colliderB.collides(colliderA);
-
-							if(responseB != CollisionResponse.NONE)
-								((DynamicSolid)solidA).responses().add(responseB);
-						}
-
-						if(bDyn)
-						{
-							CollisionResponse responseA = colliderA.collides(colliderB); //response from a to b
-
-							if(responseA != CollisionResponse.NONE)
-								((DynamicSolid)solidB).responses().add(responseA);
+							collisions.add(collision);
 						}
 					}
 				}
 			}
 		}
 
-		for(Solid solid : getSolids())
-		{
-			if(!(solid instanceof DynamicSolid))
-				continue;
-
-			for(CollisionResponse response : ((DynamicSolid)solid).responses())
-				response.apply(((DynamicSolid)solid));
-
-			((DynamicSolid)solid).setVelFresh(false);
-			((DynamicSolid)solid).responses().clear();
-		}
+		for(Collision collision : collisions)
+			collision.resolve();
 	}
 
 	public Array<Solid> getSolids()

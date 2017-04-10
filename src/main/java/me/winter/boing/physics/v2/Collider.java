@@ -1,5 +1,6 @@
 package me.winter.boing.physics.v2;
 
+import me.winter.boing.physics.v2.resolver.CollisionResolver;
 import me.winter.boing.physics.v2.shapes.Shape;
 
 /**
@@ -11,13 +12,26 @@ public class Collider
 {
 	private Solid solid;
 	private Shape shape;
-	private float bounciness;
+	private CollisionResolver resolver;
 
-	public Collider(Solid solid, Shape shape, float bounciness)
+	public Collider(Solid solid, Shape shape, CollisionResolver resolver)
 	{
 		this.solid = solid;
 		this.shape = shape;
-		this.bounciness = bounciness;
+		this.resolver = resolver;
+	}
+
+	public Collision collides(Collider collider)
+	{
+		Collision collision = shape.collides(collider.getShape());
+
+		if(collision == null)
+			return null;
+
+		collision.colliderA = this;
+		collision.colliderB = collider;
+		collision.resolver = resolver.priority > collider.resolver.priority ? resolver : collider.resolver;
+		return collision;
 	}
 
 	public Solid getSolid()
@@ -28,15 +42,5 @@ public class Collider
 	public Shape getShape()
 	{
 		return shape;
-	}
-
-	public float getBounciness()
-	{
-		return bounciness;
-	}
-
-	public void setBounciness(float bounciness)
-	{
-		this.bounciness = bounciness;
 	}
 }

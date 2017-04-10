@@ -3,7 +3,7 @@ package me.winter.boing.test.physics.v2;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import me.winter.boing.physics.v2.DynamicSolid;
-import me.winter.boing.physics.v2.response.CollisionResponse;
+import me.winter.boing.physics.v2.World;
 import me.winter.boing.physics.v2.shapes.Circle;
 import me.winter.boing.physics.v2.Collider;
 
@@ -16,11 +16,24 @@ import java.awt.Graphics;
  */
 public class SolidImpl implements DynamicSolid
 {
-	private Vector2 position = new Vector2(), velocity = new Vector2(), movement = new Vector2();
+	private World world;
+	private Vector2 position, velocity, movement;
 
 	private Array<Collider> colliders = new Array<>();
-	private Array<CollisionResponse> responses = new Array<>();
-	private boolean fresh;
+
+	public SolidImpl(World world)
+	{
+		this.world = world;
+		this.position = new Vector2();
+		this.velocity = new Vector2();
+		this.movement = new Vector2();
+	}
+
+	@Override
+	public World getWorld()
+	{
+		return world;
+	}
 
 	@Override
 	public Vector2 getPosition()
@@ -35,44 +48,26 @@ public class SolidImpl implements DynamicSolid
 	}
 
 	@Override
-	public Array<Collider> getColliders()
-	{
-		return colliders;
-	}
-
-	@Override
 	public Vector2 getMovement()
 	{
 		return movement;
 	}
 
 	@Override
-	public Array<CollisionResponse> responses()
+	public Array<Collider> getColliders()
 	{
-		return responses;
+		return colliders;
 	}
 
 	@Override
-	public void crush()
+	public float getMass()
 	{
-
-	}
-
-	@Override
-	public boolean freshVel()
-	{
-		return fresh;
-	}
-
-	@Override
-	public void setVelFresh(boolean fresh)
-	{
-		this.fresh = fresh;
+		return 1f;
 	}
 
 	public void draw(Graphics g)
 	{
-		float r = ((Circle)getColliders().get(0)).getRadius();
+		float r = ((Circle)getColliders().get(0).getShape()).getRadius();
 		g.drawOval((int)(getPosition().x - r), (int)(600 - getPosition().y - r), (int)r * 2, (int)r * 2);
 	}
 }

@@ -2,7 +2,6 @@ package me.winter.boing.physics.v2;
 
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
-import me.winter.boing.physics.v2.response.CollisionResponse;
 
 /**
  * Undocumented :(
@@ -11,12 +10,8 @@ import me.winter.boing.physics.v2.response.CollisionResponse;
  */
 public interface DynamicSolid extends Solid
 {
+	Vector2 getVelocity();
 	Vector2 getMovement();
-	Array<CollisionResponse> responses();
-	boolean freshVel();
-	void setVelFresh(boolean fresh);
-
-	void crush();
 
 	float getMass();
 }

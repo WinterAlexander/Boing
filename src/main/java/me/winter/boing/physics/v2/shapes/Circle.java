@@ -33,31 +33,14 @@ public class Circle extends AbstractShape
 		if(dst2 >= r * r)
 			return null;
 
-		Collision collision = new Collision();
+		Collision collision = ((Circle)shape).getSolid().getWorld().collisionPool.obtain();
 
-		float x = that.getSolid().getVelocity().x; //to reflect
-		float y = that.getSolid().getVelocity().y; //to reflect
+		collision.normalA.set(-dx, -dy);
+		collision.normalB.set(dx, dy);
 
-		if(dy == 0)//same height means vertical tangent
-		{
-			velocityResponse.getVel().set(-x, y);
-			return velocityResponse;
-		}
+		collision.contact.set(-dx, -dy).scl(radius / r).add(getAbsX(), getAbsY());
 
-		float a = -dx / dy;
-
-		float d = (x + y * a) / (1 + a * a);
-
-		velocityResponse.getVel().set(2 * d - x, 2 * d * a - y);
-
-		return velocityResponse;
-	}
-
-	@Override
-	public Collision collidesContinuous(Shape shape)
-	{
-		Circle that = (Circle)shape;
-		return null;
+		return collision;
 	}
 
 	public float getRadius()

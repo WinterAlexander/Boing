@@ -1,6 +1,7 @@
 package me.winter.boing.physics.v2;
 
 import com.badlogic.gdx.math.Vector2;
+import me.winter.boing.physics.v2.resolver.CollisionResolver;
 
 /**
  * Undocumented :(
@@ -9,7 +10,14 @@ import com.badlogic.gdx.math.Vector2;
  */
 public class Collision
 {
-	private Vector2 contact;
-	private Collider colliderA, colliderB;
-	private Vector2 normalA, normalB;
+	public Vector2 contact = new Vector2();
+	public Vector2 normalA = new Vector2(), normalB = new Vector2();
+
+	public Collider colliderA, colliderB;
+	public CollisionResolver resolver;
+
+	public void resolve()
+	{
+		resolver.resolve(this);
+	}
 }
