@@ -4,9 +4,8 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import me.winter.boing.physics.v2.DynamicSolid;
 import me.winter.boing.physics.v2.response.CollisionResponse;
-import me.winter.boing.physics.v2.Solid;
-import me.winter.boing.physics.v2.colliders.CircleCollider;
-import me.winter.boing.physics.v2.colliders.Collider;
+import me.winter.boing.physics.v2.shapes.Circle;
+import me.winter.boing.physics.v2.Collider;
 
 import java.awt.Graphics;
 
@@ -73,7 +72,7 @@ public class SolidImpl implements DynamicSolid
 
 	public void draw(Graphics g)
 	{
-		float r = ((CircleCollider)getColliders().get(0)).getRadius();
+		float r = ((Circle)getColliders().get(0)).getRadius();
 		g.drawOval((int)(getPosition().x - r), (int)(600 - getPosition().y - r), (int)r * 2, (int)r * 2);
 	}
 }

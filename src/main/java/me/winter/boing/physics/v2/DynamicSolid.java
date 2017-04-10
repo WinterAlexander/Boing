@@ -17,4 +17,6 @@ public interface DynamicSolid extends Solid
 	void setVelFresh(boolean fresh);
 
 	void crush();
+
+	float getMass();
 }

@@ -1,7 +1,7 @@
 package me.winter.boing.test.physics.v2.simulation;
 
 import me.winter.boing.physics.v2.World;
-import me.winter.boing.physics.v2.colliders.CircleCollider;
+import me.winter.boing.physics.v2.shapes.Circle;
 import me.winter.boing.test.physics.v2.SolidImpl;
 import org.junit.Test;
 
@@ -26,7 +26,7 @@ public class WorldSimulation
 		SolidImpl solid = new SolidImpl();
 
 		solid.getPosition().set(50, 50);
-		solid.getColliders().add(new CircleCollider(solid, 0, 0, 25));
+		solid.getColliders().add(new Circle(solid, 0, 0, 25));
 		solid.getVelocity().set(79, 50);
 
 		world.getSolids().add(solid);
@@ -34,7 +34,7 @@ public class WorldSimulation
 		SolidImpl solid2 = new SolidImpl();
 
 		solid2.getPosition().set(500, 50);
-		solid2.getColliders().add(new CircleCollider(solid2, 0, 0, 20));
+		solid2.getColliders().add(new Circle(solid2, 0, 0, 20));
 		solid2.getVelocity().set(-50, 50);
 
 		world.getSolids().add(solid2);
@@ -42,7 +42,7 @@ public class WorldSimulation
 		SolidImpl solid3 = new SolidImpl();
 
 		solid3.getPosition().set(300, 500);
-		solid3.getColliders().add(new CircleCollider(solid3, 0, 0, 25));
+		solid3.getColliders().add(new Circle(solid3, 0, 0, 25));
 		solid3.getVelocity().set(0, -100);
 
 		world.getSolids().add(solid3);
@@ -50,7 +50,7 @@ public class WorldSimulation
 		SolidImpl solid4 = new SolidImpl();
 
 		solid4.getPosition().set(500, 500);
-		solid4.getColliders().add(new CircleCollider(solid4, 0, 0, 25));
+		solid4.getColliders().add(new Circle(solid4, 0, 0, 25));
 		solid4.getVelocity().set(-100, -100);
 
 		world.getSolids().add(solid4);
@@ -60,7 +60,7 @@ public class WorldSimulation
 			SolidImpl wall1 = new SolidImpl();
 
 			wall1.getPosition().set(i, 0);
-			wall1.getColliders().add(new CircleCollider(wall1, 0, 0, 10));
+			wall1.getColliders().add(new Circle(wall1, 0, 0, 10));
 			wall1.getVelocity().set(0, 0);
 
 			world.getSolids().add(wall1);
@@ -71,7 +71,7 @@ public class WorldSimulation
 			SolidImpl wall1 = new SolidImpl();
 
 			wall1.getPosition().set(i, 600);
-			wall1.getColliders().add(new CircleCollider(wall1, 0, 0, 10));
+			wall1.getColliders().add(new Circle(wall1, 0, 0, 10));
 			wall1.getVelocity().set(0, 0);
 
 			world.getSolids().add(wall1);
@@ -82,7 +82,7 @@ public class WorldSimulation
 			SolidImpl wall1 = new SolidImpl();
 
 			wall1.getPosition().set(0, i);
-			wall1.getColliders().add(new CircleCollider(wall1, 0, 0, 10));
+			wall1.getColliders().add(new Circle(wall1, 0, 0, 10));
 			wall1.getVelocity().set(0, 0);
 
 			world.getSolids().add(wall1);
@@ -93,7 +93,7 @@ public class WorldSimulation
 			SolidImpl wall1 = new SolidImpl();
 
 			wall1.getPosition().set(800, i);
-			wall1.getColliders().add(new CircleCollider(wall1, 0, 0, 10));
+			wall1.getColliders().add(new Circle(wall1, 0, 0, 10));
 			wall1.getVelocity().set(0, 0);
 
 			world.getSolids().add(wall1);
@@ -109,7 +109,7 @@ public class WorldSimulation
 		SolidImpl solid = new SolidImpl();
 
 		solid.getPosition().set(400, 400);
-		solid.getColliders().add(new CircleCollider(solid, 0, 0, 25));
+		solid.getColliders().add(new Circle(solid, 0, 0, 25));
 		solid.getVelocity().set(50, 0);
 
 		world.getSolids().add(solid);
@@ -117,7 +117,7 @@ public class WorldSimulation
 		SolidImpl solid2 = new SolidImpl();
 
 		solid2.getPosition().set(550, 400);
-		solid2.getColliders().add(new CircleCollider(solid2, 0, 0, 50));
+		solid2.getColliders().add(new Circle(solid2, 0, 0, 50));
 		solid2.getVelocity().set(0, 0);
 
 		world.getSolids().add(solid2);
@@ -125,7 +125,7 @@ public class WorldSimulation
 		SolidImpl solid3 = new SolidImpl();
 
 		solid3.getPosition().set(250, 400);
-		solid3.getColliders().add(new CircleCollider(solid3, 0, 0, 50));
+		solid3.getColliders().add(new Circle(solid3, 0, 0, 50));
 		solid3.getVelocity().set(0, 0);
 
 		world.getSolids().add(solid3);
@@ -141,7 +141,7 @@ public class WorldSimulation
 		SolidImpl solid = new SolidImpl();
 
 		solid.getPosition().set(400, 400);
-		solid.getColliders().add(new CircleCollider(solid, 0, 0, 25));
+		solid.getColliders().add(new Circle(solid, 0, 0, 25));
 		solid.getVelocity().set(0, -50);
 
 		world.getSolids().add(solid);
@@ -149,7 +149,7 @@ public class WorldSimulation
 		SolidImpl solid2 = new SolidImpl();
 
 		solid2.getPosition().set(450, 100);
-		solid2.getColliders().add(new CircleCollider(solid2, 0, 0, 50));
+		solid2.getColliders().add(new Circle(solid2, 0, 0, 50));
 		solid2.getVelocity().set(0, 0);
 
 		world.getSolids().add(solid2);
@@ -157,7 +157,7 @@ public class WorldSimulation
 		SolidImpl solid3 = new SolidImpl();
 
 		solid3.getPosition().set(350, 100);
-		solid3.getColliders().add(new CircleCollider(solid3, 0, 0, 50));
+		solid3.getColliders().add(new Circle(solid3, 0, 0, 50));
 		solid3.getVelocity().set(0, 0);
 
 		world.getSolids().add(solid3);

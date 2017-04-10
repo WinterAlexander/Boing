@@ -1,7 +1,6 @@
 package me.winter.boing.physics.v2;
 
 import com.badlogic.gdx.utils.Array;
-import me.winter.boing.physics.v2.colliders.Collider;
 import me.winter.boing.physics.v2.response.CollisionResponse;
 
 /**
