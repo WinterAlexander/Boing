@@ -74,6 +74,7 @@ public class World
 				response.apply(((DynamicSolid)solid));
 
 			((DynamicSolid)solid).setVelFresh(false);
+			((DynamicSolid)solid).responses().clear();
 		}
 	}
 

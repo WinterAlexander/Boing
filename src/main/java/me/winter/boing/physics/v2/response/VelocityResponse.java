@@ -28,7 +28,7 @@ public class VelocityResponse extends CollisionResponse
 		}
 		else
 		{
-			solid.getVelocity().add(vel);
+			solid.getVelocity().scl(0.5f).add(vel.x * 0.5f, vel.y * 0.5f);
 		}
 	}
 

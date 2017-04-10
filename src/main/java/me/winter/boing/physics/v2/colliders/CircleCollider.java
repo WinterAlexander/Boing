@@ -31,21 +31,21 @@ public class CircleCollider extends Collider
 
 		float dst2 = dx * dx + dy * dy;
 
-		if(dst2 > r * r)
+		if(dst2 >= r * r)
 			return CollisionResponse.NONE;
 
 		VelocityResponse velocityResponse = new VelocityResponse();
 
-		float x = -collider.getSolid().getVelocity().x; //to reflect
-		float y = -collider.getSolid().getVelocity().y; //to reflect
+		float x = collider.getSolid().getVelocity().x; //to reflect
+		float y = collider.getSolid().getVelocity().y; //to reflect
 
-		if(dx == 0)
+		if(dy == 0)//same height means vertical tangent
 		{
 			velocityResponse.getVel().set(-x, y);
 			return velocityResponse;
 		}
 
-		float a = dy / dx;
+		float a = -dx / dy;
 
 		float d = (x + y * a) / (1 + a * a);
 
