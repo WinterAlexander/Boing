@@ -1,7 +1,7 @@
-package me.winter.boing.physics.v2;
+package me.winter.boing.physics;
 
 import com.badlogic.gdx.math.Vector2;
-import me.winter.boing.physics.v2.resolver.CollisionResolver;
+import me.winter.boing.physics.resolver.CollisionResolver;
 
 /**
  * Undocumented :(

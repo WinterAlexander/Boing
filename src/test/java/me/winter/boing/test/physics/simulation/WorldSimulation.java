@@ -1,10 +1,10 @@
-package me.winter.boing.test.physics.v2.simulation;
+package me.winter.boing.test.physics.simulation;
 
-import me.winter.boing.physics.v2.Collider;
-import me.winter.boing.physics.v2.World;
-import me.winter.boing.physics.v2.resolver.VelocityResolver;
-import me.winter.boing.physics.v2.shapes.Circle;
-import me.winter.boing.test.physics.v2.SolidImpl;
+import me.winter.boing.physics.Collider;
+import me.winter.boing.physics.World;
+import me.winter.boing.physics.resolver.VelocityResolver;
+import me.winter.boing.physics.shapes.Circle;
+import me.winter.boing.test.physics.SolidImpl;
 import org.junit.Test;
 
 import javax.swing.JFrame;

@@ -1,8 +1,8 @@
-package me.winter.boing.physics.v2.resolver;
+package me.winter.boing.physics.resolver;
 
 import com.badlogic.gdx.math.Vector2;
-import me.winter.boing.physics.v2.Collision;
-import me.winter.boing.physics.v2.DynamicSolid;
+import me.winter.boing.physics.DynamicSolid;
+import me.winter.boing.physics.Collision;
 
 /**
  * Undocumented :(

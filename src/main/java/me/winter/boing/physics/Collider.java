@@ -1,7 +1,7 @@
-package me.winter.boing.physics.v2;
+package me.winter.boing.physics;
 
-import me.winter.boing.physics.v2.resolver.CollisionResolver;
-import me.winter.boing.physics.v2.shapes.Shape;
+import me.winter.boing.physics.resolver.CollisionResolver;
+import me.winter.boing.physics.shapes.Shape;
 
 /**
  * Undocumented :(

@@ -1,4 +1,4 @@
-package me.winter.boing.physics.v2;
+package me.winter.boing.physics;
 
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Pool;

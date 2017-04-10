@@ -1,6 +1,6 @@
-package me.winter.boing.physics.v2.shapes;
+package me.winter.boing.physics.shapes;
 
-import me.winter.boing.physics.v2.Solid;
+import me.winter.boing.physics.Solid;
 
 /**
  * Undocumented :(

@@ -1,11 +1,11 @@
-package me.winter.boing.test.physics.v2;
+package me.winter.boing.test.physics;
 
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
-import me.winter.boing.physics.v2.DynamicSolid;
-import me.winter.boing.physics.v2.World;
-import me.winter.boing.physics.v2.shapes.Circle;
-import me.winter.boing.physics.v2.Collider;
+import me.winter.boing.physics.DynamicSolid;
+import me.winter.boing.physics.World;
+import me.winter.boing.physics.shapes.Circle;
+import me.winter.boing.physics.Collider;
 
 import java.awt.Graphics;
 
