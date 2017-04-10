@@ -105,6 +105,20 @@ public class IntVector
 		return substract(vector.x, vector.y);
 	}
 
+	public IntVector scale(float scalar)
+	{
+		this.x *= scalar;
+		this.y *= scalar;
+		return this;
+	}
+
+	public IntVector divide(float scalar)
+	{
+		this.x /= scalar;
+		this.y /= scalar;
+		return this;
+	}
+
 	public IntVector scale(double scalar)
 	{
 		this.x *= scalar;
