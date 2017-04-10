@@ -68,6 +68,8 @@ public class World
 
 		for(Collision collision : collisions)
 			collision.resolve();
+		collisionPool.freeAll(collisions);
+		collisions.clear();
 	}
 
 	public Array<Solid> getSolids()
