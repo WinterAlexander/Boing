@@ -1,6 +1,7 @@
 package me.winter.boing.physics.v2.response;
 
 import com.badlogic.gdx.utils.Pool.Poolable;
+import me.winter.boing.physics.v2.DynamicSolid;
 import me.winter.boing.physics.v2.Solid;
 
 /**
@@ -12,7 +13,7 @@ public abstract class CollisionResponse implements Poolable
 {
 	public static final CollisionResponse NONE = new CollisionResponse(CollisionResponseType.NONE) {
 		@Override
-		public void apply(Solid solid) {}
+		public void apply(DynamicSolid solid) {}
 
 	};
 
@@ -24,7 +25,7 @@ public abstract class CollisionResponse implements Poolable
 	}
 
 
-	public abstract void apply(Solid solid);
+	public abstract void apply(DynamicSolid solid);
 
 	@Override
 	public void reset()

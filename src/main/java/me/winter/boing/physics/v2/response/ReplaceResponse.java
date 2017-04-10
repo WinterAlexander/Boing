@@ -1,7 +1,7 @@
 package me.winter.boing.physics.v2.response;
 
 import com.badlogic.gdx.math.Vector2;
-import me.winter.boing.physics.v2.Solid;
+import me.winter.boing.physics.v2.DynamicSolid;
 
 import static java.lang.Math.abs;
 
@@ -25,7 +25,7 @@ public class ReplaceResponse extends CollisionResponse
 	}
 
 	@Override
-	public void apply(Solid solid)
+	public void apply(DynamicSolid solid)
 	{
 		//float dynamicToX = solid.getPosition().x + (toX - fromX);
 		//float dynamicToY = solid.getPosition().y + (toY - fromY);

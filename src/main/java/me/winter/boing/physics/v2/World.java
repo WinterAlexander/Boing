@@ -17,8 +17,11 @@ public class World
 	{
 		for(Solid solid : getSolids())
 		{
-			solid.getMovement().set(solid.getVelocity()).scl(delta);
-			solid.getPosition().add(solid.getMovement());
+			if(!(solid instanceof DynamicSolid))
+				continue;
+
+			((DynamicSolid)solid).getMovement().set(solid.getVelocity()).scl(delta);
+			solid.getPosition().add(((DynamicSolid)solid).getMovement());
 		}
 
 		int size = solids.size;
@@ -28,7 +31,13 @@ public class World
 			for(int j = i; j-- > 0;)
 			{
 				Solid solidA = solids.get(i);
-				Solid solidB = solids.get(i);
+				Solid solidB = solids.get(j);
+
+				boolean aDyn = solidA instanceof DynamicSolid;
+				boolean bDyn = solidB instanceof DynamicSolid;
+
+				if(!aDyn && !bDyn)
+					continue;
 
 				for(int k = 0; k < solidA.getColliders().size; k++)
 				{
@@ -36,11 +45,21 @@ public class World
 
 					for(Collider colliderB : solidB.getColliders())
 					{
-						CollisionResponse responseA = colliderA.collides(colliderB);
-						CollisionResponse responseB = colliderB.collides(colliderA);
+						if(aDyn)
+						{
+							CollisionResponse responseB = colliderB.collides(colliderA);
 
-						solidA.responses().add(responseB);
-						solidB.responses().add(responseA);
+							if(responseB != CollisionResponse.NONE)
+								((DynamicSolid)solidA).responses().add(responseB);
+						}
+
+						if(bDyn)
+						{
+							CollisionResponse responseA = colliderA.collides(colliderB); //response from a to b
+
+							if(responseA != CollisionResponse.NONE)
+								((DynamicSolid)solidB).responses().add(responseA);
+						}
 					}
 				}
 			}
@@ -48,10 +67,13 @@ public class World
 
 		for(Solid solid : getSolids())
 		{
-			for(CollisionResponse response : solid.responses())
-				response.apply(solid);
+			if(!(solid instanceof DynamicSolid))
+				continue;
 
-			solid.setVelFresh(false);
+			for(CollisionResponse response : ((DynamicSolid)solid).responses())
+				response.apply(((DynamicSolid)solid));
+
+			((DynamicSolid)solid).setVelFresh(false);
 		}
 	}
 

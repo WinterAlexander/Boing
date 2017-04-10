@@ -28,18 +28,27 @@ public class WorldSimulation
 		SolidImpl solid = new SolidImpl();
 
 		solid.getPosition().set(50, 50);
-		solid.getColliders().add(new CircleCollider(solid, 0, 0, 50));
-		solid.getVelocity().set(10, 10);
+		solid.getColliders().add(new CircleCollider(solid, 0, 0, 25));
+		solid.getVelocity().set(79, 50);
 
 		world.getSolids().add(solid);
 
 		SolidImpl solid2 = new SolidImpl();
 
 		solid2.getPosition().set(500, 50);
-		solid2.getColliders().add(new CircleCollider(solid2, 0, 0, 40));
-		solid2.getVelocity().set(-10, 10);
+		solid2.getColliders().add(new CircleCollider(solid2, 0, 0, 20));
+		solid2.getVelocity().set(-50, 50);
 
 		world.getSolids().add(solid2);
+
+
+		SolidImpl solid3 = new SolidImpl();
+
+		solid3.getPosition().set(300, 500);
+		solid3.getColliders().add(new CircleCollider(solid3, 0, 0, 25));
+		solid3.getVelocity().set(0, -100);
+
+		world.getSolids().add(solid3);
 
 		frame.setSize(800, 600);
 

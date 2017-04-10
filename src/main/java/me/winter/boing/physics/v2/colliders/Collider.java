@@ -23,6 +23,11 @@ public abstract class Collider
 	public abstract CollisionResponse collides(Collider collider);
 	public abstract CollisionResponse collidesContinuous(Collider collider);
 
+	public Solid getSolid()
+	{
+		return solid;
+	}
+
 	public float getAbsX()
 	{
 		return this.x + solid.getPosition().x;

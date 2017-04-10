@@ -1,8 +1,7 @@
 package me.winter.boing.physics.v2.colliders;
 
-import me.winter.boing.physics.v2.response.CollisionResponse;
-import me.winter.boing.physics.v2.response.CollisionResponseType;
 import me.winter.boing.physics.v2.Solid;
+import me.winter.boing.physics.v2.response.CollisionResponse;
 import me.winter.boing.physics.v2.response.VelocityResponse;
 
 /**
@@ -35,7 +34,24 @@ public class CircleCollider extends Collider
 		if(dst2 > r * r)
 			return CollisionResponse.NONE;
 
-		return new VelocityResponse();
+		VelocityResponse velocityResponse = new VelocityResponse();
+
+		float x = -collider.getSolid().getVelocity().x; //to reflect
+		float y = -collider.getSolid().getVelocity().y; //to reflect
+
+		if(dx == 0)
+		{
+			velocityResponse.getVel().set(-x, y);
+			return velocityResponse;
+		}
+
+		float a = dy / dx;
+
+		float d = (x + y * a) / (1 + a * a);
+
+		velocityResponse.getVel().set(2 * d - x, 2 * d * a - y);
+
+		return velocityResponse;
 	}
 
 	@Override

@@ -1,7 +1,7 @@
 package me.winter.boing.physics.v2.response;
 
 import com.badlogic.gdx.math.Vector2;
-import me.winter.boing.physics.v2.Solid;
+import me.winter.boing.physics.v2.DynamicSolid;
 
 /**
  * Undocumented :(
@@ -19,7 +19,7 @@ public class VelocityResponse extends CollisionResponse
 	}
 
 	@Override
-	public void apply(Solid solid)
+	public void apply(DynamicSolid solid)
 	{
 		if(!solid.freshVel())
 		{
