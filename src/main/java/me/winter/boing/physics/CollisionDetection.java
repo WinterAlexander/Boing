@@ -1,6 +1,5 @@
 package me.winter.boing.physics;
 
-import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Pool;
 import me.winter.boing.physics.shapes.AABB;
@@ -50,7 +49,7 @@ public class CollisionDetection
 		float peneX = boxA.width / 2 + boxB.width / 2 - abs(dx);
 		float peneY = boxA.height / 2 + boxB.height / 2 - abs(dy);
 
-		if(peneX < 0 || peneY < 0)
+		if(peneX <= 0 || peneY <= 0)
 			return null;
 
 		Collision collision = collisionPool.obtain();

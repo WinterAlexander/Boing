@@ -25,10 +25,16 @@ public class ReplaceResolver extends CollisionResolver
 		boolean solidBDyn = collision.colliderB.getSolid() instanceof DynamicSolid;
 
 		if(solidADyn)
-			replace((DynamicSolid)collision.colliderA.getSolid(), collision.normalB, solidBDyn ? collision.penetration / 2 : collision.penetration);
+			replace((DynamicSolid)collision.colliderA.getSolid(),
+					collision.normalB,
+					solidBDyn ? collision.penetration / 2 : collision.penetration);
 
 		if(solidBDyn)
-			replace((DynamicSolid)collision.colliderB.getSolid(), collision.normalA, solidADyn ? collision.penetration / 2 : collision.penetration);
+			replace((DynamicSolid)collision.colliderB.getSolid(),
+					collision.normalA,
+					solidADyn ? collision.penetration / 2 : collision.penetration);
+
+		//System.out.println("COLLISION");
 	}
 
 	private void replace(DynamicSolid solid, Vector2 normal, float delta)

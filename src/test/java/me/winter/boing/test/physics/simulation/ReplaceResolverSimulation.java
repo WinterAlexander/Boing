@@ -5,7 +5,7 @@ import me.winter.boing.physics.World;
 import me.winter.boing.physics.resolver.ReplaceResolver;
 import me.winter.boing.physics.shapes.AABB;
 import me.winter.boing.physics.shapes.Circle;
-import me.winter.boing.test.physics.SolidImpl;
+import me.winter.boing.test.physics.DynSolidImpl;
 import org.junit.Test;
 
 import static me.winter.boing.test.physics.simulation.WorldSimulationUtil.simulate;
@@ -22,7 +22,7 @@ public class ReplaceResolverSimulation
 	{
 		World world = new World();
 
-		SolidImpl solid = new SolidImpl(world);
+		DynSolidImpl solid = new DynSolidImpl(world);
 
 		solid.getPosition().set(50, 50);
 		solid.getColliders().add(new Collider(solid, new Circle(solid, 0, 0, 25), new ReplaceResolver(1f)));
@@ -30,7 +30,7 @@ public class ReplaceResolverSimulation
 
 		world.getSolids().add(solid);
 
-		SolidImpl solid2 = new SolidImpl(world);
+		DynSolidImpl solid2 = new DynSolidImpl(world);
 
 		solid2.getPosition().set(500, 50);
 		solid2.getColliders().add(new Collider(solid2, new Circle(solid2, 0, 0, 20), new ReplaceResolver(1f)));
@@ -38,7 +38,7 @@ public class ReplaceResolverSimulation
 
 		world.getSolids().add(solid2);
 
-		SolidImpl solid3 = new SolidImpl(world);
+		DynSolidImpl solid3 = new DynSolidImpl(world);
 
 		solid3.getPosition().set(300, 500);
 		solid3.getColliders().add(new Collider(solid3, new Circle(solid3, 0, 0, 25), new ReplaceResolver(1f)));
@@ -46,7 +46,7 @@ public class ReplaceResolverSimulation
 
 		world.getSolids().add(solid3);
 
-		SolidImpl solid4 = new SolidImpl(world);
+		DynSolidImpl solid4 = new DynSolidImpl(world);
 
 		solid4.getPosition().set(500, 500);
 		solid4.getColliders().add(new Collider(solid4, new Circle(solid4, 0, 0, 25), new ReplaceResolver(1f)));
@@ -56,7 +56,7 @@ public class ReplaceResolverSimulation
 
 		for(int i = 20; i < 800; i+= 20)
 		{
-			SolidImpl wall1 = new SolidImpl(world);
+			DynSolidImpl wall1 = new DynSolidImpl(world);
 
 			wall1.getPosition().set(i, 0);
 			wall1.getColliders().add(new Collider(wall1, new Circle(wall1, 0, 0, 10), new ReplaceResolver(1f)));
@@ -67,7 +67,7 @@ public class ReplaceResolverSimulation
 
 		for(int i = 20; i < 800; i+= 20)
 		{
-			SolidImpl wall1 = new SolidImpl(world);
+			DynSolidImpl wall1 = new DynSolidImpl(world);
 
 			wall1.getPosition().set(i, 600);
 			wall1.getColliders().add(new Collider(wall1, new Circle(wall1, 0, 0, 10), new ReplaceResolver(1f)));
@@ -78,7 +78,7 @@ public class ReplaceResolverSimulation
 
 		for(int i = 20; i < 600; i+= 20)
 		{
-			SolidImpl wall1 = new SolidImpl(world);
+			DynSolidImpl wall1 = new DynSolidImpl(world);
 
 			wall1.getPosition().set(0, i);
 			wall1.getColliders().add(new Collider(wall1, new Circle(wall1, 0, 0, 10), new ReplaceResolver(1f)));
@@ -89,7 +89,7 @@ public class ReplaceResolverSimulation
 
 		for(int i = 20; i < 600; i+= 20)
 		{
-			SolidImpl wall1 = new SolidImpl(world);
+			DynSolidImpl wall1 = new DynSolidImpl(world);
 
 			wall1.getPosition().set(800, i);
 			wall1.getColliders().add(new Collider(wall1, new Circle(wall1, 0, 0, 10), new ReplaceResolver(1f)));
@@ -105,21 +105,21 @@ public class ReplaceResolverSimulation
 	{
 		World world = new World();
 
-		SolidImpl solid = new SolidImpl(world);
+		DynSolidImpl solid = new DynSolidImpl(world);
 		solid.getPosition().set(400, 400);
 		solid.getColliders().add(new Collider(solid, new AABB(solid, 0, 0, 40, 25), new ReplaceResolver(1f)));
 		solid.getVelocity().set(-50, 0);
 		world.getSolids().add(solid);
 
 
-		SolidImpl solid2 = new SolidImpl(world);
+		DynSolidImpl solid2 = new DynSolidImpl(world);
 		solid2.getPosition().set(650, 400);
 		solid2.getColliders().add(new Collider(solid2, new AABB(solid2, 0, 0, 80, 100), new ReplaceResolver(1f)));
 		solid2.getVelocity().set(-60, 0);
 		world.getSolids().add(solid2);
 
 
-		SolidImpl solid3 = new SolidImpl(world);
+		DynSolidImpl solid3 = new DynSolidImpl(world);
 		solid3.getPosition().set(280, 400);
 		solid3.getColliders().add(new Collider(solid3, new AABB(solid3, 0, 0, 50, 50), new ReplaceResolver(1f)));
 		solid3.getVelocity().set(-10, 0);
@@ -133,21 +133,22 @@ public class ReplaceResolverSimulation
 	{
 		World world = new World();
 
-		SolidImpl solid = new SolidImpl(world);
+		DynSolidImpl solid = new DynSolidImpl(world);
 		solid.getPosition().set(400, 400);
 		solid.getColliders().add(new Collider(solid, new AABB(solid, 0, 0, 40, 25), new ReplaceResolver(1f)));
+		solid.getVelocity().set(0, -50);
 		solid.getVelocity().set(0, -50);
 		world.getSolids().add(solid);
 
 
-		SolidImpl solid2 = new SolidImpl(world);
+		DynSolidImpl solid2 = new DynSolidImpl(world);
 		solid2.getPosition().set(400, 650);
 		solid2.getColliders().add(new Collider(solid2, new AABB(solid2, 0, 0, 80, 100), new ReplaceResolver(1f)));
 		solid2.getVelocity().set(0, -60);
 		world.getSolids().add(solid2);
 
 
-		SolidImpl solid3 = new SolidImpl(world);
+		DynSolidImpl solid3 = new DynSolidImpl(world);
 		solid3.getPosition().set(400, 280);
 		solid3.getColliders().add(new Collider(solid3, new AABB(solid3, 0, 0, 50, 50), new ReplaceResolver(1f)));
 		solid3.getVelocity().set(0, -10);
@@ -161,13 +162,13 @@ public class ReplaceResolverSimulation
 	{
 		World world = new World();
 
-		SolidImpl ground = new SolidImpl(world);
+		DynSolidImpl ground = new DynSolidImpl(world);
 		ground.getPosition().set(400, 0);
 		ground.getColliders().add(new Collider(ground, new AABB(ground, 0, 0, 800, 100), new ReplaceResolver(1f)));
 		ground.getVelocity().set(0, 0);
 		world.getSolids().add(ground);
 
-		SolidImpl box = new SolidImpl(world);
+		DynSolidImpl box = new DynSolidImpl(world);
 		box.getPosition().set(100, 125);
 		box.getColliders().add(new Collider(box, new AABB(box, 0, 0, 50, 50), new ReplaceResolver(1f)));
 		box.getVelocity().set(150, -20);
@@ -181,19 +182,19 @@ public class ReplaceResolverSimulation
 	{
 		World world = new World();
 
-		SolidImpl solid = new SolidImpl(world);
+		DynSolidImpl solid = new DynSolidImpl(world);
 		solid.getPosition().set(400, 400);
 		solid.getColliders().add(new Collider(solid, new AABB(solid, 0, 0, 40, 25), new ReplaceResolver(1f)));
 		solid.getVelocity().set(-50, -20);
 		world.getSolids().add(solid);
 
-		SolidImpl solid2 = new SolidImpl(world);
+		DynSolidImpl solid2 = new DynSolidImpl(world);
 		solid2.getPosition().set(650, 400);
 		solid2.getColliders().add(new Collider(solid2, new AABB(solid2, 0, 0, 80, 100), new ReplaceResolver(1f)));
 		solid2.getVelocity().set(-60, 30);
 		world.getSolids().add(solid2);
 
-		SolidImpl solid3 = new SolidImpl(world);
+		DynSolidImpl solid3 = new DynSolidImpl(world);
 		solid3.getPosition().set(280, 400);
 		solid3.getColliders().add(new Collider(solid3, new AABB(solid3, 0, 0, 50, 50), new ReplaceResolver(1f)));
 		solid3.getVelocity().set(-10, 25);
@@ -201,7 +202,7 @@ public class ReplaceResolverSimulation
 
 		for(int i = 20; i < 800; i+= 20)
 		{
-			SolidImpl wall1 = new SolidImpl(world);
+			DynSolidImpl wall1 = new DynSolidImpl(world);
 			wall1.getPosition().set(i, 0);
 			wall1.getColliders().add(new Collider(wall1, new Circle(wall1, 0, 0, 10), new ReplaceResolver(1f)));
 			wall1.getVelocity().set(0, 0);
@@ -210,7 +211,7 @@ public class ReplaceResolverSimulation
 
 		for(int i = 20; i < 800; i+= 20)
 		{
-			SolidImpl wall1 = new SolidImpl(world);
+			DynSolidImpl wall1 = new DynSolidImpl(world);
 			wall1.getPosition().set(i, 600);
 			wall1.getColliders().add(new Collider(wall1, new Circle(wall1, 0, 0, 10), new ReplaceResolver(1f)));
 			wall1.getVelocity().set(0, 0);
@@ -219,7 +220,7 @@ public class ReplaceResolverSimulation
 
 		for(int i = 20; i < 600; i+= 20)
 		{
-			SolidImpl wall1 = new SolidImpl(world);
+			DynSolidImpl wall1 = new DynSolidImpl(world);
 			wall1.getPosition().set(0, i);
 			wall1.getColliders().add(new Collider(wall1, new Circle(wall1, 0, 0, 10), new ReplaceResolver(1f)));
 			wall1.getVelocity().set(0, 0);
@@ -228,7 +229,7 @@ public class ReplaceResolverSimulation
 
 		for(int i = 20; i < 600; i+= 20)
 		{
-			SolidImpl wall1 = new SolidImpl(world);
+			DynSolidImpl wall1 = new DynSolidImpl(world);
 			wall1.getPosition().set(800, i);
 			wall1.getColliders().add(new Collider(wall1, new Circle(wall1, 0, 0, 10), new ReplaceResolver(1f)));
 			wall1.getVelocity().set(0, 0);
@@ -243,19 +244,19 @@ public class ReplaceResolverSimulation
 	{
 		World world = new World();
 
-		SolidImpl solid = new SolidImpl(world);
+		DynSolidImpl solid = new DynSolidImpl(world);
 		solid.getPosition().set(400, 400);
 		solid.getColliders().add(new Collider(solid, new Circle(solid, 0, 0, 25), new ReplaceResolver(1f)));
 		solid.getVelocity().set(50, 0);
 		world.getSolids().add(solid);
 
-		SolidImpl solid2 = new SolidImpl(world);
+		DynSolidImpl solid2 = new DynSolidImpl(world);
 		solid2.getPosition().set(550, 400);
 		solid2.getColliders().add(new Collider(solid2, new Circle(solid2, 0, 0, 50), new ReplaceResolver(1f)));
 		solid2.getVelocity().set(0, 0);
 		world.getSolids().add(solid2);
 
-		SolidImpl solid3 = new SolidImpl(world);
+		DynSolidImpl solid3 = new DynSolidImpl(world);
 		solid3.getPosition().set(250, 400);
 		solid3.getColliders().add(new Collider(solid3, new Circle(solid3, 0, 0, 50), new ReplaceResolver(1f)));
 		solid3.getVelocity().set(0, 0);
@@ -269,19 +270,19 @@ public class ReplaceResolverSimulation
 	{
 		World world = new World();
 
-		SolidImpl solid = new SolidImpl(world);
+		DynSolidImpl solid = new DynSolidImpl(world);
 		solid.getPosition().set(400, 400);
 		solid.getColliders().add(new Collider(solid, new Circle(solid, 0, 0, 25), new ReplaceResolver(1f)));
 		solid.getVelocity().set(0, -50);
 		world.getSolids().add(solid);
 
-		SolidImpl solid2 = new SolidImpl(world);
+		DynSolidImpl solid2 = new DynSolidImpl(world);
 		solid2.getPosition().set(450, 100);
 		solid2.getColliders().add(new Collider(solid2, new Circle(solid2, 0, 0, 50), new ReplaceResolver(1f)));
 		solid2.getVelocity().set(0, 0);
 		world.getSolids().add(solid2);
 
-		SolidImpl solid3 = new SolidImpl(world);
+		DynSolidImpl solid3 = new DynSolidImpl(world);
 		solid3.getPosition().set(350, 100);
 		solid3.getColliders().add(new Collider(solid3, new Circle(solid3, 0, 0, 50), new ReplaceResolver(1f)));
 		solid3.getVelocity().set(0, 0);
