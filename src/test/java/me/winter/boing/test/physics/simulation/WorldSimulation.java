@@ -3,6 +3,7 @@ package me.winter.boing.test.physics.simulation;
 import me.winter.boing.physics.Collider;
 import me.winter.boing.physics.World;
 import me.winter.boing.physics.resolver.VelocityResolver;
+import me.winter.boing.physics.shapes.AABB;
 import me.winter.boing.physics.shapes.Circle;
 import me.winter.boing.test.physics.SolidImpl;
 import org.junit.Test;
@@ -100,6 +101,34 @@ public class WorldSimulation
 
 			world.getSolids().add(wall1);
 		}
+		simulate(world);
+	}
+
+	@Test
+	public void testBoxBouncingOnBox()
+	{
+		World world = new World();
+
+		SolidImpl solid = new SolidImpl(world);
+		solid.getPosition().set(400, 400);
+		solid.getColliders().add(new Collider(solid, new AABB(solid, 0, 0, 40, 25), new VelocityResolver(1f)));
+		solid.getVelocity().set(-50, 0);
+		world.getSolids().add(solid);
+
+
+		SolidImpl solid2 = new SolidImpl(world);
+		solid2.getPosition().set(650, 400);
+		solid2.getColliders().add(new Collider(solid2, new AABB(solid2, 0, 0, 80, 100), new VelocityResolver(1f)));
+		solid2.getVelocity().set(-60, 0);
+		world.getSolids().add(solid2);
+
+
+		SolidImpl solid3 = new SolidImpl(world);
+		solid3.getPosition().set(280, 400);
+		solid3.getColliders().add(new Collider(solid3, new AABB(solid3, 0, 0, 50, 50), new VelocityResolver(1f)));
+		solid3.getVelocity().set(-10, 0);
+		world.getSolids().add(solid3);
+
 		simulate(world);
 	}
 

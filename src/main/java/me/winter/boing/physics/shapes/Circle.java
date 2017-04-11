@@ -3,6 +3,9 @@ package me.winter.boing.physics.shapes;
 import me.winter.boing.physics.Collision;
 import me.winter.boing.physics.Solid;
 
+import static me.winter.boing.physics.CollisionDetection.circleBox;
+import static me.winter.boing.physics.CollisionDetection.circleCircle;
+
 /**
  * Undocumented :(
  * <p>
@@ -10,7 +13,7 @@ import me.winter.boing.physics.Solid;
  */
 public class Circle extends AbstractShape
 {
-	private float radius;
+	public float radius;
 
 	public Circle(Solid solid, float x, float y, float radius)
 	{
@@ -21,30 +24,12 @@ public class Circle extends AbstractShape
 	@Override
 	public Collision collides(Shape shape)
 	{
-		Circle that = (Circle)shape;
+		if(shape instanceof Circle)
+			return circleCircle(this, (Circle)shape, solid.getWorld().collisionPool);
 
-		float dx = getAbsX() - that.getAbsX();
-		float dy = getAbsY() - that.getAbsY();
+		if(shape instanceof AABB)
+			return circleBox(this, (AABB)shape, solid.getWorld().collisionPool);
 
-		float r = radius + that.radius;
-
-		float dst2 = dx * dx + dy * dy;
-
-		if(dst2 >= r * r)
-			return null;
-
-		Collision collision = ((Circle)shape).getSolid().getWorld().collisionPool.obtain();
-
-		collision.normalA.set(-dx, -dy);
-		collision.normalB.set(dx, dy);
-
-		collision.contact.set(-dx, -dy).scl(radius / r).add(getAbsX(), getAbsY());
-
-		return collision;
-	}
-
-	public float getRadius()
-	{
-		return radius;
+		return null;
 	}
 }

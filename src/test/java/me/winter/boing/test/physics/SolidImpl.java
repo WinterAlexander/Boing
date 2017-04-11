@@ -4,8 +4,10 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import me.winter.boing.physics.DynamicSolid;
 import me.winter.boing.physics.World;
+import me.winter.boing.physics.shapes.AABB;
 import me.winter.boing.physics.shapes.Circle;
 import me.winter.boing.physics.Collider;
+import me.winter.boing.physics.shapes.Shape;
 
 import java.awt.Graphics;
 
@@ -67,7 +69,18 @@ public class SolidImpl implements DynamicSolid
 
 	public void draw(Graphics g)
 	{
-		float r = ((Circle)getColliders().get(0).getShape()).getRadius();
-		g.drawOval((int)(getPosition().x - r), (int)(600 - getPosition().y - r), (int)r * 2, (int)r * 2);
+		Shape shape = getColliders().get(0).getShape();
+
+		if(shape instanceof Circle)
+		{
+			float r = ((Circle)shape).radius;
+			g.drawOval((int)(getPosition().x - r), (int)(600 - getPosition().y - r), (int)r * 2, (int)r * 2);
+		}
+		else if(shape instanceof AABB)
+		{
+			float w = ((AABB)shape).width;
+			float h = ((AABB)shape).height;
+			g.drawRect((int)(getPosition().x - w / 2), (int)(600 - getPosition().y - h / 2), (int)w, (int)h);
+		}
 	}
 }
