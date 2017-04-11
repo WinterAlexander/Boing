@@ -1,5 +1,6 @@
 package me.winter.boing.physics;
 
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Pool;
 import me.winter.boing.physics.shapes.AABB;
 import me.winter.boing.physics.shapes.Circle;
@@ -52,13 +53,13 @@ public class CollisionDetection
 		{
 			collision.normalA.set(-dx, 0);
 			collision.normalB.set(dx, 0);
-			collision.contact.set(signum(dx) * boxA.width / 2, 0).add(boxA.getAbsX(), boxB.getAbsY());
+			collision.contact.set(signum(dx) * boxA.width / 2, 0).add(boxA.getAbsX(), boxA.getAbsY());
 		}
 		else
 		{
 			collision.normalA.set(-dy, 0);
 			collision.normalB.set(dy, 0);
-			collision.contact.set(0, signum(dy) * boxA.height / 2).add(boxA.getAbsX(), boxB.getAbsY());
+			collision.contact.set(0, signum(dy) * boxA.height / 2).add(boxA.getAbsX(), boxA.getAbsY());
 		}
 
 		return collision;
@@ -67,12 +68,54 @@ public class CollisionDetection
 
 	public static Collision boxCircle(AABB boxA, Circle circleB, Pool<Collision> collisionPool)
 	{
-		return null;
+		float dx = boxA.getAbsX() - circleB.getAbsX();
+		float dy = boxA.getAbsY() - circleB.getAbsY();
+
+		float absDx = abs(dx);
+		float absDy = abs(dy);
+
+		float halfW = boxA.width / 2;
+		float halfH = boxA.height / 2;
+
+		//stupid box box collision outside
+		if(absDx > halfW + circleB.radius
+		|| absDy > halfH + circleB.radius)
+			return null;
+
+		//stupid box box collision inside (inverted if)
+		if(!(absDx < halfW || absDy < halfH) //if it's not inside
+		&& (absDx - halfW) * (absDx - halfW) + (absDy - halfH) * (absDy - halfH) >= circleB.radius * circleB.radius) //and it's not in the middle
+			return null;
+
+		Collision collision = collisionPool.obtain();
+
+		if(absDx > absDy)
+		{
+			collision.normalA.set(-dx, 0);
+			collision.normalB.set(dx, 0);
+			collision.contact.set(signum(dx) * boxA.width / 2, 0).add(boxA.getAbsX(), boxA.getAbsY());
+		}
+		else
+		{
+			collision.normalA.set(-dy, 0);
+			collision.normalB.set(dy, 0);
+			collision.contact.set(0, signum(dy) * boxA.height / 2).add(boxA.getAbsX(), boxA.getAbsY());
+		}
+
+		return collision;
 	}
 
 
 	public static Collision circleBox(Circle circleA, AABB boxB, Pool<Collision> collisionPool)
 	{
-		return null;
+		Collision collision = boxCircle(boxB, circleA, collisionPool);
+
+		if(collision == null)
+			return null;
+
+		Vector2 tmp = collision.normalA;
+		collision.normalA = collision.normalB;
+		collision.normalB = tmp;
+		return collision;
 	}
 }
