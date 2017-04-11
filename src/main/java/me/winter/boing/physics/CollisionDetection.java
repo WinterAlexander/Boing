@@ -44,12 +44,18 @@ public class CollisionDetection
 		float dx = boxA.getAbsX() - boxB.getAbsX();
 		float dy = boxA.getAbsY() - boxB.getAbsY();
 
-		if(abs(dx) > boxA.width / 2 + boxB.width / 2 || abs(dy) > boxA.height / 2 + boxB.height / 2)
+		float absDx = abs(dx);
+		float absDy = abs(dy);
+
+		float insideDistX = boxA.width / 2 + boxB.width / 2;
+		float insideDistY = boxA.height / 2 + boxB.height / 2;
+
+		if(absDx > insideDistX || absDy > insideDistY)
 			return null;
 
 		Collision collision = collisionPool.obtain();
 
-		if(abs(dx) > abs(dy))
+		if(absDx - insideDistX > absDy - insideDistY)
 		{
 			collision.normalA.set(-dx, 0);
 			collision.normalB.set(dx, 0);
@@ -57,14 +63,13 @@ public class CollisionDetection
 		}
 		else
 		{
-			collision.normalA.set(-dy, 0);
-			collision.normalB.set(dy, 0);
+			collision.normalA.set(0, -dy);
+			collision.normalB.set(0, dy);
 			collision.contact.set(0, signum(dy) * boxA.height / 2).add(boxA.getAbsX(), boxA.getAbsY());
 		}
 
 		return collision;
 	}
-
 
 	public static Collision boxCircle(AABB boxA, Circle circleB, Pool<Collision> collisionPool)
 	{
@@ -89,17 +94,17 @@ public class CollisionDetection
 
 		Collision collision = collisionPool.obtain();
 
-		if(absDx > absDy)
+		if(absDx - halfW > absDy - halfH)
 		{
 			collision.normalA.set(-dx, 0);
-			collision.normalB.set(dx, 0);
-			collision.contact.set(signum(dx) * boxA.width / 2, 0).add(boxA.getAbsX(), boxA.getAbsY());
+			collision.normalB.set(dx, 0); //todo better normal detection for circle
+			collision.contact.set(signum(dx) * halfW, 0).add(boxA.getAbsX(), boxA.getAbsY());
 		}
 		else
 		{
-			collision.normalA.set(-dy, 0);
-			collision.normalB.set(dy, 0);
-			collision.contact.set(0, signum(dy) * boxA.height / 2).add(boxA.getAbsX(), boxA.getAbsY());
+			collision.normalA.set(0, -dy);
+			collision.normalB.set(0, dy);
+			collision.contact.set(0, signum(dy) * halfH).add(boxA.getAbsX(), boxA.getAbsY());
 		}
 
 		return collision;

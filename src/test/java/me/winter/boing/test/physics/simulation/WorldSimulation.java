@@ -105,7 +105,7 @@ public class WorldSimulation
 	}
 
 	@Test
-	public void testBoxBouncingOnBox()
+	public void testBoxBouncingOnBoxX()
 	{
 		World world = new World();
 
@@ -133,6 +133,54 @@ public class WorldSimulation
 	}
 
 	@Test
+	public void testBoxBouncingOnBoxY()
+	{
+		World world = new World();
+
+		SolidImpl solid = new SolidImpl(world);
+		solid.getPosition().set(400, 400);
+		solid.getColliders().add(new Collider(solid, new AABB(solid, 0, 0, 40, 25), new VelocityResolver(1f)));
+		solid.getVelocity().set(0, -50);
+		world.getSolids().add(solid);
+
+
+		SolidImpl solid2 = new SolidImpl(world);
+		solid2.getPosition().set(400, 650);
+		solid2.getColliders().add(new Collider(solid2, new AABB(solid2, 0, 0, 80, 100), new VelocityResolver(1f)));
+		solid2.getVelocity().set(0, -60);
+		world.getSolids().add(solid2);
+
+
+		SolidImpl solid3 = new SolidImpl(world);
+		solid3.getPosition().set(400, 280);
+		solid3.getColliders().add(new Collider(solid3, new AABB(solid3, 0, 0, 50, 50), new VelocityResolver(1f)));
+		solid3.getVelocity().set(0, -10);
+		world.getSolids().add(solid3);
+
+		simulate(world);
+	}
+
+	@Test
+	public void testBoxWideBounce()
+	{
+		World world = new World();
+
+		SolidImpl ground = new SolidImpl(world);
+		ground.getPosition().set(400, 0);
+		ground.getColliders().add(new Collider(ground, new AABB(ground, 0, 0, 800, 100), new VelocityResolver(1f)));
+		ground.getVelocity().set(0, 0);
+		world.getSolids().add(ground);
+
+		SolidImpl box = new SolidImpl(world);
+		box.getPosition().set(100, 125);
+		box.getColliders().add(new Collider(box, new AABB(box, 0, 0, 50, 50), new VelocityResolver(1f)));
+		box.getVelocity().set(150, -20);
+		world.getSolids().add(box);
+
+		simulate(world);
+	}
+
+	@Test
 	public void testBoxesInBallCage()
 	{
 		World world = new World();
@@ -143,13 +191,11 @@ public class WorldSimulation
 		solid.getVelocity().set(-50, -20);
 		world.getSolids().add(solid);
 
-
 		SolidImpl solid2 = new SolidImpl(world);
 		solid2.getPosition().set(650, 400);
 		solid2.getColliders().add(new Collider(solid2, new AABB(solid2, 0, 0, 80, 100), new VelocityResolver(1f)));
 		solid2.getVelocity().set(-60, 30);
 		world.getSolids().add(solid2);
-
 
 		SolidImpl solid3 = new SolidImpl(world);
 		solid3.getPosition().set(280, 400);
@@ -160,44 +206,36 @@ public class WorldSimulation
 		for(int i = 20; i < 800; i+= 20)
 		{
 			SolidImpl wall1 = new SolidImpl(world);
-
 			wall1.getPosition().set(i, 0);
 			wall1.getColliders().add(new Collider(wall1, new Circle(wall1, 0, 0, 10), new VelocityResolver(1f)));
 			wall1.getVelocity().set(0, 0);
-
 			world.getSolids().add(wall1);
 		}
 
 		for(int i = 20; i < 800; i+= 20)
 		{
 			SolidImpl wall1 = new SolidImpl(world);
-
 			wall1.getPosition().set(i, 600);
 			wall1.getColliders().add(new Collider(wall1, new Circle(wall1, 0, 0, 10), new VelocityResolver(1f)));
 			wall1.getVelocity().set(0, 0);
-
 			world.getSolids().add(wall1);
 		}
 
 		for(int i = 20; i < 600; i+= 20)
 		{
 			SolidImpl wall1 = new SolidImpl(world);
-
 			wall1.getPosition().set(0, i);
 			wall1.getColliders().add(new Collider(wall1, new Circle(wall1, 0, 0, 10), new VelocityResolver(1f)));
 			wall1.getVelocity().set(0, 0);
-
 			world.getSolids().add(wall1);
 		}
 
 		for(int i = 20; i < 600; i+= 20)
 		{
 			SolidImpl wall1 = new SolidImpl(world);
-
 			wall1.getPosition().set(800, i);
 			wall1.getColliders().add(new Collider(wall1, new Circle(wall1, 0, 0, 10), new VelocityResolver(1f)));
 			wall1.getVelocity().set(0, 0);
-
 			world.getSolids().add(wall1);
 		}
 
@@ -210,27 +248,21 @@ public class WorldSimulation
 		World world = new World();
 
 		SolidImpl solid = new SolidImpl(world);
-
 		solid.getPosition().set(400, 400);
 		solid.getColliders().add(new Collider(solid, new Circle(solid, 0, 0, 25), new VelocityResolver(1f)));
 		solid.getVelocity().set(50, 0);
-
 		world.getSolids().add(solid);
 
 		SolidImpl solid2 = new SolidImpl(world);
-
 		solid2.getPosition().set(550, 400);
 		solid2.getColliders().add(new Collider(solid2, new Circle(solid2, 0, 0, 50), new VelocityResolver(1f)));
 		solid2.getVelocity().set(0, 0);
-
 		world.getSolids().add(solid2);
 
 		SolidImpl solid3 = new SolidImpl(world);
-
 		solid3.getPosition().set(250, 400);
 		solid3.getColliders().add(new Collider(solid3, new Circle(solid3, 0, 0, 50), new VelocityResolver(1f)));
 		solid3.getVelocity().set(0, 0);
-
 		world.getSolids().add(solid3);
 
 		simulate(world);
@@ -242,27 +274,21 @@ public class WorldSimulation
 		World world = new World();
 
 		SolidImpl solid = new SolidImpl(world);
-
 		solid.getPosition().set(400, 400);
 		solid.getColliders().add(new Collider(solid, new Circle(solid, 0, 0, 25), new VelocityResolver(1f)));
 		solid.getVelocity().set(0, -50);
-
 		world.getSolids().add(solid);
 
 		SolidImpl solid2 = new SolidImpl(world);
-
 		solid2.getPosition().set(450, 100);
 		solid2.getColliders().add(new Collider(solid2, new Circle(solid2, 0, 0, 50), new VelocityResolver(1f)));
 		solid2.getVelocity().set(0, 0);
-
 		world.getSolids().add(solid2);
 
 		SolidImpl solid3 = new SolidImpl(world);
-
 		solid3.getPosition().set(350, 100);
 		solid3.getColliders().add(new Collider(solid3, new Circle(solid3, 0, 0, 50), new VelocityResolver(1f)));
 		solid3.getVelocity().set(0, 0);
-
 		world.getSolids().add(solid3);
 
 		simulate(world);
