@@ -3,9 +3,11 @@ package me.winter.boing.test.physics.simulation;
 import me.winter.boing.physics.Collider;
 import me.winter.boing.physics.World;
 import me.winter.boing.physics.resolver.ReplaceResolver;
+import me.winter.boing.physics.resolver.VelocityResolver;
 import me.winter.boing.physics.shapes.AABB;
 import me.winter.boing.physics.shapes.Circle;
 import me.winter.boing.test.physics.DynSolidImpl;
+import me.winter.boing.test.physics.SolidImpl;
 import org.junit.Test;
 
 import static me.winter.boing.test.physics.simulation.WorldSimulationUtil.simulate;
@@ -162,10 +164,9 @@ public class ReplaceResolverSimulation
 	{
 		World world = new World();
 
-		DynSolidImpl ground = new DynSolidImpl(world);
+		SolidImpl ground = new SolidImpl(world);
 		ground.getPosition().set(400, 0);
 		ground.getColliders().add(new Collider(ground, new AABB(ground, 0, 0, 800, 100), new ReplaceResolver(1f)));
-		ground.getVelocity().set(0, 0);
 		world.getSolids().add(ground);
 
 		DynSolidImpl box = new DynSolidImpl(world);
@@ -287,6 +288,28 @@ public class ReplaceResolverSimulation
 		solid3.getColliders().add(new Collider(solid3, new Circle(solid3, 0, 0, 50), new ReplaceResolver(1f)));
 		solid3.getVelocity().set(0, 0);
 		world.getSolids().add(solid3);
+
+		simulate(world);
+	}
+
+
+
+	@Test
+	public void testCircleBoxCollision()
+	{
+		World world = new World();
+
+		DynSolidImpl solid = new DynSolidImpl(world);
+		solid.getPosition().set(400, 400);
+		solid.getColliders().add(new Collider(solid, new Circle(solid, 0, 0, 25), new ReplaceResolver(1f)));
+		solid.getVelocity().set(0, -50);
+		world.getSolids().add(solid);
+
+		DynSolidImpl solid2 = new DynSolidImpl(world);
+		solid2.getPosition().set(400, 100);
+		solid2.getColliders().add(new Collider(solid2, new AABB(solid2, 0, 0, 50, 50), new ReplaceResolver(1f)));
+		solid2.getVelocity().set(0, 70);
+		world.getSolids().add(solid2);
 
 		simulate(world);
 	}

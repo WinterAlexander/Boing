@@ -2,6 +2,7 @@ package me.winter.boing.test.physics.simulation;
 
 import me.winter.boing.physics.World;
 import me.winter.boing.test.physics.DynSolidImpl;
+import me.winter.boing.test.physics.SimulationElement;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -33,7 +34,7 @@ public class WorldSimulationUtil
 				g.setColor(Color.BLACK);
 
 				for(int i = 0; i < world.getSolids().size; i++)
-					((DynSolidImpl)world.getSolids().get(i)).draw(g);
+					((SimulationElement)world.getSolids().get(i)).draw(g);
 			}
 		});
 

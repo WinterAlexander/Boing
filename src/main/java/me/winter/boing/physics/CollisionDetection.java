@@ -36,7 +36,6 @@ public class CollisionDetection
 		collision.normalA.set(dx, dy);
 		collision.normalB.set(-dx, -dy);
 		collision.penetration = r - (float)sqrt(dst2);
-		//collision.contact.set(-dx, -dy).scl(circleA.radius / r).add(circleA.getAbsX(), circleA.getAbsY());
 
 		return collision;
 	}
@@ -59,14 +58,12 @@ public class CollisionDetection
 			collision.normalA.set(dx, 0);
 			collision.normalB.set(-dx, 0);
 			collision.penetration = peneX;
-			//collision.contact.set(signum(dx) * boxA.width / 2, 0).add(boxA.getAbsX(), boxA.getAbsY());
 		}
 		else
 		{
 			collision.normalA.set(0, dy);
 			collision.normalB.set(0, -dy);
 			collision.penetration = peneY;
-			//collision.contact.set(0, signum(dy) * boxA.height / 2).add(boxA.getAbsX(), boxA.getAbsY());
 		}
 
 		return collision;
@@ -103,18 +100,16 @@ public class CollisionDetection
 			closestX = signum(closestX) * halfW;
 
 			collision.normalA.set(dx, 0);
-			collision.normalB.set(-dx, 0); //todo better normal detection for circle
-			collision.penetration = (float)sqrt((dx - closestX) * (dx - closestX) + (dy - closestY) * (dy - closestY));
-			//collision.contact.set(signum(dx) * halfW, 0).add(boxA.getAbsX(), boxA.getAbsY());
+			collision.normalB.set(closestX - dx, closestY - dy);
+			collision.penetration = circleB.radius - collision.normalB.len();
 		}
 		else
 		{
 			closestY = signum(closestY) * halfH;
 
 			collision.normalA.set(0, dy);
-			collision.normalB.set(0, -dy);
-			collision.penetration = (float)sqrt((dx - closestX) * (dx - closestX) + (dy - closestY) * (dy - closestY));
-			//collision.contact.set(0, signum(dy) * halfH).add(boxA.getAbsX(), boxA.getAbsY());
+			collision.normalB.set(closestX - dx, closestY - dy);
+			collision.penetration = circleB.radius - collision.normalB.len();
 		}
 
 		return collision;

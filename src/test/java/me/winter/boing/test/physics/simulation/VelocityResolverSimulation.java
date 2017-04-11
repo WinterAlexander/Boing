@@ -6,6 +6,7 @@ import me.winter.boing.physics.resolver.VelocityResolver;
 import me.winter.boing.physics.shapes.AABB;
 import me.winter.boing.physics.shapes.Circle;
 import me.winter.boing.test.physics.DynSolidImpl;
+import me.winter.boing.test.physics.SolidImpl;
 import org.junit.Test;
 
 import static me.winter.boing.test.physics.simulation.WorldSimulationUtil.simulate;
@@ -162,10 +163,9 @@ public class VelocityResolverSimulation
 	{
 		World world = new World();
 
-		DynSolidImpl ground = new DynSolidImpl(world);
+		SolidImpl ground = new SolidImpl(world);
 		ground.getPosition().set(400, 0);
 		ground.getColliders().add(new Collider(ground, new AABB(ground, 0, 0, 800, 100), new VelocityResolver(1f)));
-		ground.getVelocity().set(0, 0);
 		world.getSolids().add(ground);
 
 		DynSolidImpl box = new DynSolidImpl(world);
