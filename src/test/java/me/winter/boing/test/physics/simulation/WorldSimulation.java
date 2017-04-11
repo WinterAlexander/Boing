@@ -29,7 +29,7 @@ public class WorldSimulation
 
 		solid.getPosition().set(50, 50);
 		solid.getColliders().add(new Collider(solid, new Circle(solid, 0, 0, 25), new VelocityResolver(1f)));
-		solid.getVelocity().set(79, 50);
+		solid.getVelocity().set(179, 150);
 
 		world.getSolids().add(solid);
 
@@ -37,7 +37,7 @@ public class WorldSimulation
 
 		solid2.getPosition().set(500, 50);
 		solid2.getColliders().add(new Collider(solid2, new Circle(solid2, 0, 0, 20), new VelocityResolver(1f)));
-		solid2.getVelocity().set(-50, 50);
+		solid2.getVelocity().set(-150, 150);
 
 		world.getSolids().add(solid2);
 
@@ -193,11 +193,16 @@ public class WorldSimulation
 
 		while(true)
 		{
+			long start = System.nanoTime();
 			world.step(1 / 60f);
 			frame.repaint();
+			long toWait = 1000 / 60 - (System.nanoTime() - start) / 1_000_000;
+
+			if(toWait <= 0)
+				continue;
 			try
 			{
-				Thread.sleep(1000 / 60);
+				Thread.sleep(toWait);
 			}
 			catch(Exception ex)
 			{
