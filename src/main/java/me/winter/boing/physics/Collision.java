@@ -10,8 +10,9 @@ import me.winter.boing.physics.resolver.CollisionResolver;
  */
 public class Collision
 {
-	public Vector2 contact = new Vector2();
+	//public Vector2 contact = new Vector2();
 	public Vector2 normalA = new Vector2(), normalB = new Vector2();
+	public float penetration;
 
 	public Collider colliderA, colliderB;
 	public CollisionResolver resolver;
