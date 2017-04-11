@@ -54,7 +54,7 @@ public class CollisionDetection
 
 		Collision collision = collisionPool.obtain();
 
-		if(peneX > peneY)
+		if(peneX < peneY)
 		{
 			collision.normalA.set(dx, 0);
 			collision.normalB.set(-dx, 0);

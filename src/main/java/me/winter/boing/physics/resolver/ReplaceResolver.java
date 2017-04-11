@@ -33,8 +33,6 @@ public class ReplaceResolver extends CollisionResolver
 			replace((DynamicSolid)collision.colliderB.getSolid(),
 					collision.normalA,
 					solidADyn ? collision.penetration / 2 : collision.penetration);
-
-		//System.out.println("COLLISION");
 	}
 
 	private void replace(DynamicSolid solid, Vector2 normal, float delta)
