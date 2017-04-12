@@ -24,7 +24,7 @@ public class ReplaceResolverSimulation
 	{
 		World world = new World();
 
-		DynSolidImpl solid = new DynSolidImpl(world);
+		DynSolidImpl solid = new DynSolidImpl(world, Float.POSITIVE_INFINITY);
 
 		solid.getPosition().set(50, 50);
 		solid.getColliders().add(new Collider(solid, new Circle(solid, 0, 0, 25), new ReplaceResolver(1f)));

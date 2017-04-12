@@ -20,12 +20,19 @@ import java.awt.Graphics;
 public class DynSolidImpl extends SolidImpl implements DynamicSolid
 {
 	private Vector2 velocity, movement;
+	private float mass;
 
 	public DynSolidImpl(World world)
+	{
+		this(world, 1f);
+	}
+
+	public DynSolidImpl(World world, float mass)
 	{
 		super(world);
 		this.velocity = new Vector2();
 		this.movement = new Vector2();
+		this.mass = mass;
 	}
 
 
@@ -44,6 +51,6 @@ public class DynSolidImpl extends SolidImpl implements DynamicSolid
 	@Override
 	public float getMass()
 	{
-		return 1f;
+		return mass;
 	}
 }
