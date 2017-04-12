@@ -159,13 +159,53 @@ public class ReplaceResolverSimulation
 			}
 		}
 
-		DynSolidImpl initier = new DynSolidImpl(world);
+		DynSolidImpl initier = new DynSolidImpl(world, Float.POSITIVE_INFINITY);
 
 		initier.getPosition().set(400, 0);
 		initier.getColliders().add(new Circle(initier, 0, 0, 10));
-		initier.getVelocity().set(0, 100);
+		initier.getVelocity().set(10, 200);
 
 		world.getSolids().add(initier);
+
+		for(int i = 20; i < 800; i+= 20)
+		{
+			SolidImpl wall1 = new SolidImpl(world);
+
+			wall1.getPosition().set(i, 0);
+			wall1.getColliders().add(new Circle(wall1, 0, 0, 100));
+
+			world.getSolids().add(wall1);
+		}
+
+		for(int i = 20; i < 800; i+= 20)
+		{
+			SolidImpl wall1 = new SolidImpl(world);
+
+			wall1.getPosition().set(i, 600);
+			wall1.getColliders().add(new Circle(wall1, 0, 0, 100));
+
+			world.getSolids().add(wall1);
+		}
+
+		for(int i = 20; i < 600; i+= 20)
+		{
+			SolidImpl wall1 = new SolidImpl(world);
+
+			wall1.getPosition().set(0, i);
+			wall1.getColliders().add(new Circle(wall1, 0, 0, 100));
+
+			world.getSolids().add(wall1);
+		}
+
+		for(int i = 20; i < 600; i+= 20)
+		{
+			SolidImpl wall1 = new SolidImpl(world);
+
+			wall1.getPosition().set(800, i);
+			wall1.getColliders().add(new Circle(wall1, 0, 0, 100));
+
+			world.getSolids().add(wall1);
+		}
 		
 		simulate(world);
 	}
