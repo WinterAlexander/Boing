@@ -2,7 +2,9 @@ package me.winter.boing.physics;
 
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Pool;
-import me.winter.boing.physics.detection.DetectorMapper;
+import me.winter.boing.physics.detection.DetectionHandler;
+import me.winter.boing.physics.resolver.CollisionResolver;
+import me.winter.boing.physics.resolver.ReplaceResolver;
 
 /**
  * Undocumented :(
@@ -14,13 +16,15 @@ public class World
 	private Array<Solid> solids = new Array<>();
 	private Array<Collision> collisions = new Array<>();
 
-	private DetectorMapper mapper;
+	private DetectionHandler mapper;
+	private CollisionResolver resolver;
 
 	public final Pool<Collision> collisionPool = new CollisionPool();
 
-	public World()
+	public World(CollisionResolver resolver)
 	{
-		mapper = new DetectorMapper(collisionPool);
+		mapper = new DetectionHandler(collisionPool);
+		this.resolver = resolver;
 	}
 
 	public void step(float delta)
@@ -69,8 +73,17 @@ public class World
 		}
 
 		for(Collision collision : collisions)
-			collision.resolve();
+		{
+			Collision swapped = collisionPool.obtain();
+			swapped.setAsSwapped(collision);
+
+			if(collision.colliderA.getSolid().collide(collision) && collision.colliderB.getSolid().collide(swapped))
+				resolver.resolve(collision);
+
+			collisionPool.free(swapped);
+		}
 		collisionPool.freeAll(collisions);
+
 		collisions.clear();
 	}
 

@@ -15,4 +15,9 @@ public interface Solid
 	Vector2 getPosition();
 
 	Array<Collider> getColliders();
+
+	default boolean collide(Collision collision)
+	{
+		return true;
+	}
 }

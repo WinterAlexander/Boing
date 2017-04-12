@@ -13,13 +13,10 @@ public class Collider
 	private Solid solid;
 	private Shape shape;
 
-	private CollisionResolver resolver;
-
-	public Collider(Solid solid, Shape shape, CollisionResolver resolver)
+	public Collider(Solid solid, Shape shape)
 	{
 		this.solid = solid;
 		this.shape = shape;
-		this.resolver = resolver;
 	}
 
 	public Solid getSolid()
@@ -30,10 +27,5 @@ public class Collider
 	public Shape getShape()
 	{
 		return shape;
-	}
-
-	public CollisionResolver getResolver()
-	{
-		return resolver;
 	}
 }

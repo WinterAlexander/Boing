@@ -20,13 +20,11 @@ import me.winter.boing.physics.shapes.Shape;
  * <p>
  * Created by Alexander Winter on 2017-04-11.
  */
-public class DetectorMapper
+public class DetectionHandler
 {
-	private static final int SHAPE_COUNT = 3;
-
 	private IntMap<CollisionDetector> detectors = new IntMap<>();
 	
-	public DetectorMapper(Pool<Collision> collisionPool)
+	public DetectionHandler(Pool<Collision> collisionPool)
 	{
 		detectors.put(getKey(Circle.class, Circle.class), new CircleCircleDetector(collisionPool));
 		detectors.put(getKey(Circle.class, AABB.class), new DetectorSwapper<>(new BoxCircleDetector(collisionPool)));
@@ -53,9 +51,6 @@ public class DetectorMapper
 
 		collision.colliderA = colliderA;
 		collision.colliderB = colliderB;
-		collision.resolver = colliderA.getResolver().priority > colliderB.getResolver().priority
-				? colliderA.getResolver()
-				: colliderB.getResolver();
 		return collision;
 	}
 

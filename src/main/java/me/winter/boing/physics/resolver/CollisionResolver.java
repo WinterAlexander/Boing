@@ -7,14 +7,7 @@ import me.winter.boing.physics.Collision;
  * <p>
  * Created by Alexander Winter on 2017-04-10.
  */
-public abstract class CollisionResolver
+public interface CollisionResolver
 {
-	public final float priority;
-
-	public CollisionResolver(float priority)
-	{
-		this.priority = priority;
-	}
-
-	public abstract void resolve(Collision collision);
+	void resolve(Collision collision);
 }

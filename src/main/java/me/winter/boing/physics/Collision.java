@@ -15,10 +15,13 @@ public class Collision
 	public float penetration;
 
 	public Collider colliderA, colliderB;
-	public CollisionResolver resolver;
 
-	public void resolve()
+	public void setAsSwapped(Collision collision)
 	{
-		resolver.resolve(this);
+		normalA = collision.normalB;
+		normalB = collision.normalA;
+		penetration = collision.penetration;
+		colliderA = collision.colliderB;
+		colliderB = collision.colliderA;
 	}
 }

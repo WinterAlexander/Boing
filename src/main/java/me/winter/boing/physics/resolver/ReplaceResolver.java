@@ -10,14 +10,9 @@ import me.winter.boing.physics.Solid;
  * <p>
  * Created by Alexander Winter on 2017-04-11.
  */
-public class ReplaceResolver extends CollisionResolver
+public class ReplaceResolver implements CollisionResolver
 {
 	private Vector2 tmpVector = new Vector2();
-
-	public ReplaceResolver(float priority)
-	{
-		super(priority);
-	}
 
 	@Override
 	public void resolve(Collision collision)

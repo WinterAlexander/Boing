@@ -9,13 +9,8 @@ import me.winter.boing.physics.Collision;
  * <p>
  * Created by Alexander Winter on 2017-04-10.
  */
-public class VelocityResolver extends CollisionResolver
+public class VelocityResolver implements CollisionResolver
 {
-	public VelocityResolver(float priority)
-	{
-		super(priority);
-	}
-
 	@Override
 	public void resolve(Collision collision)
 	{
