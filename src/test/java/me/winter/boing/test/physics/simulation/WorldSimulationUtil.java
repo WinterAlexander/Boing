@@ -55,7 +55,7 @@ public class WorldSimulationUtil
 					world.step(1 / 60f);
 					frame.repaint();
 				});
-				long toWait = 1000 / 20 - (System.nanoTime() - start) / 1_000_000;
+				long toWait = 1000 / 60 - (System.nanoTime() - start) / 1_000_000;
 
 				if(toWait <= 0)
 					continue;

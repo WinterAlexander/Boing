@@ -18,8 +18,8 @@ public class Collision
 
 	public void setAsSwapped(Collision collision)
 	{
-		normalA = collision.normalB;
-		normalB = collision.normalA;
+		normalA.set(collision.normalB);
+		normalB.set(collision.normalA);
 		penetration = collision.penetration;
 		colliderA = collision.colliderB;
 		colliderB = collision.colliderA;

@@ -4,7 +4,6 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Pool;
 import me.winter.boing.physics.detection.DetectionHandler;
 import me.winter.boing.physics.resolver.CollisionResolver;
-import me.winter.boing.physics.resolver.ReplaceResolver;
 
 /**
  * Undocumented :(
@@ -64,27 +63,25 @@ public class World
 						Collision collision = mapper.collides(colliderA, colliderB);
 
 						if(collision != null)
-						{
 							collisions.add(collision);
-						}
 					}
 				}
 			}
 		}
 
+		Collision swapped = collisionPool.obtain();
+
 		for(Collision collision : collisions)
 		{
-
-			Collision swapped = collisionPool.obtain();
 			swapped.setAsSwapped(collision);
 
 			if(collision.colliderA.getSolid().collide(collision) && collision.colliderB.getSolid().collide(swapped))
 				resolver.resolve(collision);
 
-			collisionPool.free(swapped);
 		}
-		collisionPool.freeAll(collisions);
 
+		collisionPool.free(swapped);
+		collisionPool.freeAll(collisions);
 		collisions.clear();
 	}
 
