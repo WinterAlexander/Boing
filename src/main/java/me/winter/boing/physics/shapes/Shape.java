@@ -1,6 +1,6 @@
 package me.winter.boing.physics.shapes;
 
-import me.winter.boing.physics.Collision;
+import me.winter.boing.physics.Solid;
 
 /**
  * Undocumented :(
@@ -9,5 +9,8 @@ import me.winter.boing.physics.Collision;
  */
 public interface Shape
 {
-	Collision collides(Shape shape);
+	Solid getSolid();
+
+	float getAbsX();
+	float getAbsY();
 }

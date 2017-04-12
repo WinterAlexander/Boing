@@ -36,7 +36,6 @@ public class ReplaceResolver extends CollisionResolver
 			else
 			{
 				DynamicSolid dsB = (DynamicSolid)collision.colliderB.getSolid();
-
 				replace(dsA, collision.normalB, getMassRatio(dsB, dsA)  * collision.penetration);
 			}
 		}
@@ -52,7 +51,6 @@ public class ReplaceResolver extends CollisionResolver
 			else
 			{
 				DynamicSolid dsA = (DynamicSolid)collision.colliderA.getSolid();
-
 				replace(dsB, collision.normalA, getMassRatio(dsA, dsB) * collision.penetration);
 			}
 		}

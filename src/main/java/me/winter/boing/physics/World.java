@@ -2,6 +2,7 @@ package me.winter.boing.physics;
 
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Pool;
+import me.winter.boing.physics.detection.DetectorMapper;
 
 /**
  * Undocumented :(
@@ -13,13 +14,14 @@ public class World
 	private Array<Solid> solids = new Array<>();
 	private Array<Collision> collisions = new Array<>();
 
-	public final Pool<Collision> collisionPool = new Pool<Collision>() {
-		@Override
-		protected Collision newObject()
-		{
-			return new Collision();
-		}
-	};
+	private DetectorMapper mapper;
+
+	public final Pool<Collision> collisionPool = new CollisionPool();
+
+	public World()
+	{
+		mapper = new DetectorMapper(collisionPool);
+	}
 
 	public void step(float delta)
 	{
@@ -55,7 +57,7 @@ public class World
 
 					for(Collider colliderB : solidB.getColliders())
 					{
-						Collision collision = colliderA.collides(colliderB);
+						Collision collision = mapper.collides(colliderA, colliderB);
 
 						if(collision != null)
 						{
@@ -75,5 +77,14 @@ public class World
 	public Array<Solid> getSolids()
 	{
 		return solids;
+	}
+
+	private static final class CollisionPool extends Pool<Collision>
+	{
+		@Override
+		protected Collision newObject()
+		{
+			return new Collision();
+		}
 	}
 }

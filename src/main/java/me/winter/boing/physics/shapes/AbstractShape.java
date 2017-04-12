@@ -9,8 +9,8 @@ import me.winter.boing.physics.Solid;
  */
 public abstract class AbstractShape implements Shape
 {
-	public Solid solid;
-	public float x, y;
+	protected Solid solid;
+	protected float x, y;
 
 	public AbstractShape(Solid solid, float x, float y)
 	{
@@ -19,11 +19,19 @@ public abstract class AbstractShape implements Shape
 		this.y = y;
 	}
 
+	@Override
+	public Solid getSolid()
+	{
+		return solid;
+	}
+
+	@Override
 	public float getAbsX()
 	{
 		return x + solid.getPosition().x;
 	}
 
+	@Override
 	public float getAbsY()
 	{
 		return y + solid.getPosition().y;
