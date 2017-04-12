@@ -74,6 +74,7 @@ public class World
 
 		for(Collision collision : collisions)
 		{
+
 			Collision swapped = collisionPool.obtain();
 			swapped.setAsSwapped(collision);
 

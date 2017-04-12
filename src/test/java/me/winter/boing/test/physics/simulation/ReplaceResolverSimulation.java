@@ -103,6 +103,46 @@ public class ReplaceResolverSimulation
 	}
 
 	@Test
+	public void testBug()
+	{
+		World world = new World(new ReplaceResolver());
+
+		DynSolidImpl solid = new DynSolidImpl(world, Float.POSITIVE_INFINITY);
+
+		solid.getPosition().set(50, 50);
+		solid.getColliders().add(new Collider(solid, new Circle(solid, 0, 0, 25)));
+		solid.getVelocity().set(179, 150);
+
+		world.getSolids().add(solid);
+
+		DynSolidImpl solid2 = new DynSolidImpl(world);
+
+		solid2.getPosition().set(500, 50);
+		solid2.getColliders().add(new Collider(solid2, new Circle(solid2, 0, 0, 20)));
+		solid2.getVelocity().set(-150, 150);
+
+		world.getSolids().add(solid2);
+
+		DynSolidImpl solid3 = new DynSolidImpl(world);
+
+		solid3.getPosition().set(300, 500);
+		solid3.getColliders().add(new Collider(solid3, new Circle(solid3, 0, 0, 25)));
+		solid3.getVelocity().set(0, -100);
+
+		world.getSolids().add(solid3);
+
+		DynSolidImpl solid4 = new DynSolidImpl(world);
+
+		solid4.getPosition().set(500, 500);
+		solid4.getColliders().add(new Collider(solid4, new Circle(solid4, 0, 0, 25)));
+		solid4.getVelocity().set(-100, -100);
+
+		world.getSolids().add(solid4);
+
+		simulate(world);
+	}
+
+	@Test
 	public void testBoxBouncingOnBoxX()
 	{
 		World world = new World(new ReplaceResolver());

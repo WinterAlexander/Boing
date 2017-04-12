@@ -6,9 +6,12 @@ import me.winter.boing.test.physics.SimulationElement;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
 import javax.swing.WindowConstants;
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 
 /**
  * Undocumented :(
@@ -23,7 +26,7 @@ public class WorldSimulationUtil
 
 		frame.setSize(800, 600);
 
-		frame.setContentPane(new JPanel()
+		JPanel panel = new JPanel()
 		{
 			@Override
 			protected void paintComponent(Graphics g)
@@ -36,22 +39,27 @@ public class WorldSimulationUtil
 				for(int i = 0; i < world.getSolids().size; i++)
 					((SimulationElement)world.getSolids().get(i)).draw(g);
 			}
-		});
+		};
+
+		frame.setContentPane(panel);
 
 		frame.setVisible(true);
 		frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
 		while(true)
 		{
-			long start = System.nanoTime();
-			world.step(1 / 60f);
-			frame.repaint();
-			long toWait = 1000 / 60 - (System.nanoTime() - start) / 1_000_000;
-
-			if(toWait <= 0)
-				continue;
 			try
 			{
+				long start = System.nanoTime();
+				SwingUtilities.invokeAndWait(() -> {
+					world.step(1 / 60f);
+					frame.repaint();
+				});
+				long toWait = 1000 / 20 - (System.nanoTime() - start) / 1_000_000;
+
+				if(toWait <= 0)
+					continue;
+
 				Thread.sleep(toWait);
 			}
 			catch(Exception ex)
