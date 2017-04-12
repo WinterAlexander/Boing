@@ -5,6 +5,8 @@ import me.winter.boing.physics.Collision;
 import me.winter.boing.physics.DynamicSolid;
 import me.winter.boing.physics.Solid;
 
+import static me.winter.boing.physics.VelocityUtil.getMassRatio;
+
 /**
  * Undocumented :(
  * <p>
@@ -31,7 +33,7 @@ public class ReplaceResolver implements CollisionResolver
 			else
 			{
 				DynamicSolid dsB = (DynamicSolid)collision.colliderB.getSolid();
-				replace(dsA, collision.normalB, getMassRatio(dsB, dsA)  * collision.penetration);
+				replace(dsA, collision.normalB, getMassRatio(dsB.getMass(), dsA.getMass())  * collision.penetration);
 			}
 		}
 
@@ -46,7 +48,7 @@ public class ReplaceResolver implements CollisionResolver
 			else
 			{
 				DynamicSolid dsA = (DynamicSolid)collision.colliderA.getSolid();
-				replace(dsB, collision.normalA, getMassRatio(dsA, dsB) * collision.penetration);
+				replace(dsB, collision.normalA, getMassRatio(dsA.getMass(), dsB.getMass()) * collision.penetration);
 			}
 		}
 	}
@@ -56,31 +58,5 @@ public class ReplaceResolver implements CollisionResolver
 		tmpVector.set(normal).nor().scl(delta);
 
 		solid.getPosition().add(tmpVector);
-	}
-
-	private float getMassRatio(DynamicSolid solid, DynamicSolid other)
-	{
-		if(solid.getMass() == Float.POSITIVE_INFINITY)
-		{
-			if(other.getMass() == Float.POSITIVE_INFINITY)
-				return 0.5f;
-			return 1f;
-		}
-
-		if(other.getMass() == Float.POSITIVE_INFINITY)
-			return 0f;
-
-		if(solid.getMass() == 0f)
-		{
-			if(other.getMass() == 0f)
-				return 0.5f;
-			return 0f;
-		}
-
-		if(other.getMass() == 0f)
-			return 1f;
-
-
-		return solid.getMass() / (solid.getMass() + other.getMass());
 	}
 }

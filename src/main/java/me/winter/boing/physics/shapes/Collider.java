@@ -7,7 +7,7 @@ import me.winter.boing.physics.Solid;
  * <p>
  * Created by Alexander Winter on 2017-04-10.
  */
-public interface Shape
+public interface Collider
 {
 	Solid getSolid();
 

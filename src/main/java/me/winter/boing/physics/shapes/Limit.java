@@ -8,7 +8,7 @@ import me.winter.boing.physics.Solid;
  * <p>
  * Created by Alexander Winter on 2017-04-12.
  */
-public class Limit extends AbstractShape
+public class Limit extends AbstractCollider
 {
 	public Vector2 normal;
 

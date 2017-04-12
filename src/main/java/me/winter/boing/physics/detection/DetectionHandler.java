@@ -2,7 +2,6 @@ package me.winter.boing.physics.detection;
 
 import com.badlogic.gdx.utils.IntMap;
 import com.badlogic.gdx.utils.Pool;
-import me.winter.boing.physics.Collider;
 import me.winter.boing.physics.Collision;
 import me.winter.boing.physics.detection.detectors.BoxBoxDetector;
 import me.winter.boing.physics.detection.detectors.BoxCircleDetector;
@@ -13,7 +12,7 @@ import me.winter.boing.physics.detection.detectors.LimitLimitDetector;
 import me.winter.boing.physics.shapes.AABB;
 import me.winter.boing.physics.shapes.Circle;
 import me.winter.boing.physics.shapes.Limit;
-import me.winter.boing.physics.shapes.Shape;
+import me.winter.boing.physics.shapes.Collider;
 
 /**
  * Undocumented :(
@@ -42,19 +41,12 @@ public class DetectionHandler
 	@SuppressWarnings("unchecked")
 	public Collision collides(Collider colliderA, Collider colliderB)
 	{
-		CollisionDetector detector = detectors.get(getKey(colliderA.getShape().getClass(), colliderB.getShape().getClass()));
+		CollisionDetector detector = detectors.get(getKey(colliderA.getClass(), colliderB.getClass()));
 
-		Collision collision = detector.collides(colliderA.getShape(), colliderB.getShape());
-
-		if(collision == null)
-			return null;
-
-		collision.colliderA = colliderA;
-		collision.colliderB = colliderB;
-		return collision;
+		return detector.collides(colliderA, colliderB);
 	}
 
-	public int getKey(Class<? extends Shape> classA, Class<? extends Shape> classB)
+	public int getKey(Class<? extends Collider> classA, Class<? extends Collider> classB)
 	{
 		return 713 + classA.hashCode() * 31 + classB.hashCode();
 	}

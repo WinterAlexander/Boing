@@ -2,6 +2,7 @@ package me.winter.boing.physics.detection.detectors;
 
 import com.badlogic.gdx.utils.Pool;
 import me.winter.boing.physics.Collision;
+import me.winter.boing.physics.DynamicSolid;
 import me.winter.boing.physics.detection.PooledDetector;
 import me.winter.boing.physics.shapes.Circle;
 
@@ -37,6 +38,10 @@ public class CircleCircleDetector extends PooledDetector<Circle, Circle>
 		collision.normalA.set(dx, dy);
 		collision.normalB.set(-dx, -dy);
 		collision.penetration = r - (float)sqrt(dst2);
+
+		collision.colliderA = shapeA;
+		collision.colliderB = shapeB;
+		collision.setImpactVelocities(shapeA.getSolid(), shapeB.getSolid());
 
 		return collision;
 	}

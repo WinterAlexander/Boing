@@ -1,16 +1,12 @@
 package me.winter.boing.test.physics;
 
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.utils.Array;
+import me.winter.boing.physics.Collision;
 import me.winter.boing.physics.DynamicSolid;
-import me.winter.boing.physics.Solid;
+import me.winter.boing.physics.VelocityUtil;
 import me.winter.boing.physics.World;
-import me.winter.boing.physics.shapes.AABB;
-import me.winter.boing.physics.shapes.Circle;
-import me.winter.boing.physics.Collider;
-import me.winter.boing.physics.shapes.Shape;
 
-import java.awt.Graphics;
+import static me.winter.boing.physics.VelocityUtil.getMassRatio;
 
 /**
  * Undocumented :(
@@ -21,6 +17,8 @@ public class DynSolidImpl extends SolidImpl implements DynamicSolid
 {
 	private Vector2 velocity, movement;
 	private float mass;
+
+	private Vector2 tmpVector = new Vector2();
 
 	public DynSolidImpl(World world)
 	{
@@ -35,6 +33,22 @@ public class DynSolidImpl extends SolidImpl implements DynamicSolid
 		this.mass = mass;
 	}
 
+	@Override
+	public boolean collide(Collision collision)
+	{
+		VelocityUtil.reflect(getVelocity(), collision.normalB);
+
+		if(collision.colliderB.getSolid() instanceof DynamicSolid)
+		{
+			DynamicSolid dynamicSolid = ((DynamicSolid)collision.colliderB.getSolid());
+
+			tmpVector.set(collision.impactVelB).scl(1f - getMassRatio(getMass(), dynamicSolid.getMass()));
+
+			getVelocity().add(tmpVector);
+		}
+
+		return true;
+	}
 
 	@Override
 	public Vector2 getVelocity()

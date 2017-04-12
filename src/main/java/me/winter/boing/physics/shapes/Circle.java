@@ -7,7 +7,7 @@ import me.winter.boing.physics.Solid;
  * <p>
  * Created by Alexander Winter on 2017-04-10.
  */
-public class Circle extends AbstractShape
+public class Circle extends AbstractCollider
 {
 	public float radius;
 

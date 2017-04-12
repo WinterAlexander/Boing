@@ -66,6 +66,11 @@ public class BoxCircleDetector extends PooledDetector<AABB, Circle>
 			collision.penetration = circleB.radius - collision.normalB.len();
 		}
 
+
+		collision.colliderA = boxA;
+		collision.colliderB = circleB;
+		collision.setImpactVelocities(boxA.getSolid(), circleB.getSolid());
+
 		return collision;
 	}
 }

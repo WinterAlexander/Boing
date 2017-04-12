@@ -46,6 +46,10 @@ public class BoxBoxDetector extends PooledDetector<AABB, AABB>
 			collision.penetration = peneY;
 		}
 
+		collision.colliderA = shapeA;
+		collision.colliderB = shapeB;
+		collision.setImpactVelocities(shapeA.getSolid(), shapeB.getSolid());
+
 		return collision;
 	}
 }

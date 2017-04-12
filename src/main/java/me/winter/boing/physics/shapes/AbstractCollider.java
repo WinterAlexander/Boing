@@ -7,12 +7,12 @@ import me.winter.boing.physics.Solid;
  * <p>
  * Created by Alexander Winter on 2017-04-10.
  */
-public abstract class AbstractShape implements Shape
+public abstract class AbstractCollider implements Collider
 {
 	protected Solid solid;
 	protected float x, y;
 
-	public AbstractShape(Solid solid, float x, float y)
+	public AbstractCollider(Solid solid, float x, float y)
 	{
 		this.solid = solid;
 		this.x = x;

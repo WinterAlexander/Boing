@@ -2,14 +2,14 @@ package me.winter.boing.physics.detection;
 
 import com.badlogic.gdx.math.Vector2;
 import me.winter.boing.physics.Collision;
-import me.winter.boing.physics.shapes.Shape;
+import me.winter.boing.physics.shapes.Collider;
 
 /**
  * Undocumented :(
  * <p>
  * Created by Alexander Winter on 2017-04-12.
  */
-public class DetectorSwapper<A extends Shape, B extends Shape> implements CollisionDetector<A, B>
+public class DetectorSwapper<A extends Collider, B extends Collider> implements CollisionDetector<A, B>
 {
 	private CollisionDetector<B, A> detector;
 
@@ -26,9 +26,16 @@ public class DetectorSwapper<A extends Shape, B extends Shape> implements Collis
 		if(collision == null)
 			return null;
 
-		Vector2 tmp = collision.normalA;
+		Object tmp = collision.normalA;
 		collision.normalA = collision.normalB;
-		collision.normalB = tmp;
+		collision.normalB = (Vector2)tmp;
+
+		tmp = collision.impactVelA;
+		collision.impactVelA = collision.impactVelB;
+		collision.impactVelB = (Vector2)tmp;
+
+		collision.colliderA = shapeA;
+		collision.colliderB = shapeB;
 		return collision;
 	}
 }

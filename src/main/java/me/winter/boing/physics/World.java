@@ -4,6 +4,7 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Pool;
 import me.winter.boing.physics.detection.DetectionHandler;
 import me.winter.boing.physics.resolver.CollisionResolver;
+import me.winter.boing.physics.shapes.Collider;
 
 /**
  * Undocumented :(
