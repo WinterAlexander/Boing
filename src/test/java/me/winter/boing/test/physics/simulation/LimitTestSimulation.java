@@ -17,7 +17,7 @@ import static me.winter.boing.test.physics.simulation.WorldSimulationUtil.simula
 public class LimitTestSimulation
 {
 	@Test
-	public void simpleLimitLimit()
+	public void simpleLimitLimitY()
 	{
 		World world = new World(new ReplaceResolver());
 
@@ -31,6 +31,86 @@ public class LimitTestSimulation
 		ballImpl2.getPosition().set(400, 500);
 		ballImpl2.getColliders().add(new Limit(ballImpl2, 0, 0, new Vector2(0, -1), 50));
 		ballImpl2.getVelocity().set(0, -100);
+		world.getSolids().add(ballImpl2);
+
+		simulate(world);
+	}
+
+	@Test
+	public void simpleLimitLimitX()
+	{
+		World world = new World(new ReplaceResolver());
+
+		BouncingBallImpl ballImpl = new BouncingBallImpl(world);
+		ballImpl.getPosition().set(200, 425);
+		ballImpl.getColliders().add(new Limit(ballImpl, 0, 0, new Vector2(1, 0), 50));
+		ballImpl.getVelocity().set(50, 0);
+		world.getSolids().add(ballImpl);
+
+		BouncingBallImpl ballImpl2 = new BouncingBallImpl(world);
+		ballImpl2.getPosition().set(500, 400);
+		ballImpl2.getColliders().add(new Limit(ballImpl2, 0, 0, new Vector2(-1, 0), 50));
+		ballImpl2.getVelocity().set(-100, 0);
+		world.getSolids().add(ballImpl2);
+
+		simulate(world);
+	}
+
+	@Test
+	public void angle45LimitLimit()
+	{
+		World world = new World(new ReplaceResolver());
+
+		BouncingBallImpl ballImpl = new BouncingBallImpl(world);
+		ballImpl.getPosition().set(200, 200);
+		ballImpl.getColliders().add(new Limit(ballImpl, 0, 0, new Vector2(1, 1).nor(), 50));
+		ballImpl.getVelocity().set(5, 5);
+		world.getSolids().add(ballImpl);
+
+		BouncingBallImpl ballImpl2 = new BouncingBallImpl(world);
+		ballImpl2.getPosition().set(400, 400);
+		ballImpl2.getColliders().add(new Limit(ballImpl2, 0, 0, new Vector2(-1, -1).nor(), 50));
+		ballImpl2.getVelocity().set(-150, -150);
+		world.getSolids().add(ballImpl2);
+
+		simulate(world);
+	}
+
+	@Test
+	public void angleAnyLimitLimit()
+	{
+		World world = new World(new ReplaceResolver());
+
+		BouncingBallImpl ballImpl = new BouncingBallImpl(world);
+		ballImpl.getPosition().set(200, 200);
+		ballImpl.getColliders().add(new Limit(ballImpl, 0, 0, new Vector2(1, 0.8f).nor(), 50));
+		ballImpl.getVelocity().set(5, 5);
+		world.getSolids().add(ballImpl);
+
+		BouncingBallImpl ballImpl2 = new BouncingBallImpl(world);
+		ballImpl2.getPosition().set(400, 400);
+		ballImpl2.getColliders().add(new Limit(ballImpl2, 0, 0, new Vector2(-0.9f, -1).nor(), 50));
+		ballImpl2.getVelocity().set(-150, -150);
+		world.getSolids().add(ballImpl2);
+
+		simulate(world);
+	}
+
+	@Test
+	public void straightVsAngled()
+	{
+		World world = new World(new ReplaceResolver());
+
+		BouncingBallImpl ballImpl = new BouncingBallImpl(world);
+		ballImpl.getPosition().set(400, 200);
+		ballImpl.getColliders().add(new Limit(ballImpl, 0, 0, new Vector2(0, 1).nor(), 50));
+		ballImpl.getVelocity().set(1, 60);
+		world.getSolids().add(ballImpl);
+
+		BouncingBallImpl ballImpl2 = new BouncingBallImpl(world);
+		ballImpl2.getPosition().set(400, 400);
+		ballImpl2.getColliders().add(new Limit(ballImpl2, 0, 0, new Vector2(-0.75f, -1).nor(), 50));
+		ballImpl2.getVelocity().set(0, -150);
 		world.getSolids().add(ballImpl2);
 
 		simulate(world);

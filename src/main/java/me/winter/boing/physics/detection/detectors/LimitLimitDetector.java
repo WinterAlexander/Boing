@@ -102,11 +102,11 @@ public class LimitLimitDetector extends PooledDetector<Limit, Limit>
 		Vector2 p1B = limitB.getPoint1();
 		Vector2 p2B = limitB.getPoint2();
 
-		float limitA1 = limitA.normal.y * (p1A.x + offsetA.x) + limitA.normal.x * (p1A.y + offsetA.y);
-		float limitA2 = limitA.normal.y * (p2A.x + offsetA.x) + limitA.normal.x * (p2A.y + offsetA.y);
+		float limitA1 = -limitA.normal.y * (p1A.x + offsetA.x) + limitA.normal.x * (p1A.y + offsetA.y);
+		float limitA2 = -limitA.normal.y * (p2A.x + offsetA.x) + limitA.normal.x * (p2A.y + offsetA.y);
 
-		float limitB1 = limitA.normal.y * (p1B.x + offsetB.x) + limitA.normal.x * (p1B.x + offsetB.y);
-		float limitB2 = limitA.normal.y * (p2B.x + offsetB.x) + limitA.normal.x * (p2B.x + offsetB.y);
+		float limitB1 = -limitA.normal.y * (p1B.x + offsetB.x) + limitA.normal.x * (p1B.y + offsetB.y);
+		float limitB2 = -limitA.normal.y * (p2B.x + offsetB.x) + limitA.normal.x * (p2B.y + offsetB.y);
 
 		if(max(limitA1, limitA2) <= min(limitB1, limitB2))
 			return false;
