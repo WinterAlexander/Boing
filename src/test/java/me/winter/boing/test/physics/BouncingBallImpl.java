@@ -42,9 +42,10 @@ public class DynSolidImpl extends SolidImpl implements DynamicSolid
 		{
 			DynamicSolid dynamicSolid = ((DynamicSolid)collision.colliderB.getSolid());
 
-			tmpVector.set(collision.impactVelB).scl(1f - getMassRatio(getMass(), dynamicSolid.getMass()));
+			float massRatio = getMassRatio(getMass(), dynamicSolid.getMass());
 
-			getVelocity().add(tmpVector);
+			getVelocity().add(collision.impactVelB);
+			getVelocity().scl(1f - massRatio);
 		}
 
 		return true;
