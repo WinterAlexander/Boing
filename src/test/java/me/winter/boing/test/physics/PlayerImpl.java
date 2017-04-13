@@ -25,10 +25,14 @@ public class PlayerImpl extends SolidImpl implements DynamicSolid
 	@Override
 	public void update()
 	{
-		velocity.scl(0.9f);
+		velocity.x *= 0.9f;
+		velocity.y -= 5;
 
 		if(onGround)
+		{
 			velocity.add(10, 0);
+			velocity.y = 0;
+		}
 		onGround = false;
 	}
 

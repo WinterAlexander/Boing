@@ -36,6 +36,7 @@ public class World
 
 			DynamicSolid dynamic = (DynamicSolid)solid;
 
+			solid.update();
 			dynamic.getMovement().set(dynamic.getVelocity()).scl(delta);
 			solid.getPosition().add(dynamic.getMovement());
 		}
