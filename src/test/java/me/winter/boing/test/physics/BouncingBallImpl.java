@@ -13,19 +13,19 @@ import static me.winter.boing.physics.VelocityUtil.getMassRatio;
  * <p>
  * Created by Alexander Winter on 2017-04-10.
  */
-public class DynSolidImpl extends SolidImpl implements DynamicSolid
+public class BouncingBallImpl extends SolidImpl implements DynamicSolid
 {
 	private Vector2 velocity, movement;
 	private float mass;
 
 	private Vector2 tmpVector = new Vector2();
 
-	public DynSolidImpl(World world)
+	public BouncingBallImpl(World world)
 	{
 		this(world, 1f);
 	}
 
-	public DynSolidImpl(World world, float mass)
+	public BouncingBallImpl(World world, float mass)
 	{
 		super(world);
 		this.velocity = new Vector2();

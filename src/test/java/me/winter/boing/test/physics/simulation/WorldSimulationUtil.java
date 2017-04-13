@@ -1,7 +1,6 @@
 package me.winter.boing.test.physics.simulation;
 
 import me.winter.boing.physics.World;
-import me.winter.boing.test.physics.DynSolidImpl;
 import me.winter.boing.test.physics.SimulationElement;
 
 import javax.swing.JFrame;
@@ -10,8 +9,6 @@ import javax.swing.SwingUtilities;
 import javax.swing.WindowConstants;
 import java.awt.Color;
 import java.awt.Graphics;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 
 /**
  * Undocumented :(
