@@ -83,16 +83,12 @@ public class LimitLimitDetector extends PooledDetector<Limit, Limit>
 
 	private boolean isBefore(Vector2 posA, Vector2 posB)
 	{
-		return (posA.x < posB.x || isEqual(posA.x, posB.x))
-			&& (posA.y < posB.y || isEqual(posA.y, posB.y));
+		return posA.x + posA.y < posB.x + posB.y || isEqual(posA.x + posA.y, posB.x + posB.y);
 	}
 
 	private boolean isAfter(Vector2 posA, Vector2 posB)
 	{
-		if(posA.x > posB.x)
-			return posA.y > posB.y || isEqual(posA.y, posB.y);
-
-		return isEqual(posA.x, posB.x) && posA.y > posB.y;
+		return posA.x + posA.y > posB.x + posB.y;
 	}
 
 	private boolean contains(Limit limitA, Limit limitB, Vector2 offsetA, Vector2 offsetB)
