@@ -1,11 +1,17 @@
 package me.winter.boing.physics.detection.detectors;
 
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Pool;
 import me.winter.boing.physics.Collision;
 import me.winter.boing.physics.DynamicSolid;
 import me.winter.boing.physics.detection.PooledDetector;
 import me.winter.boing.physics.shapes.Limit;
+
+import static com.badlogic.gdx.math.MathUtils.isEqual;
+import static java.lang.Math.max;
+import static java.lang.Math.min;
+import static me.winter.boing.physics.VectorUtil.divide;
 
 /**
  * Undocumented :(
@@ -14,7 +20,7 @@ import me.winter.boing.physics.shapes.Limit;
  */
 public class LimitLimitDetector extends PooledDetector<Limit, Limit>
 {
-	private Vector2 tmpVector = new Vector2(), tmpVector2 = new Vector2();
+	private Vector2 tmpVecA = new Vector2(), tmpVecB = new Vector2(), diff = new Vector2();
 
 	public LimitLimitDetector(Pool<Collision> collisionPool)
 	{
@@ -24,40 +30,42 @@ public class LimitLimitDetector extends PooledDetector<Limit, Limit>
 	@Override
 	public Collision collides(Limit shapeA, Limit shapeB)
 	{
-		return null;/*
 		if(shapeA.normal.dot(shapeB.normal) >= 0)
 			return null;
 
-		int dir = forward ? -1 : 1;
-
-		Vector2 thisVec = shapeA.getSolid() instanceof DynamicSolid
+		Vector2 vecA = shapeA.getSolid() instanceof DynamicSolid
 				? ((DynamicSolid)shapeA.getSolid()).getMovement()
 				: Vector2.Zero;
 
-		Vector2 thatVec = shapeB.getSolid() instanceof DynamicSolid
+		Vector2 vecB = shapeB.getSolid() instanceof DynamicSolid
 				? ((DynamicSolid)shapeB.getSolid()).getMovement()
 				: Vector2.Zero;
 
-		int thisPos = axisValue();
-		int thatPos = that.axisValue();
+		tmpVecA.set(shapeA.getAbsX(), shapeA.getAbsY()).scl(shapeA.normal);
+		tmpVecB.set(shapeB.getAbsX(), shapeB.getAbsY()).scl(shapeA.normal);
 
-		if(!(thisPos * dir <= thatPos * dir
-		&& (thisPos + axis.of(thisVec)) * dir > (thatPos + axis.of(thatVec)) * dir))
-			return null;
+		if(!isBefore(tmpVecA, tmpVecB)) //if limitA isn't before limitB
+			return null; //no collision
 
-		int diff = thatPos - thisPos;
+		tmpVecA.set(shapeA.getAbsX(), shapeA.getAbsY()).add(vecA).scl(shapeA.normal);
+		tmpVecB.set(shapeB.getAbsX(), shapeB.getAbsY()).add(vecB).scl(shapeA.normal);
+
+		if(!isAfter(tmpVecA, tmpVecB)) //if limitA after his velocity isn't after limitB with his velocity
+			return null; //no collision
+
+		diff.set(shapeB.getAbsX(), shapeB.getAbsY()).sub(shapeA.getAbsX(), shapeA.getAbsY());
 
 		//finding the collision point
-		tmpVector.set(thisVec).scl(diff).divide(axis.of(thisVec) - axis.of(thatVec));
-		tmpVector2.set(thatVec).scl(diff).divide(axis.of(thisVec) - axis.of(thatVec));
+		divide(tmpVecA.set(vecA).scl(diff), vecB.x - vecA.x, vecB.y - vecA.y);
+		divide(tmpVecB.set(vecB).scl(diff), vecB.x - vecA.x, vecB.y - vecA.y);
 
-		if(!contains(shapeA, shapeB, tmpVector, tmpVector2)) //and it was in bounds at the impact point
+		if(!contains(shapeA, shapeB, tmpVecA, tmpVecB)) //and it was in bounds at the impact point
 		{
 			//finding the collision point + 1 (to prevent the corner glitch)
-			tmpVector.scl((diff + dir) / diff);
-			tmpVector2.scl((diff + dir) / diff);
+			divide(tmpVecA.scl(diff.x + shapeA.normal.x, diff.y + shapeA.normal.y), diff);
+			divide(tmpVecB.scl(diff.x + shapeB.normal.x, diff.y + shapeB.normal.y), diff);
 
-			if(!contains(shapeA, shapeB, tmpVector, tmpVector2))
+			if(!contains(shapeA, shapeB, tmpVecA, tmpVecB))
 				return null;
 		}
 
@@ -70,21 +78,41 @@ public class LimitLimitDetector extends PooledDetector<Limit, Limit>
 		collision.normalB = shapeB.normal;
 		collision.setImpactVelocities(shapeA.getSolid(), shapeB.getSolid());
 
-		return collision;*/
+		return collision;
+	}
+
+	private boolean isBefore(Vector2 posA, Vector2 posB)
+	{
+		return (posA.x < posB.x || isEqual(posA.x, posB.x))
+			&& (posA.y < posB.y || isEqual(posA.y, posB.y));
+	}
+
+	private boolean isAfter(Vector2 posA, Vector2 posB)
+	{
+		if(posA.x > posB.x)
+			return posA.y > posB.y || isEqual(posA.y, posB.y);
+
+		return isEqual(posA.x, posB.x) && posA.y > posB.y;
 	}
 
 	private boolean contains(Limit limitA, Limit limitB, Vector2 offsetA, Vector2 offsetB)
 	{
-		/*
-		for(Axis axis : Axis.values()) //for all axes
-		{
-			if(this.axis == axis) //but the one of this limit
-				continue;
+		Vector2 p1A = limitA.getPoint1();
+		Vector2 p2A = limitA.getPoint2();
+		Vector2 p1B = limitB.getPoint1();
+		Vector2 p2B = limitB.getPoint2();
 
-			if(axis.of(limit.end()) + axis.of(otherOffset) <= axis.of(start()) + axis.of(thisOffset)
-					|| axis.of(limit.start()) + axis.of(otherOffset) >= axis.of(end()) + axis.of(thisOffset))
-				return false;
-		}*/
+		float limitA1 = limitA.normal.y * (p1A.x + offsetA.x) + limitA.normal.x * (p1A.y + offsetA.y);
+		float limitA2 = limitA.normal.y * (p2A.x + offsetA.x) + limitA.normal.x * (p2A.y + offsetA.y);
+
+		float limitB1 = limitA.normal.y * (p1B.x + offsetB.x) + limitA.normal.x * (p1B.x + offsetB.y);
+		float limitB2 = limitA.normal.y * (p2B.x + offsetB.x) + limitA.normal.x * (p2B.x + offsetB.y);
+
+		if(max(limitA1, limitA2) <= min(limitB1, limitB2))
+			return false;
+
+		if(min(limitA1, limitA2) >= max(limitB1, limitB2))
+			return false;
 
 		return true;
 	}

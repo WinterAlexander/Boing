@@ -1,4 +1,4 @@
-package me.winter.boing.test.physics;
+package me.winter.boing.test.physics.testimpl;
 
 import com.badlogic.gdx.math.Vector2;
 import me.winter.boing.physics.Collision;
@@ -10,9 +10,9 @@ import java.awt.KeyboardFocusManager;
 import java.awt.event.KeyEvent;
 
 import static java.lang.Math.abs;
-import static me.winter.boing.test.physics.PlayerImpl.IsKeyPressed.aPressed;
-import static me.winter.boing.test.physics.PlayerImpl.IsKeyPressed.dPressed;
-import static me.winter.boing.test.physics.PlayerImpl.IsKeyPressed.jumpPressed;
+import static me.winter.boing.test.physics.testimpl.PlayerImpl.IsKeyPressed.aPressed;
+import static me.winter.boing.test.physics.testimpl.PlayerImpl.IsKeyPressed.dPressed;
+import static me.winter.boing.test.physics.testimpl.PlayerImpl.IsKeyPressed.jumpPressed;
 
 /**
  * Undocumented :(
@@ -43,7 +43,8 @@ public class PlayerImpl extends SolidImpl implements DynamicSolid
 
 		if(onGround)
 		{
-			velocity.y = 0;
+			if(velocity.y < 0)
+				velocity.y = 0;
 			if(jumpPressed)
 				velocity.add(0, 200);
 		}

@@ -1,4 +1,4 @@
-package me.winter.boing.test.physics;
+package me.winter.boing.test.physics.testimpl;
 
 import me.winter.boing.physics.Collision;
 import me.winter.boing.physics.DynamicSolid;
@@ -23,7 +23,8 @@ public class SpringImpl extends SolidImpl
 		if(collision.colliderB.getSolid() instanceof DynamicSolid)
 		{
 			DynamicSolid ds = (DynamicSolid)collision.colliderB.getSolid();
-			VelocityUtil.reflect(ds.getVelocity(), collision.normalB);
+			ds.getVelocity().set(collision.impactVelB);
+			VelocityUtil.reflect(ds.getVelocity(), collision.normalA);
 
 			if(ds.getVelocity().len2() < 500f * 500f)
 				ds.getVelocity().nor().scl(500f);

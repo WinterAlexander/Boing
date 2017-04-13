@@ -1,4 +1,4 @@
-package me.winter.boing.test.physics;
+package me.winter.boing.test.physics.simulation;
 
 import java.awt.Graphics;
 

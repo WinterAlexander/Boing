@@ -1,7 +1,6 @@
 package me.winter.boing.test.physics.simulation;
 
 import me.winter.boing.physics.World;
-import me.winter.boing.test.physics.SimulationElement;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;

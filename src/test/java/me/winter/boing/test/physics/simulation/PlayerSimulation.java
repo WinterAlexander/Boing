@@ -3,9 +3,9 @@ package me.winter.boing.test.physics.simulation;
 import me.winter.boing.physics.World;
 import me.winter.boing.physics.resolver.ReplaceResolver;
 import me.winter.boing.physics.shapes.AABB;
-import me.winter.boing.test.physics.PlayerImpl;
-import me.winter.boing.test.physics.SolidImpl;
-import me.winter.boing.test.physics.SpringImpl;
+import me.winter.boing.test.physics.testimpl.PlayerImpl;
+import me.winter.boing.test.physics.testimpl.SolidImpl;
+import me.winter.boing.test.physics.testimpl.SpringImpl;
 import org.junit.Test;
 
 import static me.winter.boing.test.physics.simulation.WorldSimulationUtil.simulate;

@@ -1,4 +1,4 @@
-package me.winter.boing.test.physics;
+package me.winter.boing.test.physics.testimpl;
 
 import com.badlogic.gdx.math.Vector2;
 import me.winter.boing.physics.Collision;

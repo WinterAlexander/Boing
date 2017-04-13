@@ -1,4 +1,4 @@
-package me.winter.boing.test.physics;
+package me.winter.boing.test.physics.testimpl;
 
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
@@ -7,6 +7,8 @@ import me.winter.boing.physics.World;
 import me.winter.boing.physics.shapes.AABB;
 import me.winter.boing.physics.shapes.Circle;
 import me.winter.boing.physics.shapes.Collider;
+import me.winter.boing.physics.shapes.Limit;
+import me.winter.boing.test.physics.simulation.SimulationElement;
 
 import java.awt.Graphics;
 
@@ -61,6 +63,11 @@ public class SolidImpl implements Solid, SimulationElement
 			float w = ((AABB)collider).width;
 			float h = ((AABB)collider).height;
 			g.drawRect((int)(getPosition().x - w / 2), (int)(600 - getPosition().y - h / 2), (int)w, (int)h);
+		}
+		else if(collider instanceof Limit)
+		{
+			Limit limit = (Limit)collider;
+			g.drawLine((int)limit.getPoint1().x, (int)(600 - limit.getPoint1().y), (int)limit.getPoint2().x, (int)(600 - limit.getPoint2().y));
 		}
 	}
 }

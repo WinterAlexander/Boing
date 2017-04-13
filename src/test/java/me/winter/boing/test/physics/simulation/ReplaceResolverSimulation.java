@@ -4,8 +4,8 @@ import me.winter.boing.physics.World;
 import me.winter.boing.physics.resolver.ReplaceResolver;
 import me.winter.boing.physics.shapes.AABB;
 import me.winter.boing.physics.shapes.Circle;
-import me.winter.boing.test.physics.BouncingBallImpl;
-import me.winter.boing.test.physics.SolidImpl;
+import me.winter.boing.test.physics.testimpl.BouncingBallImpl;
+import me.winter.boing.test.physics.testimpl.SolidImpl;
 import org.junit.Test;
 
 import static me.winter.boing.test.physics.simulation.WorldSimulationUtil.simulate;
