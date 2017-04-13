@@ -42,7 +42,7 @@ public class BouncingBallImpl extends SolidImpl implements DynamicSolid
 		{
 			DynamicSolid dynamicSolid = ((DynamicSolid)collision.colliderB.getSolid());
 
-			float massRatio = getMassRatio(getMass(), dynamicSolid.getMass());
+			float massRatio = getMassRatio(weightFor(dynamicSolid), dynamicSolid.weightFor(this));
 
 			getVelocity().add(collision.impactVelB);
 			getVelocity().scl(1f - massRatio);
@@ -64,7 +64,7 @@ public class BouncingBallImpl extends SolidImpl implements DynamicSolid
 	}
 
 	@Override
-	public float getMass()
+	public float weightFor(DynamicSolid against)
 	{
 		return mass;
 	}

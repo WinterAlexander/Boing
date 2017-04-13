@@ -3,7 +3,6 @@ package me.winter.boing.physics.resolver;
 import com.badlogic.gdx.math.Vector2;
 import me.winter.boing.physics.Collision;
 import me.winter.boing.physics.DynamicSolid;
-import me.winter.boing.physics.Solid;
 
 import static me.winter.boing.physics.VelocityUtil.getMassRatio;
 
@@ -33,7 +32,7 @@ public class ReplaceResolver implements CollisionResolver
 			else
 			{
 				DynamicSolid dsB = (DynamicSolid)collision.colliderB.getSolid();
-				replace(dsA, collision.normalB, getMassRatio(dsB.getMass(), dsA.getMass())  * collision.penetration);
+				replace(dsA, collision.normalB, getMassRatio(dsB.weightFor(dsA), dsA.weightFor(dsB))  * collision.penetration);
 			}
 		}
 
@@ -48,7 +47,7 @@ public class ReplaceResolver implements CollisionResolver
 			else
 			{
 				DynamicSolid dsA = (DynamicSolid)collision.colliderA.getSolid();
-				replace(dsB, collision.normalA, getMassRatio(dsA.getMass(), dsB.getMass()) * collision.penetration);
+				replace(dsB, collision.normalA, getMassRatio(dsA.weightFor(dsB), dsB.weightFor(dsA)) * collision.penetration);
 			}
 		}
 	}

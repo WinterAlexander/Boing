@@ -25,8 +25,8 @@ public class SpringImpl extends SolidImpl
 			DynamicSolid ds = (DynamicSolid)collision.colliderB.getSolid();
 			VelocityUtil.reflect(ds.getVelocity(), collision.normalB);
 
-			if(ds.getVelocity().len2() < 100f * 100f)
-				ds.getVelocity().nor().scl(100f);
+			if(ds.getVelocity().len2() < 500f * 500f)
+				ds.getVelocity().nor().scl(500f);
 		}
 		return true;
 	}

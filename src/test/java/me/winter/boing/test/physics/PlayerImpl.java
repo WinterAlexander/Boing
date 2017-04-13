@@ -5,7 +5,14 @@ import me.winter.boing.physics.Collision;
 import me.winter.boing.physics.DynamicSolid;
 import me.winter.boing.physics.World;
 
+import java.awt.KeyEventDispatcher;
+import java.awt.KeyboardFocusManager;
+import java.awt.event.KeyEvent;
+
 import static java.lang.Math.abs;
+import static me.winter.boing.test.physics.PlayerImpl.IsKeyPressed.aPressed;
+import static me.winter.boing.test.physics.PlayerImpl.IsKeyPressed.dPressed;
+import static me.winter.boing.test.physics.PlayerImpl.IsKeyPressed.jumpPressed;
 
 /**
  * Undocumented :(
@@ -28,10 +35,17 @@ public class PlayerImpl extends SolidImpl implements DynamicSolid
 		velocity.x *= 0.9f;
 		velocity.y -= 5;
 
+
+		if(aPressed)
+			velocity.add(onGround ? -100 : -20, 0);
+		else if(dPressed)
+			velocity.add(onGround ? 100 : 20, 0);
+
 		if(onGround)
 		{
-			velocity.add(10, 0);
 			velocity.y = 0;
+			if(jumpPressed)
+				velocity.add(0, 200);
 		}
 		onGround = false;
 	}
@@ -57,8 +71,49 @@ public class PlayerImpl extends SolidImpl implements DynamicSolid
 	}
 
 	@Override
-	public float getMass()
+	public float weightFor(DynamicSolid against)
 	{
 		return 1f;
+	}
+
+	public static class IsKeyPressed
+	{
+		public static boolean aPressed = false, dPressed = false, jumpPressed = false;
+
+		static
+		{
+			KeyboardFocusManager.getCurrentKeyboardFocusManager().addKeyEventDispatcher(new KeyEventDispatcher() {
+				@Override
+				public boolean dispatchKeyEvent(KeyEvent ke) {
+					switch (ke.getID())
+					{
+						case KeyEvent.KEY_PRESSED:
+							if (ke.getKeyCode() == KeyEvent.VK_A)
+								aPressed = true;
+
+							if (ke.getKeyCode() == KeyEvent.VK_D)
+								dPressed = true;
+
+							if(ke.getKeyCode() == KeyEvent.VK_W)
+								jumpPressed = true;
+
+							break;
+
+						case KeyEvent.KEY_RELEASED:
+							if (ke.getKeyCode() == KeyEvent.VK_A)
+								aPressed = false;
+
+							if (ke.getKeyCode() == KeyEvent.VK_D)
+								dPressed = false;
+
+							if(ke.getKeyCode() == KeyEvent.VK_W)
+								jumpPressed = false;
+
+							break;
+					}
+					return false;
+				}
+			});
+		}
 	}
 }
