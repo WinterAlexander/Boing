@@ -11,6 +11,7 @@ import me.winter.boing.physics.shapes.Limit;
 import static com.badlogic.gdx.math.MathUtils.isEqual;
 import static java.lang.Math.max;
 import static java.lang.Math.min;
+import static java.lang.Math.sqrt;
 import static me.winter.boing.physics.VectorUtil.divide;
 
 /**
@@ -20,7 +21,7 @@ import static me.winter.boing.physics.VectorUtil.divide;
  */
 public class LimitLimitDetector extends PooledDetector<Limit, Limit>
 {
-	private Vector2 tmpVecA = new Vector2(), tmpVecB = new Vector2(), diff = new Vector2();
+	private Vector2 tmpVecA = new Vector2(), tmpVecB = new Vector2();
 
 	public LimitLimitDetector(Pool<Collision> collisionPool)
 	{
@@ -53,19 +54,27 @@ public class LimitLimitDetector extends PooledDetector<Limit, Limit>
 		if(!isAfter(tmpVecA, tmpVecB)) //if limitA after his velocity isn't after limitB with his velocity
 			return null; //no collision
 
-		diff.set(shapeB.getAbsX(), shapeB.getAbsY()).sub(shapeA.getAbsX(), shapeA.getAbsY());
+		float dx = shapeB.getAbsX() - shapeA.getAbsX();
+		float dy = shapeB.getAbsY() - shapeA.getAbsY();
+
+		float vdx = vecB.x - vecA.x;
+		float vdy = vecB.y - vecA.y;
+
+		float diff = dx * shapeA.normal.x + dy * shapeA.normal.y;
+		float vecDiff = vdx * shapeA.normal.x  + vdy * shapeA.normal.y;
 
 		//finding the collision point
-		divide(tmpVecA.set(vecA).scl(diff), vecB.x - vecA.x, vecB.y - vecA.y);
-		divide(tmpVecB.set(vecB).scl(diff), vecB.x - vecA.x, vecB.y - vecA.y);
+		tmpVecA.set(vecA).scl(diff / vecDiff);
+		tmpVecB.set(vecB).scl(diff / vecDiff);
 
-		if(!contains(shapeA, shapeB, tmpVecA, tmpVecB)) //and it was in bounds at the impact point
+		if(!contains(shapeA, shapeB, tmpVecA, tmpVecB)) //if it wasn't in bounds at the impact point
 		{
+			/*
 			//finding the collision point + 1 (to prevent the corner glitch)
 			divide(tmpVecA.scl(diff.x + shapeA.normal.x, diff.y + shapeA.normal.y), diff);
 			divide(tmpVecB.scl(diff.x + shapeB.normal.x, diff.y + shapeB.normal.y), diff);
 
-			if(!contains(shapeA, shapeB, tmpVecA, tmpVecB))
+			if(!contains(shapeA, shapeB, tmpVecA, tmpVecB))*/
 				return null;
 		}
 
@@ -74,8 +83,8 @@ public class LimitLimitDetector extends PooledDetector<Limit, Limit>
 		collision.colliderA = shapeA;
 		collision.colliderB = shapeB;
 
-		collision.normalA = shapeA.normal;
-		collision.normalB = shapeB.normal;
+		collision.normalA.set(shapeA.normal);
+		collision.normalB.set(shapeB.normal);
 		collision.setImpactVelocities(shapeA.getSolid(), shapeB.getSolid());
 
 		return collision;

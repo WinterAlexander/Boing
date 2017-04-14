@@ -24,13 +24,11 @@ public class Limit extends AbstractCollider
 
 	public Vector2 getPoint1()
 	{
-		p1.set(normal).scl(size / 2).rotate90(-1).add(getAbsX(), getAbsY());
-		return p1;
+		return p1.set(normal).scl(size / 2).rotate90(-1).add(getAbsX(), getAbsY());
 	}
 
 	public Vector2 getPoint2()
 	{
-		p2.set(normal).scl(size / 2).rotate90(1).add(getAbsX(), getAbsY());
-		return p2;
+		return p2.set(normal).scl(size / 2).rotate90(1).add(getAbsX(), getAbsY());
 	}
 }

@@ -83,25 +83,25 @@ public class LimitTestSimulation
 
 		BouncingBallImpl ballImpl = new BouncingBallImpl(world);
 		ballImpl.getPosition().set(400, 200);
-		ballImpl.getColliders().add(new Limit(ballImpl, 0, 0, new Vector2(1, 1).nor(), 50));
+		ballImpl.getColliders().add(new Limit(ballImpl, 0, 0, new Vector2(1, 0.5f).nor(), 50));
 		ballImpl.getVelocity().set(0, 50);
 		world.getSolids().add(ballImpl);
 
 		BouncingBallImpl ballImpl2 = new BouncingBallImpl(world);
 		ballImpl2.getPosition().set(400, 500);
-		ballImpl2.getColliders().add(new Limit(ballImpl2, 0, 0, new Vector2(-1, -1).nor(), 50));
+		ballImpl2.getColliders().add(new Limit(ballImpl2, 0, 0, new Vector2(-1, -0.1f).nor(), 50));
 		ballImpl2.getVelocity().set(0, -100);
-		//world.getSolids().add(ballImpl2);
+		world.getSolids().add(ballImpl2);
 
 		BouncingBallImpl ballImpl3 = new BouncingBallImpl(world);
 		ballImpl3.getPosition().set(100, 200);
-		ballImpl3.getColliders().add(new Limit(ballImpl3, 0, 0, new Vector2(1, 1).nor(), 50));
+		ballImpl3.getColliders().add(new Limit(ballImpl3, 0, 0, new Vector2(1, 10).nor(), 50));
 		ballImpl3.getVelocity().set(0, 50);
-		//world.getSolids().add(ballImpl3);
+		world.getSolids().add(ballImpl3);
 
 		BouncingBallImpl ballImpl4 = new BouncingBallImpl(world);
 		ballImpl4.getPosition().set(105, 500);
-		ballImpl4.getColliders().add(new Limit(ballImpl4, 0, 0, new Vector2(-1, -1).nor(), 50));
+		ballImpl4.getColliders().add(new Limit(ballImpl4, 0, 0, new Vector2(-0.2f, -1).nor(), 50));
 		ballImpl4.getVelocity().set(0, -100);
 		world.getSolids().add(ballImpl4);
 
@@ -109,13 +109,13 @@ public class LimitTestSimulation
 		ballImpl5.getPosition().set(600, 200);
 		ballImpl5.getColliders().add(new Limit(ballImpl5, 0, 0, new Vector2(1, 1).nor(), 50));
 		ballImpl5.getVelocity().set(0, 50);
-		//world.getSolids().add(ballImpl5);
+		world.getSolids().add(ballImpl5);
 
 		BouncingBallImpl ballImpl6 = new BouncingBallImpl(world);
 		ballImpl6.getPosition().set(620, 500);
-		ballImpl6.getColliders().add(new Limit(ballImpl6, 0, 0, new Vector2(-1, -1).nor(), 50));
+		ballImpl6.getColliders().add(new Limit(ballImpl6, 0, 0, new Vector2(-0.9f, -1).nor(), 50));
 		ballImpl6.getVelocity().set(0, -100);
-		//world.getSolids().add(ballImpl6);
+		world.getSolids().add(ballImpl6);
 
 		simulate(world);
 	}
