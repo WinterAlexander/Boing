@@ -42,17 +42,49 @@ public class LimitLimitDetector extends PooledDetector<Limit, Limit>
 				? ((DynamicSolid)shapeB.getSolid()).getMovement()
 				: Vector2.Zero;
 
-		tmpVecA.set(shapeA.getAbsX(), shapeA.getAbsY()).scl(shapeA.normal);
-		tmpVecB.set(shapeB.getAbsX(), shapeB.getAbsY()).scl(shapeA.normal);
+
+		/*
+			Use the sign of the determinant of vectors (AB,AM), where M(X,Y) is the query point:
+
+			position = sign((Bx - Ax) * (Y - Ay) - (By - Ay) * (X - Ax))
+			It is 0 on the line, and +1 on one side, -1 on the other side.
+		*/
+		float side = shapeA.normal.x * -shapeB.normal.y - shapeA.normal.y * -shapeB.normal.x;
+
+		if(side < 0)
+		{
+			tmpVecA.set(shapeA.getPoint2());
+			tmpVecB.set(shapeB.getPoint1());
+		}
+		else
+		{
+			tmpVecA.set(shapeA.getPoint1());
+			tmpVecB.set(shapeB.getPoint2());
+		}
+
+		tmpVecA.scl(shapeA.normal);
+		tmpVecB.scl(shapeA.normal);
 
 		if(!isBefore(tmpVecA, tmpVecB)) //if limitA isn't before limitB
 			return null; //no collision
+		
+		if(side < 0)
+		{
+			tmpVecA.set(shapeA.getPoint1());
+			tmpVecB.set(shapeB.getPoint2());
+		}
+		else
+		{
+			tmpVecA.set(shapeA.getPoint2());
+			tmpVecB.set(shapeB.getPoint1());
+		}
 
-		tmpVecA.set(shapeA.getAbsX(), shapeA.getAbsY()).add(vecA).scl(shapeA.normal);
-		tmpVecB.set(shapeB.getAbsX(), shapeB.getAbsY()).add(vecB).scl(shapeA.normal);
+		tmpVecA.add(vecA).scl(shapeA.normal);
+		tmpVecB.add(vecB).scl(shapeA.normal);
 
 		if(!isAfter(tmpVecA, tmpVecB)) //if limitA after his velocity isn't after limitB with his velocity
 			return null; //no collision
+
 
 		float dx = shapeB.getAbsX() - shapeA.getAbsX();
 		float dy = shapeB.getAbsY() - shapeA.getAbsY();
