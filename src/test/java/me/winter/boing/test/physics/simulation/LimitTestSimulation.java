@@ -3,8 +3,11 @@ package me.winter.boing.test.physics.simulation;
 import com.badlogic.gdx.math.Vector2;
 import me.winter.boing.physics.World;
 import me.winter.boing.physics.resolver.ReplaceResolver;
+import me.winter.boing.physics.shapes.AABB;
 import me.winter.boing.physics.shapes.Limit;
 import me.winter.boing.test.physics.testimpl.BouncingBallImpl;
+import me.winter.boing.test.physics.testimpl.PlayerImpl;
+import me.winter.boing.test.physics.testimpl.SolidImpl;
 import org.junit.Test;
 
 import static me.winter.boing.test.physics.simulation.WorldSimulationUtil.simulate;
@@ -156,6 +159,28 @@ public class LimitTestSimulation
 		ballImpl2.getColliders().add(new Limit(ballImpl2, 0, 0, new Vector2(-0.75f, -1).nor(), 50));
 		ballImpl2.getVelocity().set(0, -150);
 		world.getSolids().add(ballImpl2);
+
+		simulate(world);
+	}
+
+	@Test
+	public void sloppeTerrain()
+	{
+		World world = new World(new ReplaceResolver());
+
+		PlayerImpl player = new PlayerImpl(world);
+
+		player.getPosition().set(400, 400);
+		player.getColliders().add(new Limit(player, 0, -25, new Vector2(0, -1).nor(), 50));
+		player.getColliders().add(new Limit(player, 25, 0, new Vector2(1, 0).nor(), 50));
+		player.getColliders().add(new Limit(player, -25, 0, new Vector2(-1, 0).nor(), 50));
+		world.getSolids().add(player);
+
+		SolidImpl ground = new SolidImpl(world);
+
+		ground.getPosition().set(400, 100);
+		ground.getColliders().add(new Limit(ground, 0, 0, new Vector2(0, 1), 800));
+		world.getSolids().add(ground);
 
 		simulate(world);
 	}

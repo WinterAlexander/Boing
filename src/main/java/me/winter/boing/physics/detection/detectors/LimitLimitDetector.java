@@ -62,12 +62,12 @@ public class LimitLimitDetector extends PooledDetector<Limit, Limit>
 			tmpVecB.set(shapeB.getPoint2());
 		}
 
-		tmpVecA.scl(shapeA.normal);
-		tmpVecB.scl(shapeA.normal);
+		tmpVecA.sub(vecA).scl(shapeA.normal);
+		tmpVecB.sub(vecB).scl(shapeA.normal);
 
 		if(!isBefore(tmpVecA, tmpVecB)) //if limitA isn't before limitB
 			return null; //no collision
-		
+
 		if(side < 0)
 		{
 			tmpVecA.set(shapeA.getPoint1());
@@ -79,8 +79,8 @@ public class LimitLimitDetector extends PooledDetector<Limit, Limit>
 			tmpVecB.set(shapeB.getPoint1());
 		}
 
-		tmpVecA.add(vecA).scl(shapeA.normal);
-		tmpVecB.add(vecB).scl(shapeA.normal);
+		tmpVecA.scl(shapeA.normal);
+		tmpVecB.scl(shapeA.normal);
 
 		if(!isAfter(tmpVecA, tmpVecB)) //if limitA after his velocity isn't after limitB with his velocity
 			return null; //no collision
@@ -95,9 +95,15 @@ public class LimitLimitDetector extends PooledDetector<Limit, Limit>
 		float diff = dx * shapeA.normal.x + dy * shapeA.normal.y;
 		float vecDiff = vdx * shapeA.normal.x  + vdy * shapeA.normal.y;
 
-		//finding the collision point
-		tmpVecA.set(vecA).scl(diff / vecDiff);
-		tmpVecB.set(vecB).scl(diff / vecDiff);
+		tmpVecA.set(vecA);
+		tmpVecB.set(vecB);
+
+		if(vecDiff != 0)
+		{
+			//finding the collision point
+			tmpVecA.scl((diff + vecDiff) / vecDiff);
+			tmpVecB.scl((diff + vecDiff) / vecDiff);
+		}
 
 		if(!contains(shapeA, shapeB, tmpVecA, tmpVecB)) //if it wasn't in bounds at the impact point
 		{
@@ -118,6 +124,7 @@ public class LimitLimitDetector extends PooledDetector<Limit, Limit>
 		collision.normalA.set(shapeA.normal);
 		collision.normalB.set(shapeB.normal);
 		collision.setImpactVelocities(shapeA.getSolid(), shapeB.getSolid());
+		collision.penetration = -diff;
 
 		return collision;
 	}

@@ -51,23 +51,23 @@ public class SolidImpl implements Solid, SimulationElement
 	@Override
 	public void draw(Graphics g)
 	{
-		Collider collider = getColliders().get(0);
+		for(Collider collider : colliders)
 
-		if(collider instanceof Circle)
-		{
-			float r = ((Circle)collider).radius;
-			g.drawOval((int)(getPosition().x - r), (int)(600 - getPosition().y - r), (int)r * 2, (int)r * 2);
-		}
-		else if(collider instanceof AABB)
-		{
-			float w = ((AABB)collider).width;
-			float h = ((AABB)collider).height;
-			g.drawRect((int)(getPosition().x - w / 2), (int)(600 - getPosition().y - h / 2), (int)w, (int)h);
-		}
-		else if(collider instanceof Limit)
-		{
-			Limit limit = (Limit)collider;
-			g.drawLine((int)limit.getPoint1().x, (int)(600 - limit.getPoint1().y), (int)limit.getPoint2().x, (int)(600 - limit.getPoint2().y));
-		}
+			if(collider instanceof Circle)
+			{
+				float r = ((Circle)collider).radius;
+				g.drawOval((int)(getPosition().x - r), (int)(600 - getPosition().y - r), (int)r * 2, (int)r * 2);
+			}
+			else if(collider instanceof AABB)
+			{
+				float w = ((AABB)collider).width;
+				float h = ((AABB)collider).height;
+				g.drawRect((int)(getPosition().x - w / 2), (int)(600 - getPosition().y - h / 2), (int)w, (int)h);
+			}
+			else if(collider instanceof Limit)
+			{
+				Limit limit = (Limit)collider;
+				g.drawLine((int)limit.getPoint1().x, (int)(600 - limit.getPoint1().y), (int)limit.getPoint2().x, (int)(600 - limit.getPoint2().y));
+			}
 	}
 }
