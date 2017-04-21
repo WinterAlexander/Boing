@@ -1,6 +1,5 @@
 package me.winter.boing.physics.detection.detectors;
 
-import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Pool;
 import me.winter.boing.physics.Collision;
@@ -9,10 +8,9 @@ import me.winter.boing.physics.detection.PooledDetector;
 import me.winter.boing.physics.shapes.Limit;
 
 import static com.badlogic.gdx.math.MathUtils.isEqual;
+import static com.badlogic.gdx.math.Vector2.Zero;
 import static java.lang.Math.max;
 import static java.lang.Math.min;
-import static java.lang.Math.sqrt;
-import static me.winter.boing.physics.VectorUtil.divide;
 
 /**
  * Undocumented :(
@@ -35,12 +33,12 @@ public class LimitLimitDetector extends PooledDetector<Limit, Limit>
 			return null;
 
 		Vector2 vecA = shapeA.getSolid() instanceof DynamicSolid
-				? ((DynamicSolid)shapeA.getSolid()).getMovement()
-				: Vector2.Zero;
+					? ((DynamicSolid)shapeA.getSolid()).getMovement()
+					: Zero;
 
 		Vector2 vecB = shapeB.getSolid() instanceof DynamicSolid
-				? ((DynamicSolid)shapeB.getSolid()).getMovement()
-				: Vector2.Zero;
+					? ((DynamicSolid)shapeB.getSolid()).getMovement()
+					: Zero;
 
 
 		/*
@@ -51,43 +49,38 @@ public class LimitLimitDetector extends PooledDetector<Limit, Limit>
 		*/
 		float side = shapeA.normal.x * -shapeB.normal.y - shapeA.normal.y * -shapeB.normal.x;
 
+		Vector2 closestA, farthestA, closestB, farthestB;
+
 		if(side < 0)
 		{
-			tmpVecA.set(shapeA.getPoint2());
-			tmpVecB.set(shapeB.getPoint1());
+			closestA = shapeA.getPoint1();
+			farthestA = shapeA.getPoint2();
+			closestB = shapeB.getPoint2();
+			farthestB = shapeB.getPoint1();
 		}
 		else
 		{
-			tmpVecA.set(shapeA.getPoint1());
-			tmpVecB.set(shapeB.getPoint2());
+			closestA = shapeA.getPoint2();
+			farthestA = shapeA.getPoint1();
+			closestB = shapeB.getPoint1();
+			farthestB = shapeB.getPoint2();
 		}
 
-		tmpVecA.sub(vecA).scl(shapeA.normal);
-		tmpVecB.sub(vecB).scl(shapeA.normal);
+		tmpVecA.set(farthestA).sub(vecA).scl(shapeA.normal);
+		tmpVecB.set(farthestB).sub(vecB).scl(shapeA.normal);
 
 		if(!isBefore(tmpVecA, tmpVecB)) //if limitA isn't before limitB
 			return null; //no collision
 
-		if(side < 0)
-		{
-			tmpVecA.set(shapeA.getPoint1());
-			tmpVecB.set(shapeB.getPoint2());
-		}
-		else
-		{
-			tmpVecA.set(shapeA.getPoint2());
-			tmpVecB.set(shapeB.getPoint1());
-		}
-
-		tmpVecA.scl(shapeA.normal);
-		tmpVecB.scl(shapeA.normal);
+		tmpVecA.set(closestA).scl(shapeA.normal);
+		tmpVecB.set(closestB).scl(shapeA.normal);
 
 		if(!isAfter(tmpVecA, tmpVecB)) //if limitA after his velocity isn't after limitB with his velocity
 			return null; //no collision
 
 
-		float dx = shapeB.getAbsX() - shapeA.getAbsX();
-		float dy = shapeB.getAbsY() - shapeA.getAbsY();
+		float dx = closestB.x - closestA.x;
+		float dy = closestB.y - closestA.y;
 
 		float vdx = vecB.x - vecA.x;
 		float vdy = vecB.y - vecA.y;
