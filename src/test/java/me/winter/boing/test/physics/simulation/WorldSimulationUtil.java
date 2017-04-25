@@ -1,6 +1,6 @@
 package me.winter.boing.test.physics.simulation;
 
-import me.winter.boing.physics.World;
+import me.winter.boing.test.physics.testimpl.WorldImpl;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -16,7 +16,7 @@ import java.awt.Graphics;
  */
 public class WorldSimulationUtil
 {
-	public static void simulate(World world)
+	public static void simulate(WorldImpl world)
 	{
 		JFrame frame = new JFrame();
 

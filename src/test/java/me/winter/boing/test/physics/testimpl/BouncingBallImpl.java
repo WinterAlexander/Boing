@@ -3,10 +3,10 @@ package me.winter.boing.test.physics.testimpl;
 import com.badlogic.gdx.math.Vector2;
 import me.winter.boing.physics.Collision;
 import me.winter.boing.physics.DynamicSolid;
-import me.winter.boing.physics.VelocityUtil;
 import me.winter.boing.physics.World;
+import me.winter.boing.physics.util.VelocityUtil;
 
-import static me.winter.boing.physics.VelocityUtil.getMassRatio;
+import static me.winter.boing.physics.util.VelocityUtil.getMassRatio;
 
 /**
  * Undocumented :(

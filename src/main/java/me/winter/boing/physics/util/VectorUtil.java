@@ -1,4 +1,4 @@
-package me.winter.boing.physics;
+package me.winter.boing.physics.util;
 
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;

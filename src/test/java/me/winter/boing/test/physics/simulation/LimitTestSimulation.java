@@ -2,7 +2,7 @@ package me.winter.boing.test.physics.simulation;
 
 import com.badlogic.gdx.math.Vector2;
 import me.winter.boing.physics.Collision;
-import me.winter.boing.physics.World;
+import me.winter.boing.test.physics.testimpl.WorldImpl;
 import me.winter.boing.physics.resolver.ReplaceResolver;
 import me.winter.boing.physics.shapes.Limit;
 import me.winter.boing.test.physics.testimpl.BouncingBallImpl;
@@ -20,7 +20,7 @@ public class LimitTestSimulation
 	@Test
 	public void simpleLimitLimitY()
 	{
-		World world = new World(new ReplaceResolver());
+		WorldImpl world = new WorldImpl(new ReplaceResolver());
 
 		BouncingBallImpl ballImpl = new BouncingBallImpl(world);
 		ballImpl.getPosition().set(425, 200);
@@ -40,7 +40,7 @@ public class LimitTestSimulation
 	@Test
 	public void simpleLimitLimitX()
 	{
-		World world = new World(new ReplaceResolver());
+		WorldImpl world = new WorldImpl(new ReplaceResolver());
 
 		BouncingBallImpl ballImpl = new BouncingBallImpl(world);
 		ballImpl.getPosition().set(200, 425);
@@ -60,7 +60,7 @@ public class LimitTestSimulation
 	@Test
 	public void comingAtAAngleLimitLimitX()
 	{
-		World world = new World(new ReplaceResolver());
+		WorldImpl world = new WorldImpl(new ReplaceResolver());
 
 		BouncingBallImpl ballImpl = new BouncingBallImpl(world);
 		ballImpl.getPosition().set(200, 200);
@@ -80,7 +80,7 @@ public class LimitTestSimulation
 	@Test
 	public void cornerGlitch()
 	{
-		World world = new World(new ReplaceResolver());
+		WorldImpl world = new WorldImpl(new ReplaceResolver());
 
 		BouncingBallImpl ballImpl = new BouncingBallImpl(world) {
 			@Override

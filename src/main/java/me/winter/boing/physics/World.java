@@ -7,5 +7,6 @@ package me.winter.boing.physics;
  */
 public interface World
 {
-
+	void step(float delta);
 }
+

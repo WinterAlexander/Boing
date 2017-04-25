@@ -2,8 +2,8 @@ package me.winter.boing.test.physics.testimpl;
 
 import me.winter.boing.physics.Collision;
 import me.winter.boing.physics.DynamicSolid;
-import me.winter.boing.physics.VelocityUtil;
 import me.winter.boing.physics.World;
+import me.winter.boing.physics.util.VelocityUtil;
 
 /**
  * Undocumented :(

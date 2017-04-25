@@ -1,6 +1,7 @@
-package me.winter.boing.physics;
+package me.winter.boing.physics.util;
 
 import com.badlogic.gdx.utils.Pool;
+import me.winter.boing.physics.Collision;
 
 /**
  * Undocumented :(

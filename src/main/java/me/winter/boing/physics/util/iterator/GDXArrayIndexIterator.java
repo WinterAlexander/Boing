@@ -1,4 +1,4 @@
-package me.winter.boing.physics;
+package me.winter.boing.physics.util.iterator;
 
 import com.badlogic.gdx.utils.Array;
 
@@ -32,7 +32,7 @@ public class GDXArrayIndexIterator<T> implements IndexIterator<T>
 	@Override
 	public boolean hasNext()
 	{
-		return array.size < index;
+		return index < array.size;
 	}
 
 	@Override

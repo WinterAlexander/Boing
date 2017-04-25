@@ -1,4 +1,4 @@
-package me.winter.boing.physics;
+package me.winter.boing.physics.util.iterator;
 
 import java.util.Iterator;
 
@@ -14,6 +14,7 @@ public interface ReusableIterator<T> extends Iterator<T>, Iterable<T>
 	@Override
 	default Iterator<T> iterator()
 	{
+		reset();
 		return this;
 	}
 }

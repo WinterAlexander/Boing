@@ -1,4 +1,4 @@
-package me.winter.boing.physics;
+package me.winter.boing.physics.util.iterator;
 
 /**
  * Undocumented :(

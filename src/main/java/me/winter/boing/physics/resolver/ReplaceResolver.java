@@ -4,7 +4,7 @@ import com.badlogic.gdx.math.Vector2;
 import me.winter.boing.physics.Collision;
 import me.winter.boing.physics.DynamicSolid;
 
-import static me.winter.boing.physics.VelocityUtil.getMassRatio;
+import static me.winter.boing.physics.util.VelocityUtil.getMassRatio;
 
 /**
  * Undocumented :(

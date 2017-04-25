@@ -1,6 +1,6 @@
 package me.winter.boing.test.physics.simulation;
 
-import me.winter.boing.physics.World;
+import me.winter.boing.test.physics.testimpl.WorldImpl;
 import me.winter.boing.physics.resolver.ReplaceResolver;
 import me.winter.boing.physics.shapes.Box;
 import me.winter.boing.test.physics.testimpl.PlayerImpl;
@@ -20,7 +20,7 @@ public class PlayerSimulation
 	@Test
 	public void simpleSimul()
 	{
-		World world = new World(new ReplaceResolver());
+		WorldImpl world = new WorldImpl(new ReplaceResolver());
 
 		PlayerImpl player = new PlayerImpl(world);
 
@@ -40,7 +40,7 @@ public class PlayerSimulation
 	@Test
 	public void springSimul()
 	{
-		World world = new World(new ReplaceResolver());
+		WorldImpl world = new WorldImpl(new ReplaceResolver());
 
 		PlayerImpl player = new PlayerImpl(world);
 
