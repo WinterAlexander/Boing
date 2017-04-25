@@ -11,6 +11,9 @@ public interface DynamicSolid extends Solid
 {
 	Vector2 getVelocity();
 	Vector2 getMovement();
+	Vector2 getLastReplacement();
+
+	default void update() {}
 
 	float weightFor(DynamicSolid against);
 }

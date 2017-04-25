@@ -2,6 +2,8 @@ package me.winter.boing.physics.util;
 
 import com.badlogic.gdx.math.Vector2;
 
+import static java.lang.Float.POSITIVE_INFINITY;
+
 /**
  * Undocumented :(
  * <p>
@@ -34,10 +36,10 @@ public class VelocityUtil
 
 	public static float getMassRatio(float massA, float massB)
 	{
-		if(massA == Float.POSITIVE_INFINITY)
-			return massB == Float.POSITIVE_INFINITY ? 0.5f : 1f;
+		if(massA == POSITIVE_INFINITY)
+			return massB == POSITIVE_INFINITY ? 0.5f : 1f;
 
-		if(massB == Float.POSITIVE_INFINITY)
+		if(massB == POSITIVE_INFINITY)
 			return 0f;
 
 		if(massA == 0f)

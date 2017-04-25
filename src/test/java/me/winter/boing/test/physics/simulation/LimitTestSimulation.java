@@ -2,6 +2,7 @@ package me.winter.boing.test.physics.simulation;
 
 import com.badlogic.gdx.math.Vector2;
 import me.winter.boing.physics.Collision;
+import me.winter.boing.physics.shapes.Circle;
 import me.winter.boing.test.physics.testimpl.WorldImpl;
 import me.winter.boing.physics.resolver.ReplaceResolver;
 import me.winter.boing.physics.shapes.Limit;
@@ -89,10 +90,12 @@ public class LimitTestSimulation
 				return true;
 			}
 		};
+
 		ballImpl.getPosition().set(50, 50);
 		ballImpl.getColliders().add(new Limit(ballImpl, 25, 0, new Vector2(1, 0), 50));
 		ballImpl.getColliders().add(new Limit(ballImpl, 0, 25, new Vector2(0, 1), 50));
 		ballImpl.getVelocity().set(50, 50);
+
 		world.getSolids().add(ballImpl);
 
 		BouncingBallImpl ballImpl2 = new BouncingBallImpl(world) {
@@ -102,9 +105,44 @@ public class LimitTestSimulation
 				return true;
 			}
 		};
+
 		ballImpl2.getPosition().set(500, 500);
 		ballImpl2.getColliders().add(new Limit(ballImpl2, -25, 0, new Vector2(-1, 0), 50));
 		ballImpl2.getColliders().add(new Limit(ballImpl2, 0, -25, new Vector2(0, -1), 50));
+		ballImpl2.getVelocity().set(-100, -100);
+
+		world.getSolids().add(ballImpl2);
+
+		simulate(world);
+	}
+
+	@Test
+	public void limitCircle()
+	{
+		WorldImpl world = new WorldImpl(new ReplaceResolver());
+
+		BouncingBallImpl ballImpl = new BouncingBallImpl(world) {
+			@Override
+			public boolean collide(Collision collision)
+			{
+				return true;
+			}
+		};
+
+		ballImpl.getPosition().set(400, 0);
+		ballImpl.getColliders().add(new Limit(ballImpl, 0, 50, new Vector2(0, 1), 800));
+		world.getSolids().add(ballImpl);
+
+		BouncingBallImpl ballImpl2 = new BouncingBallImpl(world) {
+			@Override
+			public boolean collide(Collision collision)
+			{
+				return true;
+			}
+		};
+
+		ballImpl2.getPosition().set(500, 500);
+		ballImpl2.getColliders().add(new Circle(ballImpl2, 0, 0, 25));
 		ballImpl2.getVelocity().set(-100, -100);
 		world.getSolids().add(ballImpl2);
 

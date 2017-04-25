@@ -7,6 +7,7 @@ import me.winter.boing.physics.resolver.CollisionResolver;
 import me.winter.boing.physics.shapes.Collider;
 import me.winter.boing.physics.util.CollisionPool;
 import me.winter.boing.physics.util.iterator.IndexIterator;
+import me.winter.boing.physics.util.iterator.ReusableIterator;
 
 /**
  * Undocumented :(
@@ -28,23 +29,45 @@ public abstract class AbstractWorld implements World
 		this.resolver = resolver;
 	}
 
+	/**
+	 * @return An iterator for all solids
+	 */
 	protected abstract IndexIterator<Solid> getSolidIterator();
+
+	/**
+	 * @return An iterator only for dynamic solids
+	 */
+	protected abstract ReusableIterator<DynamicSolid> getDynamicIterator();
 
 	@Override
 	public void step(float delta)
 	{
-		for(Solid solid : getSolidIterator())
+		updateDynamics(delta);
+
+		detectCollisions();
+
+		resolveCollisions();
+		collisionPool.freeAll(collisions);
+		collisions.clear();
+	}
+
+	protected void updateDynamics(float delta)
+	{
+		for(DynamicSolid dynamic : getDynamicIterator())
+			dynamic.update();
+
+		for(DynamicSolid dynamic : getDynamicIterator())
 		{
-			if(!(solid instanceof DynamicSolid))
-				continue;
-
-			DynamicSolid dynamic = (DynamicSolid)solid;
-
-			solid.update();
 			dynamic.getMovement().set(dynamic.getVelocity()).scl(delta);
-			solid.getPosition().add(dynamic.getMovement());
-		}
+			dynamic.getPosition().add(dynamic.getMovement());
 
+			dynamic.getMovement().add(dynamic.getLastReplacement());
+			dynamic.getLastReplacement().setZero();
+		}
+	}
+
+	protected void detectCollisions()
+	{
 		int size = getSolidIterator().size();
 
 		for(int i = size; i-- >= 0;)
@@ -74,7 +97,10 @@ public abstract class AbstractWorld implements World
 				}
 			}
 		}
+	}
 
+	protected void resolveCollisions()
+	{
 		Collision swapped = collisionPool.obtain();
 
 		for(Collision collision : collisions)
@@ -83,11 +109,8 @@ public abstract class AbstractWorld implements World
 
 			if(collision.colliderA.getSolid().collide(collision) && collision.colliderB.getSolid().collide(swapped))
 				resolver.resolve(collision);
-
 		}
 
 		collisionPool.free(swapped);
-		collisionPool.freeAll(collisions);
-		collisions.clear();
 	}
 }

@@ -57,5 +57,6 @@ public class ReplaceResolver implements CollisionResolver
 		tmpVector.set(normal).nor().scl(delta);
 
 		solid.getPosition().add(tmpVector);
+		solid.getLastReplacement().add(tmpVector);
 	}
 }

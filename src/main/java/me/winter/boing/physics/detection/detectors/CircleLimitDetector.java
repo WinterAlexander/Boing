@@ -52,17 +52,17 @@ public class CircleLimitDetector extends PooledDetector<Circle, Limit>
 		{
 			closestX = signum(closestX) * halfW;
 
-			collision.normalA.set(dx, 0);
-			collision.normalB.set(closestX - dx, closestY - dy);
-			collision.penetration = circleA.radius - collision.normalB.len();
+			collision.normalA.set(closestX - dx, closestY - dy);
+			collision.normalB.set(dx, 0);
+			collision.penetration = circleA.radius - collision.normalA.len();
 		}
 		else
 		{
 			closestY = signum(closestY) * halfH;
 
-			collision.normalA.set(0, dy);
-			collision.normalB.set(closestX - dx, closestY - dy);
-			collision.penetration = circleA.radius - collision.normalB.len();
+			collision.normalA.set(closestX - dx, closestY - dy);
+			collision.normalB.set(0, dy);
+			collision.penetration = circleA.radius - collision.normalA.len();
 		}
 
 

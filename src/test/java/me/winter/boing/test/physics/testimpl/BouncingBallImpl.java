@@ -15,7 +15,7 @@ import static me.winter.boing.physics.util.VelocityUtil.getMassRatio;
  */
 public class BouncingBallImpl extends SolidImpl implements DynamicSolid
 {
-	private Vector2 velocity, movement;
+	private Vector2 velocity, movement, lastReplacement;
 	private float mass;
 
 	private Vector2 tmpVector = new Vector2();
@@ -30,6 +30,7 @@ public class BouncingBallImpl extends SolidImpl implements DynamicSolid
 		super(world);
 		this.velocity = new Vector2();
 		this.movement = new Vector2();
+		this.lastReplacement = new Vector2();
 		this.mass = mass;
 	}
 
@@ -67,5 +68,11 @@ public class BouncingBallImpl extends SolidImpl implements DynamicSolid
 	public float weightFor(DynamicSolid against)
 	{
 		return mass;
+	}
+
+	@Override
+	public Vector2 getLastReplacement()
+	{
+		return lastReplacement;
 	}
 }

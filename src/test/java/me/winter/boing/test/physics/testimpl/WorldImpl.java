@@ -2,10 +2,13 @@ package me.winter.boing.test.physics.testimpl;
 
 import com.badlogic.gdx.utils.Array;
 import me.winter.boing.physics.AbstractWorld;
+import me.winter.boing.physics.DynamicSolid;
 import me.winter.boing.physics.Solid;
 import me.winter.boing.physics.resolver.CollisionResolver;
+import me.winter.boing.physics.util.iterator.GDXArrayFilterIterator;
 import me.winter.boing.physics.util.iterator.GDXArrayIndexIterator;
 import me.winter.boing.physics.util.iterator.IndexIterator;
+import me.winter.boing.physics.util.iterator.ReusableIterator;
 
 /**
  * Undocumented :(
@@ -17,6 +20,7 @@ public class WorldImpl extends AbstractWorld
 	private Array<Solid> solids = new Array<>();
 
 	private GDXArrayIndexIterator<Solid> iterator = new GDXArrayIndexIterator<>(solids);
+	private GDXArrayFilterIterator<DynamicSolid> dynamics = new GDXArrayFilterIterator<>(solids, DynamicSolid.class);
 
 	public WorldImpl(CollisionResolver resolver)
 	{
@@ -27,6 +31,12 @@ public class WorldImpl extends AbstractWorld
 	protected IndexIterator<Solid> getSolidIterator()
 	{
 		return iterator;
+	}
+
+	@Override
+	protected ReusableIterator<DynamicSolid> getDynamicIterator()
+	{
+		return dynamics;
 	}
 
 	public Array<Solid> getSolids()
