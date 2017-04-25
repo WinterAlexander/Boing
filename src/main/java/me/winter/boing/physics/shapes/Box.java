@@ -3,15 +3,15 @@ package me.winter.boing.physics.shapes;
 import me.winter.boing.physics.Solid;
 
 /**
- * Undocumented :(
+ * An Axis Aligned Bounding Box collider
  * <p>
  * Created by Alexander Winter on 2017-04-10.
  */
-public class AABB extends AbstractCollider
+public class Box extends AbstractCollider
 {
 	public float width, height;
 
-	public AABB(Solid solid, float x, float y, float width, float height)
+	public Box(Solid solid, float x, float y, float width, float height)
 	{
 		super(solid, x, y);
 		this.width = width;

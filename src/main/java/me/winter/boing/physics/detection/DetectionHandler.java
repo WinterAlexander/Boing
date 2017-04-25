@@ -9,7 +9,7 @@ import me.winter.boing.physics.detection.detectors.BoxLimitDetector;
 import me.winter.boing.physics.detection.detectors.CircleCircleDetector;
 import me.winter.boing.physics.detection.detectors.CircleLimitDetector;
 import me.winter.boing.physics.detection.detectors.LimitLimitDetector;
-import me.winter.boing.physics.shapes.AABB;
+import me.winter.boing.physics.shapes.Box;
 import me.winter.boing.physics.shapes.Circle;
 import me.winter.boing.physics.shapes.Limit;
 import me.winter.boing.physics.shapes.Collider;
@@ -26,15 +26,15 @@ public class DetectionHandler
 	public DetectionHandler(Pool<Collision> collisionPool)
 	{
 		detectors.put(getKey(Circle.class, Circle.class), new CircleCircleDetector(collisionPool));
-		detectors.put(getKey(Circle.class, AABB.class), new DetectorSwapper<>(new BoxCircleDetector(collisionPool)));
+		detectors.put(getKey(Circle.class, Box.class), new DetectorSwapper<>(new BoxCircleDetector(collisionPool)));
 		detectors.put(getKey(Circle.class, Limit.class), new CircleLimitDetector(collisionPool));
 
-		detectors.put(getKey(AABB.class, Circle.class), new BoxCircleDetector(collisionPool));
-		detectors.put(getKey(AABB.class, AABB.class), new BoxBoxDetector(collisionPool));
-		detectors.put(getKey(AABB.class, Limit.class), new BoxLimitDetector(collisionPool));
+		detectors.put(getKey(Box.class, Circle.class), new BoxCircleDetector(collisionPool));
+		detectors.put(getKey(Box.class, Box.class), new BoxBoxDetector(collisionPool));
+		detectors.put(getKey(Box.class, Limit.class), new BoxLimitDetector(collisionPool));
 
 		detectors.put(getKey(Limit.class, Circle.class), new DetectorSwapper<>(new CircleLimitDetector(collisionPool)));
-		detectors.put(getKey(Limit.class, AABB.class), new DetectorSwapper<>(new BoxLimitDetector(collisionPool)));
+		detectors.put(getKey(Limit.class, Box.class), new DetectorSwapper<>(new BoxLimitDetector(collisionPool)));
 		detectors.put(getKey(Limit.class, Limit.class), new LimitLimitDetector(collisionPool));
 	}
 

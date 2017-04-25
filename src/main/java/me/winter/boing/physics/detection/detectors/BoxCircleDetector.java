@@ -3,7 +3,7 @@ package me.winter.boing.physics.detection.detectors;
 import com.badlogic.gdx.utils.Pool;
 import me.winter.boing.physics.Collision;
 import me.winter.boing.physics.detection.PooledDetector;
-import me.winter.boing.physics.shapes.AABB;
+import me.winter.boing.physics.shapes.Box;
 import me.winter.boing.physics.shapes.Circle;
 
 import static com.badlogic.gdx.math.MathUtils.clamp;
@@ -15,7 +15,7 @@ import static java.lang.Math.signum;
  * <p>
  * Created by Alexander Winter on 2017-04-12.
  */
-public class BoxCircleDetector extends PooledDetector<AABB, Circle>
+public class BoxCircleDetector extends PooledDetector<Box, Circle>
 {
 	public BoxCircleDetector(Pool<Collision> collisionPool)
 	{
@@ -23,7 +23,7 @@ public class BoxCircleDetector extends PooledDetector<AABB, Circle>
 	}
 
 	@Override
-	public Collision collides(AABB boxA, Circle circleB)
+	public Collision collides(Box boxA, Circle circleB)
 	{
 		float dx = circleB.getAbsX() - boxA.getAbsX();
 		float dy = circleB.getAbsY() - boxA.getAbsY();

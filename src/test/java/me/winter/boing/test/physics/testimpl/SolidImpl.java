@@ -4,7 +4,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import me.winter.boing.physics.Solid;
 import me.winter.boing.physics.World;
-import me.winter.boing.physics.shapes.AABB;
+import me.winter.boing.physics.shapes.Box;
 import me.winter.boing.physics.shapes.Circle;
 import me.winter.boing.physics.shapes.Collider;
 import me.winter.boing.physics.shapes.Limit;
@@ -58,16 +58,20 @@ public class SolidImpl implements Solid, SimulationElement
 				float r = ((Circle)collider).radius;
 				g.drawOval((int)(getPosition().x - r), (int)(600 - getPosition().y - r), (int)r * 2, (int)r * 2);
 			}
-			else if(collider instanceof AABB)
+			else if(collider instanceof Box)
 			{
-				float w = ((AABB)collider).width;
-				float h = ((AABB)collider).height;
+				float w = ((Box)collider).width;
+				float h = ((Box)collider).height;
 				g.drawRect((int)(getPosition().x - w / 2), (int)(600 - getPosition().y - h / 2), (int)w, (int)h);
 			}
 			else if(collider instanceof Limit)
 			{
 				Limit limit = (Limit)collider;
-				g.drawLine((int)limit.getPoint1().x, (int)(600 - limit.getPoint1().y), (int)limit.getPoint2().x, (int)(600 - limit.getPoint2().y));
+				g.drawLine(
+						(int)(limit.getAbsX() - limit.size / 2 * limit.normal.y),
+						(int)(600 - limit.getAbsY() + limit.size / 2 * limit.normal.x),
+						(int)(limit.getAbsX() + limit.size / 2 * limit.normal.y),
+						(int)(600 - limit.getAbsY() - limit.size / 2 * limit.normal.x));
 			}
 	}
 }

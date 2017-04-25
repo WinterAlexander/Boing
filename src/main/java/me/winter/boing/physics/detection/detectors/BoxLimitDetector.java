@@ -3,7 +3,7 @@ package me.winter.boing.physics.detection.detectors;
 import com.badlogic.gdx.utils.Pool;
 import me.winter.boing.physics.Collision;
 import me.winter.boing.physics.detection.PooledDetector;
-import me.winter.boing.physics.shapes.AABB;
+import me.winter.boing.physics.shapes.Box;
 import me.winter.boing.physics.shapes.Limit;
 
 /**
@@ -11,7 +11,7 @@ import me.winter.boing.physics.shapes.Limit;
  * <p>
  * Created by Alexander Winter on 2017-04-12.
  */
-public class BoxLimitDetector extends PooledDetector<AABB, Limit>
+public class BoxLimitDetector extends PooledDetector<Box, Limit>
 {
 	public BoxLimitDetector(Pool<Collision> collisionPool)
 	{
@@ -19,7 +19,7 @@ public class BoxLimitDetector extends PooledDetector<AABB, Limit>
 	}
 
 	@Override
-	public Collision collides(AABB shapeA, Limit shapeB)
+	public Collision collides(Box shapeA, Limit shapeB)
 	{
 		return null;
 	}

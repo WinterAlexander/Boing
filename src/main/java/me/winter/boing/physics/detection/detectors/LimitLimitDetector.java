@@ -29,7 +29,7 @@ public class LimitLimitDetector extends PooledDetector<Limit, Limit>
 	@Override
 	public Collision collides(Limit shapeA, Limit shapeB)
 	{
-		if(shapeA.normal.dot(shapeB.normal) >= 0)
+		if(shapeA.normal.dot(shapeB.normal) != -1)
 			return null;
 
 		Vector2 vecA = shapeA.getSolid() instanceof DynamicSolid
@@ -41,46 +41,22 @@ public class LimitLimitDetector extends PooledDetector<Limit, Limit>
 					: Zero;
 
 
-		/*
-			Use the sign of the determinant of vectors (AB,AM), where M(X,Y) is the query point:
+		tmpVecA.set(shapeA.getAbsX(), shapeA.getAbsY());
+		tmpVecB.set(shapeB.getAbsX(), shapeB.getAbsY());
 
-			position = sign((Bx - Ax) * (Y - Ay) - (By - Ay) * (X - Ax))
-			It is 0 on the line, and +1 on one side, -1 on the other side.
-		*/
-		float side = shapeA.normal.x * -shapeB.normal.y - shapeA.normal.y * -shapeB.normal.x;
-
-		Vector2 closestA, farthestA, closestB, farthestB;
-
-		if(side < 0)
-		{
-			closestA = shapeA.getPoint1();
-			farthestA = shapeA.getPoint2();
-			closestB = shapeB.getPoint2();
-			farthestB = shapeB.getPoint1();
-		}
-		else
-		{
-			closestA = shapeA.getPoint2();
-			farthestA = shapeA.getPoint1();
-			closestB = shapeB.getPoint1();
-			farthestB = shapeB.getPoint2();
-		}
-
-		tmpVecA.set(farthestA).sub(vecA).scl(shapeA.normal);
-		tmpVecB.set(farthestB).sub(vecB).scl(shapeA.normal);
-
-		if(!isBefore(tmpVecA, tmpVecB)) //if limitA isn't before limitB
+		if(!(tmpVecA.x * shapeA.normal.x + tmpVecA.y * shapeA.normal.y > tmpVecB.x * shapeA.normal.x + tmpVecB.y * shapeA.normal.y)) //if limitA after his velocity isn't after limitB with his velocity
 			return null; //no collision
 
-		tmpVecA.set(closestA).scl(shapeA.normal);
-		tmpVecB.set(closestB).scl(shapeA.normal);
+		tmpVecA.sub(vecA);
+		tmpVecB.sub(vecB);
 
-		if(!isAfter(tmpVecA, tmpVecB)) //if limitA after his velocity isn't after limitB with his velocity
+		float aDiff = (tmpVecA.x * shapeA.normal.x + tmpVecA.y * shapeA.normal.y) - (tmpVecA.x * shapeA.normal.x + tmpVecA.y * shapeA.normal.y);
+
+		if(aDiff > 0) //if limitA isn't before limitB
 			return null; //no collision
 
-
-		float dx = closestB.x - closestA.x;
-		float dy = closestB.y - closestA.y;
+		float dx = shapeB.getAbsX() - shapeA.getAbsX();
+		float dy = shapeB.getAbsY() - shapeA.getAbsY();
 
 		float vdx = vecB.x - vecA.x;
 		float vdy = vecB.y - vecA.y;
@@ -88,8 +64,8 @@ public class LimitLimitDetector extends PooledDetector<Limit, Limit>
 		float diff = dx * shapeA.normal.x + dy * shapeA.normal.y;
 		float vecDiff = vdx * shapeA.normal.x  + vdy * shapeA.normal.y;
 
-		tmpVecA.set(vecA);
-		tmpVecB.set(vecB);
+		tmpVecA.set(vecA).scl(-1f);
+		tmpVecB.set(vecB).scl(-1f);
 
 		if(vecDiff != 0)
 		{
@@ -122,35 +98,14 @@ public class LimitLimitDetector extends PooledDetector<Limit, Limit>
 		return collision;
 	}
 
-	private boolean isBefore(Vector2 posA, Vector2 posB)
-	{
-		return posA.x + posA.y < posB.x + posB.y || isEqual(posA.x + posA.y, posB.x + posB.y);
-	}
-
-	private boolean isAfter(Vector2 posA, Vector2 posB)
-	{
-		return posA.x + posA.y > posB.x + posB.y;
-	}
-
 	private boolean contains(Limit limitA, Limit limitB, Vector2 offsetA, Vector2 offsetB)
 	{
-		Vector2 p1A = limitA.getPoint1();
-		Vector2 p2A = limitA.getPoint2();
-		Vector2 p1B = limitB.getPoint1();
-		Vector2 p2B = limitB.getPoint2();
+		float limitA1 = -limitA.normal.y * (limitA.getAbsX() + offsetA.x) + limitA.normal.x * (limitA.getAbsY() + offsetA.y);
+		float limitA2 = -limitA.normal.y * (limitA.getAbsX() + offsetA.x) + limitA.normal.x * (limitA.getAbsY() + offsetA.y);
 
-		float limitA1 = -limitA.normal.y * (p1A.x + offsetA.x) + limitA.normal.x * (p1A.y + offsetA.y);
-		float limitA2 = -limitA.normal.y * (p2A.x + offsetA.x) + limitA.normal.x * (p2A.y + offsetA.y);
+		float limitB1 = -limitA.normal.y * (limitB.getAbsX() + offsetB.x) + limitA.normal.x * (limitB.getAbsY() + offsetB.y);
+		float limitB2 = -limitA.normal.y * (limitB.getAbsX() + offsetB.x) + limitA.normal.x * (limitB.getAbsY() + offsetB.y);
 
-		float limitB1 = -limitA.normal.y * (p1B.x + offsetB.x) + limitA.normal.x * (p1B.y + offsetB.y);
-		float limitB2 = -limitA.normal.y * (p2B.x + offsetB.x) + limitA.normal.x * (p2B.y + offsetB.y);
-
-		if(max(limitA1, limitA2) <= min(limitB1, limitB2))
-			return false;
-
-		if(min(limitA1, limitA2) >= max(limitB1, limitB2))
-			return false;
-
-		return true;
+		return !(max(limitA1, limitA2) <= min(limitB1, limitB2) || min(limitA1, limitA2) >= max(limitB1, limitB2));
 	}
 }

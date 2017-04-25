@@ -3,7 +3,7 @@ package me.winter.boing.physics.detection.detectors;
 import com.badlogic.gdx.utils.Pool;
 import me.winter.boing.physics.Collision;
 import me.winter.boing.physics.detection.PooledDetector;
-import me.winter.boing.physics.shapes.AABB;
+import me.winter.boing.physics.shapes.Box;
 
 import static java.lang.Math.abs;
 
@@ -12,7 +12,7 @@ import static java.lang.Math.abs;
  * <p>
  * Created by Alexander Winter on 2017-04-12.
  */
-public class BoxBoxDetector extends PooledDetector<AABB, AABB>
+public class BoxBoxDetector extends PooledDetector<Box, Box>
 {
 	public BoxBoxDetector(Pool<Collision> collisionPool)
 	{
@@ -20,7 +20,7 @@ public class BoxBoxDetector extends PooledDetector<AABB, AABB>
 	}
 
 	@Override
-	public Collision collides(AABB shapeA, AABB shapeB)
+	public Collision collides(Box shapeA, Box shapeB)
 	{
 		float dx = shapeB.getAbsX() - shapeA.getAbsX();
 		float dy = shapeB.getAbsY() - shapeA.getAbsY();

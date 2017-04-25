@@ -3,7 +3,6 @@ package me.winter.boing.test.physics.simulation;
 import com.badlogic.gdx.math.Vector2;
 import me.winter.boing.physics.World;
 import me.winter.boing.physics.resolver.ReplaceResolver;
-import me.winter.boing.physics.shapes.AABB;
 import me.winter.boing.physics.shapes.Limit;
 import me.winter.boing.test.physics.testimpl.BouncingBallImpl;
 import me.winter.boing.test.physics.testimpl.PlayerImpl;
