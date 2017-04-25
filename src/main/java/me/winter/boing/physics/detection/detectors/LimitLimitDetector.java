@@ -55,11 +55,11 @@ public class LimitLimitDetector extends PooledDetector<Limit, Limit>
 		if(aDiff > 0) //if limitA isn't before limitB
 			return null; //no collision
 
-		float dx = shapeB.getAbsX() - shapeA.getAbsX();
-		float dy = shapeB.getAbsY() - shapeA.getAbsY();
-
 		float vdx = vecB.x - vecA.x;
 		float vdy = vecB.y - vecA.y;
+
+		float dx = shapeB.getAbsX() - shapeA.getAbsX() - vdx;
+		float dy = shapeB.getAbsY() - shapeA.getAbsY() - vdy;
 
 		float diff = dx * shapeA.normal.x + dy * shapeA.normal.y;
 		float vecDiff = vdx * shapeA.normal.x  + vdy * shapeA.normal.y;
@@ -70,8 +70,8 @@ public class LimitLimitDetector extends PooledDetector<Limit, Limit>
 		if(vecDiff != 0)
 		{
 			//finding the collision point
-			tmpVecA.scl((diff + vecDiff) / vecDiff);
-			tmpVecB.scl((diff + vecDiff) / vecDiff);
+			tmpVecA.scl(1f - (diff + vecDiff) / vecDiff);
+			tmpVecB.scl(1f - (diff + vecDiff) / vecDiff);
 		}
 
 		if(!contains(shapeA, shapeB, tmpVecA, tmpVecB)) //if it wasn't in bounds at the impact point
@@ -93,18 +93,24 @@ public class LimitLimitDetector extends PooledDetector<Limit, Limit>
 		collision.normalA.set(shapeA.normal);
 		collision.normalB.set(shapeB.normal);
 		collision.setImpactVelocities(shapeA.getSolid(), shapeB.getSolid());
-		collision.penetration = -diff;
+		collision.penetration = -(diff + vecDiff);
 
 		return collision;
 	}
 
 	private boolean contains(Limit limitA, Limit limitB, Vector2 offsetA, Vector2 offsetB)
 	{
-		float limitA1 = -limitA.normal.y * (limitA.getAbsX() + offsetA.x) + limitA.normal.x * (limitA.getAbsY() + offsetA.y);
-		float limitA2 = -limitA.normal.y * (limitA.getAbsX() + offsetA.x) + limitA.normal.x * (limitA.getAbsY() + offsetA.y);
+		float limitA1 = -limitA.normal.y * (limitA.getAbsX() + offsetA.x + limitA.size / 2) +
+						limitA.normal.x * (limitA.getAbsY() + offsetA.y + limitA.size / 2);
 
-		float limitB1 = -limitA.normal.y * (limitB.getAbsX() + offsetB.x) + limitA.normal.x * (limitB.getAbsY() + offsetB.y);
-		float limitB2 = -limitA.normal.y * (limitB.getAbsX() + offsetB.x) + limitA.normal.x * (limitB.getAbsY() + offsetB.y);
+		float limitA2 = -limitA.normal.y * (limitA.getAbsX() + offsetA.x - limitA.size / 2) +
+						limitA.normal.x * (limitA.getAbsY() + offsetA.y - limitA.size / 2);
+
+		float limitB1 = -limitA.normal.y * (limitB.getAbsX() + offsetB.x + limitA.size / 2) +
+						limitA.normal.x * (limitB.getAbsY() + offsetB.y + limitA.size / 2);
+
+		float limitB2 = -limitA.normal.y * (limitB.getAbsX() + offsetB.x - limitA.size / 2) +
+						limitA.normal.x * (limitB.getAbsY() + offsetB.y - limitA.size / 2);
 
 		return !(max(limitA1, limitA2) <= min(limitB1, limitB2) || min(limitA1, limitA2) >= max(limitB1, limitB2));
 	}
