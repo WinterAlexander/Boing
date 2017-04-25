@@ -5,7 +5,8 @@ package me.winter.boing.physics;
  * <p>
  * Created by Alexander Winter on 2017-04-25.
  */
-public interface World
+public interface IndexIterator<T> extends ReusableIterator<T>
 {
-
+	int size();
+	T objectAt(int index);
 }
