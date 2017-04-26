@@ -1,8 +1,6 @@
 package me.winter.boing.test.physics;
 
 import com.badlogic.gdx.math.Vector2;
-import me.winter.boing.physics.shapes.Box;
-import me.winter.boing.physics.shapes.Circle;
 import me.winter.boing.physics.shapes.Limit;
 import me.winter.boing.test.physics.testimpl.DynamicSolidImpl;
 import me.winter.boing.test.physics.testimpl.WorldImpl;

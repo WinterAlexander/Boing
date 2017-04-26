@@ -50,7 +50,7 @@ public class LimitLimitDetector extends PooledDetector<Limit, Limit>
 		tmpVecA.sub(vecA);
 		tmpVecB.sub(vecB);
 
-		float aDiff = (tmpVecA.x * shapeA.normal.x + tmpVecA.y * shapeA.normal.y) - (tmpVecA.x * shapeA.normal.x + tmpVecA.y * shapeA.normal.y);
+		float aDiff = (tmpVecA.x * shapeA.normal.x + tmpVecA.y * shapeA.normal.y) - (tmpVecB.x * shapeA.normal.x + tmpVecB.y * shapeA.normal.y);
 
 		if(aDiff > 0) //if limitA isn't before limitB
 			return null; //no collision
