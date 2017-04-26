@@ -6,6 +6,7 @@ import me.winter.boing.physics.shapes.Box;
 import me.winter.boing.test.physics.testimpl.PlayerImpl;
 import me.winter.boing.test.physics.testimpl.SolidImpl;
 import me.winter.boing.test.physics.testimpl.SpringImpl;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import static me.winter.boing.test.physics.simulation.WorldSimulationUtil.simulate;
@@ -15,6 +16,7 @@ import static me.winter.boing.test.physics.simulation.WorldSimulationUtil.simula
  * <p>
  * Created by Alexander Winter on 2017-04-13.
  */
+@Ignore
 public class PlayerSimulation
 {
 	@Test

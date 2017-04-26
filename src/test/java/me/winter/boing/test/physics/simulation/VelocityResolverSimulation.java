@@ -6,6 +6,7 @@ import me.winter.boing.physics.shapes.Box;
 import me.winter.boing.physics.shapes.Circle;
 import me.winter.boing.test.physics.testimpl.BouncingBallImpl;
 import me.winter.boing.test.physics.testimpl.SolidImpl;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import static me.winter.boing.test.physics.simulation.WorldSimulationUtil.simulate;
@@ -15,6 +16,7 @@ import static me.winter.boing.test.physics.simulation.WorldSimulationUtil.simula
  * <p>
  * Created by Alexander Winter on 2017-04-11.
  */
+@Ignore
 public class VelocityResolverSimulation
 {
 

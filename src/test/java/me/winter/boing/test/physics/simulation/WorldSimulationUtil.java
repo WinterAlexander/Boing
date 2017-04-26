@@ -1,6 +1,7 @@
 package me.winter.boing.test.physics.simulation;
 
 import me.winter.boing.test.physics.testimpl.WorldImpl;
+import org.junit.Ignore;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -14,6 +15,7 @@ import java.awt.Graphics;
  * <p>
  * Created by Alexander Winter on 2017-04-10.
  */
+@Ignore
 public class WorldSimulationUtil
 {
 	public static void simulate(WorldImpl world)

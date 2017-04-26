@@ -9,6 +9,7 @@ import me.winter.boing.test.physics.testimpl.WorldImpl;
 import me.winter.boing.physics.resolver.ReplaceResolver;
 import me.winter.boing.physics.shapes.Limit;
 import me.winter.boing.test.physics.testimpl.BouncingBallImpl;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import static me.winter.boing.test.physics.simulation.WorldSimulationUtil.simulate;
@@ -18,6 +19,7 @@ import static me.winter.boing.test.physics.simulation.WorldSimulationUtil.simula
  * <p>
  * Created by Alexander Winter on 2017-04-13.
  */
+@Ignore
 public class LimitTestSimulation
 {
 	@Test
