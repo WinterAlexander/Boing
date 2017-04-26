@@ -11,6 +11,9 @@ repositories {
 }
 
 dependencies {
-    compile "com.badlogicgames.gdx:gdx:1.9.6"
+    if(gdxVersion == null)
+        gdxVersion = '1.9.5'
+
+    compile "com.badlogicgames.gdx:gdx:$gdxVersion"
     testCompile group: 'junit', name: 'junit', version: '4.12'
 }
