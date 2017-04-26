@@ -35,11 +35,12 @@ public class CircleLimitDetector extends PooledDetector<Circle, Limit>
 		float halfH = limitB.size / 2 * limitB.normal.x;
 
 		//stupid box box collision outside
-		if(absDx > halfW + circleA.radius || absDy > halfH + circleA.radius)
+		if(absDx >= halfW + circleA.radius
+		|| absDy >= halfH + circleA.radius)
 			return null;
 
 		//stupid box box collision inside (inverted if)
-		if(!(absDx < halfW || absDy < halfH) //if it's not inside
+		if(absDx >= halfW && absDy >= halfH //if it's not inside
 		&& (absDx - halfW) * (absDx - halfW) + (absDy - halfH) * (absDy - halfH) >= circleA.radius * circleA.radius) //and it's not in the middle
 			return null;
 

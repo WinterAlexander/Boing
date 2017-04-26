@@ -46,4 +46,35 @@ public class LimitLimitDetectionTest
 		world.step(1f);
 		assertEquals(1, collisionCount.value);
 	}
+
+	@Test
+	public void limitCatchupLimit()
+	{
+		MutableInt collisionCount = new MutableInt(0);
+
+		WorldImpl world = new WorldImpl(collision -> collisionCount.value++);
+
+		DynamicSolidImpl solidImpl = new DynamicSolidImpl(world, 1f);
+		solidImpl.getPosition().set(0, 0);
+		solidImpl.getColliders().add(new Limit(solidImpl, 0, 0, new Vector2(1, 0), 20));
+		solidImpl.getVelocity().set(-10, 0);
+		world.getSolids().add(solidImpl);
+
+		DynamicSolidImpl solidImpl2 = new DynamicSolidImpl(world, 1f);
+		solidImpl2.getPosition().set(50, 0);
+		solidImpl2.getColliders().add(new Limit(solidImpl2, 0, 0, new Vector2(-1, 0), 20));
+		solidImpl2.getVelocity().set(-40, 0);
+		world.getSolids().add(solidImpl2);
+
+		assertEquals(0, collisionCount.value);
+
+		world.step(1f);
+		assertEquals(0, collisionCount.value);
+
+		world.step(1f);
+		assertEquals(1, collisionCount.value);
+
+		world.step(1f);
+		assertEquals(1, collisionCount.value);
+	}
 }
