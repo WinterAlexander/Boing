@@ -34,14 +34,13 @@ public class BoxCircleDetector extends PooledDetector<Box, Circle>
 		float halfW = boxA.width / 2;
 		float halfH = boxA.height / 2;
 
-		//stupid box box collision outside
-		if(absDx > halfW + circleB.radius
-				|| absDy > halfH + circleB.radius)
+		if(absDx >= halfW + circleB.radius
+				|| absDy >= halfH + circleB.radius)
 			return null;
 
 		//stupid box box collision inside (inverted if)
-		if(!(absDx < halfW || absDy < halfH) //if it's not inside
-				&& (absDx - halfW) * (absDx - halfW) + (absDy - halfH) * (absDy - halfH) >= circleB.radius * circleB.radius) //and it's not in the middle
+		if(absDx >= halfW && absDy >= halfH //if it's not inside
+		&& (absDx - halfW) * (absDx - halfW) + (absDy - halfH) * (absDy - halfH) >= circleB.radius * circleB.radius) //and it's not in the middle
 			return null;
 
 		float closestX = clamp(dx, -halfW, halfW);
