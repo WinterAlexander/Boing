@@ -12,11 +12,6 @@ import me.winter.boing.physics.util.VelocityUtil;
  */
 public class SpringImpl extends SolidImpl
 {
-	public SpringImpl(World world)
-	{
-		super(world);
-	}
-
 	@Override
 	public boolean collide(Collision collision)
 	{

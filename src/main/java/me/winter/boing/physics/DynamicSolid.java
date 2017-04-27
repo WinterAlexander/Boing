@@ -15,5 +15,8 @@ public interface DynamicSolid extends Solid
 
 	default void update() {}
 
-	float weightFor(DynamicSolid against);
+	default float weightFor(DynamicSolid against)
+	{
+		return 1f;
+	}
 }

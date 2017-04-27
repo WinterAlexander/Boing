@@ -19,22 +19,9 @@ import java.awt.Graphics;
  */
 public class SolidImpl implements Solid, SimulationElement
 {
-	private World world;
-	private Vector2 position;
+	private Vector2 position = new Vector2();
 
 	private Array<Collider> colliders = new Array<>();
-
-	public SolidImpl(World world)
-	{
-		this.world = world;
-		position = new Vector2();
-	}
-
-	@Override
-	public World getWorld()
-	{
-		return world;
-	}
 
 	@Override
 	public Vector2 getPosition()

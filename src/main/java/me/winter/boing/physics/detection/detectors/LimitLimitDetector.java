@@ -75,7 +75,7 @@ public class LimitLimitDetector extends PooledDetector<Limit, Limit>
 		}
 
 		if(!contains(shapeA, shapeB, tmpVecA, tmpVecB)) //if it wasn't in bounds at the impact point
-				return null;
+			return null;
 
 		Collision collision = collisionPool.obtain();
 

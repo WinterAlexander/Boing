@@ -22,12 +22,12 @@ public class BoxBoxDetectionTest
 
 		WorldImpl world = new WorldImpl(collision -> collisionCount.value++);
 
-		DynamicSolidImpl solidImpl = new DynamicSolidImpl(world, 1f);
+		DynamicSolidImpl solidImpl = new DynamicSolidImpl(1f);
 		solidImpl.getPosition().set(0, 0);
 		solidImpl.getColliders().add(new Box(solidImpl, 0, 0, 20, 20));
 		world.getSolids().add(solidImpl);
 
-		DynamicSolidImpl solidImpl2 = new DynamicSolidImpl(world, 1f);
+		DynamicSolidImpl solidImpl2 = new DynamicSolidImpl(1f);
 		solidImpl2.getPosition().set(0, 0);
 		solidImpl2.getColliders().add(new Box(solidImpl2, 0, 0, 20, 20));
 		world.getSolids().add(solidImpl2);
@@ -68,12 +68,12 @@ public class BoxBoxDetectionTest
 
 		WorldImpl world = new WorldImpl(collision -> collisionCount.value++);
 
-		DynamicSolidImpl solidImpl = new DynamicSolidImpl(world, 1f);
+		DynamicSolidImpl solidImpl = new DynamicSolidImpl(1f);
 		solidImpl.getPosition().set(0, 0);
 		solidImpl.getColliders().add(new Box(solidImpl, 0, 0, 20, 20));
 		world.getSolids().add(solidImpl);
 
-		DynamicSolidImpl solidImpl2 = new DynamicSolidImpl(world, 1f);
+		DynamicSolidImpl solidImpl2 = new DynamicSolidImpl(1f);
 		solidImpl2.getPosition().set(50, 0);
 		solidImpl2.getColliders().add(new Box(solidImpl2, 0, 0, 20, 20));
 		solidImpl2.getVelocity().set(-16, 0);
@@ -95,17 +95,17 @@ public class BoxBoxDetectionTest
 
 		WorldImpl world = new WorldImpl(collision -> collisionCount.value++);
 
-		DynamicSolidImpl solidImpl = new DynamicSolidImpl(world, 1f);
+		DynamicSolidImpl solidImpl = new DynamicSolidImpl(1f);
 		solidImpl.getPosition().set(0, 0);
 		solidImpl.getColliders().add(new Box(solidImpl, 0, 0, 20, 20));
 		world.getSolids().add(solidImpl);
 
-		DynamicSolidImpl solidImpl2 = new DynamicSolidImpl(world, 1f);
+		DynamicSolidImpl solidImpl2 = new DynamicSolidImpl(1f);
 		solidImpl2.getPosition().set(20, 0);
 		solidImpl2.getColliders().add(new Box(solidImpl2, 0, 0, 20, 20));
 		world.getSolids().add(solidImpl2);
 
-		DynamicSolidImpl solidImpl3 = new DynamicSolidImpl(world, 1f);
+		DynamicSolidImpl solidImpl3 = new DynamicSolidImpl(1f);
 		solidImpl3.getPosition().set(10, 20);
 		solidImpl3.getColliders().add(new Box(solidImpl3, 0, 0, 20, 20));
 		world.getSolids().add(solidImpl3);
@@ -123,13 +123,13 @@ public class BoxBoxDetectionTest
 
 		WorldImpl world = new WorldImpl(collision -> collisionCount.value++);
 
-		DynamicSolidImpl solidImpl = new DynamicSolidImpl(world, 1f);
+		DynamicSolidImpl solidImpl = new DynamicSolidImpl(1f);
 		solidImpl.getPosition().set(0, 0);
 		solidImpl.getColliders().add(new Box(solidImpl, 0, 0, 20, 20));
 		solidImpl.getVelocity().set(8, 0);
 		world.getSolids().add(solidImpl);
 
-		DynamicSolidImpl solidImpl2 = new DynamicSolidImpl(world, 1f);
+		DynamicSolidImpl solidImpl2 = new DynamicSolidImpl(1f);
 		solidImpl2.getPosition().set(50, 0);
 		solidImpl2.getColliders().add(new Box(solidImpl2, 0, 0, 20, 20));
 		solidImpl2.getVelocity().set(-8, 0);

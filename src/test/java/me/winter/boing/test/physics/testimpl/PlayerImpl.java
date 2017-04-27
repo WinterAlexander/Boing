@@ -24,11 +24,6 @@ public class PlayerImpl extends SolidImpl implements DynamicSolid
 	private boolean onGround;
 	private Vector2 velocity = new Vector2(), movement = new Vector2(), lastReplacement = new Vector2();
 
-	public PlayerImpl(World world)
-	{
-		super(world);
-	}
-
 	@Override
 	public void update()
 	{

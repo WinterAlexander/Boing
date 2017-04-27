@@ -25,12 +25,12 @@ public class LimitCircleDetectionTest
 
 		WorldImpl world = new WorldImpl(collision -> collisionCount.value++);
 
-		DynamicSolidImpl solidImpl = new DynamicSolidImpl(world, 1f);
+		DynamicSolidImpl solidImpl = new DynamicSolidImpl(1f);
 		solidImpl.getPosition().set(0, 0);
 		solidImpl.getColliders().add(new Circle(solidImpl, 0, 0, 10));
 		world.getSolids().add(solidImpl);
 
-		DynamicSolidImpl solidImpl2 = new DynamicSolidImpl(world, 1f);
+		DynamicSolidImpl solidImpl2 = new DynamicSolidImpl(1f);
 		solidImpl2.getPosition().set(0, 0);
 		solidImpl2.getColliders().add(new Limit(solidImpl2, 0, 0, UP, 20));
 		world.getSolids().add(solidImpl2);

@@ -23,13 +23,13 @@ public class LimitLimitDetectionTest
 
 		WorldImpl world = new WorldImpl(collision -> collisionCount.value++);
 
-		DynamicSolidImpl solidImpl = new DynamicSolidImpl(world, 1f);
+		DynamicSolidImpl solidImpl = new DynamicSolidImpl(1f);
 		solidImpl.getPosition().set(0, 0);
 		solidImpl.getColliders().add(new Limit(solidImpl, 0, 0, new Vector2(1, 0), 20));
 		solidImpl.getVelocity().set(40, 0);
 		world.getSolids().add(solidImpl);
 
-		DynamicSolidImpl solidImpl2 = new DynamicSolidImpl(world, 1f);
+		DynamicSolidImpl solidImpl2 = new DynamicSolidImpl(1f);
 		solidImpl2.getPosition().set(100, 0);
 		solidImpl2.getColliders().add(new Limit(solidImpl2, 0, 0, new Vector2(-1, 0), 20));
 		solidImpl2.getVelocity().set(-40, 0);
@@ -54,13 +54,13 @@ public class LimitLimitDetectionTest
 
 		WorldImpl world = new WorldImpl(collision -> collisionCount.value++);
 
-		DynamicSolidImpl solidImpl = new DynamicSolidImpl(world, 1f);
+		DynamicSolidImpl solidImpl = new DynamicSolidImpl(1f);
 		solidImpl.getPosition().set(0, 0);
 		solidImpl.getColliders().add(new Limit(solidImpl, 0, 0, new Vector2(1, 0), 20));
 		solidImpl.getVelocity().set(-10, 0);
 		world.getSolids().add(solidImpl);
 
-		DynamicSolidImpl solidImpl2 = new DynamicSolidImpl(world, 1f);
+		DynamicSolidImpl solidImpl2 = new DynamicSolidImpl(1f);
 		solidImpl2.getPosition().set(50, 0);
 		solidImpl2.getColliders().add(new Limit(solidImpl2, 0, 0, new Vector2(-1, 0), 20));
 		solidImpl2.getVelocity().set(-40, 0);

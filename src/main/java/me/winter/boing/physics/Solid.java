@@ -11,8 +11,6 @@ import me.winter.boing.physics.shapes.Collider;
  */
 public interface Solid
 {
-	World getWorld();
-
 	Vector2 getPosition();
 
 	Array<Collider> getColliders();

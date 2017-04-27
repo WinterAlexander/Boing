@@ -14,14 +14,13 @@ public class DynamicSolidImpl extends SolidImpl implements DynamicSolid
 	private Vector2 velocity, movement, lastReplacement;
 	private float mass;
 
-	public DynamicSolidImpl(World world)
+	public DynamicSolidImpl()
 	{
-		this(world, 1f);
+		this(1f);
 	}
 
-	public DynamicSolidImpl(World world, float mass)
+	public DynamicSolidImpl(float mass)
 	{
-		super(world);
 		this.velocity = new Vector2();
 		this.movement = new Vector2();
 		this.lastReplacement = new Vector2();

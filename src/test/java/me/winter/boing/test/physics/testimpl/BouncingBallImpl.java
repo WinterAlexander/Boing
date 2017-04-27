@@ -14,14 +14,14 @@ import static me.winter.boing.physics.util.VelocityUtil.getMassRatio;
  */
 public class BouncingBallImpl extends DynamicSolidImpl
 {
-	public BouncingBallImpl(World world)
+	public BouncingBallImpl()
 	{
-		super(world);
+		super();
 	}
 
-	public BouncingBallImpl(World world, float mass)
+	public BouncingBallImpl(float mass)
 	{
-		super(world, mass);
+		super(mass);
 	}
 
 	@Override

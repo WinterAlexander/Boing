@@ -25,7 +25,7 @@ public class VelocityResolverSimulation
 	{
 		WorldImpl world = new WorldImpl(new VelocityResolver());
 
-		BouncingBallImpl solid = new BouncingBallImpl(world);
+		BouncingBallImpl solid = new BouncingBallImpl();
 
 		solid.getPosition().set(50, 50);
 		solid.getColliders().add(new Circle(solid, 0, 0, 25));
@@ -33,7 +33,7 @@ public class VelocityResolverSimulation
 
 		world.getSolids().add(solid);
 
-		BouncingBallImpl solid2 = new BouncingBallImpl(world);
+		BouncingBallImpl solid2 = new BouncingBallImpl();
 
 		solid2.getPosition().set(500, 50);
 		solid2.getColliders().add(new Circle(solid2, 0, 0, 20));
@@ -41,7 +41,7 @@ public class VelocityResolverSimulation
 
 		world.getSolids().add(solid2);
 
-		BouncingBallImpl solid3 = new BouncingBallImpl(world);
+		BouncingBallImpl solid3 = new BouncingBallImpl();
 
 		solid3.getPosition().set(300, 500);
 		solid3.getColliders().add(new Circle(solid3, 0, 0, 25));
@@ -49,7 +49,7 @@ public class VelocityResolverSimulation
 
 		world.getSolids().add(solid3);
 
-		BouncingBallImpl solid4 = new BouncingBallImpl(world);
+		BouncingBallImpl solid4 = new BouncingBallImpl();
 
 		solid4.getPosition().set(500, 500);
 		solid4.getColliders().add(new Circle(solid4, 0, 0, 25));
@@ -59,7 +59,7 @@ public class VelocityResolverSimulation
 
 		for(int i = 20; i < 800; i+= 20)
 		{
-			BouncingBallImpl wall1 = new BouncingBallImpl(world);
+			BouncingBallImpl wall1 = new BouncingBallImpl();
 
 			wall1.getPosition().set(i, 0);
 			wall1.getColliders().add(new Circle(wall1, 0, 0, 10));
@@ -70,7 +70,7 @@ public class VelocityResolverSimulation
 
 		for(int i = 20; i < 800; i+= 20)
 		{
-			BouncingBallImpl wall1 = new BouncingBallImpl(world);
+			BouncingBallImpl wall1 = new BouncingBallImpl();
 
 			wall1.getPosition().set(i, 600);
 			wall1.getColliders().add(new Circle(wall1, 0, 0, 10));
@@ -81,7 +81,7 @@ public class VelocityResolverSimulation
 
 		for(int i = 20; i < 600; i+= 20)
 		{
-			BouncingBallImpl wall1 = new BouncingBallImpl(world);
+			BouncingBallImpl wall1 = new BouncingBallImpl();
 
 			wall1.getPosition().set(0, i);
 			wall1.getColliders().add(new Circle(wall1, 0, 0, 10));
@@ -92,7 +92,7 @@ public class VelocityResolverSimulation
 
 		for(int i = 20; i < 600; i+= 20)
 		{
-			BouncingBallImpl wall1 = new BouncingBallImpl(world);
+			BouncingBallImpl wall1 = new BouncingBallImpl();
 
 			wall1.getPosition().set(800, i);
 			wall1.getColliders().add(new Circle(wall1, 0, 0, 10));
@@ -108,21 +108,21 @@ public class VelocityResolverSimulation
 	{
 		WorldImpl world = new WorldImpl(new VelocityResolver());
 
-		BouncingBallImpl solid = new BouncingBallImpl(world);
+		BouncingBallImpl solid = new BouncingBallImpl();
 		solid.getPosition().set(400, 400);
 		solid.getColliders().add(new Box(solid, 0, 0, 40, 25));
 		solid.getVelocity().set(-50, 0);
 		world.getSolids().add(solid);
 
 
-		BouncingBallImpl solid2 = new BouncingBallImpl(world);
+		BouncingBallImpl solid2 = new BouncingBallImpl();
 		solid2.getPosition().set(650, 400);
 		solid2.getColliders().add(new Box(solid2, 0, 0, 80, 100));
 		solid2.getVelocity().set(-60, 0);
 		world.getSolids().add(solid2);
 
 
-		BouncingBallImpl solid3 = new BouncingBallImpl(world);
+		BouncingBallImpl solid3 = new BouncingBallImpl();
 		solid3.getPosition().set(280, 400);
 		solid3.getColliders().add(new Box(solid3, 0, 0, 50, 50));
 		solid3.getVelocity().set(-10, 0);
@@ -136,21 +136,21 @@ public class VelocityResolverSimulation
 	{
 		WorldImpl world = new WorldImpl(new VelocityResolver());
 
-		BouncingBallImpl solid = new BouncingBallImpl(world);
+		BouncingBallImpl solid = new BouncingBallImpl();
 		solid.getPosition().set(400, 400);
 		solid.getColliders().add(new Box(solid, 0, 0, 40, 25));
 		solid.getVelocity().set(0, -50);
 		world.getSolids().add(solid);
 
 
-		BouncingBallImpl solid2 = new BouncingBallImpl(world);
+		BouncingBallImpl solid2 = new BouncingBallImpl();
 		solid2.getPosition().set(400, 650);
 		solid2.getColliders().add(new Box(solid2, 0, 0, 80, 100));
 		solid2.getVelocity().set(0, -60);
 		world.getSolids().add(solid2);
 
 
-		BouncingBallImpl solid3 = new BouncingBallImpl(world);
+		BouncingBallImpl solid3 = new BouncingBallImpl();
 		solid3.getPosition().set(400, 280);
 		solid3.getColliders().add(new Box(solid3, 0, 0, 50, 50));
 		solid3.getVelocity().set(0, -10);
@@ -164,12 +164,12 @@ public class VelocityResolverSimulation
 	{
 		WorldImpl world = new WorldImpl(new VelocityResolver());
 
-		SolidImpl ground = new SolidImpl(world);
+		SolidImpl ground = new SolidImpl();
 		ground.getPosition().set(400, 0);
 		ground.getColliders().add(new Box(ground, 0, 0, 800, 100));
 		world.getSolids().add(ground);
 
-		BouncingBallImpl box = new BouncingBallImpl(world);
+		BouncingBallImpl box = new BouncingBallImpl();
 		box.getPosition().set(100, 125);
 		box.getColliders().add(new Box(box, 0, 0, 50, 50));
 		box.getVelocity().set(150, -20);
@@ -183,19 +183,19 @@ public class VelocityResolverSimulation
 	{
 		WorldImpl world = new WorldImpl(new VelocityResolver());
 
-		BouncingBallImpl solid = new BouncingBallImpl(world);
+		BouncingBallImpl solid = new BouncingBallImpl();
 		solid.getPosition().set(400, 400);
 		solid.getColliders().add(new Box(solid, 0, 0, 40, 25));
 		solid.getVelocity().set(-50, -20);
 		world.getSolids().add(solid);
 
-		BouncingBallImpl solid2 = new BouncingBallImpl(world);
+		BouncingBallImpl solid2 = new BouncingBallImpl();
 		solid2.getPosition().set(650, 400);
 		solid2.getColliders().add(new Box(solid2, 0, 0, 80, 100));
 		solid2.getVelocity().set(-60, 30);
 		world.getSolids().add(solid2);
 
-		BouncingBallImpl solid3 = new BouncingBallImpl(world);
+		BouncingBallImpl solid3 = new BouncingBallImpl();
 		solid3.getPosition().set(280, 400);
 		solid3.getColliders().add(new Box(solid3, 0, 0, 50, 50));
 		solid3.getVelocity().set(-10, 25);
@@ -203,7 +203,7 @@ public class VelocityResolverSimulation
 
 		for(int i = 20; i < 800; i+= 20)
 		{
-			BouncingBallImpl wall1 = new BouncingBallImpl(world);
+			BouncingBallImpl wall1 = new BouncingBallImpl();
 			wall1.getPosition().set(i, 0);
 			wall1.getColliders().add(new Circle(wall1, 0, 0, 10));
 			wall1.getVelocity().set(0, 0);
@@ -212,7 +212,7 @@ public class VelocityResolverSimulation
 
 		for(int i = 20; i < 800; i+= 20)
 		{
-			BouncingBallImpl wall1 = new BouncingBallImpl(world);
+			BouncingBallImpl wall1 = new BouncingBallImpl();
 			wall1.getPosition().set(i, 600);
 			wall1.getColliders().add(new Circle(wall1, 0, 0, 10));
 			wall1.getVelocity().set(0, 0);
@@ -221,7 +221,7 @@ public class VelocityResolverSimulation
 
 		for(int i = 20; i < 600; i+= 20)
 		{
-			BouncingBallImpl wall1 = new BouncingBallImpl(world);
+			BouncingBallImpl wall1 = new BouncingBallImpl();
 			wall1.getPosition().set(0, i);
 			wall1.getColliders().add(new Circle(wall1, 0, 0, 10));
 			wall1.getVelocity().set(0, 0);
@@ -230,7 +230,7 @@ public class VelocityResolverSimulation
 
 		for(int i = 20; i < 600; i+= 20)
 		{
-			BouncingBallImpl wall1 = new BouncingBallImpl(world);
+			BouncingBallImpl wall1 = new BouncingBallImpl();
 			wall1.getPosition().set(800, i);
 			wall1.getColliders().add(new Circle(wall1, 0, 0, 10));
 			wall1.getVelocity().set(0, 0);
@@ -245,19 +245,19 @@ public class VelocityResolverSimulation
 	{
 		WorldImpl world = new WorldImpl(new VelocityResolver());
 
-		BouncingBallImpl solid = new BouncingBallImpl(world);
+		BouncingBallImpl solid = new BouncingBallImpl();
 		solid.getPosition().set(400, 400);
 		solid.getColliders().add(new Circle(solid, 0, 0, 25));
 		solid.getVelocity().set(50, 0);
 		world.getSolids().add(solid);
 
-		BouncingBallImpl solid2 = new BouncingBallImpl(world);
+		BouncingBallImpl solid2 = new BouncingBallImpl();
 		solid2.getPosition().set(550, 400);
 		solid2.getColliders().add(new Circle(solid2, 0, 0, 50));
 		solid2.getVelocity().set(0, 0);
 		world.getSolids().add(solid2);
 
-		BouncingBallImpl solid3 = new BouncingBallImpl(world);
+		BouncingBallImpl solid3 = new BouncingBallImpl();
 		solid3.getPosition().set(250, 400);
 		solid3.getColliders().add(new Circle(solid3, 0, 0, 50));
 		solid3.getVelocity().set(0, 0);
@@ -271,19 +271,19 @@ public class VelocityResolverSimulation
 	{
 		WorldImpl world = new WorldImpl(new VelocityResolver());
 
-		BouncingBallImpl solid = new BouncingBallImpl(world);
+		BouncingBallImpl solid = new BouncingBallImpl();
 		solid.getPosition().set(400, 400);
 		solid.getColliders().add(new Circle(solid, 0, 0, 25));
 		solid.getVelocity().set(0, -50);
 		world.getSolids().add(solid);
 
-		BouncingBallImpl solid2 = new BouncingBallImpl(world);
+		BouncingBallImpl solid2 = new BouncingBallImpl();
 		solid2.getPosition().set(450, 100);
 		solid2.getColliders().add(new Circle(solid2, 0, 0, 50));
 		solid2.getVelocity().set(0, 0);
 		world.getSolids().add(solid2);
 
-		BouncingBallImpl solid3 = new BouncingBallImpl(world);
+		BouncingBallImpl solid3 = new BouncingBallImpl();
 		solid3.getPosition().set(350, 100);
 		solid3.getColliders().add(new Circle(solid3, 0, 0, 50));
 		solid3.getVelocity().set(0, 0);

@@ -24,13 +24,13 @@ public class PlayerSimulation
 	{
 		WorldImpl world = new WorldImpl(new ReplaceResolver());
 
-		PlayerImpl player = new PlayerImpl(world);
+		PlayerImpl player = new PlayerImpl();
 
 		player.getPosition().set(400, 400);
 		player.getColliders().add(new Box(player, 0, 0, 20, 45));
 		world.getSolids().add(player);
 
-		SolidImpl ground = new SolidImpl(world);
+		SolidImpl ground = new SolidImpl();
 
 		ground.getPosition().set(400, 0);
 		ground.getColliders().add(new Box(ground, 0, 0, 800, 100));
@@ -44,19 +44,19 @@ public class PlayerSimulation
 	{
 		WorldImpl world = new WorldImpl(new ReplaceResolver());
 
-		PlayerImpl player = new PlayerImpl(world);
+		PlayerImpl player = new PlayerImpl();
 
 		player.getPosition().set(400, 400);
 		player.getColliders().add(new Box(player, 0, 0, 20, 45));
 		world.getSolids().add(player);
 
-		SolidImpl ground = new SolidImpl(world);
+		SolidImpl ground = new SolidImpl();
 
 		ground.getPosition().set(400, 0);
 		ground.getColliders().add(new Box(ground, 0, 0, 800, 100));
 		world.getSolids().add(ground);
 
-		SpringImpl spring = new SpringImpl(world);
+		SpringImpl spring = new SpringImpl();
 		spring.getPosition().set(600, 50);
 		spring.getColliders().add(new Box(spring, 0, 0, 100, 100));
 		world.getSolids().add(spring);
