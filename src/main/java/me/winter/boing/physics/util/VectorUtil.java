@@ -4,7 +4,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 
 /**
- * Undocumented :(
+ * Offers useful methods and constants for LibGDX vectors
  * <p>
  * Created by Alexander Winter on 2017-04-13.
  */
@@ -35,30 +35,6 @@ public class VectorUtil
 	{
 		vec.x /= divider.x;
 		vec.y /= divider.y;
-		return vec;
-	}
-
-	public static Vector3 divide(Vector3 vec, float scalar)
-	{
-		vec.x /= scalar;
-		vec.y /= scalar;
-		vec.z /= scalar;
-		return vec;
-	}
-
-	public static Vector3 divide(Vector3 vec, float x, float y, float z)
-	{
-		vec.x /= x;
-		vec.y /= y;
-		vec.z /= z;
-		return vec;
-	}
-
-	public static Vector3 divide(Vector3 vec, Vector3 divider)
-	{
-		vec.x /= divider.x;
-		vec.y /= divider.y;
-		vec.z /= divider.z;
 		return vec;
 	}
 }

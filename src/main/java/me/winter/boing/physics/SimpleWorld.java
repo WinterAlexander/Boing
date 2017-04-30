@@ -7,7 +7,11 @@ import me.winter.boing.physics.util.iterator.IndexIterator;
 import me.winter.boing.physics.util.iterator.ReusableIterator;
 
 /**
- * Undocumented :(
+ * Simple abstract implementation of a World detecting and resolving collisions.
+ * Does not contain the objects by itself but access them by iterator to implement.
+ * <p>
+ * Note: the test folder contains a basic (full) implementation of this class using
+ * a LibGDX array
  * <p>
  * Created by Alexander Winter on 2017-04-25.
  */
@@ -36,15 +40,16 @@ public abstract class SimpleWorld extends AbstractWorld
 	protected void update(float delta)
 	{
 		for(DynamicSolid dynamic : getDynamicIterator())
-			dynamic.update();
+			if(dynamic instanceof UpdatableSolid)
+				((UpdatableSolid)dynamic).update(delta);
 
 		for(DynamicSolid dynamic : getDynamicIterator())
 		{
 			dynamic.getMovement().set(dynamic.getVelocity()).scl(delta);
 			dynamic.getPosition().add(dynamic.getMovement());
 
-			dynamic.getMovement().add(dynamic.getLastReplacement());
-			dynamic.getLastReplacement().setZero();
+			dynamic.getMovement().add(dynamic.getCollisionShifing());
+			dynamic.getCollisionShifing().setZero();
 		}
 	}
 
@@ -91,7 +96,7 @@ public abstract class SimpleWorld extends AbstractWorld
 		{
 			swapped.setAsSwapped(collision);
 
-			if(collision.colliderA.getSolid().collide(collision) && collision.colliderB.getSolid().collide(swapped))
+			if(collision.colliderA.getSolid().notifyCollision(collision) && collision.colliderB.getSolid().notifyCollision(swapped))
 				resolver.resolve(collision);
 		}
 

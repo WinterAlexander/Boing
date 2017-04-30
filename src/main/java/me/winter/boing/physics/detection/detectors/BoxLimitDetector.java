@@ -9,7 +9,7 @@ import me.winter.boing.physics.shapes.Limit;
 import static java.lang.Math.abs;
 
 /**
- * Undocumented :(
+ * Detects collisions between an Axis Aligned Bounding Box and a Limit
  * <p>
  * Created by Alexander Winter on 2017-04-12.
  */

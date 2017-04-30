@@ -13,7 +13,7 @@ import me.winter.boing.physics.util.VelocityUtil;
 public class SpringImpl extends SolidImpl
 {
 	@Override
-	public boolean collide(Collision collision)
+	public boolean notifyCollision(Collision collision)
 	{
 		if(collision.colliderB.getSolid() instanceof DynamicSolid)
 		{

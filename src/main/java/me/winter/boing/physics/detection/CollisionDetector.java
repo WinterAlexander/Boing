@@ -4,7 +4,7 @@ import me.winter.boing.physics.Collision;
 import me.winter.boing.physics.shapes.Collider;
 
 /**
- * Undocumented :(
+ * A single collision detector able to detect collision between 2 specific shapes.
  * <p>
  * Created by Alexander Winter on 2017-04-12.
  */

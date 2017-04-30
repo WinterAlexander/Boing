@@ -3,7 +3,7 @@ package me.winter.boing.physics.util.iterator;
 import java.util.Iterator;
 
 /**
- * Undocumented :(
+ * Represents an iterator and iterable that prevents to create itself when being itered.
  * <p>
  * Created by Alexander Winter on 2017-04-25.
  */

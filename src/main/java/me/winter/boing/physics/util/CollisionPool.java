@@ -4,7 +4,7 @@ import com.badlogic.gdx.utils.Pool;
 import me.winter.boing.physics.Collision;
 
 /**
- * Undocumented :(
+ * Simple pool creating collision objects
  * <p>
  * Created by Alexander Winter on 2017-04-25.
  */

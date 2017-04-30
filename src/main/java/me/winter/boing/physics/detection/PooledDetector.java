@@ -5,7 +5,7 @@ import me.winter.boing.physics.Collision;
 import me.winter.boing.physics.shapes.Collider;
 
 /**
- * Undocumented :(
+ * CollisionDetection that requires a collisionPool to prevent creating new objects
  * <p>
  * Created by Alexander Winter on 2017-04-12.
  */

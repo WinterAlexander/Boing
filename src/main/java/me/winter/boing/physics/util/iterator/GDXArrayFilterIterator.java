@@ -3,7 +3,7 @@ package me.winter.boing.physics.util.iterator;
 import com.badlogic.gdx.utils.Array;
 
 /**
- * Undocumented :(
+ * Implementation of an IndexIterator using a LibGDX array that filters elements of a certain type.
  * <p>
  * Created by Alexander Winter on 2017-04-25.
  */

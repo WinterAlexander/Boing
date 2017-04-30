@@ -3,7 +3,8 @@ package me.winter.boing.physics.shapes;
 import me.winter.boing.physics.Solid;
 
 /**
- * Undocumented :(
+ * Abstract implementation of a Collider. Has a relative
+ * location and keeps a reference to its solid.
  * <p>
  * Created by Alexander Winter on 2017-04-10.
  */

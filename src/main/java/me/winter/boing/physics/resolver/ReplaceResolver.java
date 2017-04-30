@@ -7,7 +7,7 @@ import me.winter.boing.physics.DynamicSolid;
 import static me.winter.boing.physics.util.VelocityUtil.getMassRatio;
 
 /**
- * Undocumented :(
+ * CollisionResolver resolving collisions by replacing the objects colliding (if they are Dynamic)
  * <p>
  * Created by Alexander Winter on 2017-04-11.
  */
@@ -32,7 +32,7 @@ public class ReplaceResolver implements CollisionResolver
 			else
 			{
 				DynamicSolid dsB = (DynamicSolid)collision.colliderB.getSolid();
-				replace(dsA, collision.normalB, getMassRatio(dsB.weightFor(dsA), dsA.weightFor(dsB))  * collision.penetration);
+				replace(dsA, collision.normalB, getMassRatio(dsB.getWeight(dsA), dsA.getWeight(dsB))  * collision.penetration);
 			}
 		}
 
@@ -47,7 +47,7 @@ public class ReplaceResolver implements CollisionResolver
 			else
 			{
 				DynamicSolid dsA = (DynamicSolid)collision.colliderA.getSolid();
-				replace(dsB, collision.normalA, getMassRatio(dsA.weightFor(dsB), dsB.weightFor(dsA)) * collision.penetration);
+				replace(dsB, collision.normalA, getMassRatio(dsA.getWeight(dsB), dsB.getWeight(dsA)) * collision.penetration);
 			}
 		}
 	}
@@ -57,6 +57,6 @@ public class ReplaceResolver implements CollisionResolver
 		tmpVector.set(normal).nor().scl(delta);
 
 		solid.getPosition().add(tmpVector);
-		solid.getLastReplacement().add(tmpVector);
+		solid.getCollisionShifing().add(tmpVector);
 	}
 }

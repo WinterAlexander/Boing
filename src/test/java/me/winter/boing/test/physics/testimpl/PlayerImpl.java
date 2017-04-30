@@ -3,6 +3,7 @@ package me.winter.boing.test.physics.testimpl;
 import com.badlogic.gdx.math.Vector2;
 import me.winter.boing.physics.Collision;
 import me.winter.boing.physics.DynamicSolid;
+import me.winter.boing.physics.UpdatableSolid;
 import me.winter.boing.physics.World;
 
 import java.awt.KeyEventDispatcher;
@@ -19,13 +20,13 @@ import static me.winter.boing.test.physics.testimpl.PlayerImpl.IsKeyPressed.jump
  * <p>
  * Created by Alexander Winter on 2017-04-13.
  */
-public class PlayerImpl extends SolidImpl implements DynamicSolid
+public class PlayerImpl extends SolidImpl implements UpdatableSolid
 {
 	private boolean onGround;
 	private Vector2 velocity = new Vector2(), movement = new Vector2(), lastReplacement = new Vector2();
 
 	@Override
-	public void update()
+	public void update(float delta)
 	{
 		velocity.x *= 0.9f;
 		velocity.y -= 5;
@@ -47,7 +48,7 @@ public class PlayerImpl extends SolidImpl implements DynamicSolid
 	}
 
 	@Override
-	public boolean collide(Collision collision)
+	public boolean notifyCollision(Collision collision)
 	{
 		if(abs(collision.normalB.angle() - 90f) < 0.001f)
 			onGround = true;
@@ -67,7 +68,7 @@ public class PlayerImpl extends SolidImpl implements DynamicSolid
 	}
 
 	@Override
-	public float weightFor(DynamicSolid against)
+	public float getWeight(DynamicSolid other)
 	{
 		return 1f;
 	}
@@ -114,7 +115,7 @@ public class PlayerImpl extends SolidImpl implements DynamicSolid
 	}
 
 	@Override
-	public Vector2 getLastReplacement()
+	public Vector2 getCollisionShifing()
 	{
 		return lastReplacement;
 	}

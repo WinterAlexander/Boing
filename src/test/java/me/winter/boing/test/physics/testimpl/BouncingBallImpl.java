@@ -2,7 +2,6 @@ package me.winter.boing.test.physics.testimpl;
 
 import me.winter.boing.physics.Collision;
 import me.winter.boing.physics.DynamicSolid;
-import me.winter.boing.physics.World;
 import me.winter.boing.physics.util.VelocityUtil;
 
 import static me.winter.boing.physics.util.VelocityUtil.getMassRatio;
@@ -25,7 +24,7 @@ public class BouncingBallImpl extends DynamicSolidImpl
 	}
 
 	@Override
-	public boolean collide(Collision collision)
+	public boolean notifyCollision(Collision collision)
 	{
 		VelocityUtil.reflect(getVelocity(), collision.normalB);
 
@@ -33,7 +32,7 @@ public class BouncingBallImpl extends DynamicSolidImpl
 		{
 			DynamicSolid dynamicSolid = ((DynamicSolid)collision.colliderB.getSolid());
 
-			float massRatio = getMassRatio(weightFor(dynamicSolid), dynamicSolid.weightFor(this));
+			float massRatio = getMassRatio(getWeight(dynamicSolid), dynamicSolid.getWeight(this));
 
 			getVelocity().add(collision.impactVelB);
 			getVelocity().scl(1f - massRatio);

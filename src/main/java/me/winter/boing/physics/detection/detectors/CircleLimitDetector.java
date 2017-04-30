@@ -11,7 +11,7 @@ import static java.lang.Math.abs;
 import static java.lang.Math.signum;
 
 /**
- * Undocumented :(
+ * Detects collisions between a Circle and a Limit
  * <p>
  * Created by Alexander Winter on 2017-04-12.
  */

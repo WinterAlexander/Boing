@@ -40,13 +40,13 @@ public class DynamicSolidImpl extends SolidImpl implements DynamicSolid
 	}
 
 	@Override
-	public float weightFor(DynamicSolid against)
+	public float getWeight(DynamicSolid other)
 	{
 		return mass;
 	}
 
 	@Override
-	public Vector2 getLastReplacement()
+	public Vector2 getCollisionShifing()
 	{
 		return lastReplacement;
 	}

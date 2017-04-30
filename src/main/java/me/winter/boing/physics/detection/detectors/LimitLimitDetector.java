@@ -13,7 +13,8 @@ import static java.lang.Math.max;
 import static java.lang.Math.min;
 
 /**
- * Undocumented :(
+ * Detects collisions between 2 Limits. This is the only
+ * continous collision detector since limits do not have any area.
  * <p>
  * Created by Alexander Winter on 2017-04-12.
  */

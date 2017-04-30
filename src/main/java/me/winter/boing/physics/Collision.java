@@ -1,23 +1,60 @@
 package me.winter.boing.physics;
 
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.Pool.Poolable;
 import me.winter.boing.physics.resolver.CollisionResolver;
 import me.winter.boing.physics.shapes.Collider;
 
 /**
- * Undocumented :(
+ * Represents a collision between 2 solids. This object should be pooled
+ * but is not reset by pooling for performance reasons.
  * <p>
  * Created by Alexander Winter on 2017-04-10.
  */
 public class Collision
 {
-	//public Vector2 contact = new Vector2();
-	public Vector2 normalA = new Vector2(), normalB = new Vector2();
-	public Vector2 impactVelA = new Vector2(), impactVelB = new Vector2();
+	/**
+	 * Normal of colliderA at the impact point
+	 */
+	public final Vector2 normalA = new Vector2();
+
+	/**
+	 * Normal of colliderB at the impact point
+	 */
+	public final Vector2 normalB = new Vector2();
+
+	/**
+	 * Velocity of solidA during impact
+	 */
+	public final Vector2 impactVelA = new Vector2();
+
+	/**
+	 * Velocity of solidB during impact
+	 */
+	public final Vector2 impactVelB = new Vector2();
+
+	/**
+	 * penetration of the collision, combined distance of the colliders within each other
+	 */
 	public float penetration;
 
-	public Collider colliderA, colliderB;
+	/**
+	 * Collider involved in the collision.
+	 * <p>
+	 * In the notify method of a solid, this collider is a collider of your solid.
+	 */
+	public Collider colliderA;
 
+	/**
+	 * Collider involved in the collision.
+	 */
+	public Collider colliderB;
+
+	/**
+	 * Sets this collision as a swapped copy of another collision.
+	 *
+	 * @param collision collision to copy
+	 */
 	public void setAsSwapped(Collision collision)
 	{
 		normalA.set(collision.normalB);
@@ -29,6 +66,14 @@ public class Collision
 		colliderB = collision.colliderA;
 	}
 
+	/**
+	 * Sets the impact velocities of this collision from the solids.
+	 * <p>
+	 * If a solid isn't a DynamicSolid, its velocity will be set to 0
+	 *
+	 * @param solidA solid of impactVelA
+	 * @param solidB solid of impactVelB
+	 */
 	public void setImpactVelocities(Solid solidA, Solid solidB)
 	{
 		if(solidA instanceof DynamicSolid)

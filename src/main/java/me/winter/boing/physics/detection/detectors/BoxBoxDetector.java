@@ -8,7 +8,7 @@ import me.winter.boing.physics.shapes.Box;
 import static java.lang.Math.abs;
 
 /**
- * Undocumented :(
+ * Detects collisions between 2 Axis Aligned Bounding Box
  * <p>
  * Created by Alexander Winter on 2017-04-12.
  */

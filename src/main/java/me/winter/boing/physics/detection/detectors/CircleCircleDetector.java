@@ -9,7 +9,7 @@ import me.winter.boing.physics.shapes.Circle;
 import static java.lang.Math.sqrt;
 
 /**
- * Undocumented :(
+ * Detects collisions between 2 circles
  * <p>
  * Created by Alexander Winter on 2017-04-12.
  */

@@ -5,7 +5,7 @@ import com.badlogic.gdx.math.Vector2;
 import static java.lang.Float.POSITIVE_INFINITY;
 
 /**
- * Undocumented :(
+ * Offers useful methods to work with velocities and anything related
  * <p>
  * Created by Alexander Winter on 2017-04-12.
  */

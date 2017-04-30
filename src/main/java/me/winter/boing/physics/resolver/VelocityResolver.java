@@ -5,7 +5,7 @@ import me.winter.boing.physics.DynamicSolid;
 import me.winter.boing.physics.Collision;
 
 /**
- * Undocumented :(
+ * CollisionResolver resolving collisions by changing their velocity
  * <p>
  * Created by Alexander Winter on 2017-04-10.
  */

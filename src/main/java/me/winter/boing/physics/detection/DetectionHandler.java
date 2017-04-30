@@ -15,14 +15,19 @@ import me.winter.boing.physics.shapes.Limit;
 import me.winter.boing.physics.shapes.Collider;
 
 /**
- * Undocumented :(
+ * Collision detection handler providing full collision detection by selecting the valid CollisionDetector.
  * <p>
  * Created by Alexander Winter on 2017-04-11.
  */
 public class DetectionHandler
 {
 	private IntMap<CollisionDetector> detectors = new IntMap<>();
-	
+
+	/**
+	 * Creates a DetectionHandler by creating a CollisionDetector for each type of collision supported
+	 *
+	 * @param collisionPool collisionPool to prevent creating new objects
+	 */
 	public DetectionHandler(Pool<Collision> collisionPool)
 	{
 		detectors.put(getKey(Circle.class, Circle.class), new CircleCircleDetector(collisionPool));
@@ -38,6 +43,13 @@ public class DetectionHandler
 		detectors.put(getKey(Limit.class, Limit.class), new LimitLimitDetector(collisionPool));
 	}
 
+	/**
+	 * Provides full collision detection between 2 generic colliders.
+	 *
+	 * @param colliderA first Collider
+	 * @param colliderB second Collider
+	 * @return the collision if there's one, otherwise null
+	 */
 	@SuppressWarnings("unchecked")
 	public Collision collides(Collider colliderA, Collider colliderB)
 	{
@@ -46,6 +58,12 @@ public class DetectionHandler
 		return detector.collides(colliderA, colliderB);
 	}
 
+	/**
+	 * Gives the key from the 2 classes composing this key
+	 * @param classA type of the first Collider
+	 * @param classB type of the second Collider
+	 * @return the key to access the CollisionDetector
+	 */
 	public int getKey(Class<? extends Collider> classA, Class<? extends Collider> classB)
 	{
 		return 713 + classA.hashCode() * 31 + classB.hashCode();

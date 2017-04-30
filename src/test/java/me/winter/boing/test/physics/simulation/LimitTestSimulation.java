@@ -89,7 +89,7 @@ public class LimitTestSimulation
 
 		BouncingBallImpl ballImpl = new BouncingBallImpl() {
 			@Override
-			public boolean collide(Collision collision)
+			public boolean notifyCollision(Collision collision)
 			{
 				return true;
 			}
@@ -104,7 +104,7 @@ public class LimitTestSimulation
 
 		BouncingBallImpl ballImpl2 = new BouncingBallImpl() {
 			@Override
-			public boolean collide(Collision collision)
+			public boolean notifyCollision(Collision collision)
 			{
 				return true;
 			}
@@ -127,7 +127,7 @@ public class LimitTestSimulation
 
 		BouncingBallImpl ballImpl = new BouncingBallImpl(5f) {
 			@Override
-			public boolean collide(Collision collision)
+			public boolean notifyCollision(Collision collision)
 			{
 				return true;
 			}
@@ -139,7 +139,7 @@ public class LimitTestSimulation
 
 		BouncingBallImpl ballImpl2 = new BouncingBallImpl(0.5f) {
 			@Override
-			public boolean collide(Collision collision)
+			public boolean notifyCollision(Collision collision)
 			{
 				return true;
 			}

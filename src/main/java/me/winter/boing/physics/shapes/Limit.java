@@ -4,7 +4,7 @@ import com.badlogic.gdx.math.Vector2;
 import me.winter.boing.physics.Solid;
 
 /**
- * An axis aligned limit collider
+ * An axis aligned limit collider. Basically a segment or an edge.
  * <p>
  * Created by Alexander Winter on 2017-04-12.
  */
