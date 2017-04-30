@@ -34,8 +34,8 @@ public class CircleCircleDetector extends PooledDetector<Circle, Circle>
 
 		Collision collision = collisionPool.obtain();
 
-		collision.normalA.set(dx, dy);
-		collision.normalB.set(-dx, -dy);
+		collision.normalA.set(dx, dy).nor();
+		collision.normalB.set(-dx, -dy).nor();
 		collision.penetration = r - (float)sqrt(dst2);
 
 		collision.colliderA = shapeA;
