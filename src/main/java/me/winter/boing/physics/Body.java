@@ -19,7 +19,7 @@ public interface Body
 	/**
 	 * @return the list of colliders this body have
 	 */
-	Array<Collider> getColliders();
+	Collider[] getColliders();
 
 	/**
 	 * Method called by the World to indicate a collision is occuring with this body.

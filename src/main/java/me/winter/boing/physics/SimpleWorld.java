@@ -71,9 +71,9 @@ public abstract class SimpleWorld extends AbstractWorld
 				if(!aDyn && !bDyn)
 					continue;
 
-				for(int k = 0; k < bodyA.getColliders().size; k++)
+				for(int k = 0; k < bodyA.getColliders().length; k++)
 				{
-					Collider colliderA = bodyA.getColliders().get(k);
+					Collider colliderA = bodyA.getColliders()[k];
 
 					for(Collider colliderB : bodyB.getColliders())
 					{

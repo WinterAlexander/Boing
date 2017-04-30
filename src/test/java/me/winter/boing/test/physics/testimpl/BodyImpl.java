@@ -20,7 +20,8 @@ public class BodyImpl implements Body, SimulationElement
 {
 	private Vector2 position = new Vector2();
 
-	private Array<Collider> colliders = new Array<>();
+	private Array<Collider> colliders = new Array<>(Collider.class);
+	private Collider[] array = new Collider[0];
 
 	@Override
 	public Vector2 getPosition()
@@ -28,10 +29,15 @@ public class BodyImpl implements Body, SimulationElement
 		return position;
 	}
 
-	@Override
-	public Array<Collider> getColliders()
+	public Collider[] getColliders()
 	{
-		return colliders;
+		return array;
+	}
+
+	public void addCollider(Collider collider)
+	{
+		colliders.add(collider);
+		array = colliders.toArray();
 	}
 
 	@Override

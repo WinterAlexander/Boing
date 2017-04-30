@@ -25,12 +25,12 @@ public class BoxCircleDetectionTest
 
 		DynamicBodyImpl solidImpl = new DynamicBodyImpl(1f);
 		solidImpl.getPosition().set(0, 0);
-		solidImpl.getColliders().add(new Box(solidImpl, 0, 0, 20, 20));
+		solidImpl.addCollider(new Box(solidImpl, 0, 0, 20, 20));
 		world.getSolids().add(solidImpl);
 
 		DynamicBodyImpl solidImpl2 = new DynamicBodyImpl(1f);
 		solidImpl2.getPosition().set(0, 0);
-		solidImpl2.getColliders().add(new Circle(solidImpl2, 0, 0, 10));
+		solidImpl2.addCollider(new Circle(solidImpl2, 0, 0, 10));
 		world.getSolids().add(solidImpl2);
 
 		assertEquals(0, collisionCount.value);
@@ -71,12 +71,12 @@ public class BoxCircleDetectionTest
 
 		DynamicBodyImpl solidImpl = new DynamicBodyImpl(1f);
 		solidImpl.getPosition().set(0, 0);
-		solidImpl.getColliders().add(new Circle(solidImpl, 0, 0, 10));
+		solidImpl.addCollider(new Circle(solidImpl, 0, 0, 10));
 		world.getSolids().add(solidImpl);
 
 		DynamicBodyImpl solidImpl2 = new DynamicBodyImpl(1f);
 		solidImpl2.getPosition().set(50, 0);
-		solidImpl2.getColliders().add(new Box(solidImpl2, 0, 0, 20, 20));
+		solidImpl2.addCollider(new Box(solidImpl2, 0, 0, 20, 20));
 		solidImpl2.getVelocity().set(-16, 0);
 		world.getSolids().add(solidImpl2);
 
@@ -98,12 +98,12 @@ public class BoxCircleDetectionTest
 
 		DynamicBodyImpl solidImpl = new DynamicBodyImpl(1f);
 		solidImpl.getPosition().set(0, 0);
-		solidImpl.getColliders().add(new Box(solidImpl, 0, 0, 20, 20));
+		solidImpl.addCollider(new Box(solidImpl, 0, 0, 20, 20));
 		world.getSolids().add(solidImpl);
 
 		DynamicBodyImpl solidImpl2 = new DynamicBodyImpl(1f);
 		solidImpl2.getPosition().set(20, 0);
-		solidImpl2.getColliders().add(new Circle(solidImpl2, 0, 0, 10));
+		solidImpl2.addCollider(new Circle(solidImpl2, 0, 0, 10));
 		world.getSolids().add(solidImpl2);
 
 		assertEquals(0, collisionCount.value);
@@ -121,13 +121,13 @@ public class BoxCircleDetectionTest
 
 		DynamicBodyImpl solidImpl = new DynamicBodyImpl(1f);
 		solidImpl.getPosition().set(0, 0);
-		solidImpl.getColliders().add(new Box(solidImpl, 0, 0, 20, 20));
+		solidImpl.addCollider(new Box(solidImpl, 0, 0, 20, 20));
 		solidImpl.getVelocity().set(8, 0);
 		world.getSolids().add(solidImpl);
 
 		DynamicBodyImpl solidImpl2 = new DynamicBodyImpl(1f);
 		solidImpl2.getPosition().set(50, 0);
-		solidImpl2.getColliders().add(new Circle(solidImpl2, 0, 0, 10));
+		solidImpl2.addCollider(new Circle(solidImpl2, 0, 0, 10));
 		solidImpl2.getVelocity().set(-8, 0);
 		world.getSolids().add(solidImpl2);
 

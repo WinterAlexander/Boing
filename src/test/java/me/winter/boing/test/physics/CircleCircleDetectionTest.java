@@ -24,12 +24,12 @@ public class CircleCircleDetectionTest
 
 		DynamicBodyImpl solidImpl = new DynamicBodyImpl(1f);
 		solidImpl.getPosition().set(0, 0);
-		solidImpl.getColliders().add(new Circle(solidImpl, 0, 0, 12.5f));
+		solidImpl.addCollider(new Circle(solidImpl, 0, 0, 12.5f));
 		world.getSolids().add(solidImpl);
 
 		DynamicBodyImpl solidImpl2 = new DynamicBodyImpl(1f);
 		solidImpl2.getPosition().set(0, 0);
-		solidImpl2.getColliders().add(new Circle(solidImpl2, 0, 0, 12.5f));
+		solidImpl2.addCollider(new Circle(solidImpl2, 0, 0, 12.5f));
 		world.getSolids().add(solidImpl2);
 
 		assertEquals(0, collisionCount.value);
@@ -70,12 +70,12 @@ public class CircleCircleDetectionTest
 
 		DynamicBodyImpl solidImpl = new DynamicBodyImpl(1f);
 		solidImpl.getPosition().set(0, 0);
-		solidImpl.getColliders().add(new Circle(solidImpl, 0, 0, 10));
+		solidImpl.addCollider(new Circle(solidImpl, 0, 0, 10));
 		world.getSolids().add(solidImpl);
 
 		DynamicBodyImpl solidImpl2 = new DynamicBodyImpl(1f);
 		solidImpl2.getPosition().set(50, 0);
-		solidImpl2.getColliders().add(new Circle(solidImpl2, 0, 0, 10));
+		solidImpl2.addCollider(new Circle(solidImpl2, 0, 0, 10));
 		solidImpl2.getVelocity().set(-16, 0);
 		world.getSolids().add(solidImpl2);
 
@@ -97,17 +97,17 @@ public class CircleCircleDetectionTest
 
 		DynamicBodyImpl solidImpl = new DynamicBodyImpl(1f);
 		solidImpl.getPosition().set(0, 0);
-		solidImpl.getColliders().add(new Circle(solidImpl, 0, 0, 10));
+		solidImpl.addCollider(new Circle(solidImpl, 0, 0, 10));
 		world.getSolids().add(solidImpl);
 
 		DynamicBodyImpl solidImpl2 = new DynamicBodyImpl(1f);
 		solidImpl2.getPosition().set(20, 0);
-		solidImpl2.getColliders().add(new Circle(solidImpl2, 0, 0, 10));
+		solidImpl2.addCollider(new Circle(solidImpl2, 0, 0, 10));
 		world.getSolids().add(solidImpl2);
 
 		DynamicBodyImpl solidImpl3 = new DynamicBodyImpl(1f);
 		solidImpl3.getPosition().set(10, 17.32050807568877f);
-		solidImpl3.getColliders().add(new Circle(solidImpl3, 0, 0, 10));
+		solidImpl3.addCollider(new Circle(solidImpl3, 0, 0, 10));
 		world.getSolids().add(solidImpl3);
 
 		assertEquals(0, collisionCount.value);
@@ -125,13 +125,13 @@ public class CircleCircleDetectionTest
 
 		DynamicBodyImpl solidImpl = new DynamicBodyImpl(1f);
 		solidImpl.getPosition().set(0, 0);
-		solidImpl.getColliders().add(new Circle(solidImpl, 0, 0, 10));
+		solidImpl.addCollider(new Circle(solidImpl, 0, 0, 10));
 		solidImpl.getVelocity().set(8, 0);
 		world.getSolids().add(solidImpl);
 
 		DynamicBodyImpl solidImpl2 = new DynamicBodyImpl(1f);
 		solidImpl2.getPosition().set(50, 0);
-		solidImpl2.getColliders().add(new Circle(solidImpl2, 0, 0, 10));
+		solidImpl2.addCollider(new Circle(solidImpl2, 0, 0, 10));
 		solidImpl2.getVelocity().set(-8, 0);
 		world.getSolids().add(solidImpl2);
 
