@@ -2,8 +2,7 @@ package me.winter.boing.test.physics.testimpl;
 
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
-import me.winter.boing.physics.Solid;
-import me.winter.boing.physics.World;
+import me.winter.boing.physics.Body;
 import me.winter.boing.physics.shapes.Box;
 import me.winter.boing.physics.shapes.Circle;
 import me.winter.boing.physics.shapes.Collider;
@@ -17,7 +16,7 @@ import java.awt.Graphics;
  * <p>
  * Created by Alexander Winter on 2017-04-11.
  */
-public class SolidImpl implements Solid, SimulationElement
+public class BodyImpl implements Body, SimulationElement
 {
 	private Vector2 position = new Vector2();
 

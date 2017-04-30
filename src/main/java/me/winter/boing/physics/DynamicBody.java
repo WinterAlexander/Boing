@@ -3,21 +3,21 @@ package me.winter.boing.physics;
 import com.badlogic.gdx.math.Vector2;
 
 /**
- * Represents a solid that moves every frame.
+ * Represents a body that moves every frame.
  * <p>
  * Created by Alexander Winter on 2017-04-10.
  */
-public interface DynamicSolid extends Solid
+public interface DynamicBody extends Body
 {
 	/**
-	 * The velocity of a DynamicSolid represents how fast it's currently going.
+	 * The velocity of a DynamicBody represents how fast it's currently going.
 	 *
-	 * @return current velocity of the solid
+	 * @return current velocity of the body
 	 */
 	Vector2 getVelocity();
 
 	/**
-	 * The movement of a DynamicSolid is how much it moved in this frame.
+	 * The movement of a DynamicBody is how much it moved in this frame.
 	 * <p>
 	 * It is calculated by multiplying the current velocity with the delta of the frame.
 	 *
@@ -27,27 +27,27 @@ public interface DynamicSolid extends Solid
 
 	/**
 	 * The collision shifting is a way to represents the movement imposed by the
-	 * collision resolver when dynamic solids collides. If two solids overlap, they
+	 * collision resolver when dynamic bodies collides. If two bodies overlap, they
 	 * need to be shifted in order to stop overlapping.
 	 * <p>
 	 * This shifting has to be taken and added to the movement (but not to the position)
-	 * to prevent being shifted into another solid.
+	 * to prevent being shifted into another body.
 	 *
 	 * @return shifting imposed by collision resolver on previous frame
 	 */
 	Vector2 getCollisionShifing();
 
 	/**
-	 * The weight of a DynamicSolid is used by a CollisionResolver to choose how
+	 * The weight of a DynamicBody is used by a CollisionResolver to choose how
 	 * to handle their shifing. In favor of game design over realism, you can choose
 	 * your mass in function of the other object.
 	 * <p>
 	 * The weight can be 0 but has to be positive.
 	 *
-	 * @param other solid colliding with this one
-	 * @return the weight this solid should have against another solid
+	 * @param other body colliding with this one
+	 * @return the weight this body should have against another body
 	 */
-	default float getWeight(DynamicSolid other)
+	default float getWeight(DynamicBody other)
 	{
 		return 1f;
 	}

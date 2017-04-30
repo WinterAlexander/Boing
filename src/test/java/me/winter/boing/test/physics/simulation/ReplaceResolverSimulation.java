@@ -5,7 +5,7 @@ import me.winter.boing.physics.resolver.ReplaceResolver;
 import me.winter.boing.physics.shapes.Box;
 import me.winter.boing.physics.shapes.Circle;
 import me.winter.boing.test.physics.testimpl.BouncingBallImpl;
-import me.winter.boing.test.physics.testimpl.SolidImpl;
+import me.winter.boing.test.physics.testimpl.BodyImpl;
 import org.junit.Ignore;
 import org.junit.Test;
 
@@ -171,7 +171,7 @@ public class ReplaceResolverSimulation
 
 		for(int i = 20; i < 800; i+= 20)
 		{
-			SolidImpl wall1 = new SolidImpl();
+			BodyImpl wall1 = new BodyImpl();
 
 			wall1.getPosition().set(i, 0);
 			wall1.getColliders().add(new Circle(wall1, 0, 0, 100));
@@ -181,7 +181,7 @@ public class ReplaceResolverSimulation
 
 		for(int i = 20; i < 800; i+= 20)
 		{
-			SolidImpl wall1 = new SolidImpl();
+			BodyImpl wall1 = new BodyImpl();
 
 			wall1.getPosition().set(i, 600);
 			wall1.getColliders().add(new Circle(wall1, 0, 0, 100));
@@ -191,7 +191,7 @@ public class ReplaceResolverSimulation
 
 		for(int i = 20; i < 600; i+= 20)
 		{
-			SolidImpl wall1 = new SolidImpl();
+			BodyImpl wall1 = new BodyImpl();
 
 			wall1.getPosition().set(0, i);
 			wall1.getColliders().add(new Circle(wall1, 0, 0, 100));
@@ -201,7 +201,7 @@ public class ReplaceResolverSimulation
 
 		for(int i = 20; i < 600; i+= 20)
 		{
-			SolidImpl wall1 = new SolidImpl();
+			BodyImpl wall1 = new BodyImpl();
 
 			wall1.getPosition().set(800, i);
 			wall1.getColliders().add(new Circle(wall1, 0, 0, 100));
@@ -273,7 +273,7 @@ public class ReplaceResolverSimulation
 	{
 		WorldImpl world = new WorldImpl(new ReplaceResolver());
 
-		SolidImpl ground = new SolidImpl();
+		BodyImpl ground = new BodyImpl();
 		ground.getPosition().set(400, 0);
 		ground.getColliders().add(new Box(ground, 0, 0, 800, 100));
 		world.getSolids().add(ground);

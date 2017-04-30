@@ -1,7 +1,7 @@
 package me.winter.boing.test.physics.testimpl;
 
 import me.winter.boing.physics.Collision;
-import me.winter.boing.physics.DynamicSolid;
+import me.winter.boing.physics.DynamicBody;
 import me.winter.boing.physics.util.VelocityUtil;
 
 import static me.winter.boing.physics.util.VelocityUtil.getMassRatio;
@@ -11,7 +11,7 @@ import static me.winter.boing.physics.util.VelocityUtil.getMassRatio;
  * <p>
  * Created by Alexander Winter on 2017-04-10.
  */
-public class BouncingBallImpl extends DynamicSolidImpl
+public class BouncingBallImpl extends DynamicBodyImpl
 {
 	public BouncingBallImpl()
 	{
@@ -28,9 +28,9 @@ public class BouncingBallImpl extends DynamicSolidImpl
 	{
 		VelocityUtil.reflect(getVelocity(), collision.normalB);
 
-		if(collision.colliderB.getSolid() instanceof DynamicSolid)
+		if(collision.colliderB.getBody() instanceof DynamicBody)
 		{
-			DynamicSolid dynamicSolid = ((DynamicSolid)collision.colliderB.getSolid());
+			DynamicBody dynamicSolid = ((DynamicBody)collision.colliderB.getBody());
 
 			float massRatio = getMassRatio(getWeight(dynamicSolid), dynamicSolid.getWeight(this));
 

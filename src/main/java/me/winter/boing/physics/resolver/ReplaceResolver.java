@@ -2,7 +2,7 @@ package me.winter.boing.physics.resolver;
 
 import com.badlogic.gdx.math.Vector2;
 import me.winter.boing.physics.Collision;
-import me.winter.boing.physics.DynamicSolid;
+import me.winter.boing.physics.DynamicBody;
 
 import static me.winter.boing.physics.util.VelocityUtil.getMassRatio;
 
@@ -18,12 +18,12 @@ public class ReplaceResolver implements CollisionResolver
 	@Override
 	public void resolve(Collision collision)
 	{
-		boolean solidADyn = collision.colliderA.getSolid() instanceof DynamicSolid;
-		boolean solidBDyn = collision.colliderB.getSolid() instanceof DynamicSolid;
+		boolean solidADyn = collision.colliderA.getBody() instanceof DynamicBody;
+		boolean solidBDyn = collision.colliderB.getBody() instanceof DynamicBody;
 
 		if(solidADyn)
 		{
-			DynamicSolid dsA = (DynamicSolid)collision.colliderA.getSolid();
+			DynamicBody dsA = (DynamicBody)collision.colliderA.getBody();
 
 			if(!solidBDyn)
 			{
@@ -31,14 +31,14 @@ public class ReplaceResolver implements CollisionResolver
 			}
 			else
 			{
-				DynamicSolid dsB = (DynamicSolid)collision.colliderB.getSolid();
+				DynamicBody dsB = (DynamicBody)collision.colliderB.getBody();
 				replace(dsA, collision.normalB, getMassRatio(dsB.getWeight(dsA), dsA.getWeight(dsB))  * collision.penetration);
 			}
 		}
 
 		if(solidBDyn)
 		{
-			DynamicSolid dsB = (DynamicSolid)collision.colliderB.getSolid();
+			DynamicBody dsB = (DynamicBody)collision.colliderB.getBody();
 
 			if(!solidADyn)
 			{
@@ -46,13 +46,13 @@ public class ReplaceResolver implements CollisionResolver
 			}
 			else
 			{
-				DynamicSolid dsA = (DynamicSolid)collision.colliderA.getSolid();
+				DynamicBody dsA = (DynamicBody)collision.colliderA.getBody();
 				replace(dsB, collision.normalA, getMassRatio(dsA.getWeight(dsB), dsB.getWeight(dsA)) * collision.penetration);
 			}
 		}
 	}
 
-	private void replace(DynamicSolid solid, Vector2 normal, float delta)
+	private void replace(DynamicBody solid, Vector2 normal, float delta)
 	{
 		tmpVector.set(normal).nor().scl(delta);
 

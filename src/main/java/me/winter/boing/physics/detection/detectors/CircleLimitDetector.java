@@ -69,7 +69,7 @@ public class CircleLimitDetector extends PooledDetector<Circle, Limit>
 
 		collision.colliderA = limitB;
 		collision.colliderB = circleA;
-		collision.setImpactVelocities(limitB.getSolid(), circleA.getSolid());
+		collision.setImpactVelocities(limitB.getBody(), circleA.getBody());
 
 		return collision;
 	}

@@ -2,9 +2,8 @@ package me.winter.boing.test.physics.testimpl;
 
 import com.badlogic.gdx.math.Vector2;
 import me.winter.boing.physics.Collision;
-import me.winter.boing.physics.DynamicSolid;
-import me.winter.boing.physics.UpdatableSolid;
-import me.winter.boing.physics.World;
+import me.winter.boing.physics.DynamicBody;
+import me.winter.boing.physics.UpdatableBody;
 
 import java.awt.KeyEventDispatcher;
 import java.awt.KeyboardFocusManager;
@@ -20,7 +19,7 @@ import static me.winter.boing.test.physics.testimpl.PlayerImpl.IsKeyPressed.jump
  * <p>
  * Created by Alexander Winter on 2017-04-13.
  */
-public class PlayerImpl extends SolidImpl implements UpdatableSolid
+public class PlayerImpl extends BodyImpl implements UpdatableBody
 {
 	private boolean onGround;
 	private Vector2 velocity = new Vector2(), movement = new Vector2(), lastReplacement = new Vector2();
@@ -68,7 +67,7 @@ public class PlayerImpl extends SolidImpl implements UpdatableSolid
 	}
 
 	@Override
-	public float getWeight(DynamicSolid other)
+	public float getWeight(DynamicBody other)
 	{
 		return 1f;
 	}

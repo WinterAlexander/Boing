@@ -1,40 +1,40 @@
 package me.winter.boing.physics.shapes;
 
-import me.winter.boing.physics.Solid;
+import me.winter.boing.physics.Body;
 
 /**
  * Abstract implementation of a Collider. Has a relative
- * location and keeps a reference to its solid.
+ * location and keeps a reference to its body.
  * <p>
  * Created by Alexander Winter on 2017-04-10.
  */
 public abstract class AbstractCollider implements Collider
 {
-	protected Solid solid;
+	protected Body body;
 	protected float x, y;
 
-	public AbstractCollider(Solid solid, float x, float y)
+	public AbstractCollider(Body body, float x, float y)
 	{
-		this.solid = solid;
+		this.body = body;
 		this.x = x;
 		this.y = y;
 	}
 
 	@Override
-	public Solid getSolid()
+	public Body getBody()
 	{
-		return solid;
+		return body;
 	}
 
 	@Override
 	public float getAbsX()
 	{
-		return x + solid.getPosition().x;
+		return x + body.getPosition().x;
 	}
 
 	@Override
 	public float getAbsY()
 	{
-		return y + solid.getPosition().y;
+		return y + body.getPosition().y;
 	}
 }

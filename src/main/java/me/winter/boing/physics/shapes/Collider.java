@@ -1,6 +1,6 @@
 package me.winter.boing.physics.shapes;
 
-import me.winter.boing.physics.Solid;
+import me.winter.boing.physics.Body;
 
 /**
  * Represents a shape that can enter in collision with another
@@ -12,7 +12,7 @@ public interface Collider
 	/**
 	 * @return parent solid of this collider
 	 */
-	Solid getSolid();
+	Body getBody();
 
 	/**
 	 * @return absolute x position of this collider

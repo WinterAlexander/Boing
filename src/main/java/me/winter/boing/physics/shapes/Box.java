@@ -1,6 +1,6 @@
 package me.winter.boing.physics.shapes;
 
-import me.winter.boing.physics.Solid;
+import me.winter.boing.physics.Body;
 
 /**
  * An Axis Aligned Bounding Box collider
@@ -11,9 +11,9 @@ public class Box extends AbstractCollider
 {
 	public float width, height;
 
-	public Box(Solid solid, float x, float y, float width, float height)
+	public Box(Body body, float x, float y, float width, float height)
 	{
-		super(solid, x, y);
+		super(body, x, y);
 		this.width = width;
 		this.height = height;
 	}

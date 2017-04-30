@@ -1,7 +1,7 @@
 package me.winter.boing.physics.resolver;
 
 import com.badlogic.gdx.math.Vector2;
-import me.winter.boing.physics.DynamicSolid;
+import me.winter.boing.physics.DynamicBody;
 import me.winter.boing.physics.Collision;
 
 /**
@@ -14,14 +14,14 @@ public class VelocityResolver implements CollisionResolver
 	@Override
 	public void resolve(Collision collision)
 	{
-		if(collision.colliderA.getSolid() instanceof DynamicSolid)
-			reflect((DynamicSolid)collision.colliderA.getSolid(), collision.normalB);
+		if(collision.colliderA.getBody() instanceof DynamicBody)
+			reflect((DynamicBody)collision.colliderA.getBody(), collision.normalB);
 
-		if(collision.colliderB.getSolid() instanceof DynamicSolid)
-			reflect((DynamicSolid)collision.colliderB.getSolid(), collision.normalA);
+		if(collision.colliderB.getBody() instanceof DynamicBody)
+			reflect((DynamicBody)collision.colliderB.getBody(), collision.normalA);
 	}
 
-	private void reflect(DynamicSolid solid, Vector2 normal)
+	private void reflect(DynamicBody solid, Vector2 normal)
 	{
 		if(normal.dot(solid.getVelocity()) > 0) //not pointing toward surface anymore
 			return;

@@ -4,7 +4,7 @@ import me.winter.boing.test.physics.testimpl.WorldImpl;
 import me.winter.boing.physics.resolver.ReplaceResolver;
 import me.winter.boing.physics.shapes.Box;
 import me.winter.boing.test.physics.testimpl.PlayerImpl;
-import me.winter.boing.test.physics.testimpl.SolidImpl;
+import me.winter.boing.test.physics.testimpl.BodyImpl;
 import me.winter.boing.test.physics.testimpl.SpringImpl;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -30,7 +30,7 @@ public class PlayerSimulation
 		player.getColliders().add(new Box(player, 0, 0, 20, 45));
 		world.getSolids().add(player);
 
-		SolidImpl ground = new SolidImpl();
+		BodyImpl ground = new BodyImpl();
 
 		ground.getPosition().set(400, 0);
 		ground.getColliders().add(new Box(ground, 0, 0, 800, 100));
@@ -50,7 +50,7 @@ public class PlayerSimulation
 		player.getColliders().add(new Box(player, 0, 0, 20, 45));
 		world.getSolids().add(player);
 
-		SolidImpl ground = new SolidImpl();
+		BodyImpl ground = new BodyImpl();
 
 		ground.getPosition().set(400, 0);
 		ground.getColliders().add(new Box(ground, 0, 0, 800, 100));

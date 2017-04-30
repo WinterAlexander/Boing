@@ -68,7 +68,7 @@ public class BoxCircleDetector extends PooledDetector<Box, Circle>
 
 		collision.colliderA = boxA;
 		collision.colliderB = circleB;
-		collision.setImpactVelocities(boxA.getSolid(), circleB.getSolid());
+		collision.setImpactVelocities(boxA.getBody(), circleB.getBody());
 
 		return collision;
 	}

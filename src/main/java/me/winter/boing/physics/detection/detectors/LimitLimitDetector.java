@@ -3,7 +3,7 @@ package me.winter.boing.physics.detection.detectors;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Pool;
 import me.winter.boing.physics.Collision;
-import me.winter.boing.physics.DynamicSolid;
+import me.winter.boing.physics.DynamicBody;
 import me.winter.boing.physics.detection.PooledDetector;
 import me.winter.boing.physics.shapes.Limit;
 
@@ -33,12 +33,12 @@ public class LimitLimitDetector extends PooledDetector<Limit, Limit>
 		if(shapeA.normal.dot(shapeB.normal) != -1)
 			return null;
 
-		Vector2 vecA = shapeA.getSolid() instanceof DynamicSolid
-					? ((DynamicSolid)shapeA.getSolid()).getMovement()
+		Vector2 vecA = shapeA.getBody() instanceof DynamicBody
+					? ((DynamicBody)shapeA.getBody()).getMovement()
 					: Zero;
 
-		Vector2 vecB = shapeB.getSolid() instanceof DynamicSolid
-					? ((DynamicSolid)shapeB.getSolid()).getMovement()
+		Vector2 vecB = shapeB.getBody() instanceof DynamicBody
+					? ((DynamicBody)shapeB.getBody()).getMovement()
 					: Zero;
 
 
@@ -85,7 +85,7 @@ public class LimitLimitDetector extends PooledDetector<Limit, Limit>
 
 		collision.normalA.set(shapeA.normal);
 		collision.normalB.set(shapeB.normal);
-		collision.setImpactVelocities(shapeA.getSolid(), shapeB.getSolid());
+		collision.setImpactVelocities(shapeA.getBody(), shapeB.getBody());
 		collision.penetration = -(diff + vecDiff);
 
 		return collision;

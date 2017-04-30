@@ -5,7 +5,7 @@ import me.winter.boing.physics.resolver.VelocityResolver;
 import me.winter.boing.physics.shapes.Box;
 import me.winter.boing.physics.shapes.Circle;
 import me.winter.boing.test.physics.testimpl.BouncingBallImpl;
-import me.winter.boing.test.physics.testimpl.SolidImpl;
+import me.winter.boing.test.physics.testimpl.BodyImpl;
 import org.junit.Ignore;
 import org.junit.Test;
 
@@ -164,7 +164,7 @@ public class VelocityResolverSimulation
 	{
 		WorldImpl world = new WorldImpl(new VelocityResolver());
 
-		SolidImpl ground = new SolidImpl();
+		BodyImpl ground = new BodyImpl();
 		ground.getPosition().set(400, 0);
 		ground.getColliders().add(new Box(ground, 0, 0, 800, 100));
 		world.getSolids().add(ground);

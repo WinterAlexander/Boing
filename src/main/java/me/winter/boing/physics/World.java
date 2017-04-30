@@ -2,7 +2,7 @@ package me.winter.boing.physics;
 
 /**
  * Represents a World for a physics simulation. Note that the usage of World
- * and World derived classes isn't mandatory for solid object but might
+ * and World derived classes isn't mandatory for Body objects but might
  * become in the future. To prevent issues, you should let your world class
  * implement this interface.
  * <p>

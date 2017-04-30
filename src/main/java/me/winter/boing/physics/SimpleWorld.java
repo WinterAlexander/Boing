@@ -27,23 +27,23 @@ public abstract class SimpleWorld extends AbstractWorld
 	}
 
 	/**
-	 * @return An iterator for all solids
+	 * @return An iterator for all bodies
 	 */
-	protected abstract IndexIterator<Solid> getSolidIterator();
+	protected abstract IndexIterator<Body> getBodyIterator();
 
 	/**
-	 * @return An iterator only for dynamic solids
+	 * @return An iterator only for dynamic bodies
 	 */
-	protected abstract ReusableIterator<DynamicSolid> getDynamicIterator();
+	protected abstract ReusableIterator<DynamicBody> getDynamicIterator();
 
 	@Override
 	protected void update(float delta)
 	{
-		for(DynamicSolid dynamic : getDynamicIterator())
-			if(dynamic instanceof UpdatableSolid)
-				((UpdatableSolid)dynamic).update(delta);
+		for(DynamicBody dynamic : getDynamicIterator())
+			if(dynamic instanceof UpdatableBody)
+				((UpdatableBody)dynamic).update(delta);
 
-		for(DynamicSolid dynamic : getDynamicIterator())
+		for(DynamicBody dynamic : getDynamicIterator())
 		{
 			dynamic.getMovement().set(dynamic.getVelocity()).scl(delta);
 			dynamic.getPosition().add(dynamic.getMovement());
@@ -56,26 +56,26 @@ public abstract class SimpleWorld extends AbstractWorld
 	@Override
 	protected void detectCollisions()
 	{
-		int size = getSolidIterator().size();
+		int size = getBodyIterator().size();
 
 		for(int i = size; i-- >= 0;)
 		{
 			for(int j = i; j-- > 0;)
 			{
-				Solid solidA = getSolidIterator().objectAt(i);
-				Solid solidB = getSolidIterator().objectAt(j);
+				Body bodyA = getBodyIterator().objectAt(i);
+				Body bodyB = getBodyIterator().objectAt(j);
 
-				boolean aDyn = solidA instanceof DynamicSolid;
-				boolean bDyn = solidB instanceof DynamicSolid;
+				boolean aDyn = bodyA instanceof DynamicBody;
+				boolean bDyn = bodyB instanceof DynamicBody;
 
 				if(!aDyn && !bDyn)
 					continue;
 
-				for(int k = 0; k < solidA.getColliders().size; k++)
+				for(int k = 0; k < bodyA.getColliders().size; k++)
 				{
-					Collider colliderA = solidA.getColliders().get(k);
+					Collider colliderA = bodyA.getColliders().get(k);
 
-					for(Collider colliderB : solidB.getColliders())
+					for(Collider colliderB : bodyB.getColliders())
 					{
 						Collision collision = mapper.collides(colliderA, colliderB);
 
@@ -96,7 +96,7 @@ public abstract class SimpleWorld extends AbstractWorld
 		{
 			swapped.setAsSwapped(collision);
 
-			if(collision.colliderA.getSolid().notifyCollision(collision) && collision.colliderB.getSolid().notifyCollision(swapped))
+			if(collision.colliderA.getBody().notifyCollision(collision) && collision.colliderB.getBody().notifyCollision(swapped))
 				resolver.resolve(collision);
 		}
 

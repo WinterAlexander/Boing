@@ -48,7 +48,7 @@ public class BoxBoxDetector extends PooledDetector<Box, Box>
 
 		collision.colliderA = shapeA;
 		collision.colliderB = shapeB;
-		collision.setImpactVelocities(shapeA.getSolid(), shapeB.getSolid());
+		collision.setImpactVelocities(shapeA.getBody(), shapeB.getBody());
 
 		return collision;
 	}

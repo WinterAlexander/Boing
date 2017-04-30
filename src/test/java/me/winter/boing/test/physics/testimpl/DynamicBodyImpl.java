@@ -1,25 +1,24 @@
 package me.winter.boing.test.physics.testimpl;
 
 import com.badlogic.gdx.math.Vector2;
-import me.winter.boing.physics.DynamicSolid;
-import me.winter.boing.physics.World;
+import me.winter.boing.physics.DynamicBody;
 
 /**
  * Undocumented :(
  * <p>
  * Created by Alexander Winter on 2017-04-26.
  */
-public class DynamicSolidImpl extends SolidImpl implements DynamicSolid
+public class DynamicBodyImpl extends BodyImpl implements DynamicBody
 {
 	private Vector2 velocity, movement, lastReplacement;
 	private float mass;
 
-	public DynamicSolidImpl()
+	public DynamicBodyImpl()
 	{
 		this(1f);
 	}
 
-	public DynamicSolidImpl(float mass)
+	public DynamicBodyImpl(float mass)
 	{
 		this.velocity = new Vector2();
 		this.movement = new Vector2();
@@ -40,7 +39,7 @@ public class DynamicSolidImpl extends SolidImpl implements DynamicSolid
 	}
 
 	@Override
-	public float getWeight(DynamicSolid other)
+	public float getWeight(DynamicBody other)
 	{
 		return mass;
 	}

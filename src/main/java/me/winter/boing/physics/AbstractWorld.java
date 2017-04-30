@@ -37,7 +37,7 @@ public abstract class AbstractWorld implements World
 	}
 
 	/**
-	 * Updates the game objects by looping through them and make the DynamicSolid objects move
+	 * Updates the game objects by looping through them and make the DynamicBody objects move
 	 *
 	 * @param delta time since last update
 	 */
@@ -49,7 +49,7 @@ public abstract class AbstractWorld implements World
 	protected abstract void detectCollisions();
 
 	/**
-	 * Resolve all collisions in the collision array and update the LastShifting to all DynamicSolids
+	 * Resolve all collisions in the collision array and update the LastShifting to all DynamicBody
 	 */
 	protected abstract void resolveCollisions();
 }

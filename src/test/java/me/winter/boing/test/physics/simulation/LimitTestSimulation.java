@@ -4,7 +4,7 @@ import com.badlogic.gdx.math.Vector2;
 import me.winter.boing.physics.Collision;
 import me.winter.boing.physics.shapes.Box;
 import me.winter.boing.physics.shapes.Circle;
-import me.winter.boing.test.physics.testimpl.DynamicSolidImpl;
+import me.winter.boing.test.physics.testimpl.DynamicBodyImpl;
 import me.winter.boing.test.physics.testimpl.WorldImpl;
 import me.winter.boing.physics.resolver.ReplaceResolver;
 import me.winter.boing.physics.shapes.Limit;
@@ -158,13 +158,13 @@ public class LimitTestSimulation
 	{
 		WorldImpl world = new WorldImpl(new ReplaceResolver());
 
-		DynamicSolidImpl ballImpl = new DynamicSolidImpl(5f);
+		DynamicBodyImpl ballImpl = new DynamicBodyImpl(5f);
 
 		ballImpl.getPosition().set(400, 0);
 		ballImpl.getColliders().add(new Limit(ballImpl, 0, 50, new Vector2(0, 1), 800));
 		world.getSolids().add(ballImpl);
 
-		DynamicSolidImpl ballImpl2 = new DynamicSolidImpl(0.5f);
+		DynamicBodyImpl ballImpl2 = new DynamicBodyImpl(0.5f);
 
 		ballImpl2.getPosition().set(500, 500);
 		ballImpl2.getColliders().add(new Box(ballImpl2, 0, 0, 25, 25));

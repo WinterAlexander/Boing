@@ -1,8 +1,6 @@
 package me.winter.boing.physics;
 
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.utils.Pool.Poolable;
-import me.winter.boing.physics.resolver.CollisionResolver;
 import me.winter.boing.physics.shapes.Collider;
 
 /**
@@ -71,18 +69,18 @@ public class Collision
 	 * <p>
 	 * If a solid isn't a DynamicSolid, its velocity will be set to 0
 	 *
-	 * @param solidA solid of impactVelA
-	 * @param solidB solid of impactVelB
+	 * @param bodyA solid of impactVelA
+	 * @param bodyB solid of impactVelB
 	 */
-	public void setImpactVelocities(Solid solidA, Solid solidB)
+	public void setImpactVelocities(Body bodyA, Body bodyB)
 	{
-		if(solidA instanceof DynamicSolid)
-			impactVelA.set(((DynamicSolid)solidA).getVelocity());
+		if(bodyA instanceof DynamicBody)
+			impactVelA.set(((DynamicBody)bodyA).getVelocity());
 		else
 			impactVelA.set(0, 0);
 
-		if(solidB instanceof DynamicSolid)
-			impactVelB.set(((DynamicSolid)solidB).getVelocity());
+		if(bodyB instanceof DynamicBody)
+			impactVelB.set(((DynamicBody)bodyB).getVelocity());
 		else
 			impactVelB.set(0, 0);
 	}

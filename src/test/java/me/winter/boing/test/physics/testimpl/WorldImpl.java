@@ -2,8 +2,8 @@ package me.winter.boing.test.physics.testimpl;
 
 import com.badlogic.gdx.utils.Array;
 import me.winter.boing.physics.SimpleWorld;
-import me.winter.boing.physics.DynamicSolid;
-import me.winter.boing.physics.Solid;
+import me.winter.boing.physics.DynamicBody;
+import me.winter.boing.physics.Body;
 import me.winter.boing.physics.resolver.CollisionResolver;
 import me.winter.boing.physics.util.iterator.GDXArrayFilterIterator;
 import me.winter.boing.physics.util.iterator.GDXArrayIndexIterator;
@@ -17,10 +17,10 @@ import me.winter.boing.physics.util.iterator.ReusableIterator;
  */
 public class WorldImpl extends SimpleWorld
 {
-	private Array<Solid> solids = new Array<>();
+	private Array<Body> solids = new Array<>();
 
-	private GDXArrayIndexIterator<Solid> iterator = new GDXArrayIndexIterator<>(solids);
-	private GDXArrayFilterIterator<DynamicSolid> dynamics = new GDXArrayFilterIterator<>(solids, DynamicSolid.class);
+	private GDXArrayIndexIterator<Body> iterator = new GDXArrayIndexIterator<>(solids);
+	private GDXArrayFilterIterator<DynamicBody> dynamics = new GDXArrayFilterIterator<>(solids, DynamicBody.class);
 
 	public WorldImpl(CollisionResolver resolver)
 	{
@@ -28,18 +28,18 @@ public class WorldImpl extends SimpleWorld
 	}
 
 	@Override
-	protected IndexIterator<Solid> getSolidIterator()
+	protected IndexIterator<Body> getBodyIterator()
 	{
 		return iterator;
 	}
 
 	@Override
-	protected ReusableIterator<DynamicSolid> getDynamicIterator()
+	protected ReusableIterator<DynamicBody> getDynamicIterator()
 	{
 		return dynamics;
 	}
 
-	public Array<Solid> getSolids()
+	public Array<Body> getSolids()
 	{
 		return solids;
 	}

@@ -52,7 +52,7 @@ public class BoxLimitDetector extends PooledDetector<Box, Limit>
 
 		collision.colliderA = boxA;
 		collision.colliderB = limitB;
-		collision.setImpactVelocities(boxA.getSolid(), limitB.getSolid());
+		collision.setImpactVelocities(boxA.getBody(), limitB.getBody());
 
 		return collision;
 	}
