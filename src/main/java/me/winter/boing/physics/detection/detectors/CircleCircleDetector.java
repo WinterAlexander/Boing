@@ -26,10 +26,11 @@ public class CircleCircleDetector extends PooledDetector<Circle, Circle>
 		float dy = shapeB.getAbsY() - shapeA.getAbsY();
 
 		float r = shapeA.radius + shapeB.radius;
+		float r2 = r * r;
 
 		float dst2 = dx * dx + dy * dy;
 
-		if(dst2 >= r * r)
+		if(dst2 >= r2)
 			return null;
 
 		Collision collision = collisionPool.obtain();
@@ -37,6 +38,7 @@ public class CircleCircleDetector extends PooledDetector<Circle, Circle>
 		collision.normalA.set(dx, dy).nor();
 		collision.normalB.set(-dx, -dy).nor();
 		collision.penetration = r - (float)sqrt(dst2);
+		collision.contactSurface = 2 * (float)sqrt(r2 - dst2);
 
 		collision.colliderA = shapeA;
 		collision.colliderB = shapeB;
