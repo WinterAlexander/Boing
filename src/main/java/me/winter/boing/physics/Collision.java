@@ -37,6 +37,11 @@ public class Collision
 	public float penetration;
 
 	/**
+	 * the amount of surface where solids are touching
+	 */
+	public float contactSurface;
+
+	/**
 	 * Collider involved in the collision.
 	 * <p>
 	 * In the notify method of a solid, this collider is a collider of your solid.
@@ -60,6 +65,7 @@ public class Collision
 		impactVelA.set(collision.impactVelB);
 		impactVelB.set(collision.impactVelA);
 		penetration = collision.penetration;
+		contactSurface = collision.contactSurface;
 		colliderA = collision.colliderB;
 		colliderB = collision.colliderA;
 	}
