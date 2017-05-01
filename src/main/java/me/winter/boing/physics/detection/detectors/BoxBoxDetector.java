@@ -38,12 +38,14 @@ public class BoxBoxDetector extends PooledDetector<Box, Box>
 			collision.normalA.set(dx, 0).nor();
 			collision.normalB.set(-dx, 0).nor();
 			collision.penetration = peneX;
+			collision.contactSurface = peneY;
 		}
 		else
 		{
 			collision.normalA.set(0, dy).nor();
 			collision.normalB.set(0, -dy).nor();
 			collision.penetration = peneY;
+			collision.contactSurface = peneX;
 		}
 
 		collision.colliderA = shapeA;
