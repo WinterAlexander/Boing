@@ -7,6 +7,7 @@ import me.winter.boing.physics.shapes.Box;
 import me.winter.boing.physics.shapes.Limit;
 
 import static java.lang.Math.abs;
+import static java.lang.Math.signum;
 
 /**
  * Detects collisions between an Axis Aligned Bounding Box and a Limit
@@ -39,15 +40,17 @@ public class BoxLimitDetector extends PooledDetector<Box, Limit>
 
 		if(peneX < peneY)
 		{
-			collision.normalA.set(dx, 0).nor();
+			collision.normalA.set(dx < 0 ? -1 : 1, 0);
 			collision.normalB.set(limitB.normal);
 			collision.penetration = peneX;
+			collision.contactSurface = peneY;
 		}
 		else
 		{
-			collision.normalA.set(0, dy).nor();
+			collision.normalA.set(0, dy < 0 ? -1 : 1);
 			collision.normalB.set(limitB.normal);
 			collision.penetration = peneY;
+			collision.contactSurface = peneX;
 		}
 
 		collision.colliderA = boxA;

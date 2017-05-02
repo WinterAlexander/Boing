@@ -52,7 +52,7 @@ public class BoxCircleDetector extends PooledDetector<Box, Circle>
 		{
 			closestX = signum(closestX) * halfW;
 
-			collision.normalA.set(dx, 0).nor();
+			collision.normalA.set(dx < 0 ? -1 : 1, 0);
 			collision.normalB.set(closestX - dx, closestY - dy).nor();
 			collision.penetration = circleB.radius - collision.normalB.len();
 		}
@@ -60,12 +60,12 @@ public class BoxCircleDetector extends PooledDetector<Box, Circle>
 		{
 			closestY = signum(closestY) * halfH;
 
-			collision.normalA.set(0, dy).nor();
+			collision.normalA.set(0, dy < 0 ? -1 : 1);
 			collision.normalB.set(closestX - dx, closestY - dy).nor();
 			collision.penetration = circleB.radius - collision.normalB.len();
 		}
 
-
+		collision.contactSurface = 0;
 		collision.colliderA = boxA;
 		collision.colliderB = circleB;
 		collision.setImpactVelocities(boxA.getBody(), circleB.getBody());

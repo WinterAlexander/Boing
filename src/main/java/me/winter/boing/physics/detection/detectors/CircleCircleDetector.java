@@ -6,6 +6,7 @@ import me.winter.boing.physics.detection.PooledDetector;
 import me.winter.boing.physics.shapes.Circle;
 
 import static java.lang.Math.sqrt;
+import static me.winter.boing.physics.util.VectorUtil.divide;
 
 /**
  * Detects collisions between 2 circles
@@ -35,10 +36,13 @@ public class CircleCircleDetector extends PooledDetector<Circle, Circle>
 
 		Collision collision = collisionPool.obtain();
 
-		collision.normalA.set(dx, dy).nor();
-		collision.normalB.set(-dx, -dy).nor();
-		collision.penetration = r - (float)sqrt(dst2);
-		collision.contactSurface = 2 * (float)sqrt(r2 - dst2);
+		float dst = (float)sqrt(dst2);
+
+		divide(collision.normalA.set(dx, dy), dst);
+		divide(collision.normalB.set(-dx, -dy), dst);
+		collision.penetration = r - dst;
+		//collision.contactSurface = 2 * (float)sqrt(r2 - dst2);
+		collision.contactSurface = 0f; //theorically 0 since circles can other touch each other on one point
 
 		collision.colliderA = shapeA;
 		collision.colliderB = shapeB;
