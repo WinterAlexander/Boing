@@ -28,30 +28,30 @@ public class LimitLimitDetector extends PooledDetector<Limit, Limit>
 	}
 
 	@Override
-	public Collision collides(Limit shapeA, Limit shapeB)
+	public Collision collides(Limit limitA, Limit limitB)
 	{
-		if(shapeA.normal.dot(shapeB.normal) != -1)
+		if(limitA.normal.dot(limitB.normal) != -1)
 			return null;
 
-		Vector2 vecA = shapeA.getBody() instanceof DynamicBody
-					? ((DynamicBody)shapeA.getBody()).getMovement()
+		Vector2 vecA = limitA.getBody() instanceof DynamicBody
+					? ((DynamicBody)limitA.getBody()).getMovement()
 					: Zero;
 
-		Vector2 vecB = shapeB.getBody() instanceof DynamicBody
-					? ((DynamicBody)shapeB.getBody()).getMovement()
+		Vector2 vecB = limitB.getBody() instanceof DynamicBody
+					? ((DynamicBody)limitB.getBody()).getMovement()
 					: Zero;
 
 
-		tmpVecA.set(shapeA.getAbsX(), shapeA.getAbsY());
-		tmpVecB.set(shapeB.getAbsX(), shapeB.getAbsY());
+		tmpVecA.set(limitA.getAbsX(), limitA.getAbsY());
+		tmpVecB.set(limitB.getAbsX(), limitB.getAbsY());
 
-		if(!(tmpVecA.x * shapeA.normal.x + tmpVecA.y * shapeA.normal.y > tmpVecB.x * shapeA.normal.x + tmpVecB.y * shapeA.normal.y)) //if limitA after his velocity isn't after limitB with his velocity
+		if(!(tmpVecA.x * limitA.normal.x + tmpVecA.y * limitA.normal.y > tmpVecB.x * limitA.normal.x + tmpVecB.y * limitA.normal.y)) //if limitA after his velocity isn't after limitB with his velocity
 			return null; //no collision
 
 		tmpVecA.sub(vecA);
 		tmpVecB.sub(vecB);
 
-		float aDiff = (tmpVecA.x * shapeA.normal.x + tmpVecA.y * shapeA.normal.y) - (tmpVecB.x * shapeA.normal.x + tmpVecB.y * shapeA.normal.y);
+		float aDiff = (tmpVecA.x * limitA.normal.x + tmpVecA.y * limitA.normal.y) - (tmpVecB.x * limitA.normal.x + tmpVecB.y * limitA.normal.y);
 
 		if(aDiff > 0) //if limitA isn't before limitB
 			return null; //no collision
@@ -59,11 +59,11 @@ public class LimitLimitDetector extends PooledDetector<Limit, Limit>
 		float vdx = vecB.x - vecA.x;
 		float vdy = vecB.y - vecA.y;
 
-		float dx = shapeB.getAbsX() - shapeA.getAbsX() - vdx;
-		float dy = shapeB.getAbsY() - shapeA.getAbsY() - vdy;
+		float dx = limitB.getAbsX() - limitA.getAbsX() - vdx;
+		float dy = limitB.getAbsY() - limitA.getAbsY() - vdy;
 
-		float diff = dx * shapeA.normal.x + dy * shapeA.normal.y;
-		float vecDiff = vdx * shapeA.normal.x  + vdy * shapeA.normal.y;
+		float diff = dx * limitA.normal.x + dy * limitA.normal.y;
+		float vecDiff = vdx * limitA.normal.x  + vdy * limitA.normal.y;
 
 		tmpVecA.set(vecA).scl(-1f);
 		tmpVecB.set(vecB).scl(-1f);
@@ -75,36 +75,36 @@ public class LimitLimitDetector extends PooledDetector<Limit, Limit>
 			tmpVecB.scl(1f - (diff + vecDiff) / vecDiff);
 		}
 
-		if(!contains(shapeA, shapeB, tmpVecA, tmpVecB)) //if it wasn't in bounds at the impact point
+		float mxA = limitA.getAbsX() + tmpVecA.x; //midpoint for A
+		float myA = limitA.getAbsY() + tmpVecA.y;
+		float mxB = limitB.getAbsX() + tmpVecB.x; //midpoint for B
+		float myB = limitB.getAbsY() + tmpVecB.y;
+
+		float hsA = limitA.size / 2; //half size for A
+		float hsB = limitB.size / 2; //half size for B
+
+		float limitA1 = -limitA.normal.y * (mxA + hsA) + limitA.normal.x * (myA + hsA);
+		float limitA2 = -limitA.normal.y * (mxA - hsA) + limitA.normal.x * (myA - hsA);
+		float limitB1 = -limitA.normal.y * (mxB + hsB) + limitA.normal.x * (myB + hsB);
+		float limitB2 = -limitA.normal.y * (mxB - hsB) + limitA.normal.x * (myB - hsB);
+
+		float surface = min(max(limitA1, limitA2), max(limitB1, limitB2)) //minimum of the maximums
+					- max(min(limitA1, limitA2), min(limitB1, limitB2)); //maximum of the minimums
+
+		if(surface <= 0)
 			return null;
 
 		Collision collision = collisionPool.obtain();
 
-		collision.colliderA = shapeA;
-		collision.colliderB = shapeB;
+		collision.colliderA = limitA;
+		collision.colliderB = limitB;
 
-		collision.normalA.set(shapeA.normal);
-		collision.normalB.set(shapeB.normal);
-		collision.setImpactVelocities(shapeA.getBody(), shapeB.getBody());
+		collision.normalA.set(limitA.normal);
+		collision.normalB.set(limitB.normal);
+		collision.setImpactVelocities(limitA.getBody(), limitB.getBody());
 		collision.penetration = -(diff + vecDiff);
+		collision.contactSurface = surface;
 
 		return collision;
-	}
-
-	private boolean contains(Limit limitA, Limit limitB, Vector2 offsetA, Vector2 offsetB)
-	{
-		float limitA1 = -limitA.normal.y * (limitA.getAbsX() + offsetA.x + limitA.size / 2) +
-						limitA.normal.x * (limitA.getAbsY() + offsetA.y + limitA.size / 2);
-
-		float limitA2 = -limitA.normal.y * (limitA.getAbsX() + offsetA.x - limitA.size / 2) +
-						limitA.normal.x * (limitA.getAbsY() + offsetA.y - limitA.size / 2);
-
-		float limitB1 = -limitA.normal.y * (limitB.getAbsX() + offsetB.x + limitA.size / 2) +
-						limitA.normal.x * (limitB.getAbsY() + offsetB.y + limitA.size / 2);
-
-		float limitB2 = -limitA.normal.y * (limitB.getAbsX() + offsetB.x - limitA.size / 2) +
-						limitA.normal.x * (limitB.getAbsY() + offsetB.y - limitA.size / 2);
-
-		return !(max(limitA1, limitA2) <= min(limitB1, limitB2) || min(limitA1, limitA2) >= max(limitB1, limitB2));
 	}
 }
