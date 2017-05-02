@@ -23,4 +23,18 @@ public interface Collider
 	 * @return absolute y position of this collider
 	 */
 	float getAbsY();
+
+	/**
+	 * A tag can be used to keep track of a Collider within it's use
+	 *
+	 * @return tag of this collider
+	 */
+	Object getTag();
+
+	/**
+	 * A tag can be used to keep track of a Collider within it's use
+	 *
+	 * @param tag new tag of this collider
+	 */
+	void setTag(Object tag);
 }

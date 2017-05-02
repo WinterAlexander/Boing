@@ -13,6 +13,8 @@ public abstract class AbstractCollider implements Collider
 	protected Body body;
 	protected float x, y;
 
+	private Object tag;
+
 	public AbstractCollider(Body body, float x, float y)
 	{
 		this.body = body;
@@ -36,5 +38,17 @@ public abstract class AbstractCollider implements Collider
 	public float getAbsY()
 	{
 		return y + body.getPosition().y;
+	}
+
+	@Override
+	public Object getTag()
+	{
+		return tag;
+	}
+
+	@Override
+	public void setTag(Object tag)
+	{
+		this.tag = tag;
 	}
 }
