@@ -1,6 +1,7 @@
 package me.winter.boing.test.physics.simulation;
 
-import me.winter.boing.test.physics.testimpl.WorldImpl;
+import me.winter.boing.physics.Body;
+import me.winter.boing.physics.SimpleWorld;
 import org.junit.Ignore;
 
 import javax.swing.JFrame;
@@ -18,7 +19,7 @@ import java.awt.Graphics;
 @Ignore
 public class WorldSimulationUtil
 {
-	public static void simulate(WorldImpl world)
+	public static void simulate(SimpleWorld world)
 	{
 		JFrame frame = new JFrame();
 
@@ -34,8 +35,9 @@ public class WorldSimulationUtil
 
 				g.setColor(Color.BLACK);
 
-				for(int i = 0; i < world.getSolids().size; i++)
-					((SimulationElement)world.getSolids().get(i)).draw(g);
+				for(Body body : world)
+					if(body instanceof SimulationElement)
+						((SimulationElement)body).draw(g);
 			}
 		};
 

@@ -27,6 +27,9 @@ public interface Body
 	 * <p>
 	 * You can return false to cancel the collision and let the bodies overlap or
 	 * true if you want the collision to be resolved.
+	 * <p>
+	 * Note that with non dynamic bodies, this method won't be called every tick.
+	 * The World implementation must call a contact at least once
 	 *
 	 * @param collision detected collision about to be resolved
 	 * @return true if the collision should be resolved, otherwise false
@@ -40,6 +43,9 @@ public interface Body
 	 * Method called by the World to indicate a contact is occuring with this body.
 	 * colliderA of the collision is always a collider of this body. Not called when a
 	 * collision occurs.
+	 * <p>
+	 * Note that with non dynamic bodies, this method won't be called every tick.
+	 * The World implementation must call a contact at least once
 	 *
 	 * @param contact detected contact, penetration will always be 0
 	 */

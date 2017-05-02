@@ -2,9 +2,10 @@ package me.winter.boing.test.physics;
 
 import com.badlogic.gdx.math.Vector2;
 import me.winter.boing.physics.Collision;
+import me.winter.boing.physics.SimpleWorld;
+import me.winter.boing.physics.resolver.CollisionResolver;
 import me.winter.boing.physics.shapes.Limit;
 import me.winter.boing.test.physics.testimpl.DynamicBodyImpl;
-import me.winter.boing.test.physics.testimpl.WorldImpl;
 import me.winter.boing.test.util.MutableInt;
 import org.junit.Test;
 
@@ -22,19 +23,20 @@ public class LimitLimitDetectionTest
 	{
 		MutableInt collisionCount = new MutableInt(0);
 
-		WorldImpl world = new WorldImpl(collision -> collisionCount.value++);
+		me.winter.boing.physics.resolver.CollisionResolver resolver = collision -> collisionCount.value++;
+		SimpleWorld world = new SimpleWorld(resolver);
 
 		DynamicBodyImpl solidImpl = new DynamicBodyImpl(1f);
 		solidImpl.getPosition().set(0, 0);
 		solidImpl.addCollider(new Limit(solidImpl, 0, 0, new Vector2(1, 0), 20));
 		solidImpl.getVelocity().set(40, 0);
-		world.getSolids().add(solidImpl);
+		world.add(solidImpl);
 
 		DynamicBodyImpl solidImpl2 = new DynamicBodyImpl(1f);
 		solidImpl2.getPosition().set(100, 0);
 		solidImpl2.addCollider(new Limit(solidImpl2, 0, 0, new Vector2(-1, 0), 20));
 		solidImpl2.getVelocity().set(-40, 0);
-		world.getSolids().add(solidImpl2);
+		world.add(solidImpl2);
 
 		assertEquals(0, collisionCount.value);
 
@@ -54,7 +56,8 @@ public class LimitLimitDetectionTest
 		MutableInt collisionCount = new MutableInt(0);
 		MutableInt contactCount = new MutableInt(0);
 
-		WorldImpl world = new WorldImpl(collision -> collisionCount.value++);
+		me.winter.boing.physics.resolver.CollisionResolver resolver = collision -> collisionCount.value++;
+		SimpleWorld world = new SimpleWorld(resolver);
 
 		DynamicBodyImpl solidImpl = new DynamicBodyImpl(1f) {
 			@Override
@@ -66,13 +69,13 @@ public class LimitLimitDetectionTest
 		solidImpl.getPosition().set(0, 20);
 		solidImpl.addCollider(new Limit(solidImpl, 0, 0, new Vector2(1, 0), 20));
 		solidImpl.getVelocity().set(40, 0);
-		world.getSolids().add(solidImpl);
+		world.add(solidImpl);
 
 		DynamicBodyImpl solidImpl2 = new DynamicBodyImpl(1f);
 		solidImpl2.getPosition().set(100, 0);
 		solidImpl2.addCollider(new Limit(solidImpl2, 0, 0, new Vector2(-1, 0), 20));
 		solidImpl2.getVelocity().set(-40, 0);
-		world.getSolids().add(solidImpl2);
+		world.add(solidImpl2);
 
 		assertEquals(0, collisionCount.value);
 		assertEquals(0, contactCount.value);
@@ -95,19 +98,20 @@ public class LimitLimitDetectionTest
 	{
 		MutableInt collisionCount = new MutableInt(0);
 
-		WorldImpl world = new WorldImpl(collision -> collisionCount.value++);
+		me.winter.boing.physics.resolver.CollisionResolver resolver = collision -> collisionCount.value++;
+		SimpleWorld world = new SimpleWorld(resolver);
 
 		DynamicBodyImpl solidImpl = new DynamicBodyImpl(1f);
 		solidImpl.getPosition().set(0, 0);
 		solidImpl.addCollider(new Limit(solidImpl, 0, 0, new Vector2(1, 0), 20));
 		solidImpl.getVelocity().set(-10, 0);
-		world.getSolids().add(solidImpl);
+		world.add(solidImpl);
 
 		DynamicBodyImpl solidImpl2 = new DynamicBodyImpl(1f);
 		solidImpl2.getPosition().set(50, 0);
 		solidImpl2.addCollider(new Limit(solidImpl2, 0, 0, new Vector2(-1, 0), 20));
 		solidImpl2.getVelocity().set(-40, 0);
-		world.getSolids().add(solidImpl2);
+		world.add(solidImpl2);
 
 		assertEquals(0, collisionCount.value);
 
@@ -127,7 +131,8 @@ public class LimitLimitDetectionTest
 		MutableInt collisionCount = new MutableInt(0);
 		MutableInt contactCount = new MutableInt(0);
 
-		WorldImpl world = new WorldImpl(collision -> collisionCount.value++);
+		CollisionResolver resolver = collision -> collisionCount.value++;
+		SimpleWorld world = new SimpleWorld(resolver);
 
 		DynamicBodyImpl solidImpl = new DynamicBodyImpl(1f) {
 			@Override
@@ -139,13 +144,13 @@ public class LimitLimitDetectionTest
 		solidImpl.getPosition().set(0, 0);
 		solidImpl.addCollider(new Limit(solidImpl, 0, 0, new Vector2(1, 0), 20));
 		solidImpl.getVelocity().set(50, 0);
-		world.getSolids().add(solidImpl);
+		world.add(solidImpl);
 
 		DynamicBodyImpl solidImpl2 = new DynamicBodyImpl(1f);
 		solidImpl2.getPosition().set(100, 0);
 		solidImpl2.addCollider(new Limit(solidImpl2, 0, 0, new Vector2(-1, 0), 20));
 		solidImpl2.getVelocity().set(-50, 0);
-		world.getSolids().add(solidImpl2);
+		world.add(solidImpl2);
 
 		assertEquals(0, collisionCount.value);
 		assertEquals(0, contactCount.value);

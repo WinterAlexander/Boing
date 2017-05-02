@@ -1,6 +1,6 @@
 package me.winter.boing.test.physics.simulation;
 
-import me.winter.boing.test.physics.testimpl.WorldImpl;
+import me.winter.boing.physics.SimpleWorld;
 import me.winter.boing.physics.resolver.ReplaceResolver;
 import me.winter.boing.physics.shapes.Box;
 import me.winter.boing.test.physics.testimpl.PlayerImpl;
@@ -22,19 +22,20 @@ public class PlayerSimulation
 	@Test
 	public void simpleSimul()
 	{
-		WorldImpl world = new WorldImpl(new ReplaceResolver());
+		me.winter.boing.physics.resolver.CollisionResolver resolver = new ReplaceResolver();
+		SimpleWorld world = new SimpleWorld(resolver);
 
 		PlayerImpl player = new PlayerImpl();
 
 		player.getPosition().set(400, 400);
 		player.addCollider(new Box(player, 0, 0, 20, 45));
-		world.getSolids().add(player);
+		world.add(player);
 
 		BodyImpl ground = new BodyImpl();
 
 		ground.getPosition().set(400, 0);
 		ground.addCollider(new Box(ground, 0, 0, 800, 100));
-		world.getSolids().add(ground);
+		world.add(ground);
 
 		simulate(world);
 	}
@@ -42,24 +43,25 @@ public class PlayerSimulation
 	@Test
 	public void springSimul()
 	{
-		WorldImpl world = new WorldImpl(new ReplaceResolver());
+		me.winter.boing.physics.resolver.CollisionResolver resolver = new ReplaceResolver();
+		SimpleWorld world = new SimpleWorld(resolver);
 
 		PlayerImpl player = new PlayerImpl();
 
 		player.getPosition().set(400, 400);
 		player.addCollider(new Box(player, 0, 0, 20, 45));
-		world.getSolids().add(player);
+		world.add(player);
 
 		BodyImpl ground = new BodyImpl();
 
 		ground.getPosition().set(400, 0);
 		ground.addCollider(new Box(ground, 0, 0, 800, 100));
-		world.getSolids().add(ground);
+		world.add(ground);
 
 		SpringImpl spring = new SpringImpl();
 		spring.getPosition().set(600, 50);
 		spring.addCollider(new Box(spring, 0, 0, 100, 100));
-		world.getSolids().add(spring);
+		world.add(spring);
 
 		simulate(world);
 	}

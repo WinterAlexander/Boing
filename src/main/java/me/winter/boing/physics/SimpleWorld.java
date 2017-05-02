@@ -1,24 +1,26 @@
 package me.winter.boing.physics;
 
+import com.badlogic.gdx.utils.Queue;
 import me.winter.boing.physics.detection.DetectionHandler;
 import me.winter.boing.physics.resolver.CollisionResolver;
 import me.winter.boing.physics.shapes.Collider;
-import me.winter.boing.physics.util.iterator.IndexIterator;
-import me.winter.boing.physics.util.iterator.ReusableIterator;
+
+import java.util.Iterator;
 
 /**
- * Simple abstract implementation of a World detecting and resolving collisions.
- * Does not contain the objects by itself but access them by iterator to implement.
- * <p>
- * Note: the test folder contains a basic (full) implementation of this class using
- * a LibGDX array
+ * Simple implementation of a World detecting and resolving collisions.
  * <p>
  * Created by Alexander Winter on 2017-04-25.
  */
-public abstract class SimpleWorld extends AbstractWorld
+public class SimpleWorld extends AbstractWorld implements Iterable<Body>
 {
-	private DetectionHandler mapper;
-	private CollisionResolver resolver;
+	protected DetectionHandler mapper;
+	protected CollisionResolver resolver;
+
+	private Queue<DynamicBody> dynamics = new Queue<>();
+	private Queue<Body> all = new Queue<>();
+
+	protected boolean refresh;
 
 	public SimpleWorld(CollisionResolver resolver)
 	{
@@ -26,24 +28,14 @@ public abstract class SimpleWorld extends AbstractWorld
 		this.resolver = resolver;
 	}
 
-	/**
-	 * @return An iterator for all bodies
-	 */
-	protected abstract IndexIterator<Body> getBodyIterator();
-
-	/**
-	 * @return An iterator only for dynamic bodies
-	 */
-	protected abstract ReusableIterator<DynamicBody> getDynamicIterator();
-
 	@Override
 	protected void update(float delta)
 	{
-		for(DynamicBody dynamic : getDynamicIterator())
+		for(DynamicBody dynamic : dynamics)
 			if(dynamic instanceof UpdatableBody)
 				((UpdatableBody)dynamic).update(delta);
 
-		for(DynamicBody dynamic : getDynamicIterator())
+		for(DynamicBody dynamic : dynamics)
 		{
 			dynamic.getMovement().set(dynamic.getVelocity()).scl(delta);
 			dynamic.getPosition().add(dynamic.getMovement());
@@ -56,25 +48,60 @@ public abstract class SimpleWorld extends AbstractWorld
 	@Override
 	protected void detectCollisions()
 	{
-		int size = getBodyIterator().size();
+		if(refresh)
+		{
+			fullDetection();
+			refresh = false;
+		}
+		else
+		{
+			dynamicDetection();
+		}
+	}
 
-		for(int i = size; i-- >= 0;)
+	/**
+	 * Detects collision with 1 + 2 + 3 + ... + (N - 1) iterations, N being the number of bodies.
+	 */
+	protected void fullDetection()
+	{
+		int size = all.size;
+
+		for(int i = size; i-- > 1;)
 		{
 			for(int j = i; j-- > 0;)
 			{
-				Body bodyA = getBodyIterator().objectAt(i);
-				Body bodyB = getBodyIterator().objectAt(j);
+				Body bodyB = all.get(j);
 
-				boolean aDyn = bodyA instanceof DynamicBody;
-				boolean bDyn = bodyB instanceof DynamicBody;
-
-				if(!aDyn && !bDyn)
-					continue;
-
-				for(int k = 0; k < bodyA.getColliders().length; k++)
+				for(Collider colliderA : all.get(i).getColliders())
 				{
-					Collider colliderA = bodyA.getColliders()[k];
+					for(Collider colliderB : bodyB.getColliders())
+					{
+						Collision collision = mapper.collides(colliderA, colliderB);
 
+						if(collision != null)
+							collisions.add(collision);
+					}
+				}
+			}
+		}
+	}
+
+	/**
+	 * Detects collision with D + (D + 1) + (D + 2) + ... + (N - 1) iterations, N being the amount of bodies and D being the amount of dynamic bodies
+	 */
+	protected void dynamicDetection()
+	{
+		int dyns = dynamics.size - 1;
+		int size = all.size;
+
+		for(int i = 0; i < dyns; i++)
+		{
+			for(int j = i + 1; j < size; j++)
+			{
+				Body bodyB = all.get(j);
+
+				for(Collider colliderA : dynamics.get(i).getColliders())
+				{
 					for(Collider colliderB : bodyB.getColliders())
 					{
 						Collision collision = mapper.collides(colliderA, colliderB);
@@ -106,5 +133,43 @@ public abstract class SimpleWorld extends AbstractWorld
 		}
 
 		collisionPool.free(swapped);
+	}
+
+	public boolean isRefreshing()
+	{
+		return refresh;
+	}
+
+	public void refresh()
+	{
+		this.refresh = true;
+	}
+
+	public void add(Body body)
+	{
+		if(body instanceof DynamicBody)
+		{
+			dynamics.addFirst((DynamicBody)body);
+			all.addFirst(body);
+		}
+		else
+		{
+			all.addLast(body);
+		}
+		refresh();
+	}
+
+	public void remove(Body body)
+	{
+		all.removeValue(body, true);
+		if(body instanceof DynamicBody)
+			dynamics.removeValue((DynamicBody)body, true);
+		refresh();
+	}
+
+	@Override
+	public Iterator<Body> iterator()
+	{
+		return all.iterator();
 	}
 }
