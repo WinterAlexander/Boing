@@ -28,7 +28,7 @@ public class BoxBoxDetector extends PooledDetector<Box, Box>
 		float peneX = shapeA.width / 2 + shapeB.width / 2 - abs(dx);
 		float peneY = shapeA.height / 2 + shapeB.height / 2 - abs(dy);
 
-		if(peneX <= 0 || peneY <= 0)
+		if(peneX < 0 || peneY < 0)
 			return null;
 
 		Collision collision = collisionPool.obtain();

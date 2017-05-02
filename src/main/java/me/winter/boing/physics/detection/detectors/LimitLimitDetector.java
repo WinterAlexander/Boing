@@ -45,7 +45,7 @@ public class LimitLimitDetector extends PooledDetector<Limit, Limit>
 		tmpVecA.set(limitA.getAbsX(), limitA.getAbsY());
 		tmpVecB.set(limitB.getAbsX(), limitB.getAbsY());
 
-		if(!(tmpVecA.x * limitA.normal.x + tmpVecA.y * limitA.normal.y > tmpVecB.x * limitA.normal.x + tmpVecB.y * limitA.normal.y)) //if limitA after his velocity isn't after limitB with his velocity
+		if(!(tmpVecA.x * limitA.normal.x + tmpVecA.y * limitA.normal.y >= tmpVecB.x * limitA.normal.x + tmpVecB.y * limitA.normal.y)) //if limitA after his velocity isn't after limitB with his velocity
 			return null; //no collision
 
 		tmpVecA.sub(vecA);

@@ -33,7 +33,7 @@ public class BoxLimitDetector extends PooledDetector<Box, Limit>
 		float peneX = boxA.width / 2 + limitW / 2 - abs(dx);
 		float peneY = boxA.height / 2 + limitH / 2 - abs(dy);
 
-		if(peneX <= 0 || peneY <= 0)
+		if(peneX < 0 || peneY < 0)
 			return null;
 
 		Collision collision = collisionPool.obtain();

@@ -31,7 +31,7 @@ public class CircleCircleDetector extends PooledDetector<Circle, Circle>
 
 		float dst2 = dx * dx + dy * dy;
 
-		if(dst2 >= r2)
+		if(dst2 > r2)
 			return null;
 
 		Collision collision = collisionPool.obtain();

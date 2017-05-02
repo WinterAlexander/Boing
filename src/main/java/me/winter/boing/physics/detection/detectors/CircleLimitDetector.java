@@ -9,6 +9,7 @@ import me.winter.boing.physics.shapes.Limit;
 import static com.badlogic.gdx.math.MathUtils.clamp;
 import static java.lang.Math.abs;
 import static java.lang.Math.signum;
+import static me.winter.boing.physics.util.VectorUtil.divide;
 
 /**
  * Detects collisions between a Circle and a Limit
@@ -35,13 +36,13 @@ public class CircleLimitDetector extends PooledDetector<Circle, Limit>
 		float halfH = limitB.size / 2 * limitB.normal.x;
 
 		//stupid box box collision outside
-		if(absDx >= halfW + circleA.radius
-		|| absDy >= halfH + circleA.radius)
+		if(absDx > halfW + circleA.radius
+		|| absDy > halfH + circleA.radius)
 			return null;
 
 		//stupid box box collision inside (inverted if)
-		if(absDx >= halfW && absDy >= halfH //if it's not inside
-		&& (absDx - halfW) * (absDx - halfW) + (absDy - halfH) * (absDy - halfH) >= circleA.radius * circleA.radius) //and it's not in the middle
+		if(absDx > halfW && absDy > halfH //if it's not inside
+		&& (absDx - halfW) * (absDx - halfW) + (absDy - halfH) * (absDy - halfH) > circleA.radius * circleA.radius) //and it's not in the middle
 			return null;
 
 		float closestX = clamp(dx, -halfW, halfW);
@@ -53,15 +54,19 @@ public class CircleLimitDetector extends PooledDetector<Circle, Limit>
 		{
 			closestX = signum(closestX) * halfW;
 
-			collision.normalA.set(closestX - dx, closestY - dy).nor();
-			collision.penetration = circleA.radius - collision.normalA.len();
+			collision.normalA.set(closestX - dx, closestY - dy);
+			float len = collision.normalA.len();
+			collision.penetration = circleA.radius - len;
+			divide(collision.normalA, len);
 		}
 		else
 		{
 			closestY = signum(closestY) * halfH;
 
-			collision.normalA.set(closestX - dx, closestY - dy).nor();
-			collision.penetration = circleA.radius - collision.normalA.len();
+			collision.normalA.set(closestX - dx, closestY - dy);
+			float len = collision.normalA.len();
+			collision.penetration = circleA.radius - len;
+			divide(collision.normalA, len);
 		}
 
 		collision.normalB.set(limitB.normal);

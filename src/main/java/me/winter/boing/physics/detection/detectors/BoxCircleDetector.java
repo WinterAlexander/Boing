@@ -9,6 +9,7 @@ import me.winter.boing.physics.shapes.Circle;
 import static com.badlogic.gdx.math.MathUtils.clamp;
 import static java.lang.Math.abs;
 import static java.lang.Math.signum;
+import static me.winter.boing.physics.util.VectorUtil.divide;
 
 /**
  * Detects collisions between an Axis Aligned Bounding Box and a Circle
@@ -34,13 +35,13 @@ public class BoxCircleDetector extends PooledDetector<Box, Circle>
 		float halfW = boxA.width / 2;
 		float halfH = boxA.height / 2;
 
-		if(absDx >= halfW + circleB.radius
-				|| absDy >= halfH + circleB.radius)
+		if(absDx > halfW + circleB.radius
+				|| absDy > halfH + circleB.radius)
 			return null;
 
 		//stupid box box collision inside (inverted if)
-		if(absDx >= halfW && absDy >= halfH //if it's not inside
-		&& (absDx - halfW) * (absDx - halfW) + (absDy - halfH) * (absDy - halfH) >= circleB.radius * circleB.radius) //and it's not in the middle
+		if(absDx > halfW && absDy > halfH //if it's not inside
+		&& (absDx - halfW) * (absDx - halfW) + (absDy - halfH) * (absDy - halfH) > circleB.radius * circleB.radius) //and it's not in the middle
 			return null;
 
 		float closestX = clamp(dx, -halfW, halfW);
@@ -53,16 +54,20 @@ public class BoxCircleDetector extends PooledDetector<Box, Circle>
 			closestX = signum(closestX) * halfW;
 
 			collision.normalA.set(dx < 0 ? -1 : 1, 0);
-			collision.normalB.set(closestX - dx, closestY - dy).nor();
-			collision.penetration = circleB.radius - collision.normalB.len();
+			collision.normalB.set(closestX - dx, closestY - dy);
+			float len = collision.normalB.len();
+			collision.penetration = circleB.radius - len;
+			divide(collision.normalB, len);
 		}
 		else
 		{
 			closestY = signum(closestY) * halfH;
 
 			collision.normalA.set(0, dy < 0 ? -1 : 1);
-			collision.normalB.set(closestX - dx, closestY - dy).nor();
-			collision.penetration = circleB.radius - collision.normalB.len();
+			collision.normalB.set(closestX - dx, closestY - dy);
+			float len = collision.normalB.len();
+			collision.penetration = circleB.radius - len;
+			divide(collision.normalB, len);
 		}
 
 		collision.contactSurface = 0;

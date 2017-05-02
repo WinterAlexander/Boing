@@ -35,4 +35,13 @@ public interface Body
 	{
 		return true;
 	}
+
+	/**
+	 * Method called by the World to indicate a contact is occuring with this body.
+	 * colliderA of the collision is always a collider of this body. Not called when a
+	 * collision occurs.
+	 *
+	 * @param contact detected contact, penetration will always be 0
+	 */
+	default void notifyContact(Collision contact) {}
 }

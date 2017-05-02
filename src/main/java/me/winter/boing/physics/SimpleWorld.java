@@ -96,7 +96,12 @@ public abstract class SimpleWorld extends AbstractWorld
 		{
 			swapped.setAsSwapped(collision);
 
-			if(collision.colliderA.getBody().notifyCollision(collision) && collision.colliderB.getBody().notifyCollision(swapped))
+			if(collision.penetration == 0)
+			{
+				collision.colliderA.getBody().notifyContact(collision);
+				collision.colliderB.getBody().notifyContact(swapped);
+			}
+			else if(collision.colliderA.getBody().notifyCollision(collision) && collision.colliderB.getBody().notifyCollision(swapped))
 				resolver.resolve(collision);
 		}
 
