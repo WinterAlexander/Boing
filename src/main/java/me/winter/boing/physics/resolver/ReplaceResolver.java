@@ -56,7 +56,16 @@ public class ReplaceResolver implements CollisionResolver
 	{
 		tmpVector.set(normal).nor().scl(delta);
 
-		solid.getPosition().add(tmpVector);
-		solid.getCollisionShifing().add(tmpVector);
+		if(tmpVector.x > solid.getCollisionShifing().x)
+		{
+			solid.getPosition().sub(solid.getCollisionShifing().x, 0).add(tmpVector.x, 0);
+			solid.getCollisionShifing().x = tmpVector.x;
+		}
+
+		if(tmpVector.y > solid.getCollisionShifing().y)
+		{
+			solid.getPosition().sub(0, solid.getCollisionShifing().y).add(0, tmpVector.y);
+			solid.getCollisionShifing().y = tmpVector.y;
+		}
 	}
 }
