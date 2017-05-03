@@ -39,33 +39,31 @@ public class BoxLimitDetector extends PooledDetector<Box, Limit>
 				? ((DynamicBody)limitB.getBody()).getMovement()
 				: Zero;
 
-
-
 		float boxAbsX = boxA.getAbsX();
 		float boxAbsY = boxA.getAbsY();
 		float hsA;
 
-		if(limitB.normal.x > limitB.normal.y)
+		if(abs(limitB.normal.x) > abs(limitB.normal.y))
 		{
-			boxAbsX += limitB.normal.x * boxA.width / 2;
+			boxAbsX += -limitB.normal.x * boxA.width / 2;
 			hsA = boxA.height / 2;
 		}
 		else
 		{
-			boxAbsY += limitB.normal.y * boxA.height / 2;
+			boxAbsY += -limitB.normal.y * boxA.height / 2;
 			hsA = boxA.width / 2;
 		}
 
 		tmpVecA.set(boxAbsX, boxAbsY);
 		tmpVecB.set(limitB.getAbsX(), limitB.getAbsY());
 
-		if(!(tmpVecA.x * limitB.normal.x + tmpVecA.y * limitB.normal.y >= tmpVecB.x * limitB.normal.x + tmpVecB.y * limitB.normal.y)) //if limitB after his velocity isn't after boxA with his velocity
+		if(!(tmpVecA.x * -limitB.normal.x + tmpVecA.y * -limitB.normal.y >= tmpVecB.x * -limitB.normal.x + tmpVecB.y * -limitB.normal.y)) //if limitB after his velocity isn't after boxA with his velocity
 			return null; //no collision
 
 		tmpVecA.sub(vecA);
 		tmpVecB.sub(vecB);
 
-		float aDiff = (tmpVecA.x * limitB.normal.x + tmpVecA.y * limitB.normal.y) - (tmpVecB.x * limitB.normal.x + tmpVecB.y * limitB.normal.y);
+		float aDiff = (tmpVecA.x * -limitB.normal.x + tmpVecA.y * -limitB.normal.y) - (tmpVecB.x * -limitB.normal.x + tmpVecB.y * -limitB.normal.y);
 
 		if(aDiff > 0) //if limitB isn't before boxA
 			return null; //no collision
@@ -76,8 +74,8 @@ public class BoxLimitDetector extends PooledDetector<Box, Limit>
 		float dx = limitB.getAbsX() - limitB.getAbsX() - vdx;
 		float dy = limitB.getAbsY() - limitB.getAbsY() - vdy;
 
-		float diff = dx * limitB.normal.x + dy * limitB.normal.y;
-		float vecDiff = vdx * limitB.normal.x  + vdy * limitB.normal.y;
+		float diff = dx * -limitB.normal.x + dy * -limitB.normal.y;
+		float vecDiff = vdx * -limitB.normal.x  + vdy * -limitB.normal.y;
 
 		tmpVecA.set(vecA).scl(-1f);
 		tmpVecB.set(vecB).scl(-1f);
@@ -96,10 +94,10 @@ public class BoxLimitDetector extends PooledDetector<Box, Limit>
 
 		float hsB = limitB.size / 2; //half size for B
 
-		float limitA1 = -limitB.normal.y * (mxA + hsA) + limitB.normal.x * (myA + hsA);
-		float limitA2 = -limitB.normal.y * (mxA - hsA) + limitB.normal.x * (myA - hsA);
-		float limitB1 = -limitB.normal.y * (mxB + hsB) + limitB.normal.x * (myB + hsB);
-		float limitB2 = -limitB.normal.y * (mxB - hsB) + limitB.normal.x * (myB - hsB);
+		float limitA1 = limitB.normal.y * (mxA + hsA) + -limitB.normal.x * (myA + hsA);
+		float limitA2 = limitB.normal.y * (mxA - hsA) + -limitB.normal.x * (myA - hsA);
+		float limitB1 = limitB.normal.y * (mxB + hsB) + -limitB.normal.x * (myB + hsB);
+		float limitB2 = limitB.normal.y * (mxB - hsB) + -limitB.normal.x * (myB - hsB);
 
 		float surface = min(max(limitA1, limitA2), max(limitB1, limitB2)) //minimum of the maximums
 				- max(min(limitA1, limitA2), min(limitB1, limitB2)); //maximum of the minimums
