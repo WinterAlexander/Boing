@@ -3,6 +3,8 @@ package me.winter.boing.physics.util;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 
+import static java.lang.Math.signum;
+
 /**
  * Offers useful methods and constants for LibGDX vectors
  * <p>
@@ -36,5 +38,16 @@ public class VectorUtil
 		vec.x /= divider.x;
 		vec.y /= divider.y;
 		return vec;
+	}
+
+	public static Vector2 append(Vector2 toAppend, Vector2 other)
+	{
+		if(signum(toAppend.x) == signum(other.x))
+			toAppend.x += other.x;
+
+		if(signum(toAppend.y) == signum(other.y))
+			toAppend.y += other.y;
+
+		return toAppend;
 	}
 }

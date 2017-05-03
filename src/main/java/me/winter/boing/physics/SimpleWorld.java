@@ -1,11 +1,16 @@
 package me.winter.boing.physics;
 
+import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.IdentityMap;
 import com.badlogic.gdx.utils.Queue;
 import me.winter.boing.physics.detection.DetectionHandler;
 import me.winter.boing.physics.resolver.CollisionResolver;
 import me.winter.boing.physics.shapes.Collider;
+import me.winter.boing.physics.util.VelocityUtil;
 
 import java.util.Iterator;
+
+import static me.winter.boing.physics.util.VectorUtil.append;
 
 /**
  * Simple implementation of a World detecting and resolving collisions.
@@ -14,6 +19,12 @@ import java.util.Iterator;
  */
 public class SimpleWorld extends AbstractWorld implements Iterable<Body>
 {
+	/**
+	 * Collisions occuring in the current frame
+	 */
+	protected final Array<Collision> collisions = new Array<>();
+
+
 	protected DetectionHandler mapper;
 	protected CollisionResolver resolver;
 
@@ -40,7 +51,7 @@ public class SimpleWorld extends AbstractWorld implements Iterable<Body>
 			dynamic.getMovement().set(dynamic.getVelocity()).scl(delta);
 			dynamic.getPosition().add(dynamic.getMovement());
 
-			dynamic.getMovement().add(dynamic.getCollisionShifing());
+			append(dynamic.getMovement(), dynamic.getCollisionShifing());
 			dynamic.getCollisionShifing().setZero();
 		}
 	}
@@ -65,6 +76,7 @@ public class SimpleWorld extends AbstractWorld implements Iterable<Body>
 	protected void fullDetection()
 	{
 		int size = all.size;
+		Collision swapped = collisionPool.obtain();
 
 		for(int i = size; i-- > 1;)
 		{
@@ -79,11 +91,36 @@ public class SimpleWorld extends AbstractWorld implements Iterable<Body>
 						Collision collision = mapper.collides(colliderA, colliderB);
 
 						if(collision != null)
-							collisions.add(collision);
+						{
+							if(collision.penetration == 0)
+							{
+								swapped.setAsSwapped(collision);
+
+								collision.colliderA.getBody().notifyContact(collision);
+								collision.colliderB.getBody().notifyContact(swapped);
+
+								collisionPool.free(collision);
+								continue;
+							}
+
+							if(bodyB instanceof DynamicBody || colliderA.getBody() instanceof DynamicBody) //at least one have to be able to move to resolve it...
+								collisions.add(collision);
+							else
+							{
+								swapped.setAsSwapped(collision);
+
+								colliderA.getBody().notifyCollision(collision);
+								bodyB.notifyCollision(swapped);
+
+								collisionPool.free(collision);
+							}
+						}
 					}
 				}
 			}
 		}
+
+		collisionPool.free(swapped);
 	}
 
 	/**
@@ -93,6 +130,7 @@ public class SimpleWorld extends AbstractWorld implements Iterable<Body>
 	{
 		int dyns = dynamics.size - 1;
 		int size = all.size;
+		Collision swapped = collisionPool.obtain();
 
 		for(int i = 0; i < dyns; i++)
 		{
@@ -107,11 +145,26 @@ public class SimpleWorld extends AbstractWorld implements Iterable<Body>
 						Collision collision = mapper.collides(colliderA, colliderB);
 
 						if(collision != null)
+						{
+							if(collision.penetration == 0)
+							{
+								swapped.setAsSwapped(collision);
+
+								collision.colliderA.getBody().notifyContact(collision);
+								collision.colliderB.getBody().notifyContact(swapped);
+
+								collisionPool.free(collision);
+								continue;
+							}
+
 							collisions.add(collision);
+						}
 					}
 				}
 			}
 		}
+
+		collisionPool.free(swapped);
 	}
 
 	@Override
@@ -121,18 +174,50 @@ public class SimpleWorld extends AbstractWorld implements Iterable<Body>
 
 		for(Collision collision : collisions)
 		{
+			float weightA, weightB;
+
+			if(!(collision.colliderA.getBody() instanceof DynamicBody))
+			{
+				weightA = 0f;
+				weightB = 1f;
+			}
+			else if(!(collision.colliderB.getBody() instanceof DynamicBody))
+			{
+				weightA = 1f;
+				weightB = 0f;
+			}
+			else
+			{
+				DynamicBody dynA = (DynamicBody)collision.colliderA.getBody();
+				DynamicBody dynB = (DynamicBody)collision.colliderB.getBody();
+
+				weightA = VelocityUtil.getMassRatio(dynB.getWeight(dynA), dynA.getWeight(dynB));
+				weightB = 1f - weightA;
+
+				for(int i = 0; i < collisions.size; i++)
+				{
+					Collision current = collisions.get(i);
+
+					if(current == collision)
+						continue;
+
+					if(current.colliderA.getBody() == dynA)
+					{
+						//weightA +=
+					}
+				}
+			}
+
 			swapped.setAsSwapped(collision);
 
-			if(collision.penetration == 0)
-			{
-				collision.colliderA.getBody().notifyContact(collision);
-				collision.colliderB.getBody().notifyContact(swapped);
-			}
-			else if(collision.colliderA.getBody().notifyCollision(collision) && collision.colliderB.getBody().notifyCollision(swapped))
-				resolver.resolve(collision);
+			if(collision.colliderA.getBody().notifyCollision(collision) && collision.colliderB.getBody().notifyCollision(swapped))
+				resolver.resolve(collision, weightA, weightB);
 		}
 
 		collisionPool.free(swapped);
+
+		collisionPool.freeAll(collisions);
+		collisions.clear();
 	}
 
 	public boolean isRefreshing()

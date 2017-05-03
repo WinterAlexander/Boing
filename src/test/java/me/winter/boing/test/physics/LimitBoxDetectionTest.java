@@ -48,6 +48,82 @@ public class LimitBoxDetectionTest
 	}
 
 	@Test
+	public void testLimitGoingThroughBox2()
+	{
+		MutableInt collisionCount = new MutableInt(0);
+		MutableInt contactCount = new MutableInt(0);
+
+		CollisionResolver resolver = collision -> collisionCount.value++;
+		SimpleWorld world = new SimpleWorld(resolver);
+
+		DynamicBodyImpl solidImpl = new DynamicBodyImpl(1f) {
+			@Override
+			public void notifyContact(Collision contact)
+			{
+				contactCount.value++;
+			}
+		};
+		solidImpl.getPosition().set(0, 0);
+		solidImpl.addCollider(new Box(solidImpl, 0, 0, 20, 20));
+		world.add(solidImpl);
+
+		DynamicBodyImpl solidImpl2 = new DynamicBodyImpl(1f);
+		solidImpl2.getPosition().set(0, -50);
+		solidImpl2.addCollider(new Limit(solidImpl2, 0, 0, UP, 20));
+		solidImpl2.getVelocity().set(0, 40);
+		world.add(solidImpl2);
+
+		assertEquals(0, contactCount.value);
+		assertEquals(0, collisionCount.value);
+
+		world.step(1f);
+		assertEquals(1, contactCount.value);
+		assertEquals(0, collisionCount.value);
+
+		world.step(1f);
+		assertEquals(1, collisionCount.value);
+		assertEquals(1, contactCount.value);
+	}
+
+	@Test
+	public void testLimitGoingThroughBox3()
+	{
+		MutableInt collisionCount = new MutableInt(0);
+		MutableInt contactCount = new MutableInt(0);
+
+		CollisionResolver resolver = collision -> collisionCount.value++;
+		SimpleWorld world = new SimpleWorld(resolver);
+
+		DynamicBodyImpl solidImpl = new DynamicBodyImpl(1f) {
+			@Override
+			public void notifyContact(Collision contact)
+			{
+				contactCount.value++;
+			}
+		};
+		solidImpl.getPosition().set(0, 0);
+		solidImpl.addCollider(new Box(solidImpl, 0, 0, 20, 20));
+		world.add(solidImpl);
+
+		DynamicBodyImpl solidImpl2 = new DynamicBodyImpl(1f);
+		solidImpl2.getPosition().set(0, -50);
+		solidImpl2.addCollider(new Limit(solidImpl2, 0, 0, UP, 20));
+		solidImpl2.getVelocity().set(0, 50);
+		world.add(solidImpl2);
+
+		assertEquals(0, contactCount.value);
+		assertEquals(0, collisionCount.value);
+
+		world.step(1f);
+		assertEquals(0, contactCount.value);
+		assertEquals(1, collisionCount.value);
+
+		world.step(1f);
+		assertEquals(1, collisionCount.value);
+		assertEquals(0, contactCount.value);
+	}
+
+	@Test
 	public void testLimitTouchingBox()
 	{
 		MutableInt collisionCount = new MutableInt(0);

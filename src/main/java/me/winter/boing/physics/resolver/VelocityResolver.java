@@ -3,6 +3,9 @@ package me.winter.boing.physics.resolver;
 import com.badlogic.gdx.math.Vector2;
 import me.winter.boing.physics.DynamicBody;
 import me.winter.boing.physics.Collision;
+import me.winter.boing.physics.util.VelocityUtil;
+
+import static java.lang.Math.signum;
 
 /**
  * CollisionResolver resolving collisions by changing their velocity
@@ -12,7 +15,7 @@ import me.winter.boing.physics.Collision;
 public class VelocityResolver implements CollisionResolver
 {
 	@Override
-	public void resolve(Collision collision)
+	public void resolve(Collision collision, float weightA, float weightB)
 	{
 		if(collision.colliderA.getBody() instanceof DynamicBody)
 			reflect((DynamicBody)collision.colliderA.getBody(), collision.normalB);
@@ -26,15 +29,6 @@ public class VelocityResolver implements CollisionResolver
 		if(normal.dot(solid.getVelocity()) > 0) //not pointing toward surface anymore
 			return;
 
-		if(normal.y == 0)//means vertical tangent
-		{
-			solid.getVelocity().scl(-1, 1);
-			return;
-		}
-
-		float a = -normal.x / normal.y;
-		float d2 = 2 * (solid.getVelocity().x + solid.getVelocity().y * a) / (1 + a * a);
-
-		solid.getVelocity().scl(-1).add(d2, d2 * a);
+		VelocityUtil.reflect(solid.getVelocity(), normal);
 	}
 }
