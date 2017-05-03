@@ -20,11 +20,11 @@ import static org.junit.Assert.assertEquals;
 public class LimitBoxDetectionTest
 {
 	@Test
-	public void testStaticCrossing()
+	public void testLimitGoingThroughBox()
 	{
 		MutableInt collisionCount = new MutableInt(0);
 
-		me.winter.boing.physics.resolver.CollisionResolver resolver = collision -> collisionCount.value++;
+		CollisionResolver resolver = collision -> collisionCount.value++;
 		SimpleWorld world = new SimpleWorld(resolver);
 
 		DynamicBodyImpl solidImpl = new DynamicBodyImpl(1f);
@@ -33,8 +33,9 @@ public class LimitBoxDetectionTest
 		world.add(solidImpl);
 
 		DynamicBodyImpl solidImpl2 = new DynamicBodyImpl(1f);
-		solidImpl2.getPosition().set(0, 0);
+		solidImpl2.getPosition().set(0, -50);
 		solidImpl2.addCollider(new Limit(solidImpl2, 0, 0, UP, 20));
+		solidImpl2.getVelocity().set(0, 100);
 		world.add(solidImpl2);
 
 		assertEquals(0, collisionCount.value);
@@ -43,27 +44,7 @@ public class LimitBoxDetectionTest
 		assertEquals(1, collisionCount.value);
 
 		world.step(1f);
-		assertEquals(2, collisionCount.value);
-
-		solidImpl2.getPosition().set(100, 100);
-		world.step(1f);
-		assertEquals(2, collisionCount.value);
-
-		solidImpl2.getPosition().set(-20, 0);
-		world.step(1f);
-		assertEquals(2, collisionCount.value);
-
-		solidImpl2.getPosition().set(0, 20);
-		world.step(1f);
-		assertEquals(2, collisionCount.value);
-
-		solidImpl2.getPosition().set(19, 9);
-		world.step(1f);
-		assertEquals(3, collisionCount.value);
-
-		solidImpl2.getPosition().set(-19, -9);
-		world.step(1f);
-		assertEquals(4, collisionCount.value);
+		assertEquals(1, collisionCount.value);
 	}
 
 	@Test
