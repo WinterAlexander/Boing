@@ -32,7 +32,7 @@ public class ReplaceResolver implements CollisionResolver
 			else
 			{
 				DynamicBody dsB = (DynamicBody)collision.colliderB.getBody();
-				replace(dsA, collision.normalB, getMassRatio(dsB.getWeight(dsA), dsA.getWeight(dsB))  * collision.penetration);
+				replace(dsA, collision.normalB, getMassRatio(dsB.getWeight(dsA), dsA.getWeight(dsB)) * collision.penetration);
 			}
 		}
 
@@ -54,6 +54,9 @@ public class ReplaceResolver implements CollisionResolver
 
 	private void replace(DynamicBody solid, Vector2 normal, float delta)
 	{
+		if(delta == 0)
+			return;
+
 		tmpVector.set(normal).nor().scl(delta);
 
 		if(tmpVector.x > solid.getCollisionShifing().x)
