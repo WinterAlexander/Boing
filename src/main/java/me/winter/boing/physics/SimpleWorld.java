@@ -192,7 +192,7 @@ public class SimpleWorld extends AbstractWorld implements Iterable<Body>
 				DynamicBody dynB = (DynamicBody)collision.colliderB.getBody();
 
 				weightA = VelocityUtil.getMassRatio(dynB.getWeight(dynA), dynA.getWeight(dynB));
-				weightB = 1f - weightA;
+				weightB = 1f - weightA;/*
 
 				for(int i = 0; i < collisions.size; i++)
 				{
@@ -205,7 +205,7 @@ public class SimpleWorld extends AbstractWorld implements Iterable<Body>
 					{
 						//weightA +=
 					}
-				}
+				}*/
 			}
 
 			swapped.setAsSwapped(collision);

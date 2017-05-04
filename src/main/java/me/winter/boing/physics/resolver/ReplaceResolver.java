@@ -16,13 +16,13 @@ import static me.winter.boing.physics.util.VelocityUtil.getMassRatio;
 public class ReplaceResolver implements CollisionResolver
 {
 	@Override
-	public void resolve(Collision collision, float weightA, float weightB)
+	public void resolve(Collision collision, float deltaA, float deltaB)
 	{
-		if(weightB != 0)
-			replace((DynamicBody)collision.colliderA.getBody(), collision.normalB, weightB * collision.penetration);
+		if(deltaB != 0)
+			replace((DynamicBody)collision.colliderA.getBody(), collision.normalB, deltaB * collision.penetration);
 
-		if(weightA != 0)
-			replace((DynamicBody)collision.colliderB.getBody(), collision.normalA, weightA * collision.penetration);
+		if(deltaA != 0)
+			replace((DynamicBody)collision.colliderB.getBody(), collision.normalA, deltaA * collision.penetration);
 	}
 
 	private void replace(DynamicBody solid, Vector2 normal, float delta)
