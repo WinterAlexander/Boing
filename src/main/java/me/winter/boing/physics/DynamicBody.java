@@ -42,7 +42,7 @@ public interface DynamicBody extends Body
 	 * to handle their shifing. In favor of game design over realism, you can choose
 	 * your mass in function of the other object.
 	 * <p>
-	 * The weight can be 0 but has to be positive.
+	 * The weight can be 0 but has to be positive. You can set Float.POSITIVE_INFINITY to have an infinite weight
 	 *
 	 * @param other body colliding with this one
 	 * @return the weight this body should have against another body

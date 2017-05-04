@@ -8,6 +8,7 @@ import me.winter.boing.physics.detection.PooledDetector;
 import me.winter.boing.physics.shapes.Box;
 import me.winter.boing.physics.shapes.Limit;
 
+import static com.badlogic.gdx.math.MathUtils.FLOAT_ROUNDING_ERROR;
 import static com.badlogic.gdx.math.Vector2.Zero;
 import static java.lang.Math.abs;
 import static java.lang.Math.max;
@@ -65,14 +66,14 @@ public class BoxLimitDetector extends PooledDetector<Box, Limit>
 
 		float aDiff = (tmpVecA.x * -limitB.normal.x + tmpVecA.y * -limitB.normal.y) - (tmpVecB.x * -limitB.normal.x + tmpVecB.y * -limitB.normal.y);
 
-		if(aDiff > 0) //if limitB isn't before boxA
+		if(aDiff > FLOAT_ROUNDING_ERROR) //if limitB isn't before boxA
 			return null; //no collision
 
 		float vdx = vecB.x - vecA.x;
 		float vdy = vecB.y - vecA.y;
 
-		float dx = limitB.getAbsX() - limitB.getAbsX() - vdx;
-		float dy = limitB.getAbsY() - limitB.getAbsY() - vdy;
+		float dx = limitB.getAbsX() - boxAbsX - vdx;
+		float dy = limitB.getAbsY() - boxAbsY - vdy;
 
 		float diff = dx * -limitB.normal.x + dy * -limitB.normal.y;
 		float vecDiff = vdx * -limitB.normal.x  + vdy * -limitB.normal.y;

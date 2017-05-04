@@ -22,7 +22,7 @@ public class CircleCircleDetectionTest
 	{
 		MutableInt collisionCount = new MutableInt(0);
 
-		me.winter.boing.physics.resolver.CollisionResolver resolver = collision -> collisionCount.value++;
+		CollisionResolver resolver = (collision, weightA, weightB) -> collisionCount.value++;
 		SimpleWorld world = new SimpleWorld(resolver);
 
 		DynamicBodyImpl solidImpl = new DynamicBodyImpl(1f);
@@ -69,7 +69,7 @@ public class CircleCircleDetectionTest
 	{
 		MutableInt collisionCount = new MutableInt(0);
 
-		me.winter.boing.physics.resolver.CollisionResolver resolver = collision -> collisionCount.value++;
+		CollisionResolver resolver = (collision, weightA, weightB) -> collisionCount.value++;
 		SimpleWorld world = new SimpleWorld(resolver);
 
 		DynamicBodyImpl solidImpl = new DynamicBodyImpl(1f);
@@ -98,7 +98,7 @@ public class CircleCircleDetectionTest
 		MutableInt collisionCount = new MutableInt(0);
 		MutableInt contactCount = new MutableInt(0);
 
-		CollisionResolver resolver = collision -> collisionCount.value++;
+		CollisionResolver resolver = (collision, weightA, weightB) -> collisionCount.value++;
 		SimpleWorld world = new SimpleWorld(resolver);
 
 		DynamicBodyImpl solidImpl = new DynamicBodyImpl(1f) {
@@ -135,7 +135,7 @@ public class CircleCircleDetectionTest
 	{
 		MutableInt collisionCount = new MutableInt(0);
 
-		me.winter.boing.physics.resolver.CollisionResolver resolver = collision -> collisionCount.value++;
+		CollisionResolver resolver = (collision, weightA, weightB) -> collisionCount.value++;
 		SimpleWorld world = new SimpleWorld(resolver);
 
 		DynamicBodyImpl solidImpl = new DynamicBodyImpl(1f);

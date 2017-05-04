@@ -1,9 +1,11 @@
 package me.winter.boing.physics.resolver;
 
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.IdentityMap;
 import me.winter.boing.physics.Collision;
 import me.winter.boing.physics.DynamicBody;
 
+import static java.lang.Math.abs;
 import static me.winter.boing.physics.util.VelocityUtil.getMassRatio;
 
 /**
@@ -13,43 +15,14 @@ import static me.winter.boing.physics.util.VelocityUtil.getMassRatio;
  */
 public class ReplaceResolver implements CollisionResolver
 {
-	private Vector2 tmpVector = new Vector2();
-
 	@Override
-	public void resolve(Collision collision)
+	public void resolve(Collision collision, float deltaA, float deltaB)
 	{
-		boolean solidADyn = collision.colliderA.getBody() instanceof DynamicBody;
-		boolean solidBDyn = collision.colliderB.getBody() instanceof DynamicBody;
+		if(deltaB != 0)
+			replace((DynamicBody)collision.colliderA.getBody(), collision.normalB, deltaB * collision.penetration);
 
-		if(solidADyn)
-		{
-			DynamicBody dsA = (DynamicBody)collision.colliderA.getBody();
-
-			if(!solidBDyn)
-			{
-				replace(dsA, collision.normalB, collision.penetration);
-			}
-			else
-			{
-				DynamicBody dsB = (DynamicBody)collision.colliderB.getBody();
-				replace(dsA, collision.normalB, getMassRatio(dsB.getWeight(dsA), dsA.getWeight(dsB)) * collision.penetration);
-			}
-		}
-
-		if(solidBDyn)
-		{
-			DynamicBody dsB = (DynamicBody)collision.colliderB.getBody();
-
-			if(!solidADyn)
-			{
-				replace(dsB, collision.normalA, collision.penetration);
-			}
-			else
-			{
-				DynamicBody dsA = (DynamicBody)collision.colliderA.getBody();
-				replace(dsB, collision.normalA, getMassRatio(dsA.getWeight(dsB), dsB.getWeight(dsA)) * collision.penetration);
-			}
-		}
+		if(deltaA != 0)
+			replace((DynamicBody)collision.colliderB.getBody(), collision.normalA, deltaA * collision.penetration);
 	}
 
 	private void replace(DynamicBody solid, Vector2 normal, float delta)
@@ -57,18 +30,19 @@ public class ReplaceResolver implements CollisionResolver
 		if(delta == 0)
 			return;
 
-		tmpVector.set(normal).nor().scl(delta);
+		float replaceX = normal.x * delta;
+		float replaceY = normal.y * delta;
 
-		if(tmpVector.x > solid.getCollisionShifing().x)
+		if(abs(replaceX) > abs(solid.getCollisionShifing().x))
 		{
-			solid.getPosition().sub(solid.getCollisionShifing().x, 0).add(tmpVector.x, 0);
-			solid.getCollisionShifing().x = tmpVector.x;
+			solid.getPosition().sub(solid.getCollisionShifing().x, 0).add(replaceX, 0);
+			solid.getCollisionShifing().x = replaceX;
 		}
 
-		if(tmpVector.y > solid.getCollisionShifing().y)
+		if(abs(replaceY) > abs(solid.getCollisionShifing().y))
 		{
-			solid.getPosition().sub(0, solid.getCollisionShifing().y).add(0, tmpVector.y);
-			solid.getCollisionShifing().y = tmpVector.y;
+			solid.getPosition().sub(0, solid.getCollisionShifing().y).add(0, replaceY);
+			solid.getCollisionShifing().y = replaceY;
 		}
 	}
 }

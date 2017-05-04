@@ -15,11 +15,6 @@ import me.winter.boing.physics.util.CollisionPool;
 public abstract class AbstractWorld implements World
 {
 	/**
-	 * Collisions occuring in the current frame
-	 */
-	protected final Array<Collision> collisions = new Array<>();
-
-	/**
 	 * Collision pool to prevent creating new collisions objects.
 	 */
 	protected final Pool<Collision> collisionPool = new CollisionPool();
@@ -32,9 +27,9 @@ public abstract class AbstractWorld implements World
 		detectCollisions();
 
 		resolveCollisions();
-		collisionPool.freeAll(collisions);
-		collisions.clear();
 	}
+
+
 
 	/**
 	 * Updates the game objects by looping through them and make the DynamicBody objects move
