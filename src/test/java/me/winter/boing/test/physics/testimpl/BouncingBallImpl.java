@@ -2,9 +2,9 @@ package me.winter.boing.test.physics.testimpl;
 
 import me.winter.boing.physics.Collision;
 import me.winter.boing.physics.DynamicBody;
-import me.winter.boing.physics.util.VelocityUtil;
 
 import static me.winter.boing.physics.util.VelocityUtil.getMassRatio;
+import static me.winter.boing.physics.util.VelocityUtil.reflect;
 
 /**
  * Undocumented :(
@@ -24,9 +24,9 @@ public class BouncingBallImpl extends DynamicBodyImpl
 	}
 
 	@Override
-	public boolean notifyCollision(Collision collision)
+	public void notifyCollision(Collision collision)
 	{
-		VelocityUtil.reflect(getVelocity(), collision.normalB);
+		reflect(getVelocity(), collision.normalB);
 
 		if(collision.colliderB.getBody() instanceof DynamicBody)
 		{
@@ -37,7 +37,5 @@ public class BouncingBallImpl extends DynamicBodyImpl
 			getVelocity().add(collision.impactVelB);
 			getVelocity().scl(1f - massRatio);
 		}
-
-		return true;
 	}
 }

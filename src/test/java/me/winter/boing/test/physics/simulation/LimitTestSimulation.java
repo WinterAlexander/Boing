@@ -91,13 +91,7 @@ public class LimitTestSimulation
 		me.winter.boing.physics.resolver.CollisionResolver resolver = new ReplaceResolver();
 		SimpleWorld world = new SimpleWorld(resolver);
 
-		BouncingBallImpl ballImpl = new BouncingBallImpl() {
-			@Override
-			public boolean notifyCollision(Collision collision)
-			{
-				return true;
-			}
-		};
+		BouncingBallImpl ballImpl = new BouncingBallImpl();
 
 		ballImpl.getPosition().set(50, 50);
 		ballImpl.addCollider(new Limit(ballImpl, 25, 0, new Vector2(1, 0), 50));
@@ -106,13 +100,7 @@ public class LimitTestSimulation
 
 		world.add(ballImpl);
 
-		BouncingBallImpl ballImpl2 = new BouncingBallImpl() {
-			@Override
-			public boolean notifyCollision(Collision collision)
-			{
-				return true;
-			}
-		};
+		BouncingBallImpl ballImpl2 = new BouncingBallImpl();
 
 		ballImpl2.getPosition().set(500, 500);
 		ballImpl2.addCollider(new Limit(ballImpl2, -25, 0, new Vector2(-1, 0), 50));
@@ -132,10 +120,7 @@ public class LimitTestSimulation
 
 		BouncingBallImpl ballImpl = new BouncingBallImpl(5f) {
 			@Override
-			public boolean notifyCollision(Collision collision)
-			{
-				return true;
-			}
+			public void notifyCollision(Collision collision) {}
 		};
 
 		ballImpl.getPosition().set(400, 0);
@@ -144,10 +129,7 @@ public class LimitTestSimulation
 
 		BouncingBallImpl ballImpl2 = new BouncingBallImpl(0.5f) {
 			@Override
-			public boolean notifyCollision(Collision collision)
-			{
-				return true;
-			}
+			public void notifyCollision(Collision collision) {}
 		};
 
 		ballImpl2.getPosition().set(500, 500);

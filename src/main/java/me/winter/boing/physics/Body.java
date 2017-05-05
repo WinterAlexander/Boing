@@ -1,7 +1,6 @@
 package me.winter.boing.physics;
 
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.utils.Array;
 import me.winter.boing.physics.shapes.Collider;
 
 /**
@@ -23,21 +22,25 @@ public interface Body
 
 	/**
 	 * Method called by the World to indicate a collision is occuring with this body.
-	 * colliderA of the collision is always a collider of this body.
 	 * <p>
 	 * You can return false to cancel the collision and let the bodies overlap or
 	 * true if you want the collision to be resolved.
+	 *
+	 * @param collision detected collision about to be resolved
+	 * @return true if the collision should be resolved, otherwise false
+	 */
+	default boolean cancelCollision(Collision collision) { return false; }
+
+	/**
+	 * Method called by the World to indicate a collision is occuring with this body.
+	 * colliderA of the collision is always a collider of this body.
 	 * <p>
 	 * Note that with non dynamic bodies, this method won't be called every tick.
 	 * The World implementation must call a contact at least once
 	 *
 	 * @param collision detected collision about to be resolved
-	 * @return true if the collision should be resolved, otherwise false
 	 */
-	default boolean notifyCollision(Collision collision)
-	{
-		return true;
-	}
+	default void notifyCollision(Collision collision) {}
 
 	/**
 	 * Method called by the World to indicate a contact is occuring with this body.

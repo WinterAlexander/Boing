@@ -1,7 +1,6 @@
 package me.winter.boing.physics;
 
 import com.badlogic.gdx.utils.Array;
-import com.badlogic.gdx.utils.IdentityMap;
 import com.badlogic.gdx.utils.Queue;
 import me.winter.boing.physics.detection.DetectionHandler;
 import me.winter.boing.physics.resolver.CollisionResolver;
@@ -23,7 +22,6 @@ public class SimpleWorld extends AbstractWorld implements Iterable<Body>
 	 * Collisions occuring in the current frame
 	 */
 	protected final Array<Collision> collisions = new Array<>();
-
 
 	protected DetectionHandler mapper;
 	protected CollisionResolver resolver;
@@ -109,8 +107,8 @@ public class SimpleWorld extends AbstractWorld implements Iterable<Body>
 							{
 								swapped.setAsSwapped(collision);
 
-								colliderA.getBody().notifyCollision(collision);
-								bodyB.notifyCollision(swapped);
+								colliderA.getBody().cancelCollision(collision);
+								bodyB.cancelCollision(swapped);
 
 								collisionPool.free(collision);
 							}
@@ -192,8 +190,9 @@ public class SimpleWorld extends AbstractWorld implements Iterable<Body>
 				DynamicBody dynB = (DynamicBody)collision.colliderB.getBody();
 
 				weightA = VelocityUtil.getMassRatio(dynB.getWeight(dynA), dynA.getWeight(dynB));
-				weightB = 1f - weightA;/*
+				weightB = 1f - weightA;
 
+				/*
 				for(int i = 0; i < collisions.size; i++)
 				{
 					Collision current = collisions.get(i);
@@ -205,13 +204,18 @@ public class SimpleWorld extends AbstractWorld implements Iterable<Body>
 					{
 						//weightA +=
 					}
-				}*/
+				}
+				*/
 			}
 
 			swapped.setAsSwapped(collision);
 
-			if(collision.colliderA.getBody().notifyCollision(collision) && collision.colliderB.getBody().notifyCollision(swapped))
+			if(!collision.colliderA.getBody().cancelCollision(collision) && !collision.colliderB.getBody().cancelCollision(swapped))
+			{
+				collision.colliderA.getBody().notifyCollision(collision);
+				collision.colliderB.getBody().notifyCollision(collision);
 				resolver.resolve(collision, weightA, weightB);
+			}
 		}
 
 		collisionPool.free(swapped);

@@ -12,7 +12,7 @@ import me.winter.boing.physics.util.VelocityUtil;
 public class SpringImpl extends BodyImpl
 {
 	@Override
-	public boolean notifyCollision(Collision collision)
+	public void notifyCollision(Collision collision)
 	{
 		if(collision.colliderB.getBody() instanceof DynamicBody)
 		{
@@ -23,6 +23,5 @@ public class SpringImpl extends BodyImpl
 			if(ds.getVelocity().len2() < 500f * 500f)
 				ds.getVelocity().nor().scl(500f);
 		}
-		return true;
 	}
 }

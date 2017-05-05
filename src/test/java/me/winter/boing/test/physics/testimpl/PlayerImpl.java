@@ -47,11 +47,10 @@ public class PlayerImpl extends BodyImpl implements UpdatableBody
 	}
 
 	@Override
-	public boolean notifyCollision(Collision collision)
+	public void notifyCollision(Collision collision)
 	{
 		if(abs(collision.normalB.angle() - 90f) < 0.001f)
 			onGround = true;
-		return true;
 	}
 
 	@Override
