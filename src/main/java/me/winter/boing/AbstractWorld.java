@@ -1,6 +1,8 @@
 package me.winter.boing;
 
 import com.badlogic.gdx.utils.Pool;
+import me.winter.boing.detection.CollisionDetector;
+import me.winter.boing.resolver.CollisionResolver;
 import me.winter.boing.util.CollisionPool;
 
 /**
@@ -27,7 +29,6 @@ public abstract class AbstractWorld implements World
 
 		resolveCollisions();
 	}
-
 
 
 	/**

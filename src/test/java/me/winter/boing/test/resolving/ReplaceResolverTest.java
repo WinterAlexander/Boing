@@ -1,7 +1,7 @@
 package me.winter.boing.test.resolving;
 
 import com.badlogic.gdx.math.Vector2;
-import me.winter.boing.SimpleWorld;
+import me.winter.boing.impl.WorldImpl;
 import me.winter.boing.impl.BodyImpl;
 import me.winter.boing.impl.DynamicBodyImpl;
 import me.winter.boing.resolver.ReplaceResolver;
@@ -24,7 +24,7 @@ public class ReplaceResolverTest
 	@Test
 	public void simpleBoxBoxReplaceTest()
 	{
-		SimpleWorld world = new SimpleWorld(new ReplaceResolver());
+		WorldImpl world = new WorldImpl(new ReplaceResolver());
 
 		DynamicBodyImpl solidImpl = new DynamicBodyImpl(1f);
 		solidImpl.getPosition().set(0, 0);
@@ -59,7 +59,7 @@ public class ReplaceResolverTest
 	@Test
 	public void simpleBoxLimitReplaceTest()
 	{
-		SimpleWorld world = new SimpleWorld(new ReplaceResolver());
+		WorldImpl world = new WorldImpl(new ReplaceResolver());
 
 		DynamicBodyImpl solidImpl = new DynamicBodyImpl(1f);
 		solidImpl.getPosition().set(0, 0);
@@ -94,7 +94,7 @@ public class ReplaceResolverTest
 	@Test
 	public void boxStackTest()
 	{
-		SimpleWorld world = new SimpleWorld(new ReplaceResolver());
+		WorldImpl world = new WorldImpl(new ReplaceResolver());
 
 		DynamicBodyImpl boxOver = new DynamicBodyImpl(1f);
 		boxOver.getPosition().set(0, 40);

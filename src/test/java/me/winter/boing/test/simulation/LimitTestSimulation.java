@@ -2,7 +2,7 @@ package me.winter.boing.test.simulation;
 
 import com.badlogic.gdx.math.Vector2;
 import me.winter.boing.Collision;
-import me.winter.boing.SimpleWorld;
+import me.winter.boing.impl.WorldImpl;
 import me.winter.boing.resolver.CollisionResolver;
 import me.winter.boing.shapes.Box;
 import me.winter.boing.shapes.Circle;
@@ -27,7 +27,7 @@ public class LimitTestSimulation
 	public void simpleLimitLimitY()
 	{
 		CollisionResolver resolver = new ReplaceResolver();
-		SimpleWorld world = new SimpleWorld(resolver);
+		WorldImpl world = new WorldImpl(resolver);
 
 		BouncingBallImpl ballImpl = new BouncingBallImpl();
 		ballImpl.getPosition().set(425, 200);
@@ -48,7 +48,7 @@ public class LimitTestSimulation
 	public void simpleLimitLimitX()
 	{
 		CollisionResolver resolver = new ReplaceResolver();
-		SimpleWorld world = new SimpleWorld(resolver);
+		WorldImpl world = new WorldImpl(resolver);
 
 		BouncingBallImpl ballImpl = new BouncingBallImpl();
 		ballImpl.getPosition().set(200, 425);
@@ -69,7 +69,7 @@ public class LimitTestSimulation
 	public void comingAtAAngleLimitLimitX()
 	{
 		CollisionResolver resolver = new ReplaceResolver();
-		SimpleWorld world = new SimpleWorld(resolver);
+		WorldImpl world = new WorldImpl(resolver);
 
 		BouncingBallImpl ballImpl = new BouncingBallImpl();
 		ballImpl.getPosition().set(200, 200);
@@ -90,7 +90,7 @@ public class LimitTestSimulation
 	public void cornerGlitch()
 	{
 		CollisionResolver resolver = new ReplaceResolver();
-		SimpleWorld world = new SimpleWorld(resolver);
+		WorldImpl world = new WorldImpl(resolver);
 
 		BouncingBallImpl ballImpl = new BouncingBallImpl();
 
@@ -117,7 +117,7 @@ public class LimitTestSimulation
 	public void limitCircle()
 	{
 		CollisionResolver resolver = new ReplaceResolver();
-		SimpleWorld world = new SimpleWorld(resolver);
+		WorldImpl world = new WorldImpl(resolver);
 
 		BouncingBallImpl ballImpl = new BouncingBallImpl(5f) {
 			@Override
@@ -145,7 +145,7 @@ public class LimitTestSimulation
 	public void limitBox()
 	{
 		CollisionResolver resolver = new ReplaceResolver();
-		SimpleWorld world = new SimpleWorld(resolver);
+		WorldImpl world = new WorldImpl(resolver);
 
 		DynamicBodyImpl ballImpl = new DynamicBodyImpl(5f);
 

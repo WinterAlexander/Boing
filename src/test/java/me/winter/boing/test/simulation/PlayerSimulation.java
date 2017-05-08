@@ -1,6 +1,6 @@
 package me.winter.boing.test.simulation;
 
-import me.winter.boing.SimpleWorld;
+import me.winter.boing.impl.WorldImpl;
 import me.winter.boing.resolver.CollisionResolver;
 import me.winter.boing.resolver.ReplaceResolver;
 import me.winter.boing.shapes.Box;
@@ -22,7 +22,7 @@ public class PlayerSimulation
 	public void simpleSimul()
 	{
 		CollisionResolver resolver = new ReplaceResolver();
-		SimpleWorld world = new SimpleWorld(resolver);
+		WorldImpl world = new WorldImpl(resolver);
 
 		PlayerImpl player = new PlayerImpl();
 
@@ -43,7 +43,7 @@ public class PlayerSimulation
 	public void springSimul()
 	{
 		CollisionResolver resolver = new ReplaceResolver();
-		SimpleWorld world = new SimpleWorld(resolver);
+		WorldImpl world = new WorldImpl(resolver);
 
 		PlayerImpl player = new PlayerImpl();
 

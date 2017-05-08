@@ -1,7 +1,7 @@
 package me.winter.boing.test.simulation;
 
 import me.winter.boing.Body;
-import me.winter.boing.SimpleWorld;
+import me.winter.boing.impl.WorldImpl;
 import me.winter.boing.shapes.Box;
 import me.winter.boing.shapes.Circle;
 import me.winter.boing.shapes.Collider;
@@ -23,7 +23,7 @@ import java.awt.Graphics;
 @Ignore
 public class WorldSimulationUtil
 {
-	public static void simulate(SimpleWorld world)
+	public static void simulate(WorldImpl world)
 	{
 		JFrame frame = new JFrame();
 

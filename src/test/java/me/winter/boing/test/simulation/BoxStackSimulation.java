@@ -1,6 +1,6 @@
 package me.winter.boing.test.simulation;
 
-import me.winter.boing.SimpleWorld;
+import me.winter.boing.impl.WorldImpl;
 import me.winter.boing.impl.BodyImpl;
 import me.winter.boing.resolver.ReplaceResolver;
 import me.winter.boing.shapes.Box;
@@ -18,7 +18,7 @@ public class BoxStackSimulation
 	@Test
 	public void simpleBoxStack()
 	{
-		SimpleWorld world = new SimpleWorld(new ReplaceResolver());
+		WorldImpl world = new WorldImpl(new ReplaceResolver());
 
 		PlayerImpl player = new PlayerImpl();
 
@@ -43,7 +43,7 @@ public class BoxStackSimulation
 	@Test
 	public void bigBoxStack()
 	{
-		SimpleWorld world = new SimpleWorld(new ReplaceResolver());
+		WorldImpl world = new WorldImpl(new ReplaceResolver());
 
 		PlayerImpl player = new PlayerImpl();
 

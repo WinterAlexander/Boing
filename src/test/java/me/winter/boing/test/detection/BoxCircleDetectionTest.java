@@ -1,7 +1,7 @@
 package me.winter.boing.test.detection;
 
 import me.winter.boing.Collision;
-import me.winter.boing.SimpleWorld;
+import me.winter.boing.impl.WorldImpl;
 import me.winter.boing.resolver.CollisionResolver;
 import me.winter.boing.shapes.Box;
 import me.winter.boing.shapes.Circle;
@@ -24,7 +24,7 @@ public class BoxCircleDetectionTest
 		MutableInt collisionCount = new MutableInt(0);
 
 		CollisionResolver resolver = c -> collisionCount.value++;
-		SimpleWorld world = new SimpleWorld(resolver);
+		WorldImpl world = new WorldImpl(resolver);
 
 		DynamicBodyImpl solidImpl = new DynamicBodyImpl(1f);
 		solidImpl.getPosition().set(0, 0);
@@ -71,7 +71,7 @@ public class BoxCircleDetectionTest
 		MutableInt collisionCount = new MutableInt(0);
 
 		CollisionResolver resolver = c -> collisionCount.value++;
-		SimpleWorld world = new SimpleWorld(resolver);
+		WorldImpl world = new WorldImpl(resolver);
 
 		DynamicBodyImpl solidImpl = new DynamicBodyImpl(1f);
 		solidImpl.getPosition().set(0, 0);
@@ -100,7 +100,7 @@ public class BoxCircleDetectionTest
 		MutableInt contactCount = new MutableInt(0);
 
 		CollisionResolver resolver = c -> collisionCount.value++;
-		SimpleWorld world = new SimpleWorld(resolver);
+		WorldImpl world = new WorldImpl(resolver);
 
 		DynamicBodyImpl solidImpl = new DynamicBodyImpl(1f) {
 			@Override
@@ -132,7 +132,7 @@ public class BoxCircleDetectionTest
 		MutableInt collisionCount = new MutableInt(0);
 
 		CollisionResolver resolver = c -> collisionCount.value++;
-		SimpleWorld world = new SimpleWorld(resolver);
+		WorldImpl world = new WorldImpl(resolver);
 
 		DynamicBodyImpl solidImpl = new DynamicBodyImpl(1f);
 		solidImpl.getPosition().set(0, 0);

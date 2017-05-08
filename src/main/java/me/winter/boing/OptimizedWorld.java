@@ -2,24 +2,19 @@ package me.winter.boing;
 
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
-import com.badlogic.gdx.utils.IdentityMap;
-import com.badlogic.gdx.utils.Queue;
 import me.winter.boing.detection.DetectionHandler;
 import me.winter.boing.resolver.CollisionResolver;
 import me.winter.boing.shapes.Collider;
-import me.winter.boing.util.VectorUtil;
 import me.winter.boing.util.VelocityUtil;
-
-import java.util.Iterator;
 
 import static java.lang.Float.POSITIVE_INFINITY;
 
 /**
- * Simple implementation of a World detecting and resolving collisions.
+ * Undocumented :(
  * <p>
- * Created by Alexander Winter on 2017-04-25.
+ * Created by Alexander Winter on 2017-05-08.
  */
-public class SimpleWorld extends AbstractWorld implements Iterable<Body>
+public abstract class OptimizedWorld extends AbstractWorld
 {
 	/**
 	 * Collisions occuring in the current frame
@@ -27,35 +22,15 @@ public class SimpleWorld extends AbstractWorld implements Iterable<Body>
 	protected Array<Collision> collisions = new Array<>();
 	protected Array<Collision> prevCollisions = new Array<>();
 
-	protected DetectionHandler mapper;
+	protected DetectionHandler detector;
 	protected CollisionResolver resolver;
-
-	private Queue<DynamicBody> dynamics = new Queue<>();
-	private Queue<Body> all = new Queue<>();
 
 	protected boolean refresh;
 
-	public SimpleWorld(CollisionResolver resolver)
+	public OptimizedWorld(CollisionResolver resolver)
 	{
-		this.mapper = new DetectionHandler(collisionPool);
+		this.detector = new DetectionHandler(collisionPool);
 		this.resolver = resolver;
-	}
-
-	@Override
-	protected void update(float delta)
-	{
-		for(DynamicBody dynamic : dynamics)
-			if(dynamic instanceof UpdatableBody)
-				((UpdatableBody)dynamic).update(delta);
-
-		for(DynamicBody dynamic : dynamics)
-		{
-			dynamic.getMovement().set(dynamic.getVelocity()).scl(delta);
-			dynamic.getPosition().add(dynamic.getMovement());
-
-			VectorUtil.append(dynamic.getMovement(), dynamic.getCollisionShifing());
-			dynamic.getCollisionShifing().setZero();
-		}
 	}
 
 	@Override
@@ -75,41 +50,12 @@ public class SimpleWorld extends AbstractWorld implements Iterable<Body>
 	/**
 	 * Detects collision with 1 + 2 + 3 + ... + (N - 1) iterations, N being the number of bodies.
 	 */
-	protected void fullDetection()
-	{
-		int size = all.size;
-		Collision swapped = collisionPool.obtain();
-
-		for(int i = size; i-- > 1;)
-		{
-			Body bodyA = all.get(i);
-
-			for(int j = i; j-- > 0;)
-				detect(bodyA, all.get(j), swapped);
-		}
-
-		collisionPool.free(swapped);
-	}
+	protected abstract void fullDetection();
 
 	/**
 	 * Detects collision with D + (D + 1) + (D + 2) + ... + (N - 1) iterations, N being the amount of bodies and D being the amount of dynamic bodies
 	 */
-	protected void dynamicDetection()
-	{
-		int dyns = dynamics.size;
-		int size = all.size;
-		Collision swapped = collisionPool.obtain();
-
-		for(int i = 0; i < dyns; i++)
-		{
-			DynamicBody bodyA = dynamics.get(i);
-
-			for(int j = i + 1; j < size; j++)
-				detect(bodyA, all.get(j), swapped);
-		}
-
-		collisionPool.free(swapped);
-	}
+	protected abstract void dynamicDetection();
 
 	protected void detect(Body bodyA, Body bodyB, Collision swappedBuffer)
 	{
@@ -117,7 +63,7 @@ public class SimpleWorld extends AbstractWorld implements Iterable<Body>
 		{
 			for(Collider colliderB : bodyB.getColliders())
 			{
-				Collision collision = mapper.collides(colliderA, colliderB);
+				Collision collision = detector.collides(colliderA, colliderB);
 
 				if(collision == null)
 					continue;
@@ -249,33 +195,5 @@ public class SimpleWorld extends AbstractWorld implements Iterable<Body>
 	public void refresh()
 	{
 		this.refresh = true;
-	}
-
-	public void add(Body body)
-	{
-		if(body instanceof DynamicBody)
-		{
-			dynamics.addFirst((DynamicBody)body);
-			all.addFirst(body);
-		}
-		else
-		{
-			all.addLast(body);
-		}
-		refresh();
-	}
-
-	public void remove(Body body)
-	{
-		all.removeValue(body, true);
-		if(body instanceof DynamicBody)
-			dynamics.removeValue((DynamicBody)body, true);
-		refresh();
-	}
-
-	@Override
-	public Iterator<Body> iterator()
-	{
-		return all.iterator();
 	}
 }

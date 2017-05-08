@@ -2,7 +2,7 @@ package me.winter.boing.test.detection;
 
 import com.badlogic.gdx.math.Vector2;
 import me.winter.boing.Collision;
-import me.winter.boing.SimpleWorld;
+import me.winter.boing.impl.WorldImpl;
 import me.winter.boing.resolver.CollisionResolver;
 import me.winter.boing.shapes.Limit;
 import me.winter.boing.impl.DynamicBodyImpl;
@@ -24,7 +24,7 @@ public class LimitLimitDetectionTest
 		MutableInt collisionCount = new MutableInt(0);
 
 		CollisionResolver resolver = c -> collisionCount.value++;
-		SimpleWorld world = new SimpleWorld(resolver);
+		WorldImpl world = new WorldImpl(resolver);
 
 		DynamicBodyImpl solidImpl = new DynamicBodyImpl(1f);
 		solidImpl.getPosition().set(0, 0);
@@ -57,7 +57,7 @@ public class LimitLimitDetectionTest
 		MutableInt contactCount = new MutableInt(0);
 
 		CollisionResolver resolver = c -> collisionCount.value++;
-		SimpleWorld world = new SimpleWorld(resolver);
+		WorldImpl world = new WorldImpl(resolver);
 
 		DynamicBodyImpl solidImpl = new DynamicBodyImpl(1f) {
 			@Override
@@ -99,7 +99,7 @@ public class LimitLimitDetectionTest
 		MutableInt collisionCount = new MutableInt(0);
 
 		CollisionResolver resolver = c -> collisionCount.value++;
-		SimpleWorld world = new SimpleWorld(resolver);
+		WorldImpl world = new WorldImpl(resolver);
 
 		DynamicBodyImpl solidImpl = new DynamicBodyImpl(1f);
 		solidImpl.getPosition().set(0, 0);
@@ -132,7 +132,7 @@ public class LimitLimitDetectionTest
 		MutableInt contactCount = new MutableInt(0);
 
 		CollisionResolver resolver = c -> collisionCount.value++;
-		SimpleWorld world = new SimpleWorld(resolver);
+		WorldImpl world = new WorldImpl(resolver);
 
 		DynamicBodyImpl solidImpl = new DynamicBodyImpl(1f) {
 			@Override
