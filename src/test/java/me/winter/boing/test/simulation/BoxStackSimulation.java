@@ -6,6 +6,7 @@ import me.winter.boing.resolver.ReplaceResolver;
 import me.winter.boing.shapes.Box;
 import me.winter.boing.test.testimpl.GravityAffected;
 import me.winter.boing.test.testimpl.PlayerImpl;
+import org.junit.Ignore;
 import org.junit.Test;
 
 /**
@@ -13,6 +14,7 @@ import org.junit.Test;
  * <p>
  * Created by Alexander Winter on 2017-05-08.
  */
+@Ignore
 public class BoxStackSimulation
 {
 	@Test

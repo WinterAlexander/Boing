@@ -1,5 +1,6 @@
 package me.winter.boing.impl;
 
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Queue;
 import me.winter.boing.Body;
 import me.winter.boing.Collision;
@@ -10,6 +11,8 @@ import me.winter.boing.resolver.CollisionResolver;
 import me.winter.boing.util.VectorUtil;
 
 import java.util.Iterator;
+
+import static java.lang.Float.POSITIVE_INFINITY;
 
 /**
  * Simple implementation of a World detecting and resolving collisions.
@@ -30,12 +33,44 @@ public class WorldImpl extends OptimizedWorld implements Iterable<Body>
 	protected void update(float delta)
 	{
 		for(DynamicBody dynamic : dynamics)
+		{
 			if(dynamic instanceof UpdatableBody)
 				((UpdatableBody)dynamic).update(delta);
+		}
 
 		for(DynamicBody dynamic : dynamics)
 		{
 			dynamic.getMovement().set(dynamic.getVelocity()).scl(delta);
+
+			/*for(int i = 0; i < prevCollisions.size; i++)
+			{
+				Collision collision = prevCollisions.get(i);
+
+				Body other;
+				Vector2 impactVel, normal;
+
+				if(collision.colliderA.getBody() == dynamic)
+				{
+					impactVel = collision.impactVelA;
+					normal = collision.normalA;
+					other = collision.colliderB.getBody();
+				}
+				else
+				{
+					impactVel = collision.impactVelB;
+					normal = collision.normalB;
+					other = collision.colliderA.getBody();
+				}
+
+				if(!(other instanceof DynamicBody))
+					continue;
+
+				if(impactVel.dot(normal) < 0)
+					continue;
+
+				dynamic.getMovement().add(((DynamicBody)other).getMovement());
+			}*/
+
 			dynamic.getPosition().add(dynamic.getMovement());
 
 			VectorUtil.append(dynamic.getMovement(), dynamic.getCollisionShifing());
