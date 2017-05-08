@@ -4,7 +4,7 @@ import me.winter.boing.physics.SimpleWorld;
 import me.winter.boing.physics.resolver.ReplaceResolver;
 import me.winter.boing.physics.shapes.Box;
 import me.winter.boing.test.physics.testimpl.PlayerImpl;
-import me.winter.boing.test.physics.testimpl.BodyImpl;
+import me.winter.boing.physics.impl.BodyImpl;
 import me.winter.boing.test.physics.testimpl.SpringImpl;
 import org.junit.Ignore;
 import org.junit.Test;

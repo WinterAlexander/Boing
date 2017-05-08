@@ -5,7 +5,7 @@ import me.winter.boing.physics.resolver.ReplaceResolver;
 import me.winter.boing.physics.shapes.Box;
 import me.winter.boing.physics.shapes.Circle;
 import me.winter.boing.test.physics.testimpl.BouncingBallImpl;
-import me.winter.boing.test.physics.testimpl.BodyImpl;
+import me.winter.boing.physics.impl.BodyImpl;
 import org.junit.Ignore;
 import org.junit.Test;
 

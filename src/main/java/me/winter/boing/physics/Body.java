@@ -53,4 +53,17 @@ public interface Body
 	 * @param contact detected contact, penetration will always be 0
 	 */
 	default void notifyContact(Collision contact) {}
+
+	/**
+	 * The weight of a Body is always positive infity since it can't move.
+	 * <p>
+	 * Overriding this method may lead to unexpected behavior of the solid collision resolving
+	 *
+	 * @param collision with the other body
+	 * @return Positive infinity
+	 */
+	default float getWeight(Collision collision)
+	{
+		return Float.POSITIVE_INFINITY;
+	}
 }

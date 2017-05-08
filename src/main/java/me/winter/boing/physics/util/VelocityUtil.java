@@ -35,20 +35,27 @@ public class VelocityUtil
 		velocity.scl(-1).add(d2, d2 * a);
 	}
 
-	public static float getMassRatio(float massA, float massB)
+	/**
+	 * Returns the ratio from 0 to 1 of the weight A over the total
+	 *
+	 * @param weightA weightA
+	 * @param weightB weightB
+	 * @return the ratio of the weightA over the 2 weights
+	 */
+	public static float getWeightRatio(float weightA, float weightB)
 	{
-		if(massA == POSITIVE_INFINITY)
-			return massB == POSITIVE_INFINITY ? 0.5f : 1f;
+		if(weightA == POSITIVE_INFINITY)
+			return weightB == POSITIVE_INFINITY ? 0.5f : 1f;
 
-		if(massB == POSITIVE_INFINITY)
+		if(weightB == POSITIVE_INFINITY)
 			return 0f;
 
-		if(massA == 0f)
-			return massB == 0f ? 0.5f : 0f;
+		if(weightA == 0f)
+			return weightB == 0f ? 0.5f : 0f;
 
-		if(massB == 0f)
+		if(weightB == 0f)
 			return 1f;
 
-		return massA / (massA + massB);
+		return weightA / (weightA + weightB);
 	}
 }

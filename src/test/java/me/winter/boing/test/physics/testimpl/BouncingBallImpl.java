@@ -1,9 +1,9 @@
 package me.winter.boing.test.physics.testimpl;
 
 import me.winter.boing.physics.Collision;
-import me.winter.boing.physics.DynamicBody;
+import me.winter.boing.physics.impl.DynamicBodyImpl;
 
-import static me.winter.boing.physics.util.VelocityUtil.getMassRatio;
+import static me.winter.boing.physics.util.VelocityUtil.getWeightRatio;
 import static me.winter.boing.physics.util.VelocityUtil.reflect;
 
 /**
@@ -18,9 +18,9 @@ public class BouncingBallImpl extends DynamicBodyImpl
 		super();
 	}
 
-	public BouncingBallImpl(float mass)
+	public BouncingBallImpl(float weight)
 	{
-		super(mass);
+		super(weight);
 	}
 
 	@Override
@@ -28,14 +28,9 @@ public class BouncingBallImpl extends DynamicBodyImpl
 	{
 		reflect(getVelocity(), collision.normalB);
 
-		if(collision.colliderB.getBody() instanceof DynamicBody)
-		{
-			DynamicBody dynamicSolid = ((DynamicBody)collision.colliderB.getBody());
+		float massRatio = getWeightRatio(collision.weightA, collision.weightB);
 
-			float massRatio = getMassRatio(getWeight(dynamicSolid), dynamicSolid.getWeight(this));
-
-			getVelocity().add(collision.impactVelB);
-			getVelocity().scl(1f - massRatio);
-		}
+		getVelocity().add(collision.impactVelB);
+		getVelocity().scl(1f - massRatio);
 	}
 }

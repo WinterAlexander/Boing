@@ -42,6 +42,16 @@ public class Collision
 	public float contactSurface;
 
 	/**
+	 * Weight of solid A for solid B
+	 */
+	public float weightA;
+
+	/**
+	 * Weight of solid B for solid A
+	 */
+	public float weightB;
+
+	/**
 	 * Collider involved in the collision.
 	 * <p>
 	 * In the notify method of a solid, this collider is a collider of your solid.
@@ -68,6 +78,8 @@ public class Collision
 		contactSurface = collision.contactSurface;
 		colliderA = collision.colliderB;
 		colliderB = collision.colliderA;
+		weightA = collision.weightB;
+		weightB = collision.weightA;
 	}
 
 	/**

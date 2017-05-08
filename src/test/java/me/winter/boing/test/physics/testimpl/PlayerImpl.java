@@ -2,8 +2,9 @@ package me.winter.boing.test.physics.testimpl;
 
 import com.badlogic.gdx.math.Vector2;
 import me.winter.boing.physics.Collision;
-import me.winter.boing.physics.DynamicBody;
 import me.winter.boing.physics.UpdatableBody;
+import me.winter.boing.physics.impl.BodyImpl;
+import me.winter.boing.physics.shapes.Collider;
 
 import java.awt.KeyEventDispatcher;
 import java.awt.KeyboardFocusManager;
@@ -23,6 +24,7 @@ public class PlayerImpl extends BodyImpl implements UpdatableBody
 {
 	private boolean onGround;
 	private Vector2 velocity = new Vector2(), movement = new Vector2(), lastReplacement = new Vector2();
+
 
 	@Override
 	public void update(float delta)
@@ -66,7 +68,7 @@ public class PlayerImpl extends BodyImpl implements UpdatableBody
 	}
 
 	@Override
-	public float getWeight(DynamicBody other)
+	public float getWeight(Collision collision)
 	{
 		return 1f;
 	}

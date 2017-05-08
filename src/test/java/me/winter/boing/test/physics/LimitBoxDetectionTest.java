@@ -5,7 +5,7 @@ import me.winter.boing.physics.SimpleWorld;
 import me.winter.boing.physics.resolver.CollisionResolver;
 import me.winter.boing.physics.shapes.Box;
 import me.winter.boing.physics.shapes.Limit;
-import me.winter.boing.test.physics.testimpl.DynamicBodyImpl;
+import me.winter.boing.physics.impl.DynamicBodyImpl;
 import me.winter.boing.test.util.MutableInt;
 import org.junit.Test;
 
@@ -24,7 +24,7 @@ public class LimitBoxDetectionTest
 	{
 		MutableInt collisionCount = new MutableInt(0);
 
-		CollisionResolver resolver = (collision, weightA, weightB) -> collisionCount.value++;
+		CollisionResolver resolver = c -> collisionCount.value++;
 		SimpleWorld world = new SimpleWorld(resolver);
 
 		DynamicBodyImpl solidImpl = new DynamicBodyImpl(1f);
@@ -53,7 +53,7 @@ public class LimitBoxDetectionTest
 		MutableInt collisionCount = new MutableInt(0);
 		MutableInt contactCount = new MutableInt(0);
 
-		CollisionResolver resolver = (collision, weightA, weightB) -> collisionCount.value++;
+		CollisionResolver resolver = c -> collisionCount.value++;
 		SimpleWorld world = new SimpleWorld(resolver);
 
 		DynamicBodyImpl solidImpl = new DynamicBodyImpl(1f) {
@@ -91,7 +91,7 @@ public class LimitBoxDetectionTest
 		MutableInt collisionCount = new MutableInt(0);
 		MutableInt contactCount = new MutableInt(0);
 
-		CollisionResolver resolver = (collision, weightA, weightB) -> collisionCount.value++;
+		CollisionResolver resolver = c -> collisionCount.value++;
 		SimpleWorld world = new SimpleWorld(resolver);
 
 		DynamicBodyImpl solidImpl = new DynamicBodyImpl(1f) {
@@ -129,7 +129,7 @@ public class LimitBoxDetectionTest
 		MutableInt collisionCount = new MutableInt(0);
 		MutableInt contactCount = new MutableInt(0);
 
-		CollisionResolver resolver = (collision, weightA, weightB) -> collisionCount.value++;
+		CollisionResolver resolver = c -> collisionCount.value++;
 		SimpleWorld world = new SimpleWorld(resolver);
 
 		DynamicBodyImpl solidImpl = new DynamicBodyImpl() {

@@ -3,9 +3,10 @@ package me.winter.boing.test.physics.simulation;
 import com.badlogic.gdx.math.Vector2;
 import me.winter.boing.physics.Collision;
 import me.winter.boing.physics.SimpleWorld;
+import me.winter.boing.physics.resolver.CollisionResolver;
 import me.winter.boing.physics.shapes.Box;
 import me.winter.boing.physics.shapes.Circle;
-import me.winter.boing.test.physics.testimpl.DynamicBodyImpl;
+import me.winter.boing.physics.impl.DynamicBodyImpl;
 import me.winter.boing.physics.resolver.ReplaceResolver;
 import me.winter.boing.physics.shapes.Limit;
 import me.winter.boing.test.physics.testimpl.BouncingBallImpl;
@@ -25,7 +26,7 @@ public class LimitTestSimulation
 	@Test
 	public void simpleLimitLimitY()
 	{
-		me.winter.boing.physics.resolver.CollisionResolver resolver = new ReplaceResolver();
+		CollisionResolver resolver = new ReplaceResolver();
 		SimpleWorld world = new SimpleWorld(resolver);
 
 		BouncingBallImpl ballImpl = new BouncingBallImpl();

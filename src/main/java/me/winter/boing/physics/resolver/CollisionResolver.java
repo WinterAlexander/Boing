@@ -9,5 +9,5 @@ import me.winter.boing.physics.Collision;
  */
 public interface CollisionResolver
 {
-	void resolve(Collision collision, float weightA, float weightB);
+	void resolve(Collision collision);
 }

@@ -1,12 +1,11 @@
 package me.winter.boing.physics.resolver;
 
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.utils.IdentityMap;
 import me.winter.boing.physics.Collision;
 import me.winter.boing.physics.DynamicBody;
 
 import static java.lang.Math.abs;
-import static me.winter.boing.physics.util.VelocityUtil.getMassRatio;
+import static me.winter.boing.physics.util.VelocityUtil.getWeightRatio;
 
 /**
  * CollisionResolver resolving collisions by replacing the objects colliding (if they are Dynamic)
@@ -16,8 +15,12 @@ import static me.winter.boing.physics.util.VelocityUtil.getMassRatio;
 public class ReplaceResolver implements CollisionResolver
 {
 	@Override
-	public void resolve(Collision collision, float deltaA, float deltaB)
+	public void resolve(Collision collision)
 	{
+		float deltaA = getWeightRatio(collision.weightA, collision.weightB);
+
+		float deltaB = 1f - deltaA;
+
 		if(deltaB != 0)
 			replace((DynamicBody)collision.colliderA.getBody(), collision.normalB, deltaB * collision.penetration);
 
@@ -27,9 +30,6 @@ public class ReplaceResolver implements CollisionResolver
 
 	private void replace(DynamicBody solid, Vector2 normal, float delta)
 	{
-		if(delta == 0)
-			return;
-
 		float replaceX = normal.x * delta;
 		float replaceY = normal.y * delta;
 

@@ -2,6 +2,10 @@ package me.winter.boing.test.physics.simulation;
 
 import me.winter.boing.physics.Body;
 import me.winter.boing.physics.SimpleWorld;
+import me.winter.boing.physics.shapes.Box;
+import me.winter.boing.physics.shapes.Circle;
+import me.winter.boing.physics.shapes.Collider;
+import me.winter.boing.physics.shapes.Limit;
 import org.junit.Ignore;
 
 import javax.swing.JFrame;
@@ -36,8 +40,25 @@ public class WorldSimulationUtil
 				g.setColor(Color.BLACK);
 
 				for(Body body : world)
-					if(body instanceof SimulationElement)
-						((SimulationElement)body).draw(g);
+				{
+					for(Collider collider : body.getColliders())
+						if(collider instanceof Circle)
+						{
+							float r = ((Circle)collider).radius;
+							g.drawOval((int)(body.getPosition().x - r), (int)(600 - body.getPosition().y - r), (int)r * 2, (int)r * 2);
+						}
+						else if(collider instanceof Box)
+						{
+							float w = ((Box)collider).width;
+							float h = ((Box)collider).height;
+							g.drawRect((int)(body.getPosition().x - w / 2), (int)(600 - body.getPosition().y - h / 2), (int)w, (int)h);
+						}
+						else if(collider instanceof Limit)
+						{
+							Limit limit = (Limit)collider;
+							g.drawLine((int)(limit.getAbsX() - limit.size / 2 * limit.normal.y), (int)(600 - limit.getAbsY() + limit.size / 2 * limit.normal.x), (int)(limit.getAbsX() + limit.size / 2 * limit.normal.y), (int)(600 - limit.getAbsY() - limit.size / 2 * limit.normal.x));
+						}
+				}
 			}
 		};
 

@@ -44,10 +44,10 @@ public interface DynamicBody extends Body
 	 * <p>
 	 * The weight can be 0 but has to be positive. You can set Float.POSITIVE_INFINITY to have an infinite weight
 	 *
-	 * @param other body colliding with this one
+	 * @param collision with the other body
 	 * @return the weight this body should have against another body
 	 */
-	default float getWeight(DynamicBody other)
+	default float getWeight(Collision collision)
 	{
 		return 1f;
 	}
