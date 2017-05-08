@@ -3,7 +3,6 @@ package me.winter.boing.resolver;
 import com.badlogic.gdx.math.Vector2;
 import me.winter.boing.Collision;
 import me.winter.boing.DynamicBody;
-import me.winter.boing.util.VelocityUtil;
 
 import static java.lang.Math.abs;
 
@@ -17,14 +16,13 @@ public class ReplaceResolver implements CollisionResolver
 	@Override
 	public void resolve(Collision collision)
 	{
-		float deltaA = VelocityUtil.getWeightRatio(collision.weightA, collision.weightB);
-
+		float deltaA = collision.weightRatio;
 		float deltaB = 1f - deltaA;
 
-		if(deltaB != 0)
+		if(deltaB > 0)
 			replace((DynamicBody)collision.colliderA.getBody(), collision.normalB, deltaB * collision.penetration);
 
-		if(deltaA != 0)
+		if(deltaA > 0)
 			replace((DynamicBody)collision.colliderB.getBody(), collision.normalA, deltaA * collision.penetration);
 	}
 

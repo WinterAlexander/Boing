@@ -28,9 +28,7 @@ public class BouncingBallImpl extends DynamicBodyImpl
 	{
 		reflect(getVelocity(), collision.normalB);
 
-		float massRatio = getWeightRatio(collision.weightA, collision.weightB);
-
 		getVelocity().add(collision.impactVelB);
-		getVelocity().scl(1f - massRatio);
+		getVelocity().scl(1f - collision.weightRatio);
 	}
 }

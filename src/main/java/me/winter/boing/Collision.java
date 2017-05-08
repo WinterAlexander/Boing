@@ -42,14 +42,9 @@ public class Collision
 	public float contactSurface;
 
 	/**
-	 * Weight of solid A for solid B
+	 * Weight of solid A over the solid B
 	 */
-	public float weightA;
-
-	/**
-	 * Weight of solid B for solid A
-	 */
-	public float weightB;
+	public float weightRatio;
 
 	/**
 	 * Collider involved in the collision.
@@ -78,8 +73,7 @@ public class Collision
 		contactSurface = collision.contactSurface;
 		colliderA = collision.colliderB;
 		colliderB = collision.colliderA;
-		weightA = collision.weightB;
-		weightB = collision.weightA;
+		weightRatio = 1f - collision.weightRatio;
 	}
 
 	/**

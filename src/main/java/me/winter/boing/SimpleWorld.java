@@ -1,13 +1,18 @@
 package me.winter.boing;
 
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.IdentityMap;
 import com.badlogic.gdx.utils.Queue;
 import me.winter.boing.detection.DetectionHandler;
 import me.winter.boing.resolver.CollisionResolver;
 import me.winter.boing.shapes.Collider;
 import me.winter.boing.util.VectorUtil;
+import me.winter.boing.util.VelocityUtil;
 
 import java.util.Iterator;
+
+import static java.lang.Float.POSITIVE_INFINITY;
 
 /**
  * Simple implementation of a World detecting and resolving collisions.
@@ -19,7 +24,8 @@ public class SimpleWorld extends AbstractWorld implements Iterable<Body>
 	/**
 	 * Collisions occuring in the current frame
 	 */
-	protected final Array<Collision> collisions = new Array<>();
+	protected Array<Collision> collisions = new Array<>();
+	protected Array<Collision> prevCollisions = new Array<>();
 
 	protected DetectionHandler mapper;
 	protected CollisionResolver resolver;
@@ -76,48 +82,10 @@ public class SimpleWorld extends AbstractWorld implements Iterable<Body>
 
 		for(int i = size; i-- > 1;)
 		{
+			Body bodyA = all.get(i);
+
 			for(int j = i; j-- > 0;)
-			{
-				Body bodyB = all.get(j);
-
-				for(Collider colliderA : all.get(i).getColliders())
-				{
-					for(Collider colliderB : bodyB.getColliders())
-					{
-						Collision collision = mapper.collides(colliderA, colliderB);
-
-						if(collision == null)
-							continue;
-
-						swapped.setAsSwapped(collision);
-
-						collision.weightA = collision.colliderA.getBody().getWeight(collision);
-						collision.weightB = collision.colliderB.getBody().getWeight(swapped);
-
-						if(collision.colliderA.getBody().cancelCollision(collision) || collision.colliderB.getBody().cancelCollision(swapped))
-							continue;
-
-						if(collision.penetration == 0)
-						{
-							collision.colliderA.getBody().notifyContact(collision);
-							collision.colliderB.getBody().notifyContact(swapped);
-
-							collisionPool.free(collision);
-							continue;
-						}
-
-						if(bodyB instanceof DynamicBody || colliderA.getBody() instanceof DynamicBody) //at least one have to be able to move to resolve it...
-							collisions.add(collision);
-						else
-						{
-							colliderA.getBody().notifyCollision(collision);
-							bodyB.notifyCollision(swapped);
-
-							collisionPool.free(collision);
-						}
-					}
-				}
-			}
+				detect(bodyA, all.get(j), swapped);
 		}
 
 		collisionPool.free(swapped);
@@ -128,49 +96,125 @@ public class SimpleWorld extends AbstractWorld implements Iterable<Body>
 	 */
 	protected void dynamicDetection()
 	{
-		int dyns = dynamics.size - 1;
+		int dyns = dynamics.size;
 		int size = all.size;
 		Collision swapped = collisionPool.obtain();
 
 		for(int i = 0; i < dyns; i++)
 		{
+			DynamicBody bodyA = dynamics.get(i);
+
 			for(int j = i + 1; j < size; j++)
+				detect(bodyA, all.get(j), swapped);
+		}
+
+		collisionPool.free(swapped);
+	}
+
+	protected void detect(Body bodyA, Body bodyB, Collision swappedBuffer)
+	{
+		for(Collider colliderA : bodyA.getColliders())
+		{
+			for(Collider colliderB : bodyB.getColliders())
 			{
-				Body bodyB = all.get(j);
+				Collision collision = mapper.collides(colliderA, colliderB);
 
-				for(Collider colliderA : dynamics.get(i).getColliders())
+				if(collision == null)
+					continue;
+
+				collision.weightRatio = -1f; //not set
+
+				swappedBuffer.setAsSwapped(collision);
+
+				if(colliderA.getBody().cancelCollision(collision) || colliderB.getBody().cancelCollision(swappedBuffer))
+					continue;
+
+				if(collision.penetration == 0)
 				{
-					for(Collider colliderB : bodyB.getColliders())
-					{
-						Collision collision = mapper.collides(colliderA, colliderB);
+					colliderA.getBody().notifyContact(collision);
+					colliderB.getBody().notifyContact(swappedBuffer);
 
-						if(collision == null)
-							continue;
+					collisionPool.free(collision);
+					continue;
+				}
 
-						swapped.setAsSwapped(collision);
+				if(bodyB instanceof DynamicBody || bodyA instanceof DynamicBody) //at least one have to be able to move to resolve it...
+				{
+					resolveWeights(collision, swappedBuffer);
+					collisions.add(collision);
+				}
+				else
+				{
+					colliderA.getBody().notifyCollision(collision);
+					bodyB.notifyCollision(swappedBuffer);
 
-						collision.weightA = collision.colliderA.getBody().getWeight(collision);
-						collision.weightB = collision.colliderB.getBody().getWeight(swapped);
+					collisionPool.free(collision);
+				}
+			}
+		}
+	}
 
-						if(collision.colliderA.getBody().cancelCollision(collision) || collision.colliderB.getBody().cancelCollision(swapped))
-							continue;
+	private void resolveWeights(Collision collision, Collision miroir)
+	{
+		if(!(collision.colliderA.getBody() instanceof DynamicBody))
+		{
+			collision.weightRatio = 1f;
+			miroir.weightRatio = 0f;
+			return;
+		}
+		else if(!(collision.colliderB.getBody() instanceof DynamicBody))
+		{
+			collision.weightRatio = 0f;
+			miroir.weightRatio = 1f;
+			return;
+		}
 
-						if(collision.penetration == 0)
-						{
-							collision.colliderA.getBody().notifyContact(collision);
-							collision.colliderB.getBody().notifyContact(swapped);
+		DynamicBody dynA = (DynamicBody)collision.colliderA.getBody();
+		DynamicBody dynB = (DynamicBody)collision.colliderB.getBody();
 
-							collisionPool.free(collision);
-							continue;
-						}
 
-						collisions.add(collision);
-					}
+		collision.weightRatio = VelocityUtil.getWeightRatio(getWeight(dynA, collision.normalA, dynB), getWeight(dynB, collision.normalB, dynA));
+		miroir.weightRatio = 1f - collision.weightRatio;
+	}
+
+	private float getWeight(DynamicBody body, Vector2 normal, DynamicBody against)
+	{
+		float bestWeight = body.getWeight(against);
+
+		Collision swapped = collisionPool.obtain();
+
+		for(int i = 0; i < prevCollisions.size; i++)
+		{
+			Collision collision = prevCollisions.get(i);
+
+			if(collision.colliderB.getBody() == body)
+			{
+				swapped.setAsSwapped(collision);
+				collision = swapped;
+			}
+
+			if(collision.colliderA.getBody() == body)
+			{
+				if(collision.colliderB.getBody() == against)
+					continue;
+
+				if(collision.normalA.dot(normal) < -0.7)
+				{
+					if(!(collision.colliderB.getBody() instanceof DynamicBody))
+						return POSITIVE_INFINITY;
+
+					float currentWeight = getWeight((DynamicBody)collision.colliderB.getBody(), normal, against);
+
+					if(currentWeight > bestWeight)
+						bestWeight = currentWeight;
+
 				}
 			}
 		}
 
 		collisionPool.free(swapped);
+
+		return bestWeight;
 	}
 
 	@Override
@@ -186,10 +230,15 @@ public class SimpleWorld extends AbstractWorld implements Iterable<Body>
 
 			resolver.resolve(collision);
 		}
-		collisionPool.free(swapped);
 
-		collisionPool.freeAll(collisions);
-		collisions.clear();
+		collisionPool.free(swapped);
+		collisionPool.freeAll(prevCollisions);
+		prevCollisions.clear();
+
+		Array<Collision> tmp = prevCollisions;
+
+		prevCollisions = collisions;
+		collisions = tmp;
 	}
 
 	public boolean isRefreshing()

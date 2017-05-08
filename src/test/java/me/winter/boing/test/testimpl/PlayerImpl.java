@@ -2,6 +2,7 @@ package me.winter.boing.test.testimpl;
 
 import com.badlogic.gdx.math.Vector2;
 import me.winter.boing.Collision;
+import me.winter.boing.DynamicBody;
 import me.winter.boing.UpdatableBody;
 import me.winter.boing.impl.BodyImpl;
 
@@ -29,13 +30,12 @@ public class PlayerImpl extends BodyImpl implements UpdatableBody
 	public void update(float delta)
 	{
 		velocity.x *= 0.9f;
-		velocity.y -= 5;
 
 
 		if(aPressed)
-			velocity.add(onGround ? -100 : -20, 0);
+			velocity.add(onGround ? -30 : -20, 0);
 		else if(dPressed)
-			velocity.add(onGround ? 100 : 20, 0);
+			velocity.add(onGround ? 30 : 20, 0);
 
 		if(onGround)
 		{
@@ -44,6 +44,9 @@ public class PlayerImpl extends BodyImpl implements UpdatableBody
 			if(jumpPressed)
 				velocity.add(0, 200);
 		}
+
+		velocity.y -= 5;
+
 		onGround = false;
 	}
 
@@ -67,9 +70,9 @@ public class PlayerImpl extends BodyImpl implements UpdatableBody
 	}
 
 	@Override
-	public float getWeight(Collision collision)
+	public float getWeight(DynamicBody other)
 	{
-		return 1f;
+		return 100f;
 	}
 
 	public static class IsKeyPressed

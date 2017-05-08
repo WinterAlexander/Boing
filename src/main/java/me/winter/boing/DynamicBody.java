@@ -40,14 +40,14 @@ public interface DynamicBody extends Body
 	/**
 	 * The weight of a DynamicBody is used by a CollisionResolver to choose how
 	 * to handle their shifing. In favor of game design over realism, you can choose
-	 * your mass in function of the other object.
+	 * your weight in function of the other object.
 	 * <p>
 	 * The weight can be 0 but has to be positive. You can set Float.POSITIVE_INFINITY to have an infinite weight
 	 *
-	 * @param collision with the other body
+	 * @param against with the other body
 	 * @return the weight this body should have against another body
 	 */
-	default float getWeight(Collision collision)
+	default float getWeight(DynamicBody against)
 	{
 		return 1f;
 	}

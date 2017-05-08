@@ -2,11 +2,16 @@ package me.winter.boing.test.resolving;
 
 import com.badlogic.gdx.math.Vector2;
 import me.winter.boing.SimpleWorld;
+import me.winter.boing.impl.BodyImpl;
 import me.winter.boing.impl.DynamicBodyImpl;
 import me.winter.boing.resolver.ReplaceResolver;
 import me.winter.boing.shapes.Box;
+import me.winter.boing.shapes.Limit;
 import org.junit.Test;
 
+import static me.winter.boing.util.VectorUtil.LEFT;
+import static me.winter.boing.util.VectorUtil.UP;
+import static org.junit.Assert.assertEquals;
 import static me.winter.boing.test.util.VectorAssert.assertEquals;
 
 /**
@@ -27,12 +32,112 @@ public class ReplaceResolverTest
 		solidImpl.getVelocity().set(15, 0);
 		world.add(solidImpl);
 
-		DynamicBodyImpl solidImpl2 = new DynamicBodyImpl(1f);
-		solidImpl2.getPosition().set(10, 0);
+		BodyImpl solidImpl2 = new BodyImpl();
+		solidImpl2.getPosition().set(30, 0);
 		solidImpl2.addCollider(new Box(solidImpl2, 0, 0, 20, 20));
 		world.add(solidImpl2);
 
-		assertEquals(solidImpl.getPosition(), new Vector2(0, 0));
-		assertEquals(solidImpl2.getPosition(), new Vector2(0, 0));
+		assertEquals(new Vector2(0, 0), solidImpl.getPosition());
+		assertEquals(new Vector2(30, 0), solidImpl2.getPosition());
+
+		world.step(1f);
+
+		assertEquals(new Vector2(10, 0), solidImpl.getPosition());
+		assertEquals(new Vector2(30, 0), solidImpl2.getPosition());
+
+		world.step(1f);
+
+		assertEquals(new Vector2(10, 0), solidImpl.getPosition());
+		assertEquals(new Vector2(30, 0), solidImpl2.getPosition());
+
+		world.step(1f);
+
+		assertEquals(new Vector2(10, 0), solidImpl.getPosition());
+		assertEquals(new Vector2(30, 0), solidImpl2.getPosition());
+	}
+
+	@Test
+	public void simpleBoxLimitReplaceTest()
+	{
+		SimpleWorld world = new SimpleWorld(new ReplaceResolver());
+
+		DynamicBodyImpl solidImpl = new DynamicBodyImpl(1f);
+		solidImpl.getPosition().set(0, 0);
+		solidImpl.addCollider(new Box(solidImpl, 0, 0, 20, 20));
+		solidImpl.getVelocity().set(15, 0);
+		world.add(solidImpl);
+
+		BodyImpl solidImpl2 = new BodyImpl();
+		solidImpl2.getPosition().set(30, 0);
+		solidImpl2.addCollider(new Limit(solidImpl2, -10, 0, LEFT, 20));
+		world.add(solidImpl2);
+
+		assertEquals(new Vector2(0, 0), solidImpl.getPosition());
+		assertEquals(new Vector2(30, 0), solidImpl2.getPosition());
+
+		world.step(1f);
+
+		assertEquals(new Vector2(10, 0), solidImpl.getPosition());
+		assertEquals(new Vector2(30, 0), solidImpl2.getPosition());
+
+		world.step(1f);
+
+		assertEquals(new Vector2(10, 0), solidImpl.getPosition());
+		assertEquals(new Vector2(30, 0), solidImpl2.getPosition());
+
+		world.step(1f);
+
+		assertEquals(new Vector2(10, 0), solidImpl.getPosition());
+		assertEquals(new Vector2(30, 0), solidImpl2.getPosition());
+	}
+
+	@Test
+	public void boxStackTest()
+	{
+		SimpleWorld world = new SimpleWorld(new ReplaceResolver());
+
+		DynamicBodyImpl boxOver = new DynamicBodyImpl(1f);
+		boxOver.getPosition().set(0, 40);
+		boxOver.addCollider(new Box(boxOver, 0, 0, 20, 20));
+		boxOver.getVelocity().set(0, -4);
+		world.add(boxOver);
+
+		DynamicBodyImpl boxUnder = new DynamicBodyImpl(1f);
+		boxUnder.getPosition().set(0, 10);
+		boxUnder.addCollider(new Box(boxUnder, 0, 0, 20, 20));
+		world.add(boxUnder);
+
+		BodyImpl ground = new BodyImpl();
+		ground.getPosition().set(0, 0);
+		ground.addCollider(new Limit(ground, 0, 0, UP, 100));
+		world.add(ground);
+
+		assertEquals(new Vector2(0, 10), boxUnder.getPosition());
+		assertEquals(new Vector2(0, 40), boxOver.getPosition());
+
+		world.step(1f);
+		world.step(1f);
+
+		assertEquals(new Vector2(0, 10), boxUnder.getPosition());
+		assertEquals(new Vector2(0, 32), boxOver.getPosition());
+
+		world.step(1f);
+
+		assertEquals(new Vector2(0, 10), boxUnder.getPosition());
+		assertEquals(new Vector2(0, 30), boxOver.getPosition());
+
+		world.step(1f);
+
+		assertEquals(new Vector2(0, 10), boxUnder.getPosition());
+		assertEquals(new Vector2(0, 30), boxOver.getPosition());
+	}
+
+
+	@Test
+	public void test()
+	{
+		System.out.println("" + new Vector2(1, 0).dot(new Vector2(-1, 0)));
+		System.out.println("" + new Vector2(1, 1).nor().dot(new Vector2(-1, 1).nor()));
+
 	}
 }

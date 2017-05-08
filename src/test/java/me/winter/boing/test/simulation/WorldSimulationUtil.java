@@ -37,21 +37,21 @@ public class WorldSimulationUtil
 				g.setColor(Color.WHITE);
 				g.fillRect(0, 0, 800, 600);
 
-				g.setColor(Color.BLACK);
-
 				for(Body body : world)
 				{
+					g.setColor(new Color(body.hashCode()));
+
 					for(Collider collider : body.getColliders())
 						if(collider instanceof Circle)
 						{
 							float r = ((Circle)collider).radius;
-							g.drawOval((int)(body.getPosition().x - r), (int)(600 - body.getPosition().y - r), (int)r * 2, (int)r * 2);
+							g.fillOval((int)(body.getPosition().x - r), (int)(600 - body.getPosition().y - r), (int)r * 2, (int)r * 2);
 						}
 						else if(collider instanceof Box)
 						{
 							float w = ((Box)collider).width;
 							float h = ((Box)collider).height;
-							g.drawRect((int)(body.getPosition().x - w / 2), (int)(600 - body.getPosition().y - h / 2), (int)w, (int)h);
+							g.fillRect((int)(body.getPosition().x - w / 2), (int)(600 - body.getPosition().y - h / 2), (int)w, (int)h);
 						}
 						else if(collider instanceof Limit)
 						{
@@ -85,7 +85,7 @@ public class WorldSimulationUtil
 			}
 			catch(Exception ex)
 			{
-
+				ex.printStackTrace();
 			}
 		}
 	}

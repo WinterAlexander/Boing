@@ -16,8 +16,6 @@ public class DynamicBodyImpl extends BodyImpl implements DynamicBody
 	private Vector2 velocity, movement, lastReplacement;
 	private float weight;
 
-	private IdentityMap<Vector2, Body> collisions = new IdentityMap<>();
-
 	public DynamicBodyImpl()
 	{
 		this(1f);
@@ -29,12 +27,6 @@ public class DynamicBodyImpl extends BodyImpl implements DynamicBody
 		this.movement = new Vector2();
 		this.lastReplacement = new Vector2();
 		this.weight = weight;
-	}
-
-	@Override
-	public void notifyCollision(Collision collision)
-	{
-		collisions.put(collision.normalA, collision.colliderB.getBody());
 	}
 
 	@Override
@@ -50,7 +42,7 @@ public class DynamicBodyImpl extends BodyImpl implements DynamicBody
 	}
 
 	@Override
-	public float getWeight(Collision collision)
+	public float getWeight(DynamicBody against)
 	{
 		return weight;
 	}
