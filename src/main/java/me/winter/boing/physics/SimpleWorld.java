@@ -88,30 +88,31 @@ public class SimpleWorld extends AbstractWorld implements Iterable<Body>
 					{
 						Collision collision = mapper.collides(colliderA, colliderB);
 
-						if(collision != null)
+						if(collision == null)
+							continue;
+
+						swapped.setAsSwapped(collision);
+
+						if(collision.colliderA.getBody().cancelCollision(collision) || collision.colliderB.getBody().cancelCollision(swapped))
+							continue;
+
+						if(collision.penetration == 0)
 						{
-							if(collision.penetration == 0)
-							{
-								swapped.setAsSwapped(collision);
+							collision.colliderA.getBody().notifyContact(collision);
+							collision.colliderB.getBody().notifyContact(swapped);
 
-								collision.colliderA.getBody().notifyContact(collision);
-								collision.colliderB.getBody().notifyContact(swapped);
+							collisionPool.free(collision);
+							continue;
+						}
 
-								collisionPool.free(collision);
-								continue;
-							}
+						if(bodyB instanceof DynamicBody || colliderA.getBody() instanceof DynamicBody) //at least one have to be able to move to resolve it...
+							collisions.add(collision);
+						else
+						{
+							colliderA.getBody().notifyCollision(collision);
+							bodyB.notifyCollision(swapped);
 
-							if(bodyB instanceof DynamicBody || colliderA.getBody() instanceof DynamicBody) //at least one have to be able to move to resolve it...
-								collisions.add(collision);
-							else
-							{
-								swapped.setAsSwapped(collision);
-
-								colliderA.getBody().cancelCollision(collision);
-								bodyB.cancelCollision(swapped);
-
-								collisionPool.free(collision);
-							}
+							collisionPool.free(collision);
 						}
 					}
 				}
@@ -142,21 +143,24 @@ public class SimpleWorld extends AbstractWorld implements Iterable<Body>
 					{
 						Collision collision = mapper.collides(colliderA, colliderB);
 
-						if(collision != null)
+						if(collision == null)
+							continue;
+
+						swapped.setAsSwapped(collision);
+
+						if(collision.colliderA.getBody().cancelCollision(collision) || collision.colliderB.getBody().cancelCollision(swapped))
+							continue;
+
+						if(collision.penetration == 0)
 						{
-							if(collision.penetration == 0)
-							{
-								swapped.setAsSwapped(collision);
+							collision.colliderA.getBody().notifyContact(collision);
+							collision.colliderB.getBody().notifyContact(swapped);
 
-								collision.colliderA.getBody().notifyContact(collision);
-								collision.colliderB.getBody().notifyContact(swapped);
-
-								collisionPool.free(collision);
-								continue;
-							}
-
-							collisions.add(collision);
+							collisionPool.free(collision);
+							continue;
 						}
+
+						collisions.add(collision);
 					}
 				}
 			}
@@ -209,13 +213,9 @@ public class SimpleWorld extends AbstractWorld implements Iterable<Body>
 			}
 
 			swapped.setAsSwapped(collision);
-
-			if(!collision.colliderA.getBody().cancelCollision(collision) && !collision.colliderB.getBody().cancelCollision(swapped))
-			{
-				collision.colliderA.getBody().notifyCollision(collision);
-				collision.colliderB.getBody().notifyCollision(collision);
-				resolver.resolve(collision, weightA, weightB);
-			}
+			collision.colliderA.getBody().notifyCollision(collision);
+			collision.colliderB.getBody().notifyCollision(collision);
+			resolver.resolve(collision, weightA, weightB);
 		}
 
 		collisionPool.free(swapped);

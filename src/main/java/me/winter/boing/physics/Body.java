@@ -21,7 +21,7 @@ public interface Body
 	Collider[] getColliders();
 
 	/**
-	 * Method called by the World to indicate a collision is occuring with this body.
+	 * Method called by the World to ask if a collision should be occuring with this body.
 	 * <p>
 	 * You can return false to cancel the collision and let the bodies overlap or
 	 * true if you want the collision to be resolved.
