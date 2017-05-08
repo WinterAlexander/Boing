@@ -1,0 +1,48 @@
+package me.winter.boing.resolver;
+
+import com.badlogic.gdx.math.Vector2;
+import me.winter.boing.Collision;
+import me.winter.boing.DynamicBody;
+import me.winter.boing.util.VelocityUtil;
+
+import static java.lang.Math.abs;
+
+/**
+ * CollisionResolver resolving collisions by replacing the objects colliding (if they are Dynamic)
+ * <p>
+ * Created by Alexander Winter on 2017-04-11.
+ */
+public class ReplaceResolver implements CollisionResolver
+{
+	@Override
+	public void resolve(Collision collision)
+	{
+		float deltaA = VelocityUtil.getWeightRatio(collision.weightA, collision.weightB);
+
+		float deltaB = 1f - deltaA;
+
+		if(deltaB != 0)
+			replace((DynamicBody)collision.colliderA.getBody(), collision.normalB, deltaB * collision.penetration);
+
+		if(deltaA != 0)
+			replace((DynamicBody)collision.colliderB.getBody(), collision.normalA, deltaA * collision.penetration);
+	}
+
+	private void replace(DynamicBody solid, Vector2 normal, float delta)
+	{
+		float replaceX = normal.x * delta;
+		float replaceY = normal.y * delta;
+
+		if(abs(replaceX) > abs(solid.getCollisionShifing().x))
+		{
+			solid.getPosition().sub(solid.getCollisionShifing().x, 0).add(replaceX, 0);
+			solid.getCollisionShifing().x = replaceX;
+		}
+
+		if(abs(replaceY) > abs(solid.getCollisionShifing().y))
+		{
+			solid.getPosition().sub(0, solid.getCollisionShifing().y).add(0, replaceY);
+			solid.getCollisionShifing().y = replaceY;
+		}
+	}
+}
