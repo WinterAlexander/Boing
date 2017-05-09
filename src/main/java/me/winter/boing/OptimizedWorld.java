@@ -75,15 +75,6 @@ public abstract class OptimizedWorld extends AbstractWorld
 				if(colliderA.getBody().cancelCollision(collision) || colliderB.getBody().cancelCollision(swappedBuffer))
 					continue;
 
-				if(collision.penetration == 0)
-				{
-					colliderA.getBody().notifyContact(collision);
-					colliderB.getBody().notifyContact(swappedBuffer);
-
-					collisionPool.free(collision);
-					continue;
-				}
-
 				if(bodyB instanceof DynamicBody || bodyA instanceof DynamicBody) //at least one have to be able to move to resolve it...
 				{
 					resolveWeights(collision, swappedBuffer);
@@ -118,8 +109,7 @@ public abstract class OptimizedWorld extends AbstractWorld
 		DynamicBody dynA = (DynamicBody)collision.colliderA.getBody();
 		DynamicBody dynB = (DynamicBody)collision.colliderB.getBody();
 
-
-		collision.weightRatio = VelocityUtil.getWeightRatio(getWeight(dynA, collision.normalA, dynB), getWeight(dynB, collision.normalB, dynA));
+		collision.weightRatio = VelocityUtil.getWeightRatio(getWeight(dynA, collision.normalB, dynB), getWeight(dynB, collision.normalA, dynA));
 		miroir.weightRatio = 1f - collision.weightRatio;
 	}
 
@@ -144,12 +134,13 @@ public abstract class OptimizedWorld extends AbstractWorld
 				if(collision.colliderB.getBody() == against)
 					continue;
 
-				if(collision.normalA.dot(normal) < -0.7)
+				if(collision.normalA.dot(normal) > 0.7)
 				{
 					if(!(collision.colliderB.getBody() instanceof DynamicBody))
 						return POSITIVE_INFINITY;
 
 					float currentWeight = getWeight((DynamicBody)collision.colliderB.getBody(), normal, against);
+					//float currentWeight = body.getWeight(against);
 
 					if(currentWeight > bestWeight)
 						bestWeight = currentWeight;

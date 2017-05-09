@@ -14,6 +14,8 @@ import static java.lang.Math.abs;
 import static me.winter.boing.test.testimpl.PlayerImpl.IsKeyPressed.aPressed;
 import static me.winter.boing.test.testimpl.PlayerImpl.IsKeyPressed.dPressed;
 import static me.winter.boing.test.testimpl.PlayerImpl.IsKeyPressed.jumpPressed;
+import static me.winter.boing.util.VectorUtil.DOWN;
+import static me.winter.boing.util.VectorUtil.UP;
 
 /**
  * Undocumented :(
@@ -53,7 +55,7 @@ public class PlayerImpl extends BodyImpl implements UpdatableBody
 	@Override
 	public void notifyCollision(Collision collision)
 	{
-		if(abs(collision.normalB.angle() - 90f) < 0.001f)
+		if(collision.normalA.dot(DOWN) > 0.7 && collision.impactVelA.dot(DOWN) > 0.7)
 			onGround = true;
 	}
 

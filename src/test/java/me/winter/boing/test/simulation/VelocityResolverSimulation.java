@@ -1,12 +1,12 @@
 package me.winter.boing.test.simulation;
 
-import me.winter.boing.impl.WorldImpl;
 import me.winter.boing.resolver.CollisionResolver;
 import me.winter.boing.resolver.VelocityResolver;
 import me.winter.boing.shapes.Box;
 import me.winter.boing.shapes.Circle;
 import me.winter.boing.test.testimpl.BouncingBallImpl;
 import me.winter.boing.impl.BodyImpl;
+import me.winter.boing.test.testimpl.TestWorldImpl;
 import org.junit.Ignore;
 import org.junit.Test;
 
@@ -23,7 +23,7 @@ public class VelocityResolverSimulation
 	public void testCirclesInBox()
 	{
 		CollisionResolver resolver = new VelocityResolver();
-		WorldImpl world = new WorldImpl(resolver);
+		TestWorldImpl world = new TestWorldImpl(resolver);
 
 		BouncingBallImpl solid = new BouncingBallImpl();
 
@@ -107,7 +107,7 @@ public class VelocityResolverSimulation
 	public void testBoxBouncingOnBoxX()
 	{
 		CollisionResolver resolver = new VelocityResolver();
-		WorldImpl world = new WorldImpl(resolver);
+		TestWorldImpl world = new TestWorldImpl(resolver);
 
 		BouncingBallImpl solid = new BouncingBallImpl();
 		solid.getPosition().set(400, 400);
@@ -136,7 +136,7 @@ public class VelocityResolverSimulation
 	public void testBoxBouncingOnBoxY()
 	{
 		CollisionResolver resolver = new VelocityResolver();
-		WorldImpl world = new WorldImpl(resolver);
+		TestWorldImpl world = new TestWorldImpl(resolver);
 
 		BouncingBallImpl solid = new BouncingBallImpl();
 		solid.getPosition().set(400, 400);
@@ -165,7 +165,7 @@ public class VelocityResolverSimulation
 	public void testBoxWideBounce()
 	{
 		CollisionResolver resolver = new VelocityResolver();
-		WorldImpl world = new WorldImpl(resolver);
+		TestWorldImpl world = new TestWorldImpl(resolver);
 
 		BodyImpl ground = new BodyImpl();
 		ground.getPosition().set(400, 0);
@@ -185,7 +185,7 @@ public class VelocityResolverSimulation
 	public void testBoxesInBallCage()
 	{
 		CollisionResolver resolver = new VelocityResolver();
-		WorldImpl world = new WorldImpl(resolver);
+		TestWorldImpl world = new TestWorldImpl(resolver);
 
 		BouncingBallImpl solid = new BouncingBallImpl();
 		solid.getPosition().set(400, 400);
@@ -248,7 +248,7 @@ public class VelocityResolverSimulation
 	public void testCircleBouncingBetween2Circles()
 	{
 		CollisionResolver resolver = new VelocityResolver();
-		WorldImpl world = new WorldImpl(resolver);
+		TestWorldImpl world = new TestWorldImpl(resolver);
 
 		BouncingBallImpl solid = new BouncingBallImpl();
 		solid.getPosition().set(400, 400);
@@ -275,7 +275,7 @@ public class VelocityResolverSimulation
 	public void testCircleColling2Circles()
 	{
 		CollisionResolver resolver = new VelocityResolver();
-		WorldImpl world = new WorldImpl(resolver);
+		TestWorldImpl world = new TestWorldImpl(resolver);
 
 		BouncingBallImpl solid = new BouncingBallImpl();
 		solid.getPosition().set(400, 400);

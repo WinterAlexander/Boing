@@ -2,7 +2,6 @@ package me.winter.boing.test.simulation;
 
 import com.badlogic.gdx.math.Vector2;
 import me.winter.boing.Collision;
-import me.winter.boing.impl.WorldImpl;
 import me.winter.boing.resolver.CollisionResolver;
 import me.winter.boing.shapes.Box;
 import me.winter.boing.shapes.Circle;
@@ -10,6 +9,7 @@ import me.winter.boing.impl.DynamicBodyImpl;
 import me.winter.boing.resolver.ReplaceResolver;
 import me.winter.boing.shapes.Limit;
 import me.winter.boing.test.testimpl.BouncingBallImpl;
+import me.winter.boing.test.testimpl.TestWorldImpl;
 import org.junit.Ignore;
 import org.junit.Test;
 
@@ -27,7 +27,7 @@ public class LimitTestSimulation
 	public void simpleLimitLimitY()
 	{
 		CollisionResolver resolver = new ReplaceResolver();
-		WorldImpl world = new WorldImpl(resolver);
+		TestWorldImpl world = new TestWorldImpl(resolver);
 
 		BouncingBallImpl ballImpl = new BouncingBallImpl();
 		ballImpl.getPosition().set(425, 200);
@@ -48,7 +48,7 @@ public class LimitTestSimulation
 	public void simpleLimitLimitX()
 	{
 		CollisionResolver resolver = new ReplaceResolver();
-		WorldImpl world = new WorldImpl(resolver);
+		TestWorldImpl world = new TestWorldImpl(resolver);
 
 		BouncingBallImpl ballImpl = new BouncingBallImpl();
 		ballImpl.getPosition().set(200, 425);
@@ -69,7 +69,7 @@ public class LimitTestSimulation
 	public void comingAtAAngleLimitLimitX()
 	{
 		CollisionResolver resolver = new ReplaceResolver();
-		WorldImpl world = new WorldImpl(resolver);
+		TestWorldImpl world = new TestWorldImpl(resolver);
 
 		BouncingBallImpl ballImpl = new BouncingBallImpl();
 		ballImpl.getPosition().set(200, 200);
@@ -90,7 +90,7 @@ public class LimitTestSimulation
 	public void cornerGlitch()
 	{
 		CollisionResolver resolver = new ReplaceResolver();
-		WorldImpl world = new WorldImpl(resolver);
+		TestWorldImpl world = new TestWorldImpl(resolver);
 
 		BouncingBallImpl ballImpl = new BouncingBallImpl();
 
@@ -117,7 +117,7 @@ public class LimitTestSimulation
 	public void limitCircle()
 	{
 		CollisionResolver resolver = new ReplaceResolver();
-		WorldImpl world = new WorldImpl(resolver);
+		TestWorldImpl world = new TestWorldImpl(resolver);
 
 		BouncingBallImpl ballImpl = new BouncingBallImpl(5f) {
 			@Override
@@ -145,7 +145,7 @@ public class LimitTestSimulation
 	public void limitBox()
 	{
 		CollisionResolver resolver = new ReplaceResolver();
-		WorldImpl world = new WorldImpl(resolver);
+		TestWorldImpl world = new TestWorldImpl(resolver);
 
 		DynamicBodyImpl ballImpl = new DynamicBodyImpl(5f);
 

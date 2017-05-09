@@ -6,6 +6,7 @@ import me.winter.boing.shapes.Box;
 import me.winter.boing.shapes.Circle;
 import me.winter.boing.shapes.Collider;
 import me.winter.boing.shapes.Limit;
+import me.winter.boing.test.testimpl.TestWorldImpl;
 import org.junit.Ignore;
 
 import javax.swing.JFrame;
@@ -23,7 +24,7 @@ import java.awt.Graphics;
 @Ignore
 public class WorldSimulationUtil
 {
-	public static void simulate(WorldImpl world)
+	public static void simulate(TestWorldImpl world)
 	{
 		JFrame frame = new JFrame();
 
@@ -36,6 +37,11 @@ public class WorldSimulationUtil
 			{
 				g.setColor(Color.WHITE);
 				g.fillRect(0, 0, 800, 600);
+
+				g.setColor(Color.BLACK);
+				g.drawString("Collisions: " + world.collisionCount(), 700, 30);
+
+				int n = 0;
 
 				for(Body body : world)
 				{
@@ -58,6 +64,9 @@ public class WorldSimulationUtil
 							Limit limit = (Limit)collider;
 							g.drawLine((int)(limit.getAbsX() - limit.size / 2 * limit.normal.y), (int)(600 - limit.getAbsY() + limit.size / 2 * limit.normal.x), (int)(limit.getAbsX() + limit.size / 2 * limit.normal.y), (int)(600 - limit.getAbsY() - limit.size / 2 * limit.normal.x));
 						}
+
+					g.setColor(Color.WHITE);
+					g.drawString("" + n++, (int)body.getPosition().x, (int)(600 - body.getPosition().y));
 				}
 			}
 		};
