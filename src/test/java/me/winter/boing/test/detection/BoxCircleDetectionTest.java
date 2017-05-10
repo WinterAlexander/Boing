@@ -94,21 +94,14 @@ public class BoxCircleDetectionTest
 	}
 
 	@Test
-	public void boxTouchingCircleNoCollision()
+	public void boxTouchingCircleCollision()
 	{
 		MutableInt collisionCount = new MutableInt(0);
-		MutableInt contactCount = new MutableInt(0);
 
 		CollisionResolver resolver = c -> collisionCount.value++;
 		WorldImpl world = new WorldImpl(resolver);
 
-		DynamicBodyImpl solidImpl = new DynamicBodyImpl(1f) {
-			@Override
-			public void notifyContact(Collision contact)
-			{
-				contactCount.value++;
-			}
-		};
+		DynamicBodyImpl solidImpl = new DynamicBodyImpl(1f);
 		solidImpl.getPosition().set(0, 0);
 		solidImpl.addCollider(new Box(solidImpl, 0, 0, 20, 20));
 		world.add(solidImpl);
@@ -119,11 +112,9 @@ public class BoxCircleDetectionTest
 		world.add(solidImpl2);
 
 		assertEquals(0, collisionCount.value);
-		assertEquals(0, contactCount.value);
 
 		world.step(1f);
-		assertEquals(0, collisionCount.value);
-		assertEquals(1, contactCount.value);
+		assertEquals(1, collisionCount.value);
 	}
 
 	@Test

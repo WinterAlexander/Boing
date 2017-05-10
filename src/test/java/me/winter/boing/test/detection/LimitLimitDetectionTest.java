@@ -54,18 +54,11 @@ public class LimitLimitDetectionTest
 	public void limitMissingLimit()
 	{
 		MutableInt collisionCount = new MutableInt(0);
-		MutableInt contactCount = new MutableInt(0);
 
 		CollisionResolver resolver = c -> collisionCount.value++;
 		WorldImpl world = new WorldImpl(resolver);
 
-		DynamicBodyImpl solidImpl = new DynamicBodyImpl(1f) {
-			@Override
-			public void notifyContact(Collision contact)
-			{
-				contactCount.value++;
-			}
-		};
+		DynamicBodyImpl solidImpl = new DynamicBodyImpl(1f);
 		solidImpl.getPosition().set(0, 20);
 		solidImpl.addCollider(new Limit(solidImpl, 0, 0, new Vector2(1, 0), 20));
 		solidImpl.getVelocity().set(40, 0);
@@ -78,19 +71,15 @@ public class LimitLimitDetectionTest
 		world.add(solidImpl2);
 
 		assertEquals(0, collisionCount.value);
-		assertEquals(0, contactCount.value);
 
 		world.step(1f);
 		assertEquals(0, collisionCount.value);
-		assertEquals(0, contactCount.value);
 
 		world.step(1f);
 		assertEquals(0, collisionCount.value);
-		assertEquals(0, contactCount.value);
 
 		world.step(1f);
 		assertEquals(0, collisionCount.value);
-		assertEquals(0, contactCount.value);
 	}
 
 	@Test
@@ -129,18 +118,11 @@ public class LimitLimitDetectionTest
 	public void limitTouchingLimit()
 	{
 		MutableInt collisionCount = new MutableInt(0);
-		MutableInt contactCount = new MutableInt(0);
 
 		CollisionResolver resolver = c -> collisionCount.value++;
 		WorldImpl world = new WorldImpl(resolver);
 
-		DynamicBodyImpl solidImpl = new DynamicBodyImpl(1f) {
-			@Override
-			public void notifyContact(Collision contact)
-			{
-				contactCount.value++;
-			}
-		};
+		DynamicBodyImpl solidImpl = new DynamicBodyImpl(1f);
 		solidImpl.getPosition().set(0, 0);
 		solidImpl.addCollider(new Limit(solidImpl, 0, 0, new Vector2(1, 0), 20));
 		solidImpl.getVelocity().set(50, 0);
@@ -153,14 +135,11 @@ public class LimitLimitDetectionTest
 		world.add(solidImpl2);
 
 		assertEquals(0, collisionCount.value);
-		assertEquals(0, contactCount.value);
-
-		world.step(1f);
-		assertEquals(0, collisionCount.value);
-		assertEquals(1, contactCount.value);
 
 		world.step(1f);
 		assertEquals(1, collisionCount.value);
-		assertEquals(1, contactCount.value);
+
+		world.step(1f);
+		assertEquals(2, collisionCount.value);
 	}
 }

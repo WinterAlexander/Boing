@@ -42,15 +42,4 @@ public interface Body
 	 */
 	default void notifyCollision(Collision collision) {}
 
-	/**
-	 * Method called by the World to indicate a contact is occuring with this body.
-	 * colliderA of the collision is always a collider of this body. Not called when a
-	 * collision occurs.
-	 * <p>
-	 * Note that with non dynamic bodies, this method won't be called every tick.
-	 * The World implementation must call a contact at least once
-	 *
-	 * @param contact detected contact, penetration will always be 0
-	 */
-	default void notifyContact(Collision contact) {}
 }

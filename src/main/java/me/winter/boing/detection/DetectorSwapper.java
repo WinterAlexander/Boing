@@ -28,13 +28,15 @@ public class DetectorSwapper<A extends Collider, B extends Collider> implements 
 		if(collision == null)
 			return null;
 
-		Object tmp = collision.normalA;
+		float tmpX = collision.normalA.x;
+		float tmpY = collision.normalA.y;
 		collision.normalA.set(collision.normalB);
-		collision.normalB.set((Vector2)tmp);
+		collision.normalB.set(tmpX, tmpY);
 
-		tmp = collision.impactVelA;
+		tmpX = collision.impactVelA.x;
+		tmpY = collision.impactVelA.y;
 		collision.impactVelA.set(collision.impactVelB);
-		collision.impactVelB.set((Vector2)tmp);
+		collision.impactVelB.set(tmpX, tmpY);
 
 		collision.colliderA = shapeA;
 		collision.colliderB = shapeB;

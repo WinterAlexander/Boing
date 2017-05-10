@@ -51,18 +51,11 @@ public class LimitCircleDetectionTest
 	public void testLimitGoingThroughCircle2()
 	{
 		MutableInt collisionCount = new MutableInt(0);
-		MutableInt contactCount = new MutableInt(0);
 
 		CollisionResolver resolver = c -> collisionCount.value++;
 		WorldImpl world = new WorldImpl(resolver);
 
-		DynamicBodyImpl solidImpl = new DynamicBodyImpl(1f) {
-			@Override
-			public void notifyContact(Collision contact)
-			{
-				contactCount.value++;
-			}
-		};
+		DynamicBodyImpl solidImpl = new DynamicBodyImpl(1f);
 		solidImpl.getPosition().set(0, 0);
 		solidImpl.addCollider(new Circle(solidImpl, 0, 0, 10));
 		world.add(solidImpl);
@@ -73,34 +66,24 @@ public class LimitCircleDetectionTest
 		solidImpl2.getVelocity().set(0, 40);
 		world.add(solidImpl2);
 
-		assertEquals(0, contactCount.value);
 		assertEquals(0, collisionCount.value);
 
 		world.step(1f);
-		assertEquals(1, contactCount.value);
 		assertEquals(0, collisionCount.value);
 
 		world.step(1f);
 		assertEquals(1, collisionCount.value);
-		assertEquals(1, contactCount.value);
 	}
 
 	@Test
 	public void testLimitGoingThroughCircle3()
 	{
 		MutableInt collisionCount = new MutableInt(0);
-		MutableInt contactCount = new MutableInt(0);
 
 		CollisionResolver resolver = c -> collisionCount.value++;
 		WorldImpl world = new WorldImpl(resolver);
 
-		DynamicBodyImpl solidImpl = new DynamicBodyImpl(1f) {
-			@Override
-			public void notifyContact(Collision contact)
-			{
-				contactCount.value++;
-			}
-		};
+		DynamicBodyImpl solidImpl = new DynamicBodyImpl(1f);
 		solidImpl.getPosition().set(0, 0);
 		solidImpl.addCollider(new Circle(solidImpl, 0, 0, 10));
 		world.add(solidImpl);
@@ -111,34 +94,24 @@ public class LimitCircleDetectionTest
 		solidImpl2.getVelocity().set(0, 50);
 		world.add(solidImpl2);
 
-		assertEquals(0, contactCount.value);
 		assertEquals(0, collisionCount.value);
 
 		world.step(1f);
-		assertEquals(0, contactCount.value);
 		assertEquals(1, collisionCount.value);
 
 		world.step(1f);
 		assertEquals(1, collisionCount.value);
-		assertEquals(0, contactCount.value);
 	}
 
 	@Test
 	public void testLimitTouchingCircle()
 	{
 		MutableInt collisionCount = new MutableInt(0);
-		MutableInt contactCount = new MutableInt(0);
 
 		CollisionResolver resolver = c -> collisionCount.value++;
 		WorldImpl world = new WorldImpl(resolver);
 
-		DynamicBodyImpl solidImpl = new DynamicBodyImpl() {
-			@Override
-			public void notifyContact(Collision contact)
-			{
-				contactCount.value++;
-			}
-		};
+		DynamicBodyImpl solidImpl = new DynamicBodyImpl();
 		solidImpl.getPosition().set(0, 0);
 		solidImpl.addCollider(new Circle(solidImpl, 0, 0, 10));
 		world.add(solidImpl);
@@ -149,15 +122,12 @@ public class LimitCircleDetectionTest
 		world.add(solidImpl2);
 
 		assertEquals(0, collisionCount.value);
-		assertEquals(0, contactCount.value);
 
 		world.step(1f);
-		assertEquals(0, collisionCount.value);
-		assertEquals(1, contactCount.value);
+		assertEquals(1, collisionCount.value);
 
 		world.step(1f);
-		assertEquals(0, collisionCount.value);
-		assertEquals(2, contactCount.value);
+		assertEquals(2, collisionCount.value);
 
 	}
 
