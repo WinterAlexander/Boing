@@ -1,6 +1,8 @@
 package me.winter.boing.test.simulation;
 
+import me.winter.boing.DynamicBody;
 import me.winter.boing.impl.BodyImpl;
+import me.winter.boing.impl.DynamicBodyImpl;
 import me.winter.boing.resolver.ReplaceResolver;
 import me.winter.boing.shapes.Box;
 import me.winter.boing.test.testimpl.GravityAffected;
@@ -109,6 +111,83 @@ public class BoxStackSimulation
 		BodyImpl ground = new BodyImpl();
 
 		ground.getPosition().set(400, -100);
+		ground.addCollider(new Box(ground, 0, 0, 800, 400));
+		world.add(ground);
+
+		WorldSimulationUtil.simulate(world);
+	}
+
+	@Test
+	public void flyingBoxesStack()
+	{
+		TestWorldImpl world = new TestWorldImpl(new ReplaceResolver());
+
+		PlayerImpl player = new PlayerImpl();
+
+		player.getPosition().set(400, 600);
+		player.addCollider(new Box(player, 0, 0, 20, 45));
+		world.add(player);
+
+		DynamicBodyImpl test = new DynamicBodyImpl();
+		test.getPosition().set(400, 500);
+		test.addCollider(new Box(test, 0, 0, 30, 30));
+		world.add(test);
+
+		DynamicBodyImpl test2 = new DynamicBodyImpl();
+		test2.getPosition().set(400, 400);
+		test2.addCollider(new Box(test2, 0, 0, 30, 30));
+		world.add(test2);
+
+		DynamicBodyImpl test3 = new DynamicBodyImpl();
+		test3.getPosition().set(400, 300);
+		test3.addCollider(new Box(test3, 0, 0, 50, 50));
+		world.add(test3);
+
+		BodyImpl ground = new BodyImpl();
+
+		ground.getPosition().set(400, 0);
+		ground.addCollider(new Box(ground, 0, 0, 800, 400));
+		world.add(ground);
+
+		WorldSimulationUtil.simulate(world);
+	}
+
+	@Test
+	public void pickyBoxStack()
+	{
+		TestWorldImpl world = new TestWorldImpl(new ReplaceResolver());
+
+		PlayerImpl player = new PlayerImpl();
+
+		player.getPosition().set(400, 600);
+		player.addCollider(new Box(player, 0, 0, 20, 45));
+		world.add(player);
+
+		GravityAffected test = new GravityAffected(){
+			@Override
+			public float getWeight(DynamicBody against)
+			{
+				return against == player ? 0f : 1f;
+			}
+		};
+		test.getPosition().set(400, 500);
+		test.addCollider(new Box(test, 0, 0, 30, 30));
+		world.add(test);
+
+		GravityAffected test2 = new GravityAffected() {
+			@Override
+			public float getWeight(DynamicBody against)
+			{
+				return 0f;
+			}
+		};
+		test2.getPosition().set(400, 400);
+		test2.addCollider(new Box(test2, 0, 0, 50, 50));
+		world.add(test2);
+
+		BodyImpl ground = new BodyImpl();
+
+		ground.getPosition().set(400, 0);
 		ground.addCollider(new Box(ground, 0, 0, 800, 400));
 		world.add(ground);
 
