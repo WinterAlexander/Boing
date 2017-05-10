@@ -14,6 +14,8 @@ import org.junit.Ignore;
 import org.junit.Test;
 
 import static me.winter.boing.test.simulation.WorldSimulationUtil.simulate;
+import static me.winter.boing.util.VectorUtil.DOWN;
+import static me.winter.boing.util.VectorUtil.UP;
 
 /**
  * Undocumented :(
@@ -157,6 +159,28 @@ public class LimitTestSimulation
 
 		ballImpl2.getPosition().set(500, 500);
 		ballImpl2.addCollider(new Box(ballImpl2, 0, 0, 25, 25));
+		ballImpl2.getVelocity().set(-10, -100);
+		world.add(ballImpl2);
+
+		simulate(world);
+	}
+
+	@Test
+	public void limitFallingOnLimit()
+	{
+		CollisionResolver resolver = new ReplaceResolver();
+		TestWorldImpl world = new TestWorldImpl(resolver);
+
+		DynamicBodyImpl ballImpl = new DynamicBodyImpl(4f);
+
+		ballImpl.getPosition().set(400, 100);
+		ballImpl.addCollider(new Limit(ballImpl, 0, 0, UP, 800));
+		world.add(ballImpl);
+
+		DynamicBodyImpl ballImpl2 = new DynamicBodyImpl(1f);
+
+		ballImpl2.getPosition().set(500, 300);
+		ballImpl2.addCollider(new Limit(ballImpl2, 0, 0, DOWN, 25));
 		ballImpl2.getVelocity().set(-10, -100);
 		world.add(ballImpl2);
 

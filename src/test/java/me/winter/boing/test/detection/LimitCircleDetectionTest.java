@@ -1,12 +1,12 @@
 package me.winter.boing.test.detection;
 
-import me.winter.boing.Collision;
+import me.winter.boing.impl.DynamicBodyImpl;
 import me.winter.boing.impl.WorldImpl;
 import me.winter.boing.resolver.CollisionResolver;
 import me.winter.boing.shapes.Circle;
 import me.winter.boing.shapes.Limit;
-import me.winter.boing.impl.DynamicBodyImpl;
 import me.winter.boing.test.util.MutableInt;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import static me.winter.boing.util.VectorUtil.UP;
@@ -17,6 +17,7 @@ import static org.junit.Assert.assertEquals;
  * <p>
  * Created by Alexander Winter on 2017-04-26.
  */
+@Ignore
 public class LimitCircleDetectionTest
 {
 	@Test

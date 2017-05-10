@@ -4,7 +4,9 @@ import com.badlogic.gdx.math.Vector2;
 import me.winter.boing.Collision;
 import me.winter.boing.DynamicBody;
 
+import static com.badlogic.gdx.math.MathUtils.FLOAT_ROUNDING_ERROR;
 import static java.lang.Math.abs;
+import static java.lang.Math.signum;
 
 /**
  * CollisionResolver resolving collisions by replacing the objects colliding (if they are Dynamic)
@@ -31,15 +33,22 @@ public class ReplaceResolver implements CollisionResolver
 		float replaceX = normal.x * delta;
 		float replaceY = normal.y * delta;
 
+
+		//if(replaceX != 0 && abs(replaceX) < FLOAT_ROUNDING_ERROR)
+		//	replaceX = signum(replaceX) * FLOAT_ROUNDING_ERROR;
+
+		//if(replaceY != 0 && abs(replaceY) < FLOAT_ROUNDING_ERROR)
+		//	replaceY = signum(replaceY) * FLOAT_ROUNDING_ERROR;
+
 		if(abs(replaceX) > abs(solid.getCollisionShifing().x))
 		{
-			solid.getPosition().sub(solid.getCollisionShifing().x, 0).add(replaceX, 0);
+			solid.getPosition().x += replaceX - solid.getCollisionShifing().x;
 			solid.getCollisionShifing().x = replaceX;
 		}
 
 		if(abs(replaceY) > abs(solid.getCollisionShifing().y))
 		{
-			solid.getPosition().sub(0, solid.getCollisionShifing().y).add(0, replaceY);
+			solid.getPosition().y += replaceY - solid.getCollisionShifing().y;
 			solid.getCollisionShifing().y = replaceY;
 		}
 	}

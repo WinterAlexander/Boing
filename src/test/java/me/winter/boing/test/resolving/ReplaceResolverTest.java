@@ -132,12 +132,4 @@ public class ReplaceResolverTest
 		assertEquals(new Vector2(0, 30), boxOver.getPosition());
 	}
 
-
-	@Test
-	public void test()
-	{
-		System.out.println("" + new Vector2(1, 0).dot(new Vector2(-1, 0)));
-		System.out.println("" + new Vector2(1, 1).nor().dot(new Vector2(-1, 1).nor()));
-
-	}
 }

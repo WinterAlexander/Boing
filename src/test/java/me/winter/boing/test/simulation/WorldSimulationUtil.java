@@ -65,7 +65,7 @@ public class WorldSimulationUtil
 							g.drawLine((int)(limit.getAbsX() - limit.size / 2 * limit.normal.y), (int)(600 - limit.getAbsY() + limit.size / 2 * limit.normal.x), (int)(limit.getAbsX() + limit.size / 2 * limit.normal.y), (int)(600 - limit.getAbsY() - limit.size / 2 * limit.normal.x));
 						}
 
-					g.setColor(Color.WHITE);
+					g.setColor(body.getColliders().length == 1 && body.getColliders()[0] instanceof Limit ? Color.BLACK : Color.WHITE);
 					g.drawString("" + n++, (int)body.getPosition().x, (int)(600 - body.getPosition().y));
 				}
 			}
@@ -82,7 +82,7 @@ public class WorldSimulationUtil
 			{
 				long start = System.nanoTime();
 				SwingUtilities.invokeAndWait(() -> {
-					world.step(1 / 60f);
+					world.step(1f / 60f);
 					frame.repaint();
 				});
 				long toWait = 1000 / 60 - (System.nanoTime() - start) / 1_000_000;

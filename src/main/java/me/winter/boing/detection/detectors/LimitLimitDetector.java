@@ -3,11 +3,11 @@ package me.winter.boing.detection.detectors;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Pool;
 import me.winter.boing.Collision;
-import me.winter.boing.detection.PooledDetector;
 import me.winter.boing.DynamicBody;
+import me.winter.boing.detection.PooledDetector;
 import me.winter.boing.shapes.Limit;
 
-import static com.badlogic.gdx.math.MathUtils.isEqual;
+import static com.badlogic.gdx.math.MathUtils.FLOAT_ROUNDING_ERROR;
 import static com.badlogic.gdx.math.Vector2.Zero;
 import static java.lang.Math.max;
 import static java.lang.Math.min;
@@ -20,8 +20,6 @@ import static java.lang.Math.min;
  */
 public class LimitLimitDetector extends PooledDetector<Limit, Limit>
 {
-	private Vector2 tmpVecA = new Vector2(), tmpVecB = new Vector2();
-
 	public LimitLimitDetector(Pool<Collision> collisionPool)
 	{
 		super(collisionPool);
@@ -30,7 +28,7 @@ public class LimitLimitDetector extends PooledDetector<Limit, Limit>
 	@Override
 	public Collision collides(Limit limitA, Limit limitB)
 	{
-		if(limitA.normal.dot(limitB.normal) != -1)
+		if(limitA.normal.dot(limitB.normal) + 1 > FLOAT_ROUNDING_ERROR)
 			return null;
 
 		Vector2 vecA = limitA.getBody() instanceof DynamicBody
@@ -41,58 +39,70 @@ public class LimitLimitDetector extends PooledDetector<Limit, Limit>
 					? ((DynamicBody)limitB.getBody()).getMovement()
 					: Zero;
 
+		float ax = limitA.getAbsX();
+		float ay = limitA.getAbsY();
+		float bx = limitB.getAbsX();
+		float by = limitB.getAbsY();
 
-		tmpVecA.set(limitA.getAbsX(), limitA.getAbsY());
-		tmpVecB.set(limitB.getAbsX(), limitB.getAbsY());
+		float nx = limitA.normal.x; //normal X
+		float ny = limitA.normal.y; //normal Y
 
-		if(!(tmpVecA.x * limitA.normal.x + tmpVecA.y * limitA.normal.y >= tmpVecB.x * limitA.normal.x + tmpVecB.y * limitA.normal.y)) //if limitA after his velocity isn't after limitB with his velocity
+		if((ax * nx + ay * ny) - (bx * nx + by * ny) < -FLOAT_ROUNDING_ERROR) //if limitA after his velocity isn't after limitB with his velocity
 			return null; //no collision
 
-		tmpVecA.sub(vecA);
-		tmpVecB.sub(vecB);
+		float pax = ax - vecA.x; //previous x for A
+		float pay = ay - vecA.y; //previous y for A
+		float pbx = bx - vecB.x; //previous x for B
+		float pby = by - vecB.y; //previous y for B
 
-		float aDiff = (tmpVecA.x * limitA.normal.x + tmpVecA.y * limitA.normal.y) - (tmpVecB.x * limitA.normal.x + tmpVecB.y * limitA.normal.y);
-
-		if(aDiff > 0) //if limitA isn't before limitB
+		if((pax * nx + pay * ny) - (pbx * nx + pby * ny) > FLOAT_ROUNDING_ERROR) //if limitA isn't before limitB
 			return null; //no collision
 
-		float vdx = vecB.x - vecA.x;
-		float vdy = vecB.y - vecA.y;
+		float diff = (pbx - pax) * nx + (pby - pay) * ny;
+		float vecDiff = (vecB.x - vecA.x) * nx + (vecB.y - vecA.y) * ny;
 
-		float dx = limitB.getAbsX() - limitA.getAbsX() - vdx;
-		float dy = limitB.getAbsY() - limitA.getAbsY() - vdy;
+		float midpoint = vecDiff != 0 ? (diff + vecDiff) / vecDiff : 0f;
 
-		float diff = dx * limitA.normal.x + dy * limitA.normal.y;
-		float vecDiff = vdx * limitA.normal.x  + vdy * limitA.normal.y;
-
-		tmpVecA.set(vecA).scl(-1f);
-		tmpVecB.set(vecB).scl(-1f);
-
-		if(vecDiff != 0)
-		{
-			//finding the collision point
-			tmpVecA.scl(1f - (diff + vecDiff) / vecDiff);
-			tmpVecB.scl(1f - (diff + vecDiff) / vecDiff);
-		}
-
-		float mxA = limitA.getAbsX() + tmpVecA.x; //midpoint for A
-		float myA = limitA.getAbsY() + tmpVecA.y;
-		float mxB = limitB.getAbsX() + tmpVecB.x; //midpoint for B
-		float myB = limitB.getAbsY() + tmpVecB.y;
+		float mxA = ax - vecA.x * midpoint; //midpoint x for A
+		float myA = ay - vecA.y * midpoint; //midpoint y for A
+		float mxB = bx - vecB.x * midpoint; //midpoint x for B
+		float myB = by - vecB.y * midpoint; //midpoint y for B
 
 		float hsA = limitA.size / 2; //half size for A
 		float hsB = limitB.size / 2; //half size for B
 
-		float limitA1 = -limitA.normal.y * (mxA + hsA) + limitA.normal.x * (myA + hsA);
-		float limitA2 = -limitA.normal.y * (mxA - hsA) + limitA.normal.x * (myA - hsA);
-		float limitB1 = -limitA.normal.y * (mxB + hsB) + limitA.normal.x * (myB + hsB);
-		float limitB2 = -limitA.normal.y * (mxB - hsB) + limitA.normal.x * (myB - hsB);
+		float limitA1 = -ny * (mxA + hsA) + nx * (myA + hsA);
+		float limitA2 = -ny * (mxA - hsA) + nx * (myA - hsA);
+		float limitB1 = -ny * (mxB + hsB) + nx * (myB + hsB);
+		float limitB2 = -ny * (mxB - hsB) + nx * (myB - hsB);
 
 		float surface = min(max(limitA1, limitA2), max(limitB1, limitB2)) //minimum of the maximums
 					- max(min(limitA1, limitA2), min(limitB1, limitB2)); //maximum of the minimums
 
-		if(surface <= 0)
-			return null;
+		if(surface <= FLOAT_ROUNDING_ERROR)
+		{
+			float sizeDiff = (hsB + hsA) * nx + (hsB + hsA) * ny;
+
+			midpoint = vecDiff != 0 ? (diff + vecDiff + sizeDiff) / vecDiff : 0f;
+
+			mxA = ax - vecA.x * midpoint; //midpoint x for A
+			myA = ay - vecA.y * midpoint; //midpoint y for A
+			mxB = bx - vecB.x * midpoint; //midpoint x for B
+			myB = by - vecB.y * midpoint; //midpoint y for B
+
+			limitA1 = -ny * (mxA + hsA) + nx * (myA + hsA);
+			limitA2 = -ny * (mxA - hsA) + nx * (myA - hsA);
+			limitB1 = -ny * (mxB + hsB) + nx * (myB + hsB);
+			limitB2 = -ny * (mxB - hsB) + nx * (myB - hsB);
+
+			surface = min(max(limitA1, limitA2), max(limitB1, limitB2)) //minimum of the maximums
+					- max(min(limitA1, limitA2), min(limitB1, limitB2)); //maximum of the minimums
+
+			if(surface <= FLOAT_ROUNDING_ERROR)
+				return null;
+
+			surface = 0f;
+		}
 
 		Collision collision = collisionPool.obtain();
 
@@ -103,6 +113,7 @@ public class LimitLimitDetector extends PooledDetector<Limit, Limit>
 		collision.normalB.set(limitB.normal);
 		collision.setImpactVelocities(limitA.getBody(), limitB.getBody());
 		collision.penetration = -(diff + vecDiff);
+
 		collision.contactSurface = surface;
 
 		return collision;

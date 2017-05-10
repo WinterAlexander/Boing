@@ -30,15 +30,15 @@ public class DetectionHandler
 	 */
 	public DetectionHandler(Pool<Collision> collisionPool)
 	{
-		detectors.put(getKey(Circle.class, Circle.class), new CircleCircleDetector(collisionPool));
+		//detectors.put(getKey(Circle.class, Circle.class), new CircleCircleDetector(collisionPool));
 		detectors.put(getKey(Circle.class, Box.class), new DetectorSwapper<>(new BoxCircleDetector(collisionPool)));
 		detectors.put(getKey(Circle.class, Limit.class), new CircleLimitDetector(collisionPool));
 
-		detectors.put(getKey(Box.class, Circle.class), new BoxCircleDetector(collisionPool));
+		//detectors.put(getKey(Box.class, Circle.class), new BoxCircleDetector(collisionPool));
 		detectors.put(getKey(Box.class, Box.class), new BoxBoxDetector(collisionPool));
 		detectors.put(getKey(Box.class, Limit.class), new BoxLimitDetector(collisionPool));
 
-		detectors.put(getKey(Limit.class, Circle.class), new DetectorSwapper<>(new CircleLimitDetector(collisionPool)));
+		//detectors.put(getKey(Limit.class, Circle.class), new DetectorSwapper<>(new CircleLimitDetector(collisionPool)));
 		detectors.put(getKey(Limit.class, Box.class), new DetectorSwapper<>(new BoxLimitDetector(collisionPool)));
 		detectors.put(getKey(Limit.class, Limit.class), new LimitLimitDetector(collisionPool));
 	}
