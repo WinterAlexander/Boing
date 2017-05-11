@@ -102,6 +102,9 @@ public class BoxBoxDetector extends PooledDetector<Box, Box>
 
 		if(surface <= FLOAT_ROUNDING_ERROR)
 		{
+			if(surface < -FLOAT_ROUNDING_ERROR)
+				return null;
+
 			float sizeDiff = (hsB + hsA) * nx + (hsB + hsA) * ny;
 
 			midpoint = vecDiff != 0 ? (diff + vecDiff + sizeDiff) / vecDiff : 0f;

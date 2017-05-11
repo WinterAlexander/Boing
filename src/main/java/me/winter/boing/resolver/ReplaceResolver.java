@@ -4,9 +4,8 @@ import com.badlogic.gdx.math.Vector2;
 import me.winter.boing.Collision;
 import me.winter.boing.DynamicBody;
 
-import static com.badlogic.gdx.math.MathUtils.FLOAT_ROUNDING_ERROR;
 import static java.lang.Math.abs;
-import static java.lang.Math.signum;
+import static me.winter.boing.util.VelocityUtil.incrementMantissa;
 
 /**
  * CollisionResolver resolving collisions by replacing the objects colliding (if they are Dynamic)
@@ -32,6 +31,9 @@ public class ReplaceResolver implements CollisionResolver
 	{
 		float replaceX = normal.x * delta;
 		float replaceY = normal.y * delta;
+
+		replaceX = incrementMantissa(replaceX);
+		replaceY = incrementMantissa(replaceY);
 
 
 		//if(replaceX != 0 && abs(replaceX) < FLOAT_ROUNDING_ERROR)

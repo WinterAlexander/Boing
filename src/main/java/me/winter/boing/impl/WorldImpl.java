@@ -1,6 +1,5 @@
 package me.winter.boing.impl;
 
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Queue;
 import me.winter.boing.Body;
 import me.winter.boing.Collision;
@@ -12,8 +11,6 @@ import me.winter.boing.util.VectorUtil;
 
 import java.util.Iterator;
 
-import static java.lang.Float.POSITIVE_INFINITY;
-
 /**
  * Simple implementation of a World detecting and resolving collisions.
  * <p>
@@ -23,6 +20,8 @@ public class WorldImpl extends OptimizedWorld implements Iterable<Body>
 {
 	private Queue<DynamicBody> dynamics = new Queue<>();
 	private Queue<Body> all = new Queue<>();
+
+	private int n = 0;
 
 	public WorldImpl(CollisionResolver resolver)
 	{
@@ -37,6 +36,8 @@ public class WorldImpl extends OptimizedWorld implements Iterable<Body>
 			if(dynamic instanceof UpdatableBody)
 				((UpdatableBody)dynamic).update(delta);
 		}
+
+		System.out.println("Frame: " + n++);
 
 		for(DynamicBody dynamic : dynamics)
 		{
@@ -75,7 +76,16 @@ public class WorldImpl extends OptimizedWorld implements Iterable<Body>
 
 			VectorUtil.append(dynamic.getMovement(), dynamic.getCollisionShifing());
 			dynamic.getCollisionShifing().setZero();
+
+
+			StringBuilder sb = new StringBuilder();
+			sb.append(dynamic.getPosition().y - dynamic.getMovement().y).append(" -> ");
+			sb.append(dynamic.getPosition().y);
+			System.out.println(sb);
 		}
+
+
+		System.out.println();
 	}
 
 	/**

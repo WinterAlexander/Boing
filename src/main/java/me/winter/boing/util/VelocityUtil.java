@@ -3,6 +3,8 @@ package me.winter.boing.util;
 import com.badlogic.gdx.math.Vector2;
 
 import static java.lang.Float.POSITIVE_INFINITY;
+import static java.lang.Float.floatToIntBits;
+import static java.lang.Float.intBitsToFloat;
 import static java.lang.Math.signum;
 
 /**
@@ -57,5 +59,18 @@ public class VelocityUtil
 			return 1f;
 
 		return weightA / (weightA + weightB);
+	}
+
+	public static float incrementMantissa(float value)
+	{
+		int rest = floatToIntBits(value) ^ 0x7FFFFF;
+		int mantissa = floatToIntBits(value) & 0x7FFFFF;
+
+		if((mantissa & 0x7FFFFF) == 0x7FFFFF)
+			return value;
+
+		mantissa++;
+
+		return intBitsToFloat(rest | mantissa);
 	}
 }

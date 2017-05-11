@@ -57,6 +57,45 @@ public class ReplaceResolverTest
 	}
 
 	@Test
+	public void inaccurateBoxBoxReplaceTest()
+	{
+		WorldImpl world = new WorldImpl(new ReplaceResolver());
+
+		DynamicBodyImpl solidImpl = new DynamicBodyImpl(1f);
+		solidImpl.getPosition().set(0, 0);
+		solidImpl.addCollider(new Box(solidImpl, 0, 0, 20, 20));
+		solidImpl.getVelocity().set(15 * 60f, 0);
+		world.add(solidImpl);
+
+		BodyImpl solidImpl2 = new BodyImpl();
+		solidImpl2.getPosition().set(30, 0);
+		solidImpl2.addCollider(new Box(solidImpl2, 0, 0, 20, 20));
+		world.add(solidImpl2);
+
+		assertEquals(new Vector2(0, 0), solidImpl.getPosition());
+		assertEquals(new Vector2(30, 0), solidImpl2.getPosition());
+
+		world.step(1f / 60f);
+
+		assertEquals(new Vector2(10, 0), solidImpl.getPosition());
+		assertEquals(new Vector2(30, 0), solidImpl2.getPosition());
+
+		world.step(1f / 60f);
+
+		assertEquals(new Vector2(10, 0), solidImpl.getPosition());
+		assertEquals(new Vector2(30, 0), solidImpl2.getPosition());
+
+
+		for(int i = 0; i < 1000; i++)
+		{
+			world.step(1f / 60f);
+
+			assertEquals(new Vector2(10, 0), solidImpl.getPosition());
+			assertEquals(new Vector2(30, 0), solidImpl2.getPosition());
+		}
+	}
+
+	@Test
 	public void simpleBoxLimitReplaceTest()
 	{
 		WorldImpl world = new WorldImpl(new ReplaceResolver());

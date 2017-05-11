@@ -179,7 +179,7 @@ public class LimitTestSimulation
 
 		DynamicBodyImpl ballImpl2 = new DynamicBodyImpl(1f);
 
-		ballImpl2.getPosition().set(500, 300);
+		ballImpl2.getPosition().set(500, 150);
 		ballImpl2.addCollider(new Limit(ballImpl2, 0, 0, DOWN, 25));
 		ballImpl2.getVelocity().set(-10, -100);
 		world.add(ballImpl2);
