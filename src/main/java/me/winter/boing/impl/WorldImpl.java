@@ -85,7 +85,7 @@ public class WorldImpl extends OptimizedWorld implements Iterable<Body>
 		}
 
 
-		System.out.println();
+		//System.out.println();
 	}
 
 	/**

@@ -5,6 +5,8 @@ import me.winter.boing.Collision;
 import me.winter.boing.DynamicBody;
 
 import static java.lang.Math.abs;
+import static java.lang.Math.nextAfter;
+import static java.lang.Math.signum;
 import static me.winter.boing.util.VelocityUtil.incrementMantissa;
 
 /**
@@ -20,21 +22,34 @@ public class ReplaceResolver implements CollisionResolver
 		float deltaA = collision.weightRatio;
 		float deltaB = 1f - deltaA;
 
+		float peneA = deltaB * collision.penetration;
+		float peneB = deltaA * collision.penetration;
+
 		if(deltaB > 0)
-			replace((DynamicBody)collision.colliderA.getBody(), collision.normalB, deltaB * collision.penetration);
+			replace((DynamicBody)collision.colliderA.getBody(), collision.normalB, peneA);
 
 		if(deltaA > 0)
-			replace((DynamicBody)collision.colliderB.getBody(), collision.normalA, deltaA * collision.penetration);
+			replace((DynamicBody)collision.colliderB.getBody(), collision.normalA, peneB);
+
+
+		//if((double)peneA + (double)peneB != (double)collision.penetration)
+		//	System.out.println(peneA + " + " + peneB + " = " + (peneA + peneB) + " (instead of " + collision.penetration + ")");
 	}
 
 	private void replace(DynamicBody solid, Vector2 normal, float delta)
 	{
+		//assert normal.len() == 1f;
+
 		float replaceX = normal.x * delta;
 		float replaceY = normal.y * delta;
 
-		replaceX = incrementMantissa(replaceX);
-		replaceY = incrementMantissa(replaceY);
+		//replaceX = incrementMantissa(replaceX);
+		//replaceY = incrementMantissa(replaceY);
+		//replaceX += normal.x;
+		//replaceY += normal.y;
 
+		//replaceX = nextAfter(replaceX, replaceX + normal.x);
+		//replaceY = nextAfter(replaceY, replaceY + normal.y);
 
 		//if(replaceX != 0 && abs(replaceX) < FLOAT_ROUNDING_ERROR)
 		//	replaceX = signum(replaceX) * FLOAT_ROUNDING_ERROR;
