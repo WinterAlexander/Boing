@@ -48,8 +48,11 @@ public class ReplaceResolver implements CollisionResolver
 		//replaceX += normal.x;
 		//replaceY += normal.y;
 
-		//replaceX = nextAfter(replaceX, replaceX + normal.x);
-		//replaceY = nextAfter(replaceY, replaceY + normal.y);
+		//System.out.print("X: " + replaceX + " -> ");
+		//System.out.print("Y:" + replaceY + " -> ");
+
+		replaceX = nextAfter(replaceX, replaceX + normal.x);
+		replaceY = nextAfter(replaceY, replaceY + normal.y);
 
 		//if(replaceX != 0 && abs(replaceX) < FLOAT_ROUNDING_ERROR)
 		//	replaceX = signum(replaceX) * FLOAT_ROUNDING_ERROR;
