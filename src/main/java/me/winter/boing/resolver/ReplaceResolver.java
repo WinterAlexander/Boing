@@ -34,10 +34,6 @@ public class ReplaceResolver implements CollisionResolver
 		float replaceX = normal.x * delta;
 		float replaceY = normal.y * delta;
 
-		System.out.println("ReplaceX: " + replaceX);
-		System.out.println("ReplaceY: " + replaceY);
-
-
 		if(abs(replaceX) > abs(solid.getCollisionShifing().x))
 		{
 			solid.getPosition().x += replaceX - solid.getCollisionShifing().x;

@@ -21,7 +21,7 @@ public class WorldImpl extends OptimizedWorld implements Iterable<Body>
 	private Queue<DynamicBody> dynamics = new Queue<>();
 	private Queue<Body> all = new Queue<>();
 
-	private int n = 0;
+	//private int n = 0;
 
 	public WorldImpl(CollisionResolver resolver)
 	{
@@ -37,7 +37,7 @@ public class WorldImpl extends OptimizedWorld implements Iterable<Body>
 				((UpdatableBody)dynamic).update(delta);
 		}
 
-		System.out.println("Frame: " + n++);
+		//System.out.println("Frame: " + n++);
 
 		for(DynamicBody dynamic : dynamics)
 		{
@@ -73,7 +73,7 @@ public class WorldImpl extends OptimizedWorld implements Iterable<Body>
 			}*/
 
 
-			System.out.println("    " + dynamic.getClass().getSimpleName() + ": " + dynamic.getPosition() + " -> " + dynamic.getMovement());
+			//System.out.println("    " + dynamic.getClass().getSimpleName() + ": " + dynamic.getPosition() + " -> " + dynamic.getMovement());
 			dynamic.getPosition().add(dynamic.getMovement());
 
 			//VectorUtil.append(dynamic.getMovement(), dynamic.getCollisionShifing());

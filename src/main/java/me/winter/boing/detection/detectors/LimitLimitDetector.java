@@ -119,8 +119,6 @@ public class LimitLimitDetector extends PooledDetector<Limit, Limit>
 		collision.setImpactVelocities(limitA.getBody(), limitB.getBody());
 		collision.penetration = -(diff + vecDiff);
 
-		System.out.println("pene: " + collision.penetration);
-
 		collision.contactSurface = surface;
 
 		return collision;
