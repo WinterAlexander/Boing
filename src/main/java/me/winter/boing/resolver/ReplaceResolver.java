@@ -16,16 +16,13 @@ public class ReplaceResolver implements CollisionResolver
 	@Override
 	public void resolve(Collision collision)
 	{
-		float deltaA = collision.weightRatio;
-		float deltaB = 1f - deltaA;
+		float peneB = collision.weightRatio * collision.penetration;
+		float peneA = collision.penetration - peneB;
 
-		float peneA = deltaB * collision.penetration;
-		float peneB = deltaA * collision.penetration;
-
-		if(deltaB > 0)
+		if(peneA > 0)
 			replace((DynamicBody)collision.colliderA.getBody(), collision.normalB, peneA);
 
-		if(deltaA > 0)
+		if(peneB > 0)
 			replace((DynamicBody)collision.colliderB.getBody(), collision.normalA, peneB);
 	}
 
