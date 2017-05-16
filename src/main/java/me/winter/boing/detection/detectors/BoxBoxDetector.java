@@ -6,13 +6,13 @@ import me.winter.boing.Collision;
 import me.winter.boing.DynamicBody;
 import me.winter.boing.detection.PooledDetector;
 import me.winter.boing.shapes.Box;
-import me.winter.boing.shapes.Limit;
 
-import static com.badlogic.gdx.math.MathUtils.FLOAT_ROUNDING_ERROR;
 import static com.badlogic.gdx.math.Vector2.Zero;
-import static java.lang.Math.abs;
 import static java.lang.Math.max;
 import static java.lang.Math.min;
+import static me.winter.boing.util.FloatUtil.areEqual;
+import static me.winter.boing.util.FloatUtil.isGreaterOrEqual;
+import static me.winter.boing.util.FloatUtil.isSmallerOrEqual;
 
 /**
  * Detects collisions between 2 Axis Aligned Bounding Box
@@ -68,10 +68,10 @@ public class BoxBoxDetector extends PooledDetector<Box, Box>
 
 	public Collision collides(float ax, float ay, float nx, float ny, float hsA, Vector2 vecA, float bx, float by, float nx2, float ny2, float hsB, Vector2 vecB)
 	{
-		if(Vector2.dot(nx, ny, nx2, ny2) + 1 > FLOAT_ROUNDING_ERROR)
+		if(!areEqual(Vector2.dot(nx, ny, nx2, ny2), -1))
 			return null;
 
-		if((ax * nx + ay * ny) - (bx * nx + by * ny) < -FLOAT_ROUNDING_ERROR) //if limitA after his velocity isn't after limitB with his velocity
+		if(!isGreaterOrEqual(ax * nx + ay * ny, bx * nx + by * ny)) //if limitB with his velocity isn't after boxA with his velocity
 			return null; //no collision
 
 		float pax = ax - vecA.x; //previous x for A
@@ -79,7 +79,7 @@ public class BoxBoxDetector extends PooledDetector<Box, Box>
 		float pbx = bx - vecB.x; //previous x for B
 		float pby = by - vecB.y; //previous y for B
 
-		if((pax * nx + pay * ny) - (pbx * nx + pby * ny) > FLOAT_ROUNDING_ERROR) //if limitA isn't before limitB
+		if(!isSmallerOrEqual(pax * nx + pay * ny, pbx * nx + pby * ny)) //if limitB isn't before boxA
 			return null; //no collision
 
 		float diff = (pbx - pax) * nx + (pby - pay) * ny;
@@ -100,11 +100,8 @@ public class BoxBoxDetector extends PooledDetector<Box, Box>
 		float surface = min(max(limitA1, limitA2), max(limitB1, limitB2)) //minimum of the maximums
 				- max(min(limitA1, limitA2), min(limitB1, limitB2)); //maximum of the minimums
 
-		if(surface <= FLOAT_ROUNDING_ERROR)
+		if(areEqual(surface, 0))
 		{
-			if(surface < -FLOAT_ROUNDING_ERROR)
-				return null;
-
 			float sizeDiff = (hsB + hsA) * nx + (hsB + hsA) * ny;
 
 			midpoint = vecDiff != 0 ? (diff + vecDiff + sizeDiff) / vecDiff : 0f;
@@ -122,11 +119,13 @@ public class BoxBoxDetector extends PooledDetector<Box, Box>
 			surface = min(max(limitA1, limitA2), max(limitB1, limitB2)) //minimum of the maximums
 					- max(min(limitA1, limitA2), min(limitB1, limitB2)); //maximum of the minimums
 
-			if(surface <= FLOAT_ROUNDING_ERROR)
+			if(isSmallerOrEqual(surface, 0))
 				return null;
 
 			surface = 0f;
 		}
+		else if(surface < 0)
+			return null;
 
 		Collision collision = collisionPool.obtain();
 

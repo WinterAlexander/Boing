@@ -7,10 +7,12 @@ import me.winter.boing.DynamicBody;
 import me.winter.boing.detection.PooledDetector;
 import me.winter.boing.shapes.Limit;
 
-import static com.badlogic.gdx.math.MathUtils.FLOAT_ROUNDING_ERROR;
 import static com.badlogic.gdx.math.Vector2.Zero;
 import static java.lang.Math.max;
 import static java.lang.Math.min;
+import static me.winter.boing.util.FloatUtil.areEqual;
+import static me.winter.boing.util.FloatUtil.isGreaterOrEqual;
+import static me.winter.boing.util.FloatUtil.isSmallerOrEqual;
 
 /**
  * Detects collisions between 2 Limits. This is the only
@@ -28,7 +30,7 @@ public class LimitLimitDetector extends PooledDetector<Limit, Limit>
 	@Override
 	public Collision collides(Limit limitA, Limit limitB)
 	{
-		if(limitA.normal.dot(limitB.normal) + 1 > FLOAT_ROUNDING_ERROR)
+		if(!areEqual(limitA.normal.dot(limitB.normal), -1))
 			return null;
 
 		Vector2 vecA = limitA.getBody() instanceof DynamicBody
@@ -47,7 +49,7 @@ public class LimitLimitDetector extends PooledDetector<Limit, Limit>
 		float nx = limitA.normal.x; //normal X
 		float ny = limitA.normal.y; //normal Y
 
-		if((ax * nx + ay * ny) - (bx * nx + by * ny) < -FLOAT_ROUNDING_ERROR) //if limitA after his velocity isn't after limitB with his velocity
+		if(!isGreaterOrEqual(ax * nx + ay * ny, bx * nx + by * ny)) //if limitB with his velocity isn't after boxA with his velocity
 			return null; //no collision
 
 		float pax = ax - vecA.x; //previous x for A
@@ -55,8 +57,9 @@ public class LimitLimitDetector extends PooledDetector<Limit, Limit>
 		float pbx = bx - vecB.x; //previous x for B
 		float pby = by - vecB.y; //previous y for B
 
-		if((pax * nx + pay * ny) - (pbx * nx + pby * ny) > FLOAT_ROUNDING_ERROR) //if limitA isn't before limitB
+		if(!isSmallerOrEqual(pax * nx + pay * ny, pbx * nx + pby * ny)) //if limitB isn't before boxA
 			return null; //no collision
+
 
 		float diff = (pbx - pax) * nx + (pby - pay) * ny;
 		float vecDiff = (vecB.x - vecA.x) * nx + (vecB.y - vecA.y) * ny;
@@ -79,7 +82,7 @@ public class LimitLimitDetector extends PooledDetector<Limit, Limit>
 		float surface = min(max(limitA1, limitA2), max(limitB1, limitB2)) //minimum of the maximums
 					- max(min(limitA1, limitA2), min(limitB1, limitB2)); //maximum of the minimums
 
-		if(surface <= FLOAT_ROUNDING_ERROR)
+		if(areEqual(surface, 0))
 		{
 			float sizeDiff = (hsB + hsA) * nx + (hsB + hsA) * ny;
 
@@ -98,11 +101,13 @@ public class LimitLimitDetector extends PooledDetector<Limit, Limit>
 			surface = min(max(limitA1, limitA2), max(limitB1, limitB2)) //minimum of the maximums
 					- max(min(limitA1, limitA2), min(limitB1, limitB2)); //maximum of the minimums
 
-			if(surface <= FLOAT_ROUNDING_ERROR)
+			if(isSmallerOrEqual(surface, 0))
 				return null;
 
 			surface = 0f;
 		}
+		else if(surface < 0)
+			return null;
 
 		Collision collision = collisionPool.obtain();
 
@@ -113,6 +118,8 @@ public class LimitLimitDetector extends PooledDetector<Limit, Limit>
 		collision.normalB.set(limitB.normal);
 		collision.setImpactVelocities(limitA.getBody(), limitB.getBody());
 		collision.penetration = -(diff + vecDiff);
+
+		System.out.println("pene: " + collision.penetration);
 
 		collision.contactSurface = surface;
 
