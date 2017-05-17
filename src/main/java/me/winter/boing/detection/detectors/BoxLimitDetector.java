@@ -126,7 +126,7 @@ public class BoxLimitDetector extends PooledDetector<Box, Limit>
 		collision.normalA.set(nx, ny);
 		collision.normalB.set(limitB.normal);
 		collision.setImpactVelocities(boxA.getBody(), limitB.getBody());
-		collision.penetration = -(diff + vecDiff);
+		collision.penetration = -((bx - ax) * nx + (by - ay) * ny);
 
 		collision.contactSurface = surface;
 

@@ -8,6 +8,7 @@ import me.winter.boing.detection.PooledDetector;
 import me.winter.boing.shapes.Limit;
 
 import static com.badlogic.gdx.math.Vector2.Zero;
+import static java.lang.Math.abs;
 import static java.lang.Math.max;
 import static java.lang.Math.min;
 import static me.winter.boing.util.FloatUtil.areEqual;
@@ -84,7 +85,7 @@ public class LimitLimitDetector extends PooledDetector<Limit, Limit>
 
 		if(areEqual(surface, 0))
 		{
-			float sizeDiff = (hsB + hsA) * nx + (hsB + hsA) * ny;
+			float sizeDiff = (hsB + hsA) * abs(nx) + (hsB + hsA) * abs(ny);
 
 			midpoint = vecDiff != 0 ? (diff + vecDiff + sizeDiff) / vecDiff : 0f;
 

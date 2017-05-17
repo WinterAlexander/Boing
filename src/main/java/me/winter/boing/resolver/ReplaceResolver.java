@@ -1,6 +1,5 @@
 package me.winter.boing.resolver;
 
-import com.badlogic.gdx.math.Vector2;
 import me.winter.boing.Collision;
 import me.winter.boing.DynamicBody;
 
@@ -16,31 +15,104 @@ public class ReplaceResolver implements CollisionResolver
 	@Override
 	public void resolve(Collision collision)
 	{
-		float peneB = collision.weightRatio * collision.penetration;
-		float peneA = collision.penetration - peneB;
+		float delta = collision.weightRatio * collision.penetration;
 
-		if(peneA > 0)
-			replace((DynamicBody)collision.colliderA.getBody(), collision.normalB, peneA);
+		StringBuilder debugBuilder = new StringBuilder();
 
-		if(peneB > 0)
-			replace((DynamicBody)collision.colliderB.getBody(), collision.normalA, peneB);
-	}
+		debugBuilder.append("Delta: " + delta + "\n");
+		debugBuilder.append("Original pos A: " + collision.colliderA.getBody().getPosition().y + "\n");
+		debugBuilder.append("Original pos B: " + collision.colliderB.getBody().getPosition().y + "\n");
 
-	private void replace(DynamicBody solid, Vector2 normal, float delta)
-	{
-		float replaceX = normal.x * delta;
-		float replaceY = normal.y * delta;
+		debugBuilder.append("Predicted pos A: " + (collision.colliderA.getBody().getPosition().y + collision.penetration - collision.normalB.y * delta - ((DynamicBody)collision.colliderA.getBody()).getCollisionShifing().y) + "\n");
+		debugBuilder.append("Predicted pos B: " + (collision.colliderB.getBody().getPosition().y + collision.normalA.y * delta - ((DynamicBody)collision.colliderB.getBody()).getCollisionShifing().y) + "\n");
 
-		if(abs(replaceX) > abs(solid.getCollisionShifing().x))
+		if(collision.colliderA.getBody().getPosition().y + collision.penetration - collision.normalB.y * delta - ((DynamicBody)collision.colliderA.getBody()).getCollisionShifing().y != collision.colliderB.getBody().getPosition().y + collision.normalA.y * delta - ((DynamicBody)collision.colliderB.getBody()).getCollisionShifing().y)
 		{
-			solid.getPosition().x += replaceX - solid.getCollisionShifing().x;
-			solid.getCollisionShifing().x = replaceX;
+			System.out.println("before rip");
 		}
 
-		if(abs(replaceY) > abs(solid.getCollisionShifing().y))
+		if(delta < collision.penetration)
 		{
-			solid.getPosition().y += replaceY - solid.getCollisionShifing().y;
-			solid.getCollisionShifing().y = replaceY;
+			DynamicBody solid = (DynamicBody)collision.colliderA.getBody();
+
+			if(abs(collision.normalB.x * delta) > abs(solid.getCollisionShifing().x))
+			{
+				solid.getPosition().x = solid.getPosition().x + collision.penetration - collision.normalB.x * delta - solid.getCollisionShifing().x;
+				solid.getCollisionShifing().x = collision.penetration - collision.normalB.x * delta;
+			}
+
+			if(abs(collision.normalB.y * delta) > abs(solid.getCollisionShifing().y))
+			{
+				solid.getPosition().y = solid.getPosition().y + collision.penetration - collision.normalB.y * delta - solid.getCollisionShifing().y;
+				solid.getCollisionShifing().y = collision.penetration - collision.normalB.y * delta;
+			}
+
+			/*
+			float replaceX = collision.normalB.x * delta;
+			float replaceY = collision.normalB.y * delta;
+
+			if(abs(replaceX) > abs(solid.getCollisionShifing().x))
+			{
+				solid.getPosition().x += collision.penetration - replaceX - solid.getCollisionShifing().x;
+				solid.getCollisionShifing().x = collision.penetration - replaceX;
+			}
+
+			if(abs(replaceY) > abs(solid.getCollisionShifing().y))
+			{
+				solid.getPosition().y += collision.penetration - replaceY - solid.getCollisionShifing().y;
+				solid.getCollisionShifing().y = collision.penetration - replaceY;
+			}*/
+		}
+		else
+		{
+			System.out.println("rip common sense");
+		}
+
+		if(delta > 0)
+		{
+			DynamicBody solid = (DynamicBody)collision.colliderB.getBody();
+
+			if(abs(collision.normalA.x * delta) > abs(solid.getCollisionShifing().x))
+			{
+				solid.getPosition().x = solid.getPosition().x + collision.normalA.x * delta - solid.getCollisionShifing().x;
+				solid.getCollisionShifing().x = collision.normalA.x * delta;
+			}
+
+			if(abs(collision.normalA.y * delta) > abs(solid.getCollisionShifing().y))
+			{
+				solid.getPosition().y = solid.getPosition().y + collision.normalA.y * delta - solid.getCollisionShifing().y;
+				solid.getCollisionShifing().y = collision.normalA.y * delta;
+			}
+
+			/*
+			float replaceX = collision.normalA.x * delta;
+			float replaceY = collision.normalA.y * delta;
+
+			if(abs(replaceX) > abs(solid.getCollisionShifing().x))
+			{
+				solid.getPosition().x += replaceX - solid.getCollisionShifing().x;
+				solid.getCollisionShifing().x = replaceX;
+			}
+
+			if(abs(replaceY) > abs(solid.getCollisionShifing().y))
+			{
+				solid.getPosition().y += replaceY - solid.getCollisionShifing().y;
+				solid.getCollisionShifing().y = replaceY;
+			}*/
+		}
+		else
+		{
+			System.out.println("rip common sense");
+		}
+
+		debugBuilder.append("Final pos A: " + collision.colliderA.getBody().getPosition().y + "\n");
+		debugBuilder.append("Final pos B: " + collision.colliderB.getBody().getPosition().y + "\n");
+
+		if(collision.colliderA.getBody().getPosition().y != collision.colliderB.getBody().getPosition().y)
+		{
+			System.out.println("after rip");
+			System.out.println(debugBuilder.toString());
 		}
 	}
+
 }

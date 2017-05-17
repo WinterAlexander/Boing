@@ -8,7 +8,7 @@ import static java.lang.Math.ulp;
  * <p>
  * Created by Alexander Winter on 2017-05-16.
  */
-public class FloatUtil
+public strictfp class FloatUtil
 {
 	public static final int DEFAULT_ULPS = 5;
 
@@ -16,17 +16,20 @@ public class FloatUtil
 
 	public static boolean areEqual(float a, float b, int ulps)
 	{
-		return abs(a - b) < ulps * ulp(a);
+		return a == b;
+		//return abs(a - b) < ulps * ulp(a);
 	}
 
 	public static boolean isGreaterOrEqual(float a, float b, int ulps)
 	{
-		return a - b > ulps * -ulp(a);
+		return a >= b;
+		//return a - b > ulps * -ulp(a);
 	}
 
 	public static boolean isSmallerOrEqual(float a, float b, int ulps)
 	{
-		return a - b < ulps * ulp(a);
+		return a <= b;
+		//return a - b < ulps * ulp(a);
 	}
 
 	public static boolean areEqual(float a, float b)

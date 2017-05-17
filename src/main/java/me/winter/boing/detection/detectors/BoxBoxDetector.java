@@ -131,7 +131,7 @@ public class BoxBoxDetector extends PooledDetector<Box, Box>
 
 		collision.normalA.set(nx, ny);
 		collision.normalB.set(nx2, ny2);
-		collision.penetration = -(diff + vecDiff);
+		collision.penetration = -((bx - ax) * nx + (by - ay) * ny);
 
 		collision.contactSurface = surface;
 

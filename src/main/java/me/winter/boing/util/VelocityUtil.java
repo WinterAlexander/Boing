@@ -16,7 +16,7 @@ public class VelocityUtil
 {
 	private VelocityUtil() {}
 
-	public static void reflect(Vector2 velocity, Vector2 normal)
+	public static strictfp void reflect(Vector2 velocity, Vector2 normal)
 	{
 		if(normal.y == 0)//means vertical tangent
 		{
@@ -44,7 +44,7 @@ public class VelocityUtil
 	 * @param weightB weightB
 	 * @return the ratio of the weightA over the 2 weights
 	 */
-	public static float getWeightRatio(float weightA, float weightB)
+	public static strictfp float getWeightRatio(float weightA, float weightB)
 	{
 		if(weightA == POSITIVE_INFINITY)
 			return weightB == POSITIVE_INFINITY ? 0.5f : 1f;
@@ -61,7 +61,7 @@ public class VelocityUtil
 		return weightA / (weightA + weightB);
 	}
 
-	public static float incrementMantissa(float value)
+	public static strictfp float incrementMantissa(float value)
 	{
 		int rest = floatToIntBits(value) ^ 0x7FFFFF;
 		int mantissa = floatToIntBits(value) & 0x7FFFFF;
