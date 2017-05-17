@@ -39,22 +39,33 @@ public class BoxBoxDetector extends PooledDetector<Box, Box>
 
 		float ax = boxA.getAbsX();
 		float ay = boxA.getAbsY();
-
-
 		float bx = boxB.getAbsX();
 		float by = boxB.getAbsY();
 
+		float pax = boxA.getAbsX();
+		float pay = boxA.getAbsY();
+		float pbx = boxB.getAbsX();
+		float pby = boxB.getAbsY();
 
-		Collision collision = collides(ax, ay + boxA.height / 2, 0, 1, boxA.width / 2, vecA, bx, by - boxB.height / 2, 0, -1, boxB.width / 2, vecB);
+
+		Collision collision = collides(
+				ax, ay + boxA.height / 2, 0, 1, boxA.width / 2, vecA, pax, pay + boxA.height / 2,
+				bx, by - boxB.height / 2, 0, -1, boxB.width / 2, vecB, pbx, pby - boxB.height / 2);
 
 		if(collision == null)
-			collision = collides(ax, ay - boxA.height / 2, 0, -1, boxA.width / 2, vecA, bx, by + boxB.height / 2, 0, 1, boxB.width / 2, vecB);
+			collision = collides(
+					ax, ay - boxA.height / 2, 0, -1, boxA.width / 2, vecA, pax, pay - boxA.height / 2,
+					bx, by + boxB.height / 2, 0, 1, boxB.width / 2, vecB,  pbx, pby + boxB.height / 2);
 
 		if(collision == null)
-			collision = collides(ax + boxA.width / 2, ay, 1, 0, boxA.height / 2, vecA, bx - boxB.width / 2, by, -1, 0, boxB.height / 2, vecB);
+			collision = collides(
+					ax + boxA.width / 2, ay, 1, 0, boxA.height / 2, vecA, pax + boxA.width / 2, pay,
+					bx - boxB.width / 2, by, -1, 0, boxB.height / 2, vecB, pbx - boxB.width / 2, pay);
 
 		if(collision == null)
-			collision = collides(ax - boxA.width / 2, ay, -1, 0, boxA.height / 2, vecA, bx + boxB.width / 2, by, 1, 0, boxB.height / 2, vecB);
+			collision = collides(
+					ax - boxA.width / 2, ay, -1, 0, boxA.height / 2, vecA, pax - boxA.width / 2, pay,
+					bx + boxB.width / 2, by, 1, 0, boxB.height / 2, vecB, pbx + boxB.width / 2, pay);
 
 		if(collision == null)
 			return null;
@@ -66,7 +77,7 @@ public class BoxBoxDetector extends PooledDetector<Box, Box>
 		return collision;
 	}
 
-	public Collision collides(float ax, float ay, float nx, float ny, float hsA, Vector2 vecA, float bx, float by, float nx2, float ny2, float hsB, Vector2 vecB)
+	public Collision collides(float ax, float ay, float nx, float ny, float hsA, Vector2 vecA, float pax, float pay, float bx, float by, float nx2, float ny2, float hsB, Vector2 vecB, float pbx, float pby)
 	{
 		if(!areEqual(Vector2.dot(nx, ny, nx2, ny2), -1))
 			return null;
@@ -74,10 +85,6 @@ public class BoxBoxDetector extends PooledDetector<Box, Box>
 		if(!isGreaterOrEqual(ax * nx + ay * ny, bx * nx + by * ny)) //if limitB with his velocity isn't after boxA with his velocity
 			return null; //no collision
 
-		float pax = ax - vecA.x; //previous x for A
-		float pay = ay - vecA.y; //previous y for A
-		float pbx = bx - vecB.x; //previous x for B
-		float pby = by - vecB.y; //previous y for B
 
 		if(!isSmallerOrEqual(pax * nx + pay * ny, pbx * nx + pby * ny)) //if limitB isn't before boxA
 			return null; //no collision

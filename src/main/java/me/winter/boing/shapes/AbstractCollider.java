@@ -1,6 +1,7 @@
 package me.winter.boing.shapes;
 
 import me.winter.boing.Body;
+import me.winter.boing.DynamicBody;
 
 /**
  * Abstract implementation of a Collider. Has a relative
@@ -38,6 +39,22 @@ public abstract class AbstractCollider implements Collider
 	public float getAbsY()
 	{
 		return y + body.getPosition().y;
+	}
+
+	@Override
+	public float getPrevAbsX()
+	{
+		if(body instanceof DynamicBody)
+			return x + ((DynamicBody)body).getPreviousPos().x;
+		return getAbsX();
+	}
+
+	@Override
+	public float getPrevAbsY()
+	{
+		if(body instanceof DynamicBody)
+			return y + ((DynamicBody)body).getPreviousPos().y;
+		return getAbsY();
 	}
 
 	@Override

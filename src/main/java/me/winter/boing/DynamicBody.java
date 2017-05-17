@@ -9,6 +9,13 @@ import com.badlogic.gdx.math.Vector2;
  */
 public interface DynamicBody extends Body
 {
+
+	/**
+	 *
+	 * @return previous position of the body
+	 */
+	Vector2 getPreviousPos();
+
 	/**
 	 * The velocity of a DynamicBody represents how fast it's currently going.
 	 *

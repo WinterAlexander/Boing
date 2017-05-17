@@ -42,10 +42,10 @@ public class LimitLimitDetector extends PooledDetector<Limit, Limit>
 					? ((DynamicBody)limitB.getBody()).getMovement()
 					: Zero;
 
-		float ax = limitA.getAbsX();
-		float ay = limitA.getAbsY();
-		float bx = limitB.getAbsX();
-		float by = limitB.getAbsY();
+		float ax = limitA.getPrevAbsX() + vecA.x;
+		float ay = limitA.getPrevAbsY() + vecA.y;
+		float bx = limitB.getPrevAbsX() + vecB.x;
+		float by = limitB.getPrevAbsY() + vecB.y;
 
 		float nx = limitA.normal.x; //normal X
 		float ny = limitA.normal.y; //normal Y
@@ -53,14 +53,13 @@ public class LimitLimitDetector extends PooledDetector<Limit, Limit>
 		if(!isGreaterOrEqual(ax * nx + ay * ny, bx * nx + by * ny)) //if limitB with his velocity isn't after boxA with his velocity
 			return null; //no collision
 
-		float pax = ax - vecA.x; //previous x for A
-		float pay = ay - vecA.y; //previous y for A
-		float pbx = bx - vecB.x; //previous x for B
-		float pby = by - vecB.y; //previous y for B
+		float pax = limitA.getPrevAbsX(); //previous x for A
+		float pay = limitA.getPrevAbsY(); //previous y for A
+		float pbx = limitB.getPrevAbsX(); //previous x for B
+		float pby = limitB.getPrevAbsY(); //previous y for B
 
 		if(!isSmallerOrEqual(pax * nx + pay * ny, pbx * nx + pby * ny)) //if limitB isn't before boxA
 			return null; //no collision
-
 
 		float diff = (pbx - pax) * nx + (pby - pay) * ny;
 		float vecDiff = (vecB.x - vecA.x) * nx + (vecB.y - vecA.y) * ny;

@@ -25,6 +25,16 @@ public interface Collider
 	float getAbsY();
 
 	/**
+	 * @return absolute x previous position of this collider
+	 */
+	float getPrevAbsX();
+
+	/**
+	 * @return absolute y previous position of this collider
+	 */
+	float getPrevAbsY();
+
+	/**
 	 * A tag can be used to keep track of a Collider within it's use
 	 *
 	 * @return tag of this collider

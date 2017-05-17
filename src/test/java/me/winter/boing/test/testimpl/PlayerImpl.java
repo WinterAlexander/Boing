@@ -25,7 +25,7 @@ import static me.winter.boing.util.VectorUtil.UP;
 public class PlayerImpl extends BodyImpl implements UpdatableBody
 {
 	private boolean onGround;
-	private Vector2 velocity = new Vector2(), movement = new Vector2(), lastReplacement = new Vector2();
+	private Vector2 prevPos = new Vector2(), velocity = new Vector2(), movement = new Vector2(), lastReplacement = new Vector2();
 
 
 	@Override
@@ -57,6 +57,12 @@ public class PlayerImpl extends BodyImpl implements UpdatableBody
 	{
 		if(collision.normalA.dot(DOWN) > 0.7 && collision.impactVelA.dot(DOWN) > 0.7)
 			onGround = true;
+	}
+
+	@Override
+	public Vector2 getPreviousPos()
+	{
+		return prevPos;
 	}
 
 	@Override
