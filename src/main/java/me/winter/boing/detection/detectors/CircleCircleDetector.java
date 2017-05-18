@@ -13,6 +13,7 @@ import static me.winter.boing.util.VectorUtil.divide;
  * <p>
  * Created by Alexander Winter on 2017-04-12.
  */
+@Deprecated
 public class CircleCircleDetector extends PooledDetector<Circle, Circle>
 {
 	public CircleCircleDetector(Pool<Collision> collisionPool)

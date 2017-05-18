@@ -1,12 +1,11 @@
-package me.winter.boing.test.simulation;
+package me.winter.boing.util;
 
 import me.winter.boing.Body;
-import me.winter.boing.impl.WorldImpl;
 import me.winter.boing.shapes.Box;
 import me.winter.boing.shapes.Circle;
 import me.winter.boing.shapes.Collider;
 import me.winter.boing.shapes.Limit;
-import me.winter.boing.test.testimpl.TestWorldImpl;
+import me.winter.boing.testimpl.TestWorldImpl;
 import org.junit.Ignore;
 
 import javax.swing.JFrame;

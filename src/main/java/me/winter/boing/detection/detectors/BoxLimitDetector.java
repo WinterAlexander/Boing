@@ -12,6 +12,7 @@ import static com.badlogic.gdx.math.Vector2.Zero;
 import static java.lang.Math.abs;
 import static java.lang.Math.max;
 import static java.lang.Math.min;
+import static me.winter.boing.util.FloatUtil.DEFAULT_ULPS;
 import static me.winter.boing.util.FloatUtil.areEqual;
 import static me.winter.boing.util.FloatUtil.isGreaterOrEqual;
 import static me.winter.boing.util.FloatUtil.isSmallerOrEqual;
@@ -31,13 +32,10 @@ public class BoxLimitDetector extends PooledDetector<Box, Limit>
 	@Override
 	public Collision collides(Box boxA, Limit limitB)
 	{
-		Vector2 vecA = boxA.getBody() instanceof DynamicBody
-				? ((DynamicBody)boxA.getBody()).getMovement()
-				: Zero;
+		Vector2 vecA = boxA.getMovement();
+		Vector2 vecB = limitB.getMovement();
 
-		Vector2 vecB = limitB.getBody() instanceof DynamicBody
-				? ((DynamicBody)limitB.getBody()).getMovement()
-				: Zero;
+		float epsilon = DEFAULT_ULPS * max(boxA.getPrecision(), limitB.getPrecision());
 
 		float ax = boxA.getAbsX(); //abs X for a
 		float ay = boxA.getAbsY(); //abs Y for a
@@ -48,29 +46,26 @@ public class BoxLimitDetector extends PooledDetector<Box, Limit>
 		float nx = -limitB.normal.x; //normal X
 		float ny = -limitB.normal.y; //normal Y
 
-		float pax = boxA.getPrevAbsX(); //previous x for A
-		float pay = boxA.getPrevAbsY(); //previous y for A
-
 		if(abs(limitB.normal.x) > abs(limitB.normal.y)) //if collision is more horizontal than vertical
 		{
 			ax += nx * boxA.width / 2; //extends to side
-			pax += nx * boxA.width / 2;
 			hsA = boxA.height / 2;
 		}
 		else
 		{
 			ay += ny * boxA.height / 2; //extend to top/bottom
-			pay += ny * boxA.height / 2;
 			hsA = boxA.width / 2;
 		}
 
-		if(!isGreaterOrEqual(ax * nx + ay * ny, bx * nx + by * ny)) //if limitB with his velocity isn't after boxA with his velocity
+		if(!isGreaterOrEqual(ax * nx + ay * ny, bx * nx + by * ny, epsilon)) //if limitB with his velocity isn't after boxA with his velocity
 			return null; //no collision
 
-		float pbx = limitB.getPrevAbsX(); //previous x for B
-		float pby = limitB.getPrevAbsY(); //previous y for B
+		float pax = ax - vecA.x; //previous x for A
+		float pay = ay - vecA.y; //previous y for A
+		float pbx = bx - vecB.x; //previous x for B
+		float pby = by - vecB.y; //previous y for B
 
-		if(!isSmallerOrEqual(pax * nx + pay * ny, pbx * nx + pby * ny)) //if limitB isn't before boxA
+		if(!isSmallerOrEqual(pax * nx + pay * ny, pbx * nx + pby * ny, epsilon)) //if limitB isn't before boxA
 			return null; //no collision
 
 
@@ -94,7 +89,7 @@ public class BoxLimitDetector extends PooledDetector<Box, Limit>
 		float surface = min(max(limitA1, limitA2), max(limitB1, limitB2)) //minimum of the maximums
 				- max(min(limitA1, limitA2), min(limitB1, limitB2)); //maximum of the minimums
 
-		if(areEqual(surface, 0))
+		if(areEqual(surface, 0, epsilon))
 		{
 			float sizeDiff = (hsB + hsA) * nx + (hsB + hsA) * ny;
 
@@ -113,7 +108,7 @@ public class BoxLimitDetector extends PooledDetector<Box, Limit>
 			surface = min(max(limitA1, limitA2), max(limitB1, limitB2)) //minimum of the maximums
 					- max(min(limitA1, limitA2), min(limitB1, limitB2)); //maximum of the minimums
 
-			if(isSmallerOrEqual(surface, 0))
+			if(isSmallerOrEqual(surface, 0, epsilon))
 				return null;
 
 			surface = 0f;

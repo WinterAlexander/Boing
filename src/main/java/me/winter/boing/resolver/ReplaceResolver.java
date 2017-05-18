@@ -18,7 +18,7 @@ public class ReplaceResolver implements CollisionResolver
 		float pene = collision.penetration;
 		float delta = collision.weightRatio * pene;
 
-		StringBuilder debugBuilder = new StringBuilder();
+		/*StringBuilder debugBuilder = new StringBuilder();
 
 		debugBuilder.append("Delta: " + delta + "\n");
 		debugBuilder.append("Original pos A: " + collision.colliderA.getBody().getPosition().y + "\n");
@@ -27,7 +27,7 @@ public class ReplaceResolver implements CollisionResolver
 		if(collision.colliderA.getBody().getPosition().y + pene - collision.normalB.y * delta - ((DynamicBody)collision.colliderA.getBody()).getCollisionShifing().y != collision.colliderB.getBody().getPosition().y + collision.normalA.y * delta - ((DynamicBody)collision.colliderB.getBody()).getCollisionShifing().y)
 		{
 			System.out.println("before rip");
-		}
+		}*/
 
 		if(delta < pene)
 		{
@@ -65,7 +65,7 @@ public class ReplaceResolver implements CollisionResolver
 				solid.getCollisionShifing().y = replaceY;
 			}
 		}
-
+/*
 		debugBuilder.append("Final pos A: " + collision.colliderA.getBody().getPosition().y + "\n");
 		debugBuilder.append("Final pos B: " + collision.colliderB.getBody().getPosition().y + "\n");
 
@@ -73,7 +73,7 @@ public class ReplaceResolver implements CollisionResolver
 		{
 			System.out.println("after rip");
 			System.out.println(debugBuilder.toString());
-		}
+		}*/
 	}
 
 }

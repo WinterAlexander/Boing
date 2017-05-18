@@ -1,4 +1,4 @@
-package me.winter.boing.test.util;
+package me.winter.boing.util;
 
 /**
  * Undocumented :(

@@ -1,4 +1,4 @@
-package me.winter.boing.test.util;
+package me.winter.boing.util;
 
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;

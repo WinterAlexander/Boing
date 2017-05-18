@@ -12,7 +12,7 @@ import org.junit.Test;
 import static me.winter.boing.util.VectorUtil.LEFT;
 import static me.winter.boing.util.VectorUtil.UP;
 import static org.junit.Assert.assertEquals;
-import static me.winter.boing.test.util.VectorAssert.assertEquals;
+import static me.winter.boing.util.VectorAssert.assertEquals;
 
 /**
  * Undocumented :(

@@ -1,17 +1,22 @@
-package me.winter.boing.test.simulation;
+package me.winter.boing.simulation;
 
+import me.winter.boing.Collision;
 import me.winter.boing.DynamicBody;
 import me.winter.boing.impl.BodyImpl;
 import me.winter.boing.impl.DynamicBodyImpl;
 import me.winter.boing.resolver.ReplaceResolver;
 import me.winter.boing.shapes.Box;
 import me.winter.boing.shapes.Limit;
-import me.winter.boing.test.testimpl.GravityAffected;
-import me.winter.boing.test.testimpl.PlayerImpl;
-import me.winter.boing.test.testimpl.TestWorldImpl;
+import me.winter.boing.testimpl.GravityAffected;
+import me.winter.boing.testimpl.PlayerImpl;
+import me.winter.boing.testimpl.TestWorldImpl;
+import me.winter.boing.util.WorldSimulationUtil;
 import org.junit.Ignore;
 import org.junit.Test;
 
+import static me.winter.boing.testimpl.PlayerImpl.IsKeyPressed.aPressed;
+import static me.winter.boing.testimpl.PlayerImpl.IsKeyPressed.dPressed;
+import static me.winter.boing.testimpl.PlayerImpl.IsKeyPressed.jumpPressed;
 import static me.winter.boing.util.VectorUtil.DOWN;
 import static me.winter.boing.util.VectorUtil.LEFT;
 import static me.winter.boing.util.VectorUtil.RIGHT;
@@ -91,16 +96,32 @@ public class BoxStackSimulation
 	{
 		TestWorldImpl world = new TestWorldImpl(new ReplaceResolver());
 
-		PlayerImpl player = new PlayerImpl();
+		GravityAffected test = new GravityAffected() {
+			@Override
+			public void update(float delta)
+			{
+				super.update(delta);
+				getVelocity().y += 4;
+			}
+		};
+		test.getPosition().set(400, 500);
+		test.addCollider(new Box(test, 0, 0, 30, 30));
+		world.add(test);
+
+		PlayerImpl player = new PlayerImpl() {
+			@Override
+			public void notifyCollision(Collision collision)
+			{
+				if(collision.normalA.dot(DOWN) > 0.7 && collision.impactVelA.dot(DOWN) > 0.7 && collision.colliderB.getBody() != test)
+					onGround = true;
+			}
+		};
 
 		player.getPosition().set(400, 600);
 		player.addCollider(new Box(player, 0, 0, 20, 45));
 		world.add(player);
 
-		GravityAffected test = new GravityAffected();
-		test.getPosition().set(400, 500);
-		test.addCollider(new Box(test, 0, 0, 30, 30));
-		world.add(test);
+
 
 		GravityAffected test2 = new GravityAffected();
 		test2.getPosition().set(400, 400);

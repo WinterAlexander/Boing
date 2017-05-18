@@ -1,7 +1,12 @@
 package me.winter.boing.shapes;
 
+import com.badlogic.gdx.math.Vector2;
 import me.winter.boing.Body;
 import me.winter.boing.DynamicBody;
+
+import static com.badlogic.gdx.math.Vector2.Zero;
+import static java.lang.Math.max;
+import static java.lang.Math.ulp;
 
 /**
  * Abstract implementation of a Collider. Has a relative
@@ -41,20 +46,13 @@ public abstract class AbstractCollider implements Collider
 		return y + body.getPosition().y;
 	}
 
-	@Override
-	public float getPrevAbsX()
-	{
-		if(body instanceof DynamicBody)
-			return x + ((DynamicBody)body).getPreviousPos().x;
-		return getAbsX();
-	}
 
 	@Override
-	public float getPrevAbsY()
+	public Vector2 getMovement()
 	{
-		if(body instanceof DynamicBody)
-			return y + ((DynamicBody)body).getPreviousPos().y;
-		return getAbsY();
+		return body instanceof DynamicBody
+				? ((DynamicBody)body).getMovement()
+				: Zero;
 	}
 
 	@Override

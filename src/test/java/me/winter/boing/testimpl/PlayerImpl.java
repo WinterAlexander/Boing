@@ -1,4 +1,4 @@
-package me.winter.boing.test.testimpl;
+package me.winter.boing.testimpl;
 
 import com.badlogic.gdx.math.Vector2;
 import me.winter.boing.Collision;
@@ -11,11 +11,10 @@ import java.awt.KeyboardFocusManager;
 import java.awt.event.KeyEvent;
 
 import static java.lang.Math.abs;
-import static me.winter.boing.test.testimpl.PlayerImpl.IsKeyPressed.aPressed;
-import static me.winter.boing.test.testimpl.PlayerImpl.IsKeyPressed.dPressed;
-import static me.winter.boing.test.testimpl.PlayerImpl.IsKeyPressed.jumpPressed;
+import static me.winter.boing.testimpl.PlayerImpl.IsKeyPressed.aPressed;
+import static me.winter.boing.testimpl.PlayerImpl.IsKeyPressed.dPressed;
+import static me.winter.boing.testimpl.PlayerImpl.IsKeyPressed.jumpPressed;
 import static me.winter.boing.util.VectorUtil.DOWN;
-import static me.winter.boing.util.VectorUtil.UP;
 
 /**
  * Undocumented :(
@@ -24,8 +23,8 @@ import static me.winter.boing.util.VectorUtil.UP;
  */
 public class PlayerImpl extends BodyImpl implements UpdatableBody
 {
-	private boolean onGround;
-	private Vector2 prevPos = new Vector2(), velocity = new Vector2(), movement = new Vector2(), lastReplacement = new Vector2();
+	protected boolean onGround;
+	protected Vector2 velocity = new Vector2(), movement = new Vector2(), lastReplacement = new Vector2();
 
 
 	@Override
@@ -57,12 +56,6 @@ public class PlayerImpl extends BodyImpl implements UpdatableBody
 	{
 		if(collision.normalA.dot(DOWN) > 0.7 && collision.impactVelA.dot(DOWN) > 0.7)
 			onGround = true;
-	}
-
-	@Override
-	public Vector2 getPreviousPos()
-	{
-		return prevPos;
 	}
 
 	@Override

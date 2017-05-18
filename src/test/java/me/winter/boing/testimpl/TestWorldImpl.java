@@ -1,4 +1,4 @@
-package me.winter.boing.test.testimpl;
+package me.winter.boing.testimpl;
 
 import me.winter.boing.impl.WorldImpl;
 import me.winter.boing.resolver.CollisionResolver;

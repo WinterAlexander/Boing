@@ -5,7 +5,7 @@ import me.winter.boing.impl.WorldImpl;
 import me.winter.boing.resolver.CollisionResolver;
 import me.winter.boing.shapes.Circle;
 import me.winter.boing.shapes.Limit;
-import me.winter.boing.test.util.MutableInt;
+import me.winter.boing.util.MutableInt;
 import org.junit.Ignore;
 import org.junit.Test;
 

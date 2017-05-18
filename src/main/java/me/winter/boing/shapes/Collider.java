@@ -1,5 +1,6 @@
 package me.winter.boing.shapes;
 
+import com.badlogic.gdx.math.Vector2;
 import me.winter.boing.Body;
 
 /**
@@ -25,14 +26,15 @@ public interface Collider
 	float getAbsY();
 
 	/**
-	 * @return absolute x previous position of this collider
+	 * @return precision needed when comparing this collider with others
 	 */
-	float getPrevAbsX();
+	float getPrecision();
 
 	/**
-	 * @return absolute y previous position of this collider
+	 *
+	 * @return the current movement of the body of this collider
 	 */
-	float getPrevAbsY();
+	Vector2 getMovement();
 
 	/**
 	 * A tag can be used to keep track of a Collider within it's use
