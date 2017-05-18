@@ -1,16 +1,14 @@
 package me.winter.boing.detection.detectors;
 
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Pool;
 import me.winter.boing.Collision;
-import me.winter.boing.DynamicBody;
 import me.winter.boing.detection.PooledDetector;
 import me.winter.boing.shapes.Limit;
 
-import static com.badlogic.gdx.math.Vector2.Zero;
 import static java.lang.Math.abs;
 import static java.lang.Math.max;
 import static java.lang.Math.min;
+import static java.lang.Math.signum;
 import static me.winter.boing.util.FloatUtil.DEFAULT_ULPS;
 import static me.winter.boing.util.FloatUtil.areEqual;
 import static me.winter.boing.util.FloatUtil.isGreaterOrEqual;
@@ -35,8 +33,15 @@ public class LimitLimitDetector extends PooledDetector<Limit, Limit>
 		if(!areEqual(limitA.normal.dot(limitB.normal), -1))
 			return null;
 
-		Vector2 vecA = limitA.getMovement();
-		Vector2 vecB = limitB.getMovement();
+		float csax = limitA.getCollisionShifting().x;
+		float csay = limitA.getCollisionShifting().y;
+		float csbx = limitB.getCollisionShifting().x;
+		float csby = limitB.getCollisionShifting().y;
+
+		float vax = limitA.getMovement().x + (signum(csax) == limitA.normal.x ? csax : 0);
+		float vay = limitA.getMovement().y + (signum(csay) == limitA.normal.y ? csay : 0);
+		float vbx = limitB.getMovement().x + (signum(csbx) == limitB.normal.x ? csbx : 0);
+		float vby = limitB.getMovement().y + (signum(csby) == limitB.normal.y ? csby : 0);
 
 		float epsilon = DEFAULT_ULPS * max(limitA.getPrecision(), limitB.getPrecision());
 
@@ -51,23 +56,23 @@ public class LimitLimitDetector extends PooledDetector<Limit, Limit>
 		if(!isGreaterOrEqual(ax * nx + ay * ny, bx * nx + by * ny, epsilon)) //if limitB with his velocity isn't after boxA with his velocity
 			return null; //no collision
 
-		float pax = ax - vecA.x; //previous x for A
-		float pay = ay - vecA.y; //previous y for A
-		float pbx = bx - vecB.x; //previous x for B
-		float pby = by - vecB.y; //previous y for B
+		float pax = ax - vax; //previous x for A
+		float pay = ay - vay; //previous y for A
+		float pbx = bx - vbx; //previous x for B
+		float pby = by - vby; //previous y for B
 
 		if(!isSmallerOrEqual(pax * nx + pay * ny, pbx * nx + pby * ny, epsilon)) //if limitB isn't before boxA
 			return null; //no collision
 
 		float diff = (pbx - pax) * nx + (pby - pay) * ny;
-		float vecDiff = (vecB.x - vecA.x) * nx + (vecB.y - vecA.y) * ny;
+		float vecDiff = (vbx - vax) * nx + (vby - vay) * ny;
 
 		float midpoint = vecDiff != 0 ? (diff + vecDiff) / vecDiff : 0f;
 
-		float mxA = ax - vecA.x * midpoint; //midpoint x for A
-		float myA = ay - vecA.y * midpoint; //midpoint y for A
-		float mxB = bx - vecB.x * midpoint; //midpoint x for B
-		float myB = by - vecB.y * midpoint; //midpoint y for B
+		float mxA = ax - vax * midpoint; //midpoint x for A
+		float myA = ay - vay * midpoint; //midpoint y for A
+		float mxB = bx - vbx * midpoint; //midpoint x for B
+		float myB = by - vby * midpoint; //midpoint y for B
 
 		float hsA = limitA.size / 2; //half size for A
 		float hsB = limitB.size / 2; //half size for B
@@ -86,10 +91,10 @@ public class LimitLimitDetector extends PooledDetector<Limit, Limit>
 
 			midpoint = vecDiff != 0 ? (diff + vecDiff + sizeDiff) / vecDiff : 0f;
 
-			mxA = ax - vecA.x * midpoint; //midpoint x for A
-			myA = ay - vecA.y * midpoint; //midpoint y for A
-			mxB = bx - vecB.x * midpoint; //midpoint x for B
-			myB = by - vecB.y * midpoint; //midpoint y for B
+			mxA = ax - vax * midpoint; //midpoint x for A
+			myA = ay - vay * midpoint; //midpoint y for A
+			mxB = bx - vbx * midpoint; //midpoint x for B
+			myB = by - vby * midpoint; //midpoint y for B
 
 			limitA1 = -ny * (mxA + hsA) + nx * (myA + hsA);
 			limitA2 = -ny * (mxA - hsA) + nx * (myA - hsA);

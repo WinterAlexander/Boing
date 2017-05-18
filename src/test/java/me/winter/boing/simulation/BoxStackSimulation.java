@@ -56,12 +56,36 @@ public class BoxStackSimulation
 	}
 
 	@Test
-	public void simpleBoxStackWithSolidBlock()
+	public void shortBoxStack()
 	{
 		TestWorldImpl world = new TestWorldImpl(new ReplaceResolver());
 
 		PlayerImpl player = new PlayerImpl();
 
+		player.getPosition().set(400, 200);
+		player.addCollider(new Box(player, 0, 0, 20, 45));
+		world.add(player);
+
+		GravityAffected test = new GravityAffected();
+		test.getPosition().set(400, 150);
+		test.addCollider(new Box(test, 0, 0, 50, 50));
+		world.add(test);
+
+		BodyImpl ground = new BodyImpl();
+
+		ground.getPosition().set(400, -100);
+		ground.addCollider(new Box(ground, 0, 0, 800, 400));
+		world.add(ground);
+
+		WorldSimulationUtil.simulate(world);
+	}
+
+	@Test
+	public void simpleBoxStackWithSolidBlock()
+	{
+		TestWorldImpl world = new TestWorldImpl(new ReplaceResolver());
+
+		PlayerImpl player = new PlayerImpl();
 		player.getPosition().set(400, 400);
 		player.addCollider(new Box(player, 0, 0, 20, 45));
 		world.add(player);
@@ -76,14 +100,12 @@ public class BoxStackSimulation
 		solidBlock.addCollider(new Box(solidBlock, 0, 0, 100, 100));
 		world.add(solidBlock);
 
-
 		BodyImpl solidBlock2 = new BodyImpl();
 		solidBlock2.getPosition().set(200, 110);
 		solidBlock2.addCollider(new Box(solidBlock2, 0, 0, 100, 100));
 		world.add(solidBlock2);
 
 		BodyImpl ground = new BodyImpl();
-
 		ground.getPosition().set(400, -100);
 		ground.addCollider(new Box(ground, 0, 0, 800, 400));
 		world.add(ground);
@@ -102,12 +124,9 @@ public class BoxStackSimulation
 		world.add(test);
 
 		PlayerImpl player = new PlayerImpl();
-
 		player.getPosition().set(400, 600);
 		player.addCollider(new Box(player, 0, 0, 20, 45));
 		world.add(player);
-
-
 
 		GravityAffected test2 = new GravityAffected();
 		test2.getPosition().set(400, 400);
@@ -120,7 +139,6 @@ public class BoxStackSimulation
 		world.add(test3);
 
 		BodyImpl ground = new BodyImpl();
-
 		ground.getPosition().set(400, 0);
 		ground.addCollider(new Box(ground, 0, 0, 800, 400));
 		world.add(ground);
@@ -158,8 +176,6 @@ public class BoxStackSimulation
 		player.addCollider(new Box(player, 0, 0, 20, 45));
 		world.add(player);
 
-
-
 		GravityAffected test2 = new GravityAffected();
 		test2.getPosition().set(400, 400);
 		test2.addCollider(new Box(test2, 0, 0, 30, 30));
@@ -171,7 +187,6 @@ public class BoxStackSimulation
 		world.add(test3);
 
 		BodyImpl ground = new BodyImpl();
-
 		ground.getPosition().set(400, 0);
 		ground.addCollider(new Box(ground, 0, 0, 800, 400));
 		world.add(ground);
@@ -185,7 +200,6 @@ public class BoxStackSimulation
 		TestWorldImpl world = new TestWorldImpl(new ReplaceResolver());
 
 		PlayerImpl player = new PlayerImpl();
-
 		player.getPosition().set(400, 800);
 		player.addCollider(new Box(player, 0, 0, 20, 45));
 		world.add(player);
@@ -204,7 +218,6 @@ public class BoxStackSimulation
 		world.add(solidBlock);
 
 		BodyImpl ground = new BodyImpl();
-
 		ground.getPosition().set(400, -100);
 		ground.addCollider(new Box(ground, 0, 0, 800, 400));
 		world.add(ground);
@@ -218,7 +231,6 @@ public class BoxStackSimulation
 		TestWorldImpl world = new TestWorldImpl(new ReplaceResolver());
 
 		PlayerImpl player = new PlayerImpl();
-
 		player.getPosition().set(400, 800);
 		player.addCollider(new Limit(player, -10, 25, LEFT, 50));
 		player.addCollider(new Limit(player, 10, 25, RIGHT, 50));
@@ -243,7 +255,6 @@ public class BoxStackSimulation
 		world.add(solidBlock);
 
 		BodyImpl ground = new BodyImpl();
-
 		ground.getPosition().set(400, 100);
 		ground.addCollider(new Limit(ground, 0, 0, UP, 800));
 		world.add(ground);

@@ -46,12 +46,19 @@ public abstract class AbstractCollider implements Collider
 		return y + body.getPosition().y;
 	}
 
-
 	@Override
 	public Vector2 getMovement()
 	{
 		return body instanceof DynamicBody
 				? ((DynamicBody)body).getMovement()
+				: Zero;
+	}
+
+	@Override
+	public Vector2 getCollisionShifting()
+	{
+		return body instanceof DynamicBody
+				? ((DynamicBody)body).getCollisionShifting()
 				: Zero;
 	}
 

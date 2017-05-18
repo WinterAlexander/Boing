@@ -7,7 +7,6 @@ import me.winter.boing.DynamicBody;
 import me.winter.boing.OptimizedWorld;
 import me.winter.boing.UpdatableBody;
 import me.winter.boing.resolver.CollisionResolver;
-import me.winter.boing.util.VectorUtil;
 
 import java.util.Iterator;
 
@@ -76,8 +75,8 @@ public class WorldImpl extends OptimizedWorld implements Iterable<Body>
 			//System.out.println("    " + dynamic.getClass().getSimpleName() + ": " + dynamic.getPosition() + " -> " + dynamic.getMovement());
 			dynamic.getPosition().add(dynamic.getMovement());
 
-			//VectorUtil.append(dynamic.getMovement(), dynamic.getCollisionShifing());
-			dynamic.getCollisionShifing().setZero();
+			dynamic.getCollisionShifting().set(dynamic.getLastReplacement());
+			dynamic.getLastReplacement().setZero();
 
 
 			//StringBuilder sb = new StringBuilder();

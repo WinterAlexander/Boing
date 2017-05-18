@@ -64,7 +64,7 @@ public class WorldSimulationUtil
 							g.drawLine((int)(limit.getAbsX() - limit.size / 2 * limit.normal.y), (int)(600 - limit.getAbsY() + limit.size / 2 * limit.normal.x), (int)(limit.getAbsX() + limit.size / 2 * limit.normal.y), (int)(600 - limit.getAbsY() - limit.size / 2 * limit.normal.x));
 						}
 
-					g.setColor(body.getColliders().length == 1 && body.getColliders()[0] instanceof Limit ? Color.BLACK : Color.WHITE);
+					g.setColor(body.getColliders().length > 0 && body.getColliders()[0] instanceof Limit ? Color.BLACK : Color.WHITE);
 					g.drawString("" + n++, (int)body.getPosition().x, (int)(600 - body.getPosition().y));
 				}
 			}

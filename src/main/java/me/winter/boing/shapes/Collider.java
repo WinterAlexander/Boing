@@ -37,6 +37,12 @@ public interface Collider
 	Vector2 getMovement();
 
 	/**
+	 *
+	 * @return
+	 */
+	Vector2 getCollisionShifting();
+
+	/**
 	 * A tag can be used to keep track of a Collider within it's use
 	 *
 	 * @return tag of this collider

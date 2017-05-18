@@ -18,62 +18,80 @@ public class ReplaceResolver implements CollisionResolver
 		float pene = collision.penetration;
 		float delta = collision.weightRatio * pene;
 
-		/*StringBuilder debugBuilder = new StringBuilder();
+		/*String debug = null;
 
-		debugBuilder.append("Delta: " + delta + "\n");
-		debugBuilder.append("Original pos A: " + collision.colliderA.getBody().getPosition().y + "\n");
-		debugBuilder.append("Original pos B: " + collision.colliderB.getBody().getPosition().y + "\n");
-
-		if(collision.colliderA.getBody().getPosition().y + pene - collision.normalB.y * delta - ((DynamicBody)collision.colliderA.getBody()).getCollisionShifing().y != collision.colliderB.getBody().getPosition().y + collision.normalA.y * delta - ((DynamicBody)collision.colliderB.getBody()).getCollisionShifing().y)
+		if(plyCls().isInstance(collision.colliderA.getBody()))
 		{
-			System.out.println("before rip");
+			System.out.println(collision.weightRatio);
+			debug = "A";
+		}
+
+		if(plyCls().isInstance(collision.colliderB.getBody()))
+		{
+			System.out.println(1f - collision.weightRatio);
+			debug = "B";
 		}*/
 
 		if(delta < pene)
 		{
 			DynamicBody solid = (DynamicBody)collision.colliderA.getBody();
 
-			if(abs(collision.normalB.x * pene - collision.normalB.x * delta) > abs(solid.getCollisionShifing().x))
+			if(abs(collision.normalB.x * pene - collision.normalB.x * delta) > abs(solid.getLastReplacement().x))
 			{
-				solid.getPosition().x = solid.getPosition().x + collision.normalB.x * pene - collision.normalB.x * delta - solid.getCollisionShifing().x;
-				solid.getCollisionShifing().x = collision.normalB.x * pene - collision.normalB.x * delta;
+				solid.getPosition().x = solid.getPosition().x + collision.normalB.x * pene - collision.normalB.x * delta - solid.getLastReplacement().x;
+				solid.getLastReplacement().x = collision.normalB.x * pene - collision.normalB.x * delta;
 			}
 
-			if(abs(collision.normalB.y * pene - collision.normalB.y * delta) > abs(solid.getCollisionShifing().y))
+			if(abs(collision.normalB.y * pene - collision.normalB.y * delta) > abs(solid.getLastReplacement().y))
 			{
-				solid.getPosition().y = solid.getPosition().y + collision.normalB.y * pene - collision.normalB.y * delta - solid.getCollisionShifing().y;
-				solid.getCollisionShifing().y = collision.normalB.y * pene - collision.normalB.y * delta;
+				solid.getPosition().y = solid.getPosition().y + collision.normalB.y * pene - collision.normalB.y * delta - solid.getLastReplacement().y;
+				solid.getLastReplacement().y = collision.normalB.y * pene - collision.normalB.y * delta;
 			}
 		}
+		/*else if(debug != null)
+		{
+			System.out.println("No movement for A, player is " + debug);
+		}*/
 
 		if(delta > 0)
 		{
 			DynamicBody solid = (DynamicBody)collision.colliderB.getBody();
 
+			if(delta == pene)
+				System.out.println("B getting pushed af");
+
 			float replaceX = collision.normalA.x * delta;
 			float replaceY = collision.normalA.y * delta;
 
-			if(abs(replaceX) > abs(solid.getCollisionShifing().x))
+			if(abs(replaceX) > abs(solid.getLastReplacement().x))
 			{
-				solid.getPosition().x = solid.getPosition().x + replaceX - solid.getCollisionShifing().x;
-				solid.getCollisionShifing().x = replaceX;
+				solid.getPosition().x = solid.getPosition().x + replaceX - solid.getLastReplacement().x;
+				solid.getLastReplacement().x = replaceX;
 			}
 
-			if(abs(replaceY) > abs(solid.getCollisionShifing().y))
+			if(abs(replaceY) > abs(solid.getLastReplacement().y))
 			{
-				solid.getPosition().y = solid.getPosition().y + replaceY - solid.getCollisionShifing().y;
-				solid.getCollisionShifing().y = replaceY;
+				solid.getPosition().y = solid.getPosition().y + replaceY - solid.getLastReplacement().y;
+				solid.getLastReplacement().y = replaceY;
 			}
 		}
-/*
-		debugBuilder.append("Final pos A: " + collision.colliderA.getBody().getPosition().y + "\n");
-		debugBuilder.append("Final pos B: " + collision.colliderB.getBody().getPosition().y + "\n");
-
-		if(collision.colliderA.getBody().getPosition().y != collision.colliderB.getBody().getPosition().y)
+		/*else if(debug != null)
 		{
-			System.out.println("after rip");
-			System.out.println(debugBuilder.toString());
+			System.out.println("No movement for B, player is " + debug);
 		}*/
+	}
+
+	private Class<?> plyCls()
+	{
+		try
+		{
+			return Class.forName("me.winter.boing.testimpl.PlayerImpl");
+		}
+		catch(Throwable t)
+		{
+			t.printStackTrace();
+			return null;
+		}
 	}
 
 }
