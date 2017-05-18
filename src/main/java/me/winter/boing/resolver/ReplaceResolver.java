@@ -57,8 +57,8 @@ public class ReplaceResolver implements CollisionResolver
 		{
 			DynamicBody solid = (DynamicBody)collision.colliderB.getBody();
 
-			if(delta == pene)
-				System.out.println("B getting pushed af");
+			//if(delta == pene)
+			//	System.out.println("B getting pushed af");
 
 			float replaceX = collision.normalA.x * delta;
 			float replaceY = collision.normalA.y * delta;

@@ -75,7 +75,6 @@ public class BoxLimitDetector extends PooledDetector<Box, Limit>
 		if(!isSmallerOrEqual(pax * nx + pay * ny, pbx * nx + pby * ny, epsilon)) //if limitB isn't before boxA
 			return null; //no collision
 
-
 		float diff = (pbx - pax) * nx + (pby - pay) * ny;
 		float vecDiff = (vbx - vax) * nx + (vby - vay) * ny;
 

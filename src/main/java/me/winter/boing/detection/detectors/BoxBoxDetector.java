@@ -49,7 +49,6 @@ public class BoxBoxDetector extends PooledDetector<Box, Box>
 		float csbx = boxB.getCollisionShifting().x;
 		float csby = boxB.getCollisionShifting().y;
 
-
 		Collision collision = collides(
 				ax, ay + boxA.height / 2, 0, 1, boxA.width / 2, vecA.x, vecA.y + (signum(csay) == 1 ? csay : 0), pax, pay + boxA.height / 2,
 				bx, by - boxB.height / 2, 0, -1, boxB.width / 2, vecB.x, vecB.y + (signum(csby) == -1 ? csby : 0), pbx, pby - boxB.height / 2,

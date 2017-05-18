@@ -97,8 +97,7 @@ public class BoxBoxDetectionTest
 	{
 		MutableInt collisionCount = new MutableInt(0);
 
-		CollisionResolver resolver = c -> collisionCount.value++;
-		WorldImpl world = new WorldImpl(resolver);
+		WorldImpl world = new WorldImpl(c -> collisionCount.value++);
 
 		DynamicBodyImpl solidImpl = new DynamicBodyImpl(1f);
 		solidImpl.getPosition().set(0, 0);
