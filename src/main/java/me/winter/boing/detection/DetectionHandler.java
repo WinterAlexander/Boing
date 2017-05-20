@@ -4,15 +4,11 @@ import com.badlogic.gdx.utils.IntMap;
 import com.badlogic.gdx.utils.Pool;
 import me.winter.boing.Collision;
 import me.winter.boing.detection.detectors.BoxBoxDetector;
-import me.winter.boing.detection.detectors.CircleCircleDetector;
-import me.winter.boing.detection.detectors.BoxCircleDetector;
 import me.winter.boing.detection.detectors.BoxLimitDetector;
-import me.winter.boing.detection.detectors.CircleLimitDetector;
 import me.winter.boing.detection.detectors.LimitLimitDetector;
-import me.winter.boing.shapes.Box;
-import me.winter.boing.shapes.Circle;
-import me.winter.boing.shapes.Limit;
-import me.winter.boing.shapes.Collider;
+import me.winter.boing.colliders.Box;
+import me.winter.boing.colliders.Limit;
+import me.winter.boing.colliders.Collider;
 
 /**
  * Collision detection handler providing full collision detection by selecting the valid CollisionDetector.

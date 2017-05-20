@@ -1,4 +1,4 @@
-package me.winter.boing.shapes;
+package me.winter.boing.colliders;
 
 import com.badlogic.gdx.math.Vector2;
 import me.winter.boing.Body;

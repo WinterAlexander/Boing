@@ -1,8 +1,7 @@
 package me.winter.boing.detection;
 
-import com.badlogic.gdx.math.Vector2;
 import me.winter.boing.Collision;
-import me.winter.boing.shapes.Collider;
+import me.winter.boing.colliders.Collider;
 
 /**
  * Represents a CollisionDetector acting as the opposite of the specified CollisionDetector.

@@ -1,11 +1,10 @@
 package me.winter.boing.detection.detectors;
 
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Pool;
 import me.winter.boing.Collision;
 import me.winter.boing.detection.PooledDetector;
-import me.winter.boing.shapes.Box;
-import me.winter.boing.shapes.Limit;
+import me.winter.boing.colliders.Box;
+import me.winter.boing.colliders.Limit;
 
 import static java.lang.Math.abs;
 import static java.lang.Math.max;
@@ -33,10 +32,10 @@ public class BoxLimitDetector extends PooledDetector<Box, Limit>
 	{
 		float epsilon = DEFAULT_ULPS * max(boxA.getPrecision(), limitB.getPrecision());
 
-		float ax = boxA.getAbsX(); //abs X for a
-		float ay = boxA.getAbsY(); //abs Y for a
-		float bx = limitB.getAbsX(); //abs X for b
-		float by = limitB.getAbsY(); //abs Y for b
+		float pax = boxA.getAbsX(); //abs X for a
+		float pay = boxA.getAbsY(); //abs Y for a
+		float pbx = limitB.getAbsX(); //abs X for b
+		float pby = limitB.getAbsY(); //abs Y for b
 		float hsA; //half size of A (as a Limit)
 
 		float nx = -limitB.normal.x; //normal X
@@ -44,35 +43,29 @@ public class BoxLimitDetector extends PooledDetector<Box, Limit>
 
 		if(abs(limitB.normal.x) > abs(limitB.normal.y)) //if collision is more horizontal than vertical
 		{
-			ax += nx * boxA.width / 2; //extends to side
+			pax += nx * boxA.width / 2; //extends to side
 			hsA = boxA.height / 2;
 		}
 		else
 		{
-			ay += ny * boxA.height / 2; //extend to top/bottom
+			pay += ny * boxA.height / 2; //extend to top/bottom
 			hsA = boxA.width / 2;
 		}
 
-		float csax = boxA.getCollisionShifting().x;
-		float csay = boxA.getCollisionShifting().y;
-		float csbx = limitB.getCollisionShifting().x;
-		float csby = limitB.getCollisionShifting().y;
-
-		float vax = boxA.getMovement().x + (signum(csax) == nx ? csax : 0);
-		float vay = boxA.getMovement().y + (signum(csay) == ny ? csay : 0);
-		float vbx = limitB.getMovement().x + (signum(csbx) == limitB.normal.x ? csbx : 0);
-		float vby = limitB.getMovement().y + (signum(csby) == limitB.normal.y ? csby : 0);
-
-
-		if(!isGreaterOrEqual(ax * nx + ay * ny, bx * nx + by * ny, epsilon)) //if limitB with his velocity isn't after boxA with his velocity
-			return null; //no collision
-
-		float pax = ax - vax; //previous x for A
-		float pay = ay - vay; //previous y for A
-		float pbx = bx - vbx; //previous x for B
-		float pby = by - vby; //previous y for B
+		float vax = boxA.getMovement().x;
+		float vay = boxA.getMovement().y;
+		float vbx = limitB.getMovement().x;
+		float vby = limitB.getMovement().y;
 
 		if(!isSmallerOrEqual(pax * nx + pay * ny, pbx * nx + pby * ny, epsilon)) //if limitB isn't before boxA
+			return null; //no collision
+
+		float ax = pax + vax; //previous x for A
+		float ay = pay + vay; //previous y for A
+		float bx = pbx + vbx; //previous x for B
+		float by = pby + vby; //previous y for B
+
+		if(!isGreaterOrEqual(ax * nx + ay * ny, bx * nx + by * ny, epsilon)) //if limitB with his velocity isn't after boxA with his velocity
 			return null; //no collision
 
 		float diff = (pbx - pax) * nx + (pby - pay) * ny;

@@ -1,4 +1,4 @@
-package me.winter.boing.shapes;
+package me.winter.boing.colliders;
 
 import com.badlogic.gdx.math.Vector2;
 import me.winter.boing.Body;
@@ -51,14 +51,6 @@ public abstract class AbstractCollider implements Collider
 	{
 		return body instanceof DynamicBody
 				? ((DynamicBody)body).getMovement()
-				: Zero;
-	}
-
-	@Override
-	public Vector2 getCollisionShifting()
-	{
-		return body instanceof DynamicBody
-				? ((DynamicBody)body).getCollisionShifting()
 				: Zero;
 	}
 

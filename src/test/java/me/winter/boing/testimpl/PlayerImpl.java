@@ -24,7 +24,7 @@ import static me.winter.boing.util.VectorUtil.DOWN;
 public class PlayerImpl extends BodyImpl implements UpdatableBody
 {
 	protected boolean onGround;
-	protected Vector2 velocity = new Vector2(), movement = new Vector2(), lastReplacement = new Vector2(), collisionShifting = new Vector2();
+	protected Vector2 velocity = new Vector2(), movement = new Vector2();
 
 
 	@Override
@@ -115,17 +115,5 @@ public class PlayerImpl extends BodyImpl implements UpdatableBody
 				}
 			});
 		}
-	}
-
-	@Override
-	public Vector2 getCollisionShifting()
-	{
-		return collisionShifting;
-	}
-
-	@Override
-	public Vector2 getLastReplacement()
-	{
-		return lastReplacement;
 	}
 }

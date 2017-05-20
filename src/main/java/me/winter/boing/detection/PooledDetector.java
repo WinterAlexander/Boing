@@ -2,7 +2,7 @@ package me.winter.boing.detection;
 
 import com.badlogic.gdx.utils.Pool;
 import me.winter.boing.Collision;
-import me.winter.boing.shapes.Collider;
+import me.winter.boing.colliders.Collider;
 
 /**
  * CollisionDetection that requires a collisionPool to prevent creating new objects

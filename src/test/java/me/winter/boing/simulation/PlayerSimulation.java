@@ -2,7 +2,7 @@ package me.winter.boing.simulation;
 
 import me.winter.boing.resolver.CollisionResolver;
 import me.winter.boing.resolver.ReplaceResolver;
-import me.winter.boing.shapes.Box;
+import me.winter.boing.colliders.Box;
 import me.winter.boing.testimpl.PlayerImpl;
 import me.winter.boing.impl.BodyImpl;
 import me.winter.boing.testimpl.SpringImpl;

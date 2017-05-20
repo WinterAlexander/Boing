@@ -1,7 +1,7 @@
 package me.winter.boing;
 
 import com.badlogic.gdx.math.Vector2;
-import me.winter.boing.shapes.Collider;
+import me.winter.boing.colliders.Collider;
 
 /**
  * Represents a simple, static body. Cannot move but can prevent a DynamicSolid from moving.

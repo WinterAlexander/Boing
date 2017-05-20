@@ -2,8 +2,8 @@ package me.winter.boing.test.detection;
 
 import me.winter.boing.impl.WorldImpl;
 import me.winter.boing.resolver.CollisionResolver;
-import me.winter.boing.shapes.Box;
-import me.winter.boing.shapes.Circle;
+import me.winter.boing.colliders.Box;
+import me.winter.boing.colliders.Circle;
 import me.winter.boing.impl.DynamicBodyImpl;
 import me.winter.boing.util.MutableInt;
 import org.junit.Ignore;

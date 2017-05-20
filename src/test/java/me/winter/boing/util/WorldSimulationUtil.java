@@ -1,10 +1,10 @@
 package me.winter.boing.util;
 
 import me.winter.boing.Body;
-import me.winter.boing.shapes.Box;
-import me.winter.boing.shapes.Circle;
-import me.winter.boing.shapes.Collider;
-import me.winter.boing.shapes.Limit;
+import me.winter.boing.colliders.Box;
+import me.winter.boing.colliders.Circle;
+import me.winter.boing.colliders.Collider;
+import me.winter.boing.colliders.Limit;
 import me.winter.boing.testimpl.TestWorldImpl;
 import org.junit.Ignore;
 

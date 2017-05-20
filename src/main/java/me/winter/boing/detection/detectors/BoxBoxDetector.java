@@ -4,7 +4,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Pool;
 import me.winter.boing.Collision;
 import me.winter.boing.detection.PooledDetector;
-import me.winter.boing.shapes.Box;
+import me.winter.boing.colliders.Box;
 
 import static java.lang.Math.max;
 import static java.lang.Math.min;
@@ -34,45 +34,42 @@ public class BoxBoxDetector extends PooledDetector<Box, Box>
 
 		float epsilon = DEFAULT_ULPS * max(boxA.getPrecision(), boxB.getPrecision());
 
-		float ax = boxA.getAbsX();
-		float ay = boxA.getAbsY();
-		float bx = boxB.getAbsX();
-		float by = boxB.getAbsY();
+		float pax = boxA.getAbsX();
+		float pay = boxA.getAbsY();
+		float pbx = boxB.getAbsX();
+		float pby = boxB.getAbsY();
 
-		float pax = boxA.getAbsX() - vecA.x;
-		float pay = boxA.getAbsY() - vecA.y;
-		float pbx = boxB.getAbsX() - vecB.x;
-		float pby = boxB.getAbsY() - vecB.y;
+		float ax = boxA.getAbsX() + vecA.x;
+		float ay = boxA.getAbsY() + vecA.y;
+		float bx = boxB.getAbsX() + vecB.x;
+		float by = boxB.getAbsY() + vecB.y;
 
-		float csax = boxA.getCollisionShifting().x;
-		float csay = boxA.getCollisionShifting().y;
-		float csbx = boxB.getCollisionShifting().x;
-		float csby = boxB.getCollisionShifting().y;
+		//TODO find which limits collide and stop this cancer
 
 		Collision collision = collides(
-				ax, ay + boxA.height / 2, 0, 1, boxA.width / 2, vecA.x, vecA.y + (signum(csay) == 1 ? csay : 0), pax, pay + boxA.height / 2,
-				bx, by - boxB.height / 2, 0, -1, boxB.width / 2, vecB.x, vecB.y + (signum(csby) == -1 ? csby : 0), pbx, pby - boxB.height / 2,
+				ax, ay + boxA.height / 2, 0, 1, boxA.width / 2, vecA.x, vecA.y, pax, pay + boxA.height / 2,
+				bx, by - boxB.height / 2, 0, -1, boxB.width / 2, vecB.x, vecB.y, pbx, pby - boxB.height / 2,
 				epsilon);
 
 		if(collision == null)
 		{
 			collision = collides(
-					ax, ay - boxA.height / 2, 0, -1, boxA.width / 2, vecA.x, vecA.y + (signum(csay) == -1 ? csay : 0), pax, pay - boxA.height / 2,
-					bx, by + boxB.height / 2, 0, 1, boxB.width / 2, vecB.x, vecB.y + (signum(csby) == 1 ? csby : 0), pbx, pby + boxB.height / 2,
+					ax, ay - boxA.height / 2, 0, -1, boxA.width / 2, vecA.x, vecA.y, pax, pay - boxA.height / 2,
+					bx, by + boxB.height / 2, 0, 1, boxB.width / 2, vecB.x, vecB.y, pbx, pby + boxB.height / 2,
 					epsilon);
 
 			if(collision == null)
 			{
 				collision = collides(
-						ax + boxA.width / 2, ay, 1, 0, boxA.height / 2, vecA.x + (signum(csax) == 1 ? csax : 0), vecA.y, pax + boxA.width / 2, pay,
-						bx - boxB.width / 2, by, -1, 0, boxB.height / 2, vecB.x + (signum(csbx) == -1 ? csbx : 0), vecB.y, pbx - boxB.width / 2, pay,
+						ax + boxA.width / 2, ay, 1, 0, boxA.height / 2, vecA.x, vecA.y, pax + boxA.width / 2, pay,
+						bx - boxB.width / 2, by, -1, 0, boxB.height / 2, vecB.x, vecB.y, pbx - boxB.width / 2, pay,
 						epsilon);
 
 				if(collision == null)
 				{
 					collision = collides(
-							ax - boxA.width / 2, ay, -1, 0, boxA.height / 2, vecA.x + (signum(csax) == -1 ? csax : 0), vecA.y, pax - boxA.width / 2, pay,
-							bx + boxB.width / 2, by, 1, 0, boxB.height / 2, vecB.x + (signum(csbx) == 1 ? csbx : 0), vecB.y, pbx + boxB.width / 2, pay,
+							ax - boxA.width / 2, ay, -1, 0, boxA.height / 2, vecA.x, vecA.y, pax - boxA.width / 2, pay,
+							bx + boxB.width / 2, by, 1, 0, boxB.height / 2, vecB.x, vecB.y, pbx + boxB.width / 2, pay,
 							epsilon);
 
 					if(collision == null)
@@ -95,11 +92,10 @@ public class BoxBoxDetector extends PooledDetector<Box, Box>
 		if(!areEqual(Vector2.dot(nx, ny, nx2, ny2), -1, epsilon))
 			return null;
 
-		if(!isGreaterOrEqual(ax * nx + ay * ny, bx * nx + by * ny, epsilon)) //if limitB with his velocity isn't after boxA with his velocity
+		if(!isGreaterOrEqual(ax * nx + ay * ny, bx * nx + by * ny, epsilon)) //if limitB with his velocity isn't after limitA with his velocity
 			return null; //no collision
 
-
-		if(!isSmallerOrEqual(pax * nx + pay * ny, pbx * nx + pby * ny, epsilon)) //if limitB isn't before boxA
+		if(!isSmallerOrEqual(pax * nx + pay * ny, pbx * nx + pby * ny, epsilon)) //if limitB isn't before limitA
 			return null; //no collision
 
 		float diff = (pbx - pax) * nx + (pby - pay) * ny;
@@ -126,10 +122,10 @@ public class BoxBoxDetector extends PooledDetector<Box, Box>
 
 			midpoint = vecDiff != 0 ? (diff + vecDiff + sizeDiff) / vecDiff : 0f;
 
-			mxA = ax - vax * midpoint; //midpoint x for A
-			myA = ay - vay * midpoint; //midpoint y for A
-			mxB = bx - vbx * midpoint; //midpoint x for B
-			myB = by - vby * midpoint; //midpoint y for B
+			mxA = pax + vax * midpoint; //midpoint x for A
+			myA = pay + vay * midpoint; //midpoint y for A
+			mxB = pbx + vbx * midpoint; //midpoint x for B
+			myB = pby + vby * midpoint; //midpoint y for B
 
 			limitA1 = -ny * (mxA + hsA) + nx * (myA + hsA);
 			limitA2 = -ny * (mxA - hsA) + nx * (myA - hsA);

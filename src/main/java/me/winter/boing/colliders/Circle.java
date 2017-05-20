@@ -1,4 +1,4 @@
-package me.winter.boing.shapes;
+package me.winter.boing.colliders;
 
 import me.winter.boing.Body;
 

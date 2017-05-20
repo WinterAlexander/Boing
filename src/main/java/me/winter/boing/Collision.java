@@ -1,7 +1,7 @@
 package me.winter.boing;
 
 import com.badlogic.gdx.math.Vector2;
-import me.winter.boing.shapes.Collider;
+import me.winter.boing.colliders.Collider;
 
 /**
  * Represents a collision between 2 solids. This object should be pooled

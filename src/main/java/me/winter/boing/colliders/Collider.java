@@ -1,4 +1,4 @@
-package me.winter.boing.shapes;
+package me.winter.boing.colliders;
 
 import com.badlogic.gdx.math.Vector2;
 import me.winter.boing.Body;
@@ -35,12 +35,6 @@ public interface Collider
 	 * @return the current movement of the body of this collider
 	 */
 	Vector2 getMovement();
-
-	/**
-	 *
-	 * @return
-	 */
-	Vector2 getCollisionShifting();
 
 	/**
 	 * A tag can be used to keep track of a Collider within it's use

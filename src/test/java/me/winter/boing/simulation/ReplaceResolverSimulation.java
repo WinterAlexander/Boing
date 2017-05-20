@@ -2,8 +2,8 @@ package me.winter.boing.simulation;
 
 import me.winter.boing.resolver.CollisionResolver;
 import me.winter.boing.resolver.ReplaceResolver;
-import me.winter.boing.shapes.Box;
-import me.winter.boing.shapes.Circle;
+import me.winter.boing.colliders.Box;
+import me.winter.boing.colliders.Circle;
 import me.winter.boing.testimpl.BouncingBallImpl;
 import me.winter.boing.impl.BodyImpl;
 import me.winter.boing.testimpl.TestWorldImpl;

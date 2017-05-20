@@ -34,13 +34,6 @@ public class WorldImpl extends OptimizedWorld implements Iterable<Body>
 		{
 			if(dynamic instanceof UpdatableBody)
 				((UpdatableBody)dynamic).update(delta);
-		}
-
-		//System.out.println("Frame: " + n++);
-
-		for(DynamicBody dynamic : dynamics)
-		{
-			dynamic.getMovement().set(dynamic.getVelocity()).scl(delta);
 
 			/*for(int i = 0; i < prevCollisions.size; i++)
 			{
@@ -71,22 +64,17 @@ public class WorldImpl extends OptimizedWorld implements Iterable<Body>
 				dynamic.getMovement().add(((DynamicBody)other).getMovement());
 			}*/
 
-
-			//System.out.println("    " + dynamic.getClass().getSimpleName() + ": " + dynamic.getPosition() + " -> " + dynamic.getMovement());
-			dynamic.getPosition().add(dynamic.getMovement());
-
-			dynamic.getCollisionShifting().set(dynamic.getLastReplacement());
-			dynamic.getLastReplacement().setZero();
-
-
-			//StringBuilder sb = new StringBuilder();
-			//sb.append(dynamic.getPosition().y - dynamic.getMovement().y).append(" -> ");
-			//sb.append(dynamic.getPosition().y);
-			//System.out.println(sb);
+			dynamic.getMovement().set(dynamic.getVelocity()).scl(delta);
 		}
+	}
 
-
-		//System.out.println();
+	@Override
+	protected void moveBodies()
+	{
+		for(DynamicBody dynamic : dynamics)
+		{
+			dynamic.getPosition().add(dynamic.getMovement());
+		}
 	}
 
 	/**

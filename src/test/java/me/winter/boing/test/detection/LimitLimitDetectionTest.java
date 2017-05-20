@@ -3,7 +3,7 @@ package me.winter.boing.test.detection;
 import com.badlogic.gdx.math.Vector2;
 import me.winter.boing.impl.WorldImpl;
 import me.winter.boing.resolver.CollisionResolver;
-import me.winter.boing.shapes.Limit;
+import me.winter.boing.colliders.Limit;
 import me.winter.boing.impl.DynamicBodyImpl;
 import me.winter.boing.testimpl.BouncingBallImpl;
 import me.winter.boing.util.MutableInt;

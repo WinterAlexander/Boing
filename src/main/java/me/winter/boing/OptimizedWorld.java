@@ -4,7 +4,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import me.winter.boing.detection.DetectionHandler;
 import me.winter.boing.resolver.CollisionResolver;
-import me.winter.boing.shapes.Collider;
+import me.winter.boing.colliders.Collider;
 import me.winter.boing.util.VelocityUtil;
 
 import static java.lang.Float.POSITIVE_INFINITY;

@@ -5,8 +5,8 @@ import me.winter.boing.impl.WorldImpl;
 import me.winter.boing.impl.BodyImpl;
 import me.winter.boing.impl.DynamicBodyImpl;
 import me.winter.boing.resolver.ReplaceResolver;
-import me.winter.boing.shapes.Box;
-import me.winter.boing.shapes.Limit;
+import me.winter.boing.colliders.Box;
+import me.winter.boing.colliders.Limit;
 import org.junit.Test;
 
 import static me.winter.boing.util.VectorUtil.LEFT;
