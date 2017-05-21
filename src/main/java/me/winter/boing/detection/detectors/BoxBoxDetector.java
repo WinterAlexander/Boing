@@ -3,9 +3,11 @@ package me.winter.boing.detection.detectors;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Pool;
 import me.winter.boing.Collision;
+import me.winter.boing.DynamicBody;
 import me.winter.boing.detection.PooledDetector;
 import me.winter.boing.colliders.Box;
 
+import static com.badlogic.gdx.math.Vector2.dot;
 import static java.lang.Math.max;
 import static java.lang.Math.min;
 import static java.lang.Math.signum;
@@ -39,37 +41,32 @@ public class BoxBoxDetector extends PooledDetector<Box, Box>
 		float pbx = boxB.getAbsX();
 		float pby = boxB.getAbsY();
 
-		float ax = boxA.getAbsX() + vecA.x;
-		float ay = boxA.getAbsY() + vecA.y;
-		float bx = boxB.getAbsX() + vecB.x;
-		float by = boxB.getAbsY() + vecB.y;
-
 		//TODO find which limits collide and stop this cancer
 
 		Collision collision = collides(
-				ax, ay + boxA.height / 2, 0, 1, boxA.width / 2, vecA.x, vecA.y, pax, pay + boxA.height / 2,
-				bx, by - boxB.height / 2, 0, -1, boxB.width / 2, vecB.x, vecB.y, pbx, pby - boxB.height / 2,
+				0, 1, boxA.width / 2, vecA.x, vecA.y, pax, pay + boxA.height / 2,
+				0, -1, boxB.width / 2, vecB.x, vecB.y, pbx, pby - boxB.height / 2,
 				epsilon);
 
 		if(collision == null)
 		{
 			collision = collides(
-					ax, ay - boxA.height / 2, 0, -1, boxA.width / 2, vecA.x, vecA.y, pax, pay - boxA.height / 2,
-					bx, by + boxB.height / 2, 0, 1, boxB.width / 2, vecB.x, vecB.y, pbx, pby + boxB.height / 2,
+					0, -1, boxA.width / 2, vecA.x, vecA.y, pax, pay - boxA.height / 2,
+					0, 1, boxB.width / 2, vecB.x, vecB.y, pbx, pby + boxB.height / 2,
 					epsilon);
 
 			if(collision == null)
 			{
 				collision = collides(
-						ax + boxA.width / 2, ay, 1, 0, boxA.height / 2, vecA.x, vecA.y, pax + boxA.width / 2, pay,
-						bx - boxB.width / 2, by, -1, 0, boxB.height / 2, vecB.x, vecB.y, pbx - boxB.width / 2, pay,
+						1, 0, boxA.height / 2, vecA.x, vecA.y, pax + boxA.width / 2, pay,
+						-1, 0, boxB.height / 2, vecB.x, vecB.y, pbx - boxB.width / 2, pay,
 						epsilon);
 
 				if(collision == null)
 				{
 					collision = collides(
-							ax - boxA.width / 2, ay, -1, 0, boxA.height / 2, vecA.x, vecA.y, pax - boxA.width / 2, pay,
-							bx + boxB.width / 2, by, 1, 0, boxB.height / 2, vecB.x, vecB.y, pbx + boxB.width / 2, pay,
+							-1, 0, boxA.height / 2, vecA.x, vecA.y, pax - boxA.width / 2, pay,
+							1, 0, boxB.height / 2, vecB.x, vecB.y, pbx + boxB.width / 2, pay,
 							epsilon);
 
 					if(collision == null)
@@ -82,14 +79,37 @@ public class BoxBoxDetector extends PooledDetector<Box, Box>
 		collision.colliderB = boxB;
 		collision.setImpactVelocities(boxA.getBody(), boxB.getBody());
 
+
+
+		if(collision.colliderA.getBody() instanceof DynamicBody && collision.colliderB.getBody() instanceof DynamicBody)
+			System.out.println(collision.contactSurface);
+
 		return collision;
 	}
 
-	public Collision collides(float ax, float ay, float nx, float ny, float hsA, float vax, float vay, float pax, float pay,
-	                          float bx, float by, float nx2, float ny2, float hsB, float vbx, float vby, float pbx, float pby,
+	public Collision collides(float nx, float ny, float hsA, float vax, float vay, float pax, float pay,
+	                          float nx2, float ny2, float hsB, float vbx, float vby, float pbx, float pby,
 	                          float epsilon)
 	{
-		if(!areEqual(Vector2.dot(nx, ny, nx2, ny2), -1, epsilon))
+
+		if(dot(nx, ny, vax, vay) < 0)
+		{
+			vax = 0f;
+			vay = 0f;
+		}
+
+		if(dot(nx2, ny2, vbx, vby) < 0)
+		{
+			vbx = 0f;
+			vby = 0f;
+		}
+
+		float ax = pax + vax;
+		float ay = pay + vay;
+		float bx = pbx + vbx;
+		float by = pby + vby;
+
+		if(!areEqual(dot(nx, ny, nx2, ny2), -1, epsilon))
 			return null;
 
 		if(!isGreaterOrEqual(ax * nx + ay * ny, bx * nx + by * ny, epsilon)) //if limitB with his velocity isn't after limitA with his velocity
@@ -122,10 +142,10 @@ public class BoxBoxDetector extends PooledDetector<Box, Box>
 
 			midpoint = vecDiff != 0 ? (diff + vecDiff + sizeDiff) / vecDiff : 0f;
 
-			mxA = pax + vax * midpoint; //midpoint x for A
-			myA = pay + vay * midpoint; //midpoint y for A
-			mxB = pbx + vbx * midpoint; //midpoint x for B
-			myB = pby + vby * midpoint; //midpoint y for B
+			mxA = ax - vax * midpoint; //midpoint x for A
+			myA = ay - vay * midpoint; //midpoint y for A
+			mxB = bx - vbx * midpoint; //midpoint x for B
+			myB = by - vby * midpoint; //midpoint y for B
 
 			limitA1 = -ny * (mxA + hsA) + nx * (myA + hsA);
 			limitA2 = -ny * (mxA - hsA) + nx * (myA - hsA);

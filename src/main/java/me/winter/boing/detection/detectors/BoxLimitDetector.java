@@ -1,11 +1,13 @@
 package me.winter.boing.detection.detectors;
 
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Pool;
 import me.winter.boing.Collision;
 import me.winter.boing.detection.PooledDetector;
 import me.winter.boing.colliders.Box;
 import me.winter.boing.colliders.Limit;
 
+import static com.badlogic.gdx.math.Vector2.dot;
 import static java.lang.Math.abs;
 import static java.lang.Math.max;
 import static java.lang.Math.min;
@@ -56,6 +58,18 @@ public class BoxLimitDetector extends PooledDetector<Box, Limit>
 		float vay = boxA.getMovement().y;
 		float vbx = limitB.getMovement().x;
 		float vby = limitB.getMovement().y;
+
+		if(dot(nx, ny, vax, vay) < 0)
+		{
+			vax = 0f;
+			vay = 0f;
+		}
+
+		if(limitB.normal.dot(vbx, vby) < 0)
+		{
+			vbx = 0f;
+			vby = 0f;
+		}
 
 		if(!isSmallerOrEqual(pax * nx + pay * ny, pbx * nx + pby * ny, epsilon)) //if limitB isn't before boxA
 			return null; //no collision

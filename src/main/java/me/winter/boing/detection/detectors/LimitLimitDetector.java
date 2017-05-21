@@ -2,6 +2,7 @@ package me.winter.boing.detection.detectors;
 
 import com.badlogic.gdx.utils.Pool;
 import me.winter.boing.Collision;
+import me.winter.boing.DynamicBody;
 import me.winter.boing.detection.PooledDetector;
 import me.winter.boing.colliders.Limit;
 
@@ -37,6 +38,18 @@ public class LimitLimitDetector extends PooledDetector<Limit, Limit>
 		float vay = limitA.getMovement().y;
 		float vbx = limitB.getMovement().x;
 		float vby = limitB.getMovement().y;
+
+		if(limitA.normal.dot(vax, vay) < 0)
+		{
+			vax = 0f;
+			vay = 0f;
+		}
+
+		if(limitB.normal.dot(vbx, vby) < 0)
+		{
+			vbx = 0f;
+			vby = 0f;
+		}
 
 		float epsilon = DEFAULT_ULPS * max(limitA.getPrecision(), limitB.getPrecision());
 
@@ -86,10 +99,10 @@ public class LimitLimitDetector extends PooledDetector<Limit, Limit>
 
 			midpoint = vecDiff != 0 ? (diff + vecDiff + sizeDiff) / vecDiff : 0f;
 
-			mxA = pax + vax * midpoint; //midpoint x for A
-			myA = pay + vay * midpoint; //midpoint y for A
-			mxB = pbx + vbx * midpoint; //midpoint x for B
-			myB = pby + vby * midpoint; //midpoint y for B
+			mxA = ax - vax * midpoint; //midpoint x for A
+			myA = ay - vay * midpoint; //midpoint y for A
+			mxB = bx - vbx * midpoint; //midpoint x for B
+			myB = by - vby * midpoint; //midpoint y for B
 
 			limitA1 = -ny * (mxA + hsA) + nx * (myA + hsA);
 			limitA2 = -ny * (mxA - hsA) + nx * (myA - hsA);

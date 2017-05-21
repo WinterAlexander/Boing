@@ -3,8 +3,6 @@ package me.winter.boing.resolver;
 import me.winter.boing.Collision;
 import me.winter.boing.DynamicBody;
 
-import static java.lang.Math.abs;
-
 /**
  * CollisionResolver resolving collisions by replacing the objects colliding (if they are Dynamic)
  * <p>
