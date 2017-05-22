@@ -55,6 +55,14 @@ public abstract class AbstractCollider implements Collider
 	}
 
 	@Override
+	public Vector2 getCollisionShifting()
+	{
+		return body instanceof DynamicBody
+				? ((DynamicBody)body).getCollisionShifting()
+				: Zero;
+	}
+
+	@Override
 	public Object getTag()
 	{
 		return tag;

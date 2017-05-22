@@ -40,17 +40,24 @@ public class ReplaceResolver implements CollisionResolver
 
 	private void replace(DynamicBody solid, float replaceX, float replaceY)
 	{
-		float dirX = signum(solid.getCollisionShifting().x);
-		float dirY = signum(solid.getCollisionShifting().y);
+		if(replaceX != 0f)
+		{
+			float dirX = signum(solid.getCollisionShifting().x);
 
-		if(dirX == 0 || replaceX * dirX > solid.getCollisionShifting().x * dirX)
-			solid.getCollisionShifting().x = replaceX;
-		else if(dirX != signum(replaceX))
-			solid.getCollisionShifting().x += replaceX;
+			if(dirX == 0 || replaceX * dirX > solid.getCollisionShifting().x * dirX)
+				solid.getCollisionShifting().x = replaceX;
+			else if(dirX != signum(replaceX))
+				solid.getCollisionShifting().x += replaceX;
+		}
 
-		if(dirY == 0 || replaceY * dirY > solid.getCollisionShifting().y * dirY)
-			solid.getCollisionShifting().y = replaceY;
-		else if(dirY != signum(replaceY))
-			solid.getCollisionShifting().y += replaceY;
+		if(replaceY != 0f)
+		{
+			float dirY = signum(solid.getCollisionShifting().y);
+
+			if(dirY == 0 || replaceY * dirY > solid.getCollisionShifting().y * dirY)
+				solid.getCollisionShifting().y = replaceY;
+			else if(dirY != signum(replaceY))
+				solid.getCollisionShifting().y += replaceY;
+		}
 	}
 }

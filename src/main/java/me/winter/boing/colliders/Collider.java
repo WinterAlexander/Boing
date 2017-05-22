@@ -37,6 +37,12 @@ public interface Collider
 	Vector2 getMovement();
 
 	/**
+	 *
+	 * @return the last movement imposed by collision resolving
+	 */
+	Vector2 getCollisionShifting();
+
+	/**
 	 * A tag can be used to keep track of a Collider within it's use
 	 *
 	 * @return tag of this collider
