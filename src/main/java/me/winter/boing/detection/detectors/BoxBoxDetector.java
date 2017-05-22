@@ -59,14 +59,14 @@ public class BoxBoxDetector extends PooledDetector<Box, Box>
 			{
 				collision = collides(
 						1, 0, boxA.height / 2, vecA.x, vecA.y, pax + boxA.width / 2, pay,
-						-1, 0, boxB.height / 2, vecB.x, vecB.y, pbx - boxB.width / 2, pay,
+						-1, 0, boxB.height / 2, vecB.x, vecB.y, pbx - boxB.width / 2, pby,
 						epsilon);
 
 				if(collision == null)
 				{
 					collision = collides(
 							-1, 0, boxA.height / 2, vecA.x, vecA.y, pax - boxA.width / 2, pay,
-							1, 0, boxB.height / 2, vecB.x, vecB.y, pbx + boxB.width / 2, pay,
+							1, 0, boxB.height / 2, vecB.x, vecB.y, pbx + boxB.width / 2, pby,
 							epsilon);
 
 					if(collision == null)
@@ -81,8 +81,8 @@ public class BoxBoxDetector extends PooledDetector<Box, Box>
 
 
 
-		if(collision.colliderA.getBody() instanceof DynamicBody && collision.colliderB.getBody() instanceof DynamicBody)
-			System.out.println(collision.contactSurface);
+		//if(collision.colliderA.getBody() instanceof DynamicBody && collision.colliderB.getBody() instanceof DynamicBody)
+		//	System.out.println(collision.contactSurface);
 
 		return collision;
 	}

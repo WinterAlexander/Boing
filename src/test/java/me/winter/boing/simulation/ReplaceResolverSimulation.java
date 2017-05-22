@@ -1,15 +1,16 @@
 package me.winter.boing.simulation;
 
-import me.winter.boing.resolver.CollisionResolver;
-import me.winter.boing.resolver.ReplaceResolver;
 import me.winter.boing.colliders.Box;
 import me.winter.boing.colliders.Circle;
-import me.winter.boing.testimpl.BouncingBallImpl;
 import me.winter.boing.impl.BodyImpl;
+import me.winter.boing.resolver.ReplaceResolver;
+import me.winter.boing.testimpl.BouncingBallImpl;
 import me.winter.boing.testimpl.TestWorldImpl;
 import me.winter.boing.util.WorldSimulationUtil;
 import org.junit.Ignore;
 import org.junit.Test;
+
+import static java.lang.Float.POSITIVE_INFINITY;
 
 /**
  * Undocumented :(
@@ -22,10 +23,9 @@ public class ReplaceResolverSimulation
 	@Test
 	public void testCirclesInBox()
 	{
-		CollisionResolver resolver = new ReplaceResolver();
-		TestWorldImpl world = new TestWorldImpl(resolver);
+		TestWorldImpl world = new TestWorldImpl(new ReplaceResolver());
 
-		BouncingBallImpl solid = new BouncingBallImpl(Float.POSITIVE_INFINITY);
+		BouncingBallImpl solid = new BouncingBallImpl(POSITIVE_INFINITY);
 
 		solid.getPosition().set(50, 50);
 		solid.addCollider(new Circle(solid, 0, 0, 25));
@@ -106,10 +106,9 @@ public class ReplaceResolverSimulation
 	@Test
 	public void testBug()
 	{
-		CollisionResolver resolver = new ReplaceResolver();
-		TestWorldImpl world = new TestWorldImpl(resolver);
+		TestWorldImpl world = new TestWorldImpl(new ReplaceResolver());
 
-		BouncingBallImpl solid = new BouncingBallImpl(Float.POSITIVE_INFINITY);
+		BouncingBallImpl solid = new BouncingBallImpl(POSITIVE_INFINITY);
 
 		solid.getPosition().set(50, 50);
 		solid.addCollider(new Circle(solid, 0, 0, 25));
@@ -147,8 +146,7 @@ public class ReplaceResolverSimulation
 	@Test
 	public void testFuckFest()
 	{
-		CollisionResolver resolver = new ReplaceResolver();
-		TestWorldImpl world = new TestWorldImpl(resolver);
+		TestWorldImpl world = new TestWorldImpl(new ReplaceResolver());
 		
 		for(int i = 200; i < 600; i += 20)
 		{
@@ -164,7 +162,7 @@ public class ReplaceResolverSimulation
 			}
 		}
 
-		BouncingBallImpl initier = new BouncingBallImpl(Float.POSITIVE_INFINITY);
+		BouncingBallImpl initier = new BouncingBallImpl(POSITIVE_INFINITY);
 
 		initier.getPosition().set(400, 0);
 		initier.addCollider(new Circle(initier, 0, 0, 10));
@@ -218,8 +216,7 @@ public class ReplaceResolverSimulation
 	@Test
 	public void testBoxBouncingOnBoxX()
 	{
-		CollisionResolver resolver = new ReplaceResolver();
-		TestWorldImpl world = new TestWorldImpl(resolver);
+		TestWorldImpl world = new TestWorldImpl(new ReplaceResolver());
 
 		BouncingBallImpl solid = new BouncingBallImpl();
 		solid.getPosition().set(400, 400);
@@ -247,8 +244,7 @@ public class ReplaceResolverSimulation
 	@Test
 	public void testBoxBouncingOnBoxY()
 	{
-		CollisionResolver resolver = new ReplaceResolver();
-		TestWorldImpl world = new TestWorldImpl(resolver);
+		TestWorldImpl world = new TestWorldImpl(new ReplaceResolver());
 
 		BouncingBallImpl solid = new BouncingBallImpl();
 		solid.getPosition().set(400, 400);
@@ -276,8 +272,7 @@ public class ReplaceResolverSimulation
 	@Test
 	public void testBoxWideBounce()
 	{
-		CollisionResolver resolver = new ReplaceResolver();
-		TestWorldImpl world = new TestWorldImpl(resolver);
+		TestWorldImpl world = new TestWorldImpl(new ReplaceResolver());
 
 		BodyImpl ground = new BodyImpl();
 		ground.getPosition().set(400, 0);
@@ -296,8 +291,7 @@ public class ReplaceResolverSimulation
 	@Test
 	public void testBoxesInBallCage()
 	{
-		CollisionResolver resolver = new ReplaceResolver();
-		TestWorldImpl world = new TestWorldImpl(resolver);
+		TestWorldImpl world = new TestWorldImpl(new ReplaceResolver());
 
 		BouncingBallImpl solid = new BouncingBallImpl();
 		solid.getPosition().set(400, 400);
@@ -359,8 +353,7 @@ public class ReplaceResolverSimulation
 	@Test
 	public void testCircleBouncingBetween2Circles()
 	{
-		CollisionResolver resolver = new ReplaceResolver();
-		TestWorldImpl world = new TestWorldImpl(resolver);
+		TestWorldImpl world = new TestWorldImpl(new ReplaceResolver());
 
 		BouncingBallImpl solid = new BouncingBallImpl();
 		solid.getPosition().set(400, 400);
@@ -386,8 +379,7 @@ public class ReplaceResolverSimulation
 	@Test
 	public void testCircleColling2Circles()
 	{
-		CollisionResolver resolver = new ReplaceResolver();
-		TestWorldImpl world = new TestWorldImpl(resolver);
+		TestWorldImpl world = new TestWorldImpl(new ReplaceResolver());
 
 		BouncingBallImpl solid = new BouncingBallImpl();
 		solid.getPosition().set(400, 400);
@@ -410,13 +402,10 @@ public class ReplaceResolverSimulation
 		WorldSimulationUtil.simulate(world);
 	}
 
-
-
 	@Test
 	public void testCircleBoxCollision()
 	{
-		CollisionResolver resolver = new ReplaceResolver();
-		TestWorldImpl world = new TestWorldImpl(resolver);
+		TestWorldImpl world = new TestWorldImpl(new ReplaceResolver());
 
 		BouncingBallImpl solid = new BouncingBallImpl();
 		solid.getPosition().set(400, 400);
@@ -428,6 +417,26 @@ public class ReplaceResolverSimulation
 		solid2.getPosition().set(400, 100);
 		solid2.addCollider(new Box(solid2, 0, 0, 50, 50));
 		solid2.getVelocity().set(0, 70);
+		world.add(solid2);
+
+		WorldSimulationUtil.simulate(world);
+	}
+
+	@Test
+	public void boxGoingNextToBoxX()
+	{
+		TestWorldImpl world = new TestWorldImpl(new ReplaceResolver());
+
+		BouncingBallImpl solid = new BouncingBallImpl();
+		solid.getPosition().set(400, 400);
+		solid.addCollider(new Box(solid, 0, 0, 50, 50));
+		solid.getVelocity().set(-50, 0);
+		world.add(solid);
+
+		BouncingBallImpl solid2 = new BouncingBallImpl();
+		solid2.getPosition().set(100, 350);
+		solid2.addCollider(new Box(solid2, 0, 0, 50, 50));
+		solid2.getVelocity().set(70, 0);
 		world.add(solid2);
 
 		WorldSimulationUtil.simulate(world);
