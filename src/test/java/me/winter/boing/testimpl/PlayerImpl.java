@@ -10,7 +10,6 @@ import java.awt.KeyEventDispatcher;
 import java.awt.KeyboardFocusManager;
 import java.awt.event.KeyEvent;
 
-import static java.lang.Math.abs;
 import static me.winter.boing.testimpl.PlayerImpl.IsKeyPressed.aPressed;
 import static me.winter.boing.testimpl.PlayerImpl.IsKeyPressed.dPressed;
 import static me.winter.boing.testimpl.PlayerImpl.IsKeyPressed.jumpPressed;
@@ -24,7 +23,7 @@ import static me.winter.boing.util.VectorUtil.DOWN;
 public class PlayerImpl extends BodyImpl implements UpdatableBody
 {
 	protected boolean onGround;
-	protected Vector2 velocity = new Vector2(), movement = new Vector2();
+	protected Vector2 velocity = new Vector2(), movement = new Vector2(), shifting = new Vector2();
 
 
 	@Override
@@ -68,6 +67,12 @@ public class PlayerImpl extends BodyImpl implements UpdatableBody
 	public Vector2 getMovement()
 	{
 		return movement;
+	}
+
+	@Override
+	public Vector2 getCollisionShifting()
+	{
+		return shifting;
 	}
 
 	@Override

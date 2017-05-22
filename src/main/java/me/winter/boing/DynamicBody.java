@@ -27,6 +27,15 @@ public interface DynamicBody extends Body
 	Vector2 getMovement();
 
 	/**
+	 * The collision shifting is a way to represents the movement imposed by the
+	 * collision resolver when dynamic bodies collides. If two bodies overlap, they
+	 * need to be shifted in order to stop overlapping.
+	 *
+	 * @return shifting imposed by collision resolver on previous frame
+	 */
+	Vector2 getCollisionShifting();
+
+	/**
 	 * The weight of a DynamicBody is used by a CollisionResolver to choose how
 	 * to handle their shifing. In favor of game design over realism, you can choose
 	 * your weight in function of the other object.

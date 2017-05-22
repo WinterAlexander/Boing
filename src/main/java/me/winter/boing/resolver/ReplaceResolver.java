@@ -3,6 +3,8 @@ package me.winter.boing.resolver;
 import me.winter.boing.Collision;
 import me.winter.boing.DynamicBody;
 
+import static java.lang.Math.signum;
+
 /**
  * CollisionResolver resolving collisions by replacing the objects colliding (if they are Dynamic)
  * <p>
@@ -22,8 +24,7 @@ public class ReplaceResolver implements CollisionResolver
 			float replaceX = collision.normalB.x * collision.penetration - collision.normalB.x * delta;
 			float replaceY = collision.normalB.y * collision.penetration - collision.normalB.y * delta;
 
-			solid.getMovement().x += replaceX;
-			solid.getMovement().y += replaceY;
+			replace(solid, replaceX, replaceY);
 		}
 
 		if(delta > 0)
@@ -33,8 +34,23 @@ public class ReplaceResolver implements CollisionResolver
 			float replaceX = collision.normalA.x * delta;
 			float replaceY = collision.normalA.y * delta;
 
-			solid.getMovement().x += replaceX;
-			solid.getMovement().y += replaceY;
+			replace(solid, replaceX, replaceY);
 		}
+	}
+
+	private void replace(DynamicBody solid, float replaceX, float replaceY)
+	{
+		float dirX = signum(solid.getCollisionShifting().x);
+		float dirY = signum(solid.getCollisionShifting().y);
+
+		if(dirX == 0 || replaceX * dirX > solid.getCollisionShifting().x * dirX)
+			solid.getCollisionShifting().x = replaceX;
+		else if(dirX != signum(replaceX))
+			solid.getCollisionShifting().x += replaceX;
+
+		if(dirY == 0 || replaceY * dirY > solid.getCollisionShifting().y * dirY)
+			solid.getCollisionShifting().y = replaceY;
+		else if(dirY != signum(replaceY))
+			solid.getCollisionShifting().y += replaceY;
 	}
 }

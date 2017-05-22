@@ -13,7 +13,7 @@ import me.winter.boing.DynamicBody;
  */
 public class DynamicBodyImpl extends BodyImpl implements DynamicBody
 {
-	private Vector2 velocity, movement;
+	private Vector2 velocity, movement, shifting;
 	private float weight;
 
 	public DynamicBodyImpl()
@@ -25,6 +25,7 @@ public class DynamicBodyImpl extends BodyImpl implements DynamicBody
 	{
 		this.velocity = new Vector2();
 		this.movement = new Vector2();
+		this.shifting = new Vector2();
 		this.weight = weight;
 	}
 
@@ -38,6 +39,12 @@ public class DynamicBodyImpl extends BodyImpl implements DynamicBody
 	public Vector2 getMovement()
 	{
 		return movement;
+	}
+
+	@Override
+	public Vector2 getCollisionShifting()
+	{
+		return shifting;
 	}
 
 	@Override
