@@ -17,6 +17,16 @@ public class ReplaceResolver implements CollisionResolver
 	{
 		float delta = collision.weightRatio * collision.penetration;
 
+		if(delta > 0)
+		{
+			DynamicBody solid = (DynamicBody)collision.colliderB.getBody();
+
+			float replaceX = collision.normal.x * delta;
+			float replaceY = collision.normal.y * delta;
+
+			replace(solid, replaceX, replaceY);
+		}
+
 		if(delta < collision.penetration)
 		{
 			DynamicBody solid = (DynamicBody)collision.colliderA.getBody();
@@ -27,15 +37,6 @@ public class ReplaceResolver implements CollisionResolver
 			replace(solid, replaceX, replaceY);
 		}
 
-		if(delta > 0)
-		{
-			DynamicBody solid = (DynamicBody)collision.colliderB.getBody();
-
-			float replaceX = collision.normal.x * delta;
-			float replaceY = collision.normal.y * delta;
-
-			replace(solid, replaceX, replaceY);
-		}
 	}
 
 	private void replace(DynamicBody solid, float replaceX, float replaceY)
