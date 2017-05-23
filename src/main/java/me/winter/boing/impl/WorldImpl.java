@@ -10,6 +10,9 @@ import me.winter.boing.resolver.CollisionResolver;
 
 import java.util.Iterator;
 
+import static java.lang.Math.abs;
+import static me.winter.boing.util.FloatUtil.DEFAULT_ULPS;
+
 /**
  * Simple implementation of a World detecting and resolving collisions.
  * <p>
@@ -65,6 +68,18 @@ public class WorldImpl extends OptimizedWorld implements Iterable<Body>
 			}*/
 
 			dynamic.getMovement().set(dynamic.getVelocity()).scl(delta);
+
+			if(abs(dynamic.getMovement().x) < DEFAULT_ULPS * 2 * dynamic.getPrecision()) //twice as much as the collision detection
+			{
+				dynamic.getMovement().x = 0;
+				dynamic.getVelocity().x = 0;
+			}
+
+			if(abs(dynamic.getMovement().y) < DEFAULT_ULPS * 2 * dynamic.getPrecision()) //twice as much as the collision detection
+			{
+				dynamic.getMovement().y = 0;
+				dynamic.getVelocity().y = 0;
+			}
 		}
 	}
 

@@ -62,14 +62,4 @@ public strictfp class FloatUtil
 	{
 		return Math.max(Math.max(Math.max(Math.max(Math.max(a, b), c), d), e), f);
 	}
-
-	public static float max(float... floats)
-	{
-		float max = floats[0];
-
-		for(int i = floats.length - 1; i > 0; i--)
-			max = Math.max(max, floats[i]);
-
-		return max;
-	}
 }

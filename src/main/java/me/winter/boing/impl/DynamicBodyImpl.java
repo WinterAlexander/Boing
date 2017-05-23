@@ -1,9 +1,6 @@
 package me.winter.boing.impl;
 
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.utils.IdentityMap;
-import me.winter.boing.Body;
-import me.winter.boing.Collision;
 import me.winter.boing.DynamicBody;
 
 /**

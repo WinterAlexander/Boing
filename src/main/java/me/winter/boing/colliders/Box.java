@@ -2,9 +2,6 @@ package me.winter.boing.colliders;
 
 import me.winter.boing.Body;
 
-import static java.lang.Math.ulp;
-import static me.winter.boing.util.FloatUtil.max;
-
 /**
  * An Axis Aligned Bounding Box collider
  * <p>
@@ -22,8 +19,31 @@ public class Box extends AbstractCollider
 	}
 
 	@Override
-	public float getPrecision()
+	public float getWidth()
 	{
-		return ulp(max(getAbsX(), getAbsY(), width, height, getMovement().x, getMovement().y));
+		return width;
+	}
+
+	@Override
+	public float getHeight()
+	{
+		return height;
+	}
+
+	public boolean overlaps(Box box)
+	{
+		if(getAbsX() > box.getAbsX() + box.width)
+			return false;
+
+		if(getAbsX() + width < box.getAbsX())
+			return false;
+
+		if(getAbsY() > box.getAbsY() + box.height)
+			return false;
+
+		if(getAbsY() + height < box.getAbsY())
+			return false;
+
+		return true;
 	}
 }

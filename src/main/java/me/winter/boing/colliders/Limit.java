@@ -3,8 +3,7 @@ package me.winter.boing.colliders;
 import com.badlogic.gdx.math.Vector2;
 import me.winter.boing.Body;
 
-import static java.lang.Math.ulp;
-import static me.winter.boing.util.FloatUtil.max;
+import static java.lang.Math.abs;
 
 /**
  * An axis aligned limit collider. Basically a segment or an edge.
@@ -28,8 +27,14 @@ public class Limit extends AbstractCollider
 	}
 
 	@Override
-	public float getPrecision()
+	public float getWidth()
 	{
-		return ulp(max(getAbsX(), getAbsY(), size, getMovement().x, getMovement().y));
+		return size * abs(normal.y);
+	}
+
+	@Override
+	public float getHeight()
+	{
+		return size * abs(normal.x);
 	}
 }

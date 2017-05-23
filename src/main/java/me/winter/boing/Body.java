@@ -1,7 +1,12 @@
 package me.winter.boing;
 
 import com.badlogic.gdx.math.Vector2;
+import me.winter.boing.colliders.Box;
 import me.winter.boing.colliders.Collider;
+
+import static java.lang.Math.abs;
+import static java.lang.Math.ulp;
+import static me.winter.boing.util.FloatUtil.max;
 
 /**
  * Represents a simple, static body. Cannot move but can prevent a DynamicSolid from moving.
@@ -14,6 +19,27 @@ public interface Body
 	 * @return the absolute position of this body
 	 */
 	Vector2 getPosition();
+
+	/**
+	 *
+	 * @return the precision needed to do float operations with this body
+	 */
+	default float getPrecision()
+	{
+		return ulp(max(abs(getPosition().x), abs(getPosition().y), getWidth(), getHeight()));
+	}
+
+	/**
+	 *
+	 * @return width of the whole body
+	 */
+	float getWidth();
+
+	/**
+	 *
+	 * @return height of the whole body
+	 */
+	float getHeight();
 
 	/**
 	 * @return the list of colliders this body have

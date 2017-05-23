@@ -2,6 +2,7 @@ package me.winter.boing.colliders;
 
 import me.winter.boing.Body;
 
+import static java.lang.Math.abs;
 import static java.lang.Math.ulp;
 import static me.winter.boing.util.FloatUtil.max;
 
@@ -21,8 +22,14 @@ public class Circle extends AbstractCollider
 	}
 
 	@Override
-	public float getPrecision()
+	public float getWidth()
 	{
-		return ulp(max(getAbsX(), getAbsY(), radius * 2, getMovement().x, getMovement().y));
+		return radius;
+	}
+
+	@Override
+	public float getHeight()
+	{
+		return radius;
 	}
 }

@@ -2,6 +2,10 @@ package me.winter.boing;
 
 import com.badlogic.gdx.math.Vector2;
 
+import static java.lang.Math.abs;
+import static java.lang.Math.ulp;
+import static me.winter.boing.util.FloatUtil.max;
+
 /**
  * Represents a body that moves every frame.
  * <p>
@@ -34,6 +38,16 @@ public interface DynamicBody extends Body
 	 * @return shifting imposed by collision resolver on previous frame
 	 */
 	Vector2 getCollisionShifting();
+
+	/**
+	 *
+	 * @return the precision needed to do float operations with this body
+	 */
+	@Override
+	default float getPrecision()
+	{
+		return ulp(max(abs(getPosition().x), abs(getPosition().y), getWidth(), getHeight(), abs(getMovement().x), abs(getMovement().y)));
+	}
 
 	/**
 	 * The weight of a DynamicBody is used by a CollisionResolver to choose how

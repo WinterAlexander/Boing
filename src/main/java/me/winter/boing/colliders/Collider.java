@@ -26,9 +26,24 @@ public interface Collider
 	float getAbsY();
 
 	/**
+	 *
+	 * @return width of the collider
+	 */
+	float getWidth();
+
+	/**
+	 *
+	 * @return height of the collider
+	 */
+	float getHeight();
+
+	/**
 	 * @return precision needed when comparing this collider with others
 	 */
-	float getPrecision();
+	default float getPrecision()
+	{
+		return getBody().getPrecision();
+	}
 
 	/**
 	 *
