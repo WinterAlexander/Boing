@@ -1,6 +1,5 @@
 package me.winter.boing.detection.detectors;
 
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Pool;
 import me.winter.boing.Collision;
 import me.winter.boing.detection.PooledDetector;
@@ -65,7 +64,7 @@ public class BoxLimitDetector extends PooledDetector<Box, Limit>
 			vay = 0f;
 		}
 
-		if(limitB.normal.dot(vbx, vby) < 0)
+		if(dot(-nx, -ny, vbx, vby) < 0)
 		{
 			vbx = 0f;
 			vby = 0f;
@@ -134,8 +133,7 @@ public class BoxLimitDetector extends PooledDetector<Box, Limit>
 		collision.colliderA = boxA;
 		collision.colliderB = limitB;
 
-		collision.normalA.set(nx, ny);
-		collision.normalB.set(limitB.normal);
+		collision.normal.set(nx, ny);
 		collision.setImpactVelocities(boxA.getBody(), limitB.getBody());
 		collision.penetration = -((bx - ax) * nx + (by - ay) * ny);
 

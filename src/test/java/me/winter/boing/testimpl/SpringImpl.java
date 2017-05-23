@@ -19,7 +19,7 @@ public class SpringImpl extends BodyImpl
 		{
 			DynamicBody ds = (DynamicBody)collision.colliderB.getBody();
 			ds.getVelocity().set(collision.impactVelB);
-			VelocityUtil.reflect(ds.getVelocity(), collision.normalA);
+			VelocityUtil.reflect(ds.getVelocity(), collision.normal);
 
 			if(ds.getVelocity().len2() < 500f * 500f)
 				ds.getVelocity().nor().scl(500f);

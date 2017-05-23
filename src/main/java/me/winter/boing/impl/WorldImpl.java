@@ -48,7 +48,7 @@ public class WorldImpl extends OptimizedWorld implements Iterable<Body>
 				if(collision.colliderA.getBody() == dynamic)
 				{
 					impactVel = collision.impactVelA;
-					normal = collision.normalA;
+					normal = collision.normal;
 					other = collision.colliderB.getBody();
 				}
 				else

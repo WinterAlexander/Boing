@@ -25,7 +25,7 @@ public class BouncingBallImpl extends DynamicBodyImpl
 	@Override
 	public void notifyCollision(Collision collision)
 	{
-		reflect(getVelocity(), collision.normalB);
+		reflect(getVelocity(), collision.normal);
 
 		getVelocity().add(collision.impactVelB);
 		getVelocity().scl(1f - collision.weightRatio);

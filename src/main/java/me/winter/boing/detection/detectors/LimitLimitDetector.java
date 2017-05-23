@@ -2,7 +2,6 @@ package me.winter.boing.detection.detectors;
 
 import com.badlogic.gdx.utils.Pool;
 import me.winter.boing.Collision;
-import me.winter.boing.DynamicBody;
 import me.winter.boing.detection.PooledDetector;
 import me.winter.boing.colliders.Limit;
 
@@ -143,8 +142,7 @@ public class LimitLimitDetector extends PooledDetector<Limit, Limit>
 		collision.colliderA = limitA;
 		collision.colliderB = limitB;
 
-		collision.normalA.set(limitA.normal);
-		collision.normalB.set(limitB.normal);
+		collision.normal.set(limitA.normal);
 		collision.setImpactVelocities(limitA.getBody(), limitB.getBody());
 		collision.penetration = -((bx - ax) * nx + (by - ay) * ny);
 

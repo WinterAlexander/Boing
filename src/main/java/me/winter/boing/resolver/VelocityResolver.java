@@ -18,10 +18,10 @@ public class VelocityResolver implements CollisionResolver
 	public void resolve(Collision collision)
 	{
 		if(collision.colliderA.getBody() instanceof DynamicBody)
-			reflect((DynamicBody)collision.colliderA.getBody(), collision.normalB);
+			reflect((DynamicBody)collision.colliderA.getBody(), collision.normal);
 
 		if(collision.colliderB.getBody() instanceof DynamicBody)
-			reflect((DynamicBody)collision.colliderB.getBody(), collision.normalA);
+			reflect((DynamicBody)collision.colliderB.getBody(), collision.normal);
 	}
 
 	private void reflect(DynamicBody solid, Vector2 normal)

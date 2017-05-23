@@ -1,5 +1,6 @@
 package me.winter.boing.detection.detectors;
 
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Pool;
 import me.winter.boing.Collision;
 import me.winter.boing.detection.PooledDetector;
@@ -55,21 +56,17 @@ public class BoxCircleDetector extends PooledDetector<Box, Circle>
 		{
 			closestX = signum(closestX) * halfW;
 
-			collision.normalA.set(dx < 0 ? -1 : 1, 0);
-			collision.normalB.set(closestX - dx, closestY - dy);
-			float len = collision.normalB.len();
+			collision.normal.set(dx < 0 ? -1 : 1, 0);
+			float len = Vector2.len(closestX - dx, closestY - dy);
 			collision.penetration = circleB.radius - len;
-			VectorUtil.divide(collision.normalB, len);
 		}
 		else
 		{
 			closestY = signum(closestY) * halfH;
 
-			collision.normalA.set(0, dy < 0 ? -1 : 1);
-			collision.normalB.set(closestX - dx, closestY - dy);
-			float len = collision.normalB.len();
+			collision.normal.set(0, dy < 0 ? -1 : 1);
+			float len = Vector2.len(closestX - dx, closestY - dy);
 			collision.penetration = circleB.radius - len;
-			VectorUtil.divide(collision.normalB, len);
 		}
 
 		collision.contactSurface = 0;

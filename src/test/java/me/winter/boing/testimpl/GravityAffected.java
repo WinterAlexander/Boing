@@ -32,7 +32,7 @@ public class GravityAffected extends DynamicBodyImpl implements UpdatableBody
 	@Override
 	public void notifyCollision(Collision collision)
 	{
-		if(abs(collision.normalB.angle() - 90f) < 0.001f)
+		if(abs(collision.normal.angle() - 90f) < 0.001f)
 			onGround = true;
 
 		super.notifyCollision(collision);

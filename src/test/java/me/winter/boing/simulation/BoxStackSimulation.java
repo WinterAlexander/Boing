@@ -164,7 +164,7 @@ public class BoxStackSimulation
 			@Override
 			public void notifyCollision(Collision collision)
 			{
-				if(collision.normalA.dot(DOWN) > 0.7 && collision.impactVelA.dot(DOWN) > 0.7 && collision.colliderB.getBody() != test)
+				if(collision.normal.dot(DOWN) > 0.7 && collision.impactVelA.dot(DOWN) > 0.7 && collision.colliderB.getBody() != test)
 					onGround = true;
 			}
 		};
@@ -343,7 +343,7 @@ public class BoxStackSimulation
 			@Override
 			public void notifyCollision(Collision collision)
 			{
-				if(collision.normalA.dot(DOWN) > 0.7 && collision.impactVelA.dot(DOWN) > 0.7 && collision.colliderB.getBody() == ground)
+				if(collision.normal.dot(DOWN) > 0.7 && collision.impactVelA.dot(DOWN) > 0.7 && collision.colliderB.getBody() == ground)
 					onGround = true;
 			}
 		};

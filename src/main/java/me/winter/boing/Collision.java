@@ -12,14 +12,9 @@ import me.winter.boing.colliders.Collider;
 public class Collision
 {
 	/**
-	 * Normal of colliderA at the impact point
+	 * Normal of the collision at the impact point from A's perpective (B is opposite)
 	 */
-	public final Vector2 normalA = new Vector2();
-
-	/**
-	 * Normal of colliderB at the impact point
-	 */
-	public final Vector2 normalB = new Vector2();
+	public final Vector2 normal = new Vector2();
 
 	/**
 	 * Velocity of solidA during impact
@@ -65,8 +60,7 @@ public class Collision
 	 */
 	public void setAsSwapped(Collision collision)
 	{
-		normalA.set(collision.normalB);
-		normalB.set(collision.normalA);
+		normal.set(collision.normal).scl(-1);
 		impactVelA.set(collision.impactVelB);
 		impactVelB.set(collision.impactVelA);
 		penetration = collision.penetration;

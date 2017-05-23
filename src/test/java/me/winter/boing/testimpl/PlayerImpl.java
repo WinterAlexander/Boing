@@ -53,7 +53,7 @@ public class PlayerImpl extends BodyImpl implements UpdatableBody
 	@Override
 	public void notifyCollision(Collision collision)
 	{
-		if(collision.normalA.dot(DOWN) > 0.7 && collision.impactVelA.dot(DOWN) > 0.7)
+		if(collision.normal.dot(DOWN) > 0.7 && collision.impactVelA.dot(DOWN) > 0.7)
 			onGround = true;
 	}
 

@@ -27,6 +27,8 @@ public abstract class OptimizedWorld extends AbstractWorld
 
 	protected boolean refresh;
 
+	private Vector2 tmpVector = new Vector2();
+
 	public OptimizedWorld(CollisionResolver resolver)
 	{
 		this.detector = new DetectionHandler(collisionPool);
@@ -109,7 +111,7 @@ public abstract class OptimizedWorld extends AbstractWorld
 		DynamicBody dynA = (DynamicBody)collision.colliderA.getBody();
 		DynamicBody dynB = (DynamicBody)collision.colliderB.getBody();
 
-		collision.weightRatio = VelocityUtil.getWeightRatio(getWeight(dynA, collision.normalB, dynB), getWeight(dynB, collision.normalA, dynA));
+		collision.weightRatio = VelocityUtil.getWeightRatio(getWeight(dynA, tmpVector.set(collision.normal).scl(-1), dynB), getWeight(dynB, collision.normal, dynA));
 		miroir.weightRatio = 1f - collision.weightRatio;
 	}
 
@@ -134,7 +136,7 @@ public abstract class OptimizedWorld extends AbstractWorld
 				if(collision.colliderB.getBody() == against)
 					continue;
 
-				if(collision.normalA.dot(normal) > 0.7)
+				if(collision.normal.dot(normal) > 0.7)
 				{
 					if(!(collision.colliderB.getBody() instanceof DynamicBody))
 						return POSITIVE_INFINITY;
