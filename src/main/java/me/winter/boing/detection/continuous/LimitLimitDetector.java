@@ -1,4 +1,4 @@
-package me.winter.boing.detection.detectors;
+package me.winter.boing.detection.continuous;
 
 import com.badlogic.gdx.utils.Pool;
 import me.winter.boing.Collision;

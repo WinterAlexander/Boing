@@ -1,4 +1,4 @@
-package me.winter.boing.detection.detectors;
+package me.winter.boing.detection.simple;
 
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Pool;
@@ -6,7 +6,6 @@ import me.winter.boing.Collision;
 import me.winter.boing.detection.PooledDetector;
 import me.winter.boing.colliders.Box;
 import me.winter.boing.colliders.Circle;
-import me.winter.boing.util.VectorUtil;
 
 import static com.badlogic.gdx.math.MathUtils.clamp;
 import static java.lang.Math.abs;
@@ -18,7 +17,6 @@ import static me.winter.boing.util.VectorUtil.divide;
  * <p>
  * Created by Alexander Winter on 2017-04-12.
  */
-@Deprecated
 public class BoxCircleDetector extends PooledDetector<Box, Circle>
 {
 	public BoxCircleDetector(Pool<Collision> collisionPool)
@@ -29,8 +27,9 @@ public class BoxCircleDetector extends PooledDetector<Box, Circle>
 	@Override
 	public Collision collides(Box boxA, Circle circleB)
 	{
-		float dx = circleB.getAbsX() - boxA.getAbsX();
-		float dy = circleB.getAbsY() - boxA.getAbsY();
+
+		float dx = circleB.getAbsX() + circleB.getMovement().x - (boxA.getAbsX() + boxA.getMovement().x);
+		float dy = circleB.getAbsY() + circleB.getMovement().y - (boxA.getAbsY() + boxA.getMovement().y);
 
 		float absDx = abs(dx);
 		float absDy = abs(dy);

@@ -3,9 +3,9 @@ package me.winter.boing.detection;
 import com.badlogic.gdx.utils.IntMap;
 import com.badlogic.gdx.utils.Pool;
 import me.winter.boing.Collision;
-import me.winter.boing.detection.detectors.BoxBoxDetector;
-import me.winter.boing.detection.detectors.BoxLimitDetector;
-import me.winter.boing.detection.detectors.LimitLimitDetector;
+import me.winter.boing.detection.continuous.BoxBoxDetector;
+import me.winter.boing.detection.continuous.BoxLimitDetector;
+import me.winter.boing.detection.continuous.LimitLimitDetector;
 import me.winter.boing.colliders.Box;
 import me.winter.boing.colliders.Limit;
 import me.winter.boing.colliders.Collider;
@@ -26,15 +26,15 @@ public class DetectionHandler
 	 */
 	public DetectionHandler(Pool<Collision> collisionPool)
 	{
-		//detectors.put(getKey(Circle.class, Circle.class), new CircleCircleDetector(collisionPool));
-		//detectors.put(getKey(Circle.class, Box.class), new DetectorSwapper<>(new BoxCircleDetector(collisionPool)));
-		//detectors.put(getKey(Circle.class, Limit.class), new CircleLimitDetector(collisionPool));
+		//continuous.put(getKey(Circle.class, Circle.class), new CircleCircleDetector(collisionPool));
+		//continuous.put(getKey(Circle.class, Box.class), new DetectorSwapper<>(new BoxCircleDetector(collisionPool)));
+		//continuous.put(getKey(Circle.class, Limit.class), new CircleLimitDetector(collisionPool));
 
-		//detectors.put(getKey(Box.class, Circle.class), new BoxCircleDetector(collisionPool));
+		//continuous.put(getKey(Box.class, Circle.class), new BoxCircleDetector(collisionPool));
 		detectors.put(getKey(Box.class, Box.class), new BoxBoxDetector(collisionPool));
 		detectors.put(getKey(Box.class, Limit.class), new BoxLimitDetector(collisionPool));
 
-		//detectors.put(getKey(Limit.class, Circle.class), new DetectorSwapper<>(new CircleLimitDetector(collisionPool)));
+		//continuous.put(getKey(Limit.class, Circle.class), new DetectorSwapper<>(new CircleLimitDetector(collisionPool)));
 		detectors.put(getKey(Limit.class, Box.class), new DetectorSwapper<>(new BoxLimitDetector(collisionPool)));
 		detectors.put(getKey(Limit.class, Limit.class), new LimitLimitDetector(collisionPool));
 	}

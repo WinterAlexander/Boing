@@ -1,4 +1,4 @@
-package me.winter.boing.detection.detectors;
+package me.winter.boing.detection.simple;
 
 import com.badlogic.gdx.utils.Pool;
 import me.winter.boing.Collision;
@@ -13,7 +13,6 @@ import static me.winter.boing.util.VectorUtil.divide;
  * <p>
  * Created by Alexander Winter on 2017-04-12.
  */
-@Deprecated
 public class CircleCircleDetector extends PooledDetector<Circle, Circle>
 {
 	public CircleCircleDetector(Pool<Collision> collisionPool)
@@ -24,8 +23,8 @@ public class CircleCircleDetector extends PooledDetector<Circle, Circle>
 	@Override
 	public Collision collides(Circle shapeA, Circle shapeB)
 	{
-		float dx = shapeB.getAbsX() - shapeA.getAbsX();
-		float dy = shapeB.getAbsY() - shapeA.getAbsY();
+		float dx = shapeB.getAbsX() + shapeB.getMovement().x - (shapeA.getAbsX() + shapeA.getMovement().x);
+		float dy = shapeB.getAbsY() + shapeB.getMovement().y - (shapeA.getAbsY() + shapeA.getMovement().y);
 
 		float r = shapeA.radius + shapeB.radius;
 		float r2 = r * r;

@@ -1,12 +1,13 @@
-package me.winter.boing.detection.detectors;
+package me.winter.boing.detection.continuous;
 
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Pool;
 import me.winter.boing.Collision;
 import me.winter.boing.detection.PooledDetector;
 import me.winter.boing.colliders.Box;
+import me.winter.boing.colliders.Limit;
 
 import static com.badlogic.gdx.math.Vector2.dot;
+import static java.lang.Math.abs;
 import static java.lang.Math.max;
 import static java.lang.Math.min;
 import static java.lang.Math.signum;
@@ -16,80 +17,46 @@ import static me.winter.boing.util.FloatUtil.isGreaterOrEqual;
 import static me.winter.boing.util.FloatUtil.isSmallerOrEqual;
 
 /**
- * Detects collisions between 2 Axis Aligned Bounding Box
+ * Detects collisions between an Axis Aligned Bounding Box and a Limit
  * <p>
  * Created by Alexander Winter on 2017-04-12.
  */
-public class BoxBoxDetector extends PooledDetector<Box, Box>
+public class BoxLimitDetector extends PooledDetector<Box, Limit>
 {
-	public BoxBoxDetector(Pool<Collision> collisionPool)
+	public BoxLimitDetector(Pool<Collision> collisionPool)
 	{
 		super(collisionPool);
 	}
 
 	@Override
-	public Collision collides(Box boxA, Box boxB)
+	public Collision collides(Box boxA, Limit limitB)
 	{
-		Vector2 vecA = boxA.getMovement();
-		Vector2 vecB = boxB.getMovement();
+		float epsilon = DEFAULT_ULPS * max(boxA.getPrecision(), limitB.getPrecision());
 
-		float epsilon = DEFAULT_ULPS * max(boxA.getPrecision(), boxB.getPrecision());
+		float pax = boxA.getAbsX(); //abs X for a
+		float pay = boxA.getAbsY(); //abs Y for a
+		float pbx = limitB.getAbsX(); //abs X for b
+		float pby = limitB.getAbsY(); //abs Y for b
+		float hsA; //half size of A (as a Limit)
 
-		float pax = boxA.getAbsX();
-		float pay = boxA.getAbsY();
-		float pbx = boxB.getAbsX();
-		float pby = boxB.getAbsY();
+		float nx = -limitB.normal.x; //normal X
+		float ny = -limitB.normal.y; //normal Y
 
-		//TODO find which limits collide and stop this cancer
-
-		Collision collision = collides(
-				boxA.width / 2, vecA.x, vecA.y, pax, pay + boxA.height / 2,
-				boxB.width / 2, vecB.x, vecB.y, pbx, pby - boxB.height / 2,
-				epsilon, 0, 1);
-
-		if(collision == null)
+		if(abs(limitB.normal.x) > abs(limitB.normal.y)) //if collision is more horizontal than vertical
 		{
-			collision = collides(
-					boxA.width / 2, vecA.x, vecA.y, pax, pay - boxA.height / 2,
-					boxB.width / 2, vecB.x, vecB.y, pbx, pby + boxB.height / 2,
-					epsilon, 0, -1);
-
-			if(collision == null)
-			{
-				collision = collides(
-						boxA.height / 2, vecA.x, vecA.y, pax + boxA.width / 2, pay,
-						boxB.height / 2, vecB.x, vecB.y, pbx - boxB.width / 2, pby,
-						epsilon, 1, 0);
-
-				if(collision == null)
-				{
-					collision = collides(
-							boxA.height / 2, vecA.x, vecA.y, pax - boxA.width / 2, pay,
-							boxB.height / 2, vecB.x, vecB.y, pbx + boxB.width / 2, pby,
-							epsilon, -1, 0);
-
-					if(collision == null)
-						return null;
-				}
-			}
+			pax += nx * boxA.width / 2; //extends to side
+			hsA = boxA.height / 2;
+		}
+		else
+		{
+			pay += ny * boxA.height / 2; //extend to top/bottom
+			hsA = boxA.width / 2;
 		}
 
-		collision.colliderA = boxA;
-		collision.colliderB = boxB;
-		collision.setImpactVelocities(boxA.getBody(), boxB.getBody());
-
-
-
-		//if(collision.colliderA.getBody() instanceof DynamicBody && collision.colliderB.getBody() instanceof DynamicBody)
-		//	System.out.println(collision.contactSurface);
-
-		return collision;
-	}
-
-	public Collision collides(float hsA, float vax, float vay, float pax, float pay,
-	                          float hsB, float vbx, float vby, float pbx, float pby,
-	                          float epsilon, float nx, float ny)
-	{
+		float vax = boxA.getMovement().x;
+		float vay = boxA.getMovement().y;
+		float vbx = limitB.getMovement().x;
+		float vby = limitB.getMovement().y;
 
 		if(dot(nx, ny, vax, vay) < 0)
 		{
@@ -103,15 +70,15 @@ public class BoxBoxDetector extends PooledDetector<Box, Box>
 			vby = 0f;
 		}
 
-		float ax = pax + vax;
-		float ay = pay + vay;
-		float bx = pbx + vbx;
-		float by = pby + vby;
-
-		if(!isGreaterOrEqual(ax * nx + ay * ny, bx * nx + by * ny, epsilon)) //if limitB with his velocity isn't after limitA with his velocity
+		if(!isSmallerOrEqual(pax * nx + pay * ny, pbx * nx + pby * ny, epsilon)) //if limitB isn't before boxA
 			return null; //no collision
 
-		if(!isSmallerOrEqual(pax * nx + pay * ny, pbx * nx + pby * ny, epsilon)) //if limitB isn't before limitA
+		float ax = pax + vax; //previous x for A
+		float ay = pay + vay; //previous y for A
+		float bx = pbx + vbx; //previous x for B
+		float by = pby + vby; //previous y for B
+
+		if(!isGreaterOrEqual(ax * nx + ay * ny, bx * nx + by * ny, epsilon)) //if limitB with his velocity isn't after boxA with his velocity
 			return null; //no collision
 
 		float diff = (pbx - pax) * nx + (pby - pay) * ny;
@@ -123,6 +90,8 @@ public class BoxBoxDetector extends PooledDetector<Box, Box>
 		float myA = ay - vay * midpoint; //midpoint y for A
 		float mxB = bx - vbx * midpoint; //midpoint x for B
 		float myB = by - vby * midpoint; //midpoint y for B
+
+		float hsB = limitB.size / 2; //half size for B
 
 		float limitA1 = -ny * (mxA + hsA) + nx * (myA + hsA);
 		float limitA2 = -ny * (mxA - hsA) + nx * (myA - hsA);
@@ -161,7 +130,11 @@ public class BoxBoxDetector extends PooledDetector<Box, Box>
 
 		Collision collision = collisionPool.obtain();
 
+		collision.colliderA = boxA;
+		collision.colliderB = limitB;
+
 		collision.normal.set(nx, ny);
+		collision.setImpactVelocities(boxA.getBody(), limitB.getBody());
 		collision.penetration = -((bx - ax) * nx + (by - ay) * ny);
 
 		collision.contactSurface = surface;
