@@ -97,6 +97,11 @@ public class FlyingPushableBoxSimulation
 		limit2.addCollider(new Limit(limit2, 0, 0, UP, 50));
 		testWorld.add(limit2);
 
+		BodyImpl solid = new BodyImpl();
+		solid.getPosition().set(600, 600);
+		solid.addCollider(new Box(solid, 0, 0, 50, 50));
+		testWorld.add(solid);
+
 		WorldSimulationUtil.simulate(testWorld);
 	}
 }

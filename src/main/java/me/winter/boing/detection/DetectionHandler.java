@@ -3,7 +3,7 @@ package me.winter.boing.detection;
 import com.badlogic.gdx.utils.IntMap;
 import com.badlogic.gdx.utils.Pool;
 import me.winter.boing.Collision;
-import me.winter.boing.detection.continuous.BoxBoxDetector;
+import me.winter.boing.detection.simple.BoxBoxDetector;
 import me.winter.boing.detection.continuous.BoxLimitDetector;
 import me.winter.boing.detection.continuous.LimitLimitDetector;
 import me.winter.boing.colliders.Box;
