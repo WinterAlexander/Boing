@@ -33,40 +33,34 @@ public class LimitLimitDetector extends PooledDetector<Limit, Limit>
 		if(!areEqual(limitA.normal.dot(limitB.normal), -1))
 			return null;
 
-		float vax = limitA.getMovement().x;
-		float vay = limitA.getMovement().y;
-		float vbx = limitB.getMovement().x;
-		float vby = limitB.getMovement().y;
+		float vax = 0;
+		float vay = 0;
+		float vbx = 0;
+		float vby = 0;
 
-		float cax = limitA.getCollisionShifting().x;
-		float cay = limitA.getCollisionShifting().y;
-		float cbx = limitB.getCollisionShifting().x;
-		float cby = limitB.getCollisionShifting().y;
-
-		if(limitA.normal.dot(vax, vay) < 0 || vax == 0 && vay == 0)
+		if(limitA.normal.dot(limitA.getMovement()) > 0)
 		{
-			vax += cax;
-			vay += cay;
+			vax += limitA.getMovement().x;
+			vay += limitA.getMovement().y;
 		}
 
-		if(limitB.normal.dot(vbx, vby) < 0 || vbx == 0 && vby == 0)
+		if(limitB.normal.dot(limitB.getMovement()) > 0)
 		{
-			vbx += cbx;
-			vby += cby;
-		}
-/*
-
-		if(limitA.normal.dot(cax, cay) > 0)
-		{
-			vax += cax;
-			vay += cay;
+			vbx += limitB.getMovement().x;
+			vby += limitB.getMovement().y;
 		}
 
-		if(limitB.normal.dot(cbx, cby) > 0)
+		if(limitA.normal.dot(limitA.getCollisionShifting()) > 0)
 		{
-			vbx += cbx;
-			vby += cby;
-		}*/
+			vax += limitA.getCollisionShifting().x;
+			vay += limitA.getCollisionShifting().y;
+		}
+
+		if(limitB.normal.dot(limitB.getCollisionShifting()) > 0)
+		{
+			vbx += limitB.getCollisionShifting().x;
+			vby += limitB.getCollisionShifting().y;
+		}
 
 		float epsilon = DEFAULT_ULPS * max(limitA.getPrecision(), limitB.getPrecision());
 
