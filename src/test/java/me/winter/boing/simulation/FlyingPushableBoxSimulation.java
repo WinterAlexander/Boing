@@ -75,7 +75,7 @@ public class FlyingPushableBoxSimulation
 			@Override
 			public float getWeight(DynamicBody other)
 			{
-				return Float.POSITIVE_INFINITY;
+				return 1f;
 			}
 		};
 		player.getPosition().set(400, 400);
@@ -170,7 +170,14 @@ public class FlyingPushableBoxSimulation
 	{
 		TestWorldImpl testWorld = new TestWorldImpl(new ReplaceResolver());
 
-		FlyingPlayerImpl player = new FlyingPlayerImpl();
+		FlyingPlayerImpl player = new FlyingPlayerImpl()
+		/*{
+			@Override
+			public float getWeight(DynamicBody other) {
+				return Float.POSITIVE_INFINITY;
+			}
+		}//*/
+		;
 		player.getPosition().set(500, 400);
 		player.addCollider(new Limit(player, 0, 25, UP, 50));
 		player.addCollider(new Limit(player, 0, -25, DOWN, 50));

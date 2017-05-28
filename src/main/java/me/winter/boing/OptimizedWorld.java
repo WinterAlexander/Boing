@@ -117,7 +117,7 @@ public abstract class OptimizedWorld extends AbstractWorld
 
 	private float getWeight(DynamicBody body, Vector2 normal, DynamicBody against)
 	{
-		float bestWeight = body.getWeight(against);
+		float weight = body.getWeight(against);
 
 		Collision swapped = collisionPool.obtain();
 
@@ -136,24 +136,19 @@ public abstract class OptimizedWorld extends AbstractWorld
 				if(collision.colliderB.getBody() == against)
 					continue;
 
-				if(collision.normal.dot(normal) > 0.7)
+				if(collision.normal.dot(normal) == 1f)
 				{
 					if(!(collision.colliderB.getBody() instanceof DynamicBody))
 						return POSITIVE_INFINITY;
 
-					float currentWeight = getWeight((DynamicBody)collision.colliderB.getBody(), normal, against);
-					//float currentWeight = body.getWeight(against);
-
-					if(currentWeight > bestWeight)
-						bestWeight = currentWeight;
-
+					weight += getWeight((DynamicBody)collision.colliderB.getBody(), normal, against);
 				}
 			}
 		}
 
 		collisionPool.free(swapped);
 
-		return bestWeight;
+		return weight;
 	}
 
 	@Override
