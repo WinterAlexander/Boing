@@ -2,7 +2,6 @@ package me.winter.boing.testimpl;
 
 import com.badlogic.gdx.math.Vector2;
 import me.winter.boing.Collision;
-import me.winter.boing.DynamicBody;
 import me.winter.boing.UpdatableBody;
 import me.winter.boing.impl.BodyImpl;
 
@@ -76,7 +75,7 @@ public class PlayerImpl extends BodyImpl implements UpdatableBody
 	}
 
 	@Override
-	public float getWeight(DynamicBody other)
+	public float getWeight()
 	{
 		return 100f;
 	}

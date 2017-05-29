@@ -3,6 +3,7 @@ package me.winter.boing.resolver;
 import com.badlogic.gdx.math.Vector2;
 import me.winter.boing.DynamicBody;
 import me.winter.boing.Collision;
+import me.winter.boing.World;
 import me.winter.boing.util.VelocityUtil;
 
 import static java.lang.Math.signum;
@@ -15,7 +16,7 @@ import static java.lang.Math.signum;
 public class VelocityResolver implements CollisionResolver
 {
 	@Override
-	public void resolve(Collision collision)
+	public void resolve(Collision collision, World world)
 	{
 		if(collision.colliderA.getBody() instanceof DynamicBody)
 			reflect((DynamicBody)collision.colliderA.getBody(), collision.normal);

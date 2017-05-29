@@ -1,6 +1,5 @@
 package me.winter.boing.simulation;
 
-import me.winter.boing.DynamicBody;
 import me.winter.boing.colliders.Box;
 import me.winter.boing.colliders.Limit;
 import me.winter.boing.impl.BodyImpl;
@@ -73,7 +72,7 @@ public class FlyingPushableBoxSimulation
 		FlyingPlayerImpl player = new FlyingPlayerImpl() {
 
 			@Override
-			public float getWeight(DynamicBody other)
+			public float getWeight()
 			{
 				return 1f;
 			}

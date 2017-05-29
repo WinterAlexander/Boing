@@ -70,8 +70,6 @@ public abstract class OptimizedWorld extends AbstractWorld
 				if(collision == null)
 					continue;
 
-				collision.weightRatio = -1f; //not set
-
 				swappedBuffer.setAsSwapped(collision);
 
 				if(colliderA.getBody().cancelCollision(collision) || colliderB.getBody().cancelCollision(swappedBuffer))
@@ -79,7 +77,6 @@ public abstract class OptimizedWorld extends AbstractWorld
 
 				if(bodyB instanceof DynamicBody || bodyA instanceof DynamicBody) //at least one have to be able to move to resolve it...
 				{
-					resolveWeights(collision, swappedBuffer);
 					collisions.add(collision);
 				}
 				else
@@ -93,64 +90,6 @@ public abstract class OptimizedWorld extends AbstractWorld
 		}
 	}
 
-	private void resolveWeights(Collision collision, Collision miroir)
-	{
-		if(!(collision.colliderA.getBody() instanceof DynamicBody))
-		{
-			collision.weightRatio = 1f;
-			miroir.weightRatio = 0f;
-			return;
-		}
-		else if(!(collision.colliderB.getBody() instanceof DynamicBody))
-		{
-			collision.weightRatio = 0f;
-			miroir.weightRatio = 1f;
-			return;
-		}
-
-		DynamicBody dynA = (DynamicBody)collision.colliderA.getBody();
-		DynamicBody dynB = (DynamicBody)collision.colliderB.getBody();
-
-		collision.weightRatio = VelocityUtil.getWeightRatio(getWeight(dynA, tmpVector.set(collision.normal).scl(-1), dynB), getWeight(dynB, collision.normal, dynA));
-		miroir.weightRatio = 1f - collision.weightRatio;
-	}
-
-	private float getWeight(DynamicBody body, Vector2 normal, DynamicBody against)
-	{
-		float weight = body.getWeight(against);
-
-		Collision swapped = collisionPool.obtain();
-
-		for(int i = 0; i < prevCollisions.size; i++)
-		{
-			Collision collision = prevCollisions.get(i);
-
-			if(collision.colliderB.getBody() == body)
-			{
-				swapped.setAsSwapped(collision);
-				collision = swapped;
-			}
-
-			if(collision.colliderA.getBody() == body)
-			{
-				if(collision.colliderB.getBody() == against)
-					continue;
-
-				if(collision.normal.dot(normal) == 1f)
-				{
-					if(!(collision.colliderB.getBody() instanceof DynamicBody))
-						return POSITIVE_INFINITY;
-
-					weight += getWeight((DynamicBody)collision.colliderB.getBody(), normal, against);
-				}
-			}
-		}
-
-		collisionPool.free(swapped);
-
-		return weight;
-	}
-
 	@Override
 	protected void resolveCollisions()
 	{
@@ -162,7 +101,7 @@ public abstract class OptimizedWorld extends AbstractWorld
 			collision.colliderA.getBody().notifyCollision(collision);
 			collision.colliderB.getBody().notifyCollision(swapped);
 
-			resolver.resolve(collision);
+			resolver.resolve(collision, this);
 		}
 
 		collisionPool.free(swapped);
@@ -183,5 +122,11 @@ public abstract class OptimizedWorld extends AbstractWorld
 	public void refresh()
 	{
 		this.refresh = true;
+	}
+
+	@Override
+	public Array<Collision> getCollisions()
+	{
+		return collisions;
 	}
 }

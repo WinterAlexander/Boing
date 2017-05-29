@@ -1,6 +1,7 @@
 package me.winter.boing.resolver;
 
 import me.winter.boing.Collision;
+import me.winter.boing.World;
 
 /**
  * Represents a object able to resolve a collision
@@ -9,5 +10,5 @@ import me.winter.boing.Collision;
  */
 public interface CollisionResolver
 {
-	void resolve(Collision collision);
+	void resolve(Collision collision, World world);
 }

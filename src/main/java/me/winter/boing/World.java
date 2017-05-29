@@ -1,5 +1,8 @@
 package me.winter.boing;
 
+import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.Pool;
+
 /**
  * Represents a World for a physics simulation. Note that the usage of World
  * and World derived classes isn't mandatory for Body objects but might
@@ -15,5 +18,10 @@ public interface World
 	 * @param delta time since the last update
 	 */
 	void step(float delta);
+
+
+	Pool<Collision> getCollisionPool();
+
+	Array<Collision> getCollisions();
 }
 

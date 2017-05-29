@@ -23,7 +23,7 @@ public class LimitLimitDetectionTest
 	{
 		MutableInt collisionCount = new MutableInt(0);
 
-		CollisionResolver resolver = c -> collisionCount.value++;
+		CollisionResolver resolver = (w, c) -> collisionCount.value++;
 		WorldImpl world = new WorldImpl(resolver);
 
 		DynamicBodyImpl solidImpl = new DynamicBodyImpl(1f);
@@ -55,7 +55,7 @@ public class LimitLimitDetectionTest
 	{
 		MutableInt collisionCount = new MutableInt(0);
 
-		CollisionResolver resolver = c -> collisionCount.value++;
+		CollisionResolver resolver = (w, c) -> collisionCount.value++;
 		WorldImpl world = new WorldImpl(resolver);
 
 		DynamicBodyImpl solidImpl = new DynamicBodyImpl(1f);
@@ -87,7 +87,7 @@ public class LimitLimitDetectionTest
 	{
 		MutableInt collisionCount = new MutableInt(0);
 
-		CollisionResolver resolver = c -> collisionCount.value++;
+		CollisionResolver resolver = (w, c) -> collisionCount.value++;
 		WorldImpl world = new WorldImpl(resolver);
 
 		DynamicBodyImpl solidImpl = new DynamicBodyImpl(1f);
@@ -119,7 +119,7 @@ public class LimitLimitDetectionTest
 	{
 		MutableInt collisionCount = new MutableInt(0);
 
-		CollisionResolver resolver = c -> collisionCount.value++;
+		CollisionResolver resolver = (w, c) -> collisionCount.value++;
 		WorldImpl world = new WorldImpl(resolver);
 
 		DynamicBodyImpl solidImpl = new DynamicBodyImpl(1f);
@@ -148,7 +148,7 @@ public class LimitLimitDetectionTest
 	{
 		MutableInt collisionCount = new MutableInt(0);
 
-		CollisionResolver resolver = c -> collisionCount.value++;
+		CollisionResolver resolver = (w, c) -> collisionCount.value++;
 		WorldImpl world = new WorldImpl(resolver);
 
 		BouncingBallImpl ballImpl = new BouncingBallImpl();

@@ -52,4 +52,10 @@ public abstract class AbstractWorld implements World
 
 
 	protected abstract void moveBodies();
+
+	@Override
+	public Pool<Collision> getCollisionPool()
+	{
+		return collisionPool;
+	}
 }

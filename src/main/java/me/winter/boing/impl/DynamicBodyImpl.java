@@ -45,7 +45,7 @@ public class DynamicBodyImpl extends BodyImpl implements DynamicBody
 	}
 
 	@Override
-	public float getWeight(DynamicBody against)
+	public float getWeight()
 	{
 		return weight;
 	}

@@ -1,7 +1,6 @@
 package me.winter.boing.simulation;
 
 import me.winter.boing.Collision;
-import me.winter.boing.DynamicBody;
 import me.winter.boing.impl.BodyImpl;
 import me.winter.boing.impl.DynamicBodyImpl;
 import me.winter.boing.resolver.ReplaceResolver;
@@ -388,9 +387,9 @@ public class BoxStackSimulation
 
 		GravityAffected test = new GravityAffected(){
 			@Override
-			public float getWeight(DynamicBody against)
+			public float getWeight()
 			{
-				return against == player ? 0f : 1f;
+				return 1f;
 			}
 		};
 		test.getPosition().set(400, 500);
@@ -399,7 +398,7 @@ public class BoxStackSimulation
 
 		GravityAffected test2 = new GravityAffected() {
 			@Override
-			public float getWeight(DynamicBody against)
+			public float getWeight()
 			{
 				return 0f;
 			}

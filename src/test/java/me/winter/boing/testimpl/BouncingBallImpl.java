@@ -28,6 +28,6 @@ public class BouncingBallImpl extends DynamicBodyImpl
 		reflect(getVelocity(), collision.normal);
 
 		getVelocity().add(collision.impactVelB);
-		getVelocity().scl(1f - collision.weightRatio);
+		//getVelocity().scl(1f - collision.weightRatio);
 	}
 }
