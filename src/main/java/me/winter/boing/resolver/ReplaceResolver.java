@@ -19,6 +19,9 @@ public class ReplaceResolver implements CollisionResolver
 	@Override
 	public void resolve(Collision collision, World world)
 	{
+		if(collision.penetration == 0)
+			return;
+
 		DynamicBody toPush = resolveWeights(collision, world);
 
 		if(toPush == null)
@@ -27,14 +30,14 @@ public class ReplaceResolver implements CollisionResolver
 		float nx = toPush == collision.colliderA.getBody() ? -collision.normal.x : collision.normal.x;
 		float ny = toPush == collision.colliderA.getBody() ? -collision.normal.y : collision.normal.y;
 
-		float replaceX = nx * collision.penetration;
-		float replaceY = ny * collision.penetration;
-
-		replace(toPush, replaceX, replaceY);
+		replace(world, toPush, nx, ny, collision.penetration);
 	}
 
-	private void replace(DynamicBody solid, float replaceX, float replaceY)
+	private void replace(World world, DynamicBody solid, float nx, float ny, float pene)
 	{
+		float replaceX = nx * pene;
+		float replaceY = ny * pene;
+
 		if(replaceX != 0f)
 		{
 			float dirX = signum(solid.getCollisionShifting().x);
@@ -53,6 +56,37 @@ public class ReplaceResolver implements CollisionResolver
 				solid.getCollisionShifting().y = replaceY;
 			else if(dirY != signum(replaceY))
 				solid.getCollisionShifting().y += replaceY;
+		}
+
+		Collision swapped = world.getCollisionPool().obtain();
+
+		try
+		{
+			for(int i = 0; i < world.getCollisions().size; i++)
+			{
+				Collision collision = world.getCollisions().get(i);
+
+				if(collision.colliderB.getBody() == solid)
+				{
+					swapped.setAsSwapped(collision);
+					collision = swapped;
+				}
+
+				if(collision.colliderA.getBody() == solid)
+				{
+					if(collision.normal.dot(nx, ny) == 1f)
+					{
+						if(!(collision.colliderB.getBody() instanceof DynamicBody))
+							return;
+
+						replace(world, (DynamicBody)collision.colliderB.getBody(), nx, ny, pene);
+					}
+				}
+			}
+		}
+		finally
+		{
+			world.getCollisionPool().free(swapped);
 		}
 	}
 
@@ -90,29 +124,34 @@ public class ReplaceResolver implements CollisionResolver
 
 		Collision swapped = world.getCollisionPool().obtain();
 
-		for(int i = 0; i < world.getCollisions().size; i++)
+		try
 		{
-			Collision collision = world.getCollisions().get(i);
-
-			if(collision.colliderB.getBody() == body)
+			for(int i = 0; i < world.getCollisions().size; i++)
 			{
-				swapped.setAsSwapped(collision);
-				collision = swapped;
-			}
+				Collision collision = world.getCollisions().get(i);
 
-			if(collision.colliderA.getBody() == body)
-			{
-				if(collision.normal.dot(nx, ny) == 1f)
+				if(collision.colliderB.getBody() == body)
 				{
-					if(!(collision.colliderB.getBody() instanceof DynamicBody))
-						return POSITIVE_INFINITY;
+					swapped.setAsSwapped(collision);
+					collision = swapped;
+				}
 
-					weight += getWeight(world, (DynamicBody)collision.colliderB.getBody(), nx, ny);
+				if(collision.colliderA.getBody() == body)
+				{
+					if(collision.normal.dot(nx, ny) == 1f)
+					{
+						if(!(collision.colliderB.getBody() instanceof DynamicBody))
+							return POSITIVE_INFINITY;
+
+						weight += getWeight(world, (DynamicBody)collision.colliderB.getBody(), nx, ny);
+					}
 				}
 			}
 		}
-
-		world.getCollisionPool().free(swapped);
+		finally
+		{
+			world.getCollisionPool().free(swapped);
+		}
 
 		return weight;
 	}

@@ -70,6 +70,22 @@ public class BoxLimitDetector extends PooledDetector<Box, Limit>
 			vby = 0f;
 		}
 
+		if(dot(nx, ny, boxA.getCollisionShifting().x, boxA.getCollisionShifting().y) > 0)
+		{
+			pax -= boxA.getCollisionShifting().x;
+			pay -= boxA.getCollisionShifting().y;
+			vax += boxA.getCollisionShifting().x;
+			vay += boxA.getCollisionShifting().y;
+		}
+
+		if(limitB.normal.dot(limitB.getCollisionShifting()) > 0)
+		{
+			pbx -= limitB.getCollisionShifting().x;
+			pby -= limitB.getCollisionShifting().y;
+			vbx += limitB.getCollisionShifting().x;
+			vby += limitB.getCollisionShifting().y;
+		}
+
 		if(!isSmallerOrEqual(pax * nx + pay * ny, pbx * nx + pby * ny, epsilon)) //if limitB isn't before boxA
 			return null; //no collision
 

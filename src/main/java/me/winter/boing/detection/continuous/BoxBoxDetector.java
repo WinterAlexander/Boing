@@ -33,6 +33,9 @@ public class BoxBoxDetector extends PooledDetector<Box, Box>
 		Vector2 vecA = boxA.getMovement();
 		Vector2 vecB = boxB.getMovement();
 
+		Vector2 csA = boxA.getCollisionShifting();
+		Vector2 csB = boxB.getCollisionShifting();
+
 		float epsilon = DEFAULT_ULPS * max(boxA.getPrecision(), boxB.getPrecision());
 
 		float pax = boxA.getAbsX();
@@ -43,29 +46,29 @@ public class BoxBoxDetector extends PooledDetector<Box, Box>
 		//TODO find which limits collide and stop this cancer
 
 		Collision collision = collides(
-				boxA.width / 2, vecA.x, vecA.y, pax, pay + boxA.height / 2,
-				boxB.width / 2, vecB.x, vecB.y, pbx, pby - boxB.height / 2,
+				boxA.width / 2, vecA.x, vecA.y, pax, pay + boxA.height / 2, csA.x, csA.y,
+				boxB.width / 2, vecB.x, vecB.y, pbx, pby - boxB.height / 2, csB.x, csB.y,
 				epsilon, 0, 1);
 
 		if(collision == null)
 		{
 			collision = collides(
-					boxA.width / 2, vecA.x, vecA.y, pax, pay - boxA.height / 2,
-					boxB.width / 2, vecB.x, vecB.y, pbx, pby + boxB.height / 2,
+					boxA.width / 2, vecA.x, vecA.y, pax, pay - boxA.height / 2, csA.x, csA.y,
+					boxB.width / 2, vecB.x, vecB.y, pbx, pby + boxB.height / 2, csB.x, csB.y,
 					epsilon, 0, -1);
 
 			if(collision == null)
 			{
 				collision = collides(
-						boxA.height / 2, vecA.x, vecA.y, pax + boxA.width / 2, pay,
-						boxB.height / 2, vecB.x, vecB.y, pbx - boxB.width / 2, pby,
+						boxA.height / 2, vecA.x, vecA.y, pax + boxA.width / 2, pay, csA.x, csA.y,
+						boxB.height / 2, vecB.x, vecB.y, pbx - boxB.width / 2, pby, csB.x, csB.y,
 						epsilon, 1, 0);
 
 				if(collision == null)
 				{
 					collision = collides(
-							boxA.height / 2, vecA.x, vecA.y, pax - boxA.width / 2, pay,
-							boxB.height / 2, vecB.x, vecB.y, pbx + boxB.width / 2, pby,
+							boxA.height / 2, vecA.x, vecA.y, pax - boxA.width / 2, pay, csA.x, csA.y,
+							boxB.height / 2, vecB.x, vecB.y, pbx + boxB.width / 2, pby, csB.x, csB.y,
 							epsilon, -1, 0);
 
 					if(collision == null)
@@ -86,8 +89,8 @@ public class BoxBoxDetector extends PooledDetector<Box, Box>
 		return collision;
 	}
 
-	public Collision collides(float hsA, float vax, float vay, float pax, float pay,
-	                          float hsB, float vbx, float vby, float pbx, float pby,
+	public Collision collides(float hsA, float vax, float vay, float pax, float pay, float csax, float csay,
+	                          float hsB, float vbx, float vby, float pbx, float pby, float csbx, float csby,
 	                          float epsilon, float nx, float ny)
 	{
 
@@ -101,6 +104,22 @@ public class BoxBoxDetector extends PooledDetector<Box, Box>
 		{
 			vbx = 0f;
 			vby = 0f;
+		}
+
+		if(dot(nx, ny, csax, csay) > 0)
+		{
+			pax -= csax;
+			pay -= csay;
+			vax += csax;
+			vay += csay;
+		}
+
+		if(dot(-nx, -ny, csbx, csby) > 0)
+		{
+			pbx -= csbx;
+			pby -= csby;
+			vbx += csbx;
+			vby += csby;
 		}
 
 		float ax = pax + vax;
