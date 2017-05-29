@@ -1,10 +1,8 @@
 package me.winter.boing.resolver;
 
-import com.badlogic.gdx.math.Vector2;
 import me.winter.boing.Collision;
 import me.winter.boing.DynamicBody;
 import me.winter.boing.World;
-import me.winter.boing.util.VelocityUtil;
 
 import static java.lang.Float.POSITIVE_INFINITY;
 import static java.lang.Math.signum;
@@ -30,10 +28,10 @@ public class ReplaceResolver implements CollisionResolver
 		float nx = toPush == collision.colliderA.getBody() ? -collision.normal.x : collision.normal.x;
 		float ny = toPush == collision.colliderA.getBody() ? -collision.normal.y : collision.normal.y;
 
-		replace(world, toPush, nx, ny, collision.penetration);
+		replace(world, toPush, nx, ny, collision.penetration, true);
 	}
 
-	private void replace(World world, DynamicBody solid, float nx, float ny, float pene)
+	private void replace(World world, DynamicBody solid, float nx, float ny, float pene, boolean original)
 	{
 		float replaceX = nx * pene;
 		float replaceY = ny * pene;
@@ -42,20 +40,20 @@ public class ReplaceResolver implements CollisionResolver
 		{
 			float dirX = signum(solid.getCollisionShifting().x);
 
-			if(dirX == 0 || replaceX * dirX > solid.getCollisionShifting().x * dirX)
-				solid.getCollisionShifting().x = replaceX;
-			else if(dirX != signum(replaceX))
+			if(!original || dirX != signum(replaceX))
 				solid.getCollisionShifting().x += replaceX;
+			else if(dirX == 0 || replaceX * dirX > solid.getCollisionShifting().x * dirX)
+				solid.getCollisionShifting().x = replaceX;
 		}
 
 		if(replaceY != 0f)
 		{
 			float dirY = signum(solid.getCollisionShifting().y);
 
-			if(dirY == 0 || replaceY * dirY > solid.getCollisionShifting().y * dirY)
-				solid.getCollisionShifting().y = replaceY;
-			else if(dirY != signum(replaceY))
+			if(!original || dirY != signum(replaceY))
 				solid.getCollisionShifting().y += replaceY;
+			else if(dirY == 0 || replaceY * dirY > solid.getCollisionShifting().y * dirY)
+				solid.getCollisionShifting().y = replaceY;
 		}
 
 		Collision swapped = world.getCollisionPool().obtain();
@@ -79,7 +77,7 @@ public class ReplaceResolver implements CollisionResolver
 						if(!(collision.colliderB.getBody() instanceof DynamicBody))
 							return;
 
-						replace(world, (DynamicBody)collision.colliderB.getBody(), nx, ny, pene);
+						replace(world, (DynamicBody)collision.colliderB.getBody(), nx, ny, pene, false);
 					}
 				}
 			}

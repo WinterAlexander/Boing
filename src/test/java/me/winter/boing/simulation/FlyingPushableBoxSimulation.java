@@ -8,6 +8,7 @@ import me.winter.boing.resolver.ReplaceResolver;
 import me.winter.boing.testimpl.FlyingPlayerImpl;
 import me.winter.boing.testimpl.TestWorldImpl;
 import me.winter.boing.util.WorldSimulationUtil;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import static me.winter.boing.util.VectorUtil.DOWN;
@@ -20,6 +21,7 @@ import static me.winter.boing.util.VectorUtil.UP;
  * <p>
  * Created by Alexander Winter on 2017-05-22.
  */
+@Ignore
 public class FlyingPushableBoxSimulation
 {
 	@Test

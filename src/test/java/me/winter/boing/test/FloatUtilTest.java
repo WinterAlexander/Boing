@@ -10,7 +10,7 @@ import static org.junit.Assert.assertEquals;
  * <p>
  * Created by Alexander Winter on 2017-05-18.
  */
-public class TestFloatUtil
+public class FloatUtilTest
 {
 	@Test(timeout = 1000L)
 	public void testMax3Params()
