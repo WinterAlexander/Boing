@@ -7,7 +7,7 @@ import me.winter.boing.impl.DynamicBodyImpl;
 import me.winter.boing.resolver.ReplaceResolver;
 import me.winter.boing.testimpl.FlyingPlayerImpl;
 import me.winter.boing.testimpl.TestWorldImpl;
-import me.winter.boing.util.WorldSimulationUtil;
+import me.winter.boing.util.WorldSimulation;
 import org.junit.Ignore;
 import org.junit.Test;
 
@@ -39,7 +39,7 @@ public class FlyingPushableBoxSimulation
 		solid.addCollider(new Box(solid, 0, 0, 50, 50));
 		testWorld.add(solid);
 
-		WorldSimulationUtil.simulate(testWorld);
+		new WorldSimulation(testWorld, 60f).start();
 	}
 
 	@Test
@@ -63,7 +63,7 @@ public class FlyingPushableBoxSimulation
 		solid.addCollider(new Limit(solid, -25, 0, LEFT, 50));
 		testWorld.add(solid);
 
-		WorldSimulationUtil.simulate(testWorld);
+		new WorldSimulation(testWorld, 60f).start();
 	}
 
 	@Test
@@ -96,7 +96,7 @@ public class FlyingPushableBoxSimulation
 		solid2.addCollider(toTest);
 		testWorld.add(solid2);
 
-		WorldSimulationUtil.simulate(testWorld);
+		new WorldSimulation(testWorld, 60f).start();
 	}
 
 	@Test
@@ -124,7 +124,7 @@ public class FlyingPushableBoxSimulation
 		limit2.addCollider(new Limit(limit2, 0, 0, UP, 50));
 		testWorld.add(limit2);
 
-		WorldSimulationUtil.simulate(testWorld);
+		new WorldSimulation(testWorld, 60f).start();
 	}
 
 	@Test
@@ -163,7 +163,7 @@ public class FlyingPushableBoxSimulation
 		solid.addCollider(new Box(solid, 0, 0, 50, 50));
 		testWorld.add(solid);
 
-		WorldSimulationUtil.simulate(testWorld);
+		new WorldSimulation(testWorld, 60f).start();
 	}
 
 	@Test
@@ -200,6 +200,6 @@ public class FlyingPushableBoxSimulation
 			}
 		}
 
-		WorldSimulationUtil.simulate(testWorld);
+		new WorldSimulation(testWorld, 60f).start();
 	}
 }

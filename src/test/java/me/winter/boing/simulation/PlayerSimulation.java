@@ -7,7 +7,7 @@ import me.winter.boing.testimpl.PlayerImpl;
 import me.winter.boing.impl.BodyImpl;
 import me.winter.boing.testimpl.SpringImpl;
 import me.winter.boing.testimpl.TestWorldImpl;
-import me.winter.boing.util.WorldSimulationUtil;
+import me.winter.boing.util.WorldSimulation;
 import org.junit.Ignore;
 import org.junit.Test;
 
@@ -37,7 +37,7 @@ public class PlayerSimulation
 		ground.addCollider(new Box(ground, 0, 0, 800, 100));
 		world.add(ground);
 
-		WorldSimulationUtil.simulate(world);
+		new WorldSimulation(world, 60f).start();
 	}
 
 	@Test
@@ -63,6 +63,6 @@ public class PlayerSimulation
 		spring.addCollider(new Box(spring, 0, 0, 100, 100));
 		world.add(spring);
 
-		WorldSimulationUtil.simulate(world);
+		new WorldSimulation(world, 60f).start();
 	}
 }

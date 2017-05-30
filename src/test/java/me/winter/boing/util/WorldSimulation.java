@@ -14,6 +14,8 @@ import javax.swing.SwingUtilities;
 import javax.swing.WindowConstants;
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 
 /**
  * Undocumented :(
@@ -21,16 +23,21 @@ import java.awt.Graphics;
  * Created by Alexander Winter on 2017-04-10.
  */
 @Ignore
-public class WorldSimulationUtil
+public class WorldSimulation extends JFrame implements KeyListener
 {
-	public static void simulate(TestWorldImpl world)
+	private TestWorldImpl world;
+	private float frameRate;
+
+	private long frames = 0, framesRemaining = -1;
+
+	public WorldSimulation(TestWorldImpl world, float frameRate)
 	{
-		JFrame frame = new JFrame();
+		this.world = world;
+		this.frameRate = frameRate;
 
-		frame.setSize(800, 600);
+		setSize(800, 600);
 
-		JPanel panel = new JPanel()
-		{
+		JPanel panel = new JPanel() {
 			@Override
 			protected void paintComponent(Graphics g)
 			{
@@ -38,7 +45,8 @@ public class WorldSimulationUtil
 				g.fillRect(0, 0, 800, 600);
 
 				g.setColor(Color.BLACK);
-				g.drawString("Collisions: " + world.collisionCount(), 700, 30);
+				g.drawString("Collisions: " + world.collisionCount(), 650, 20);
+				g.drawString("Frames: " + frames, 650, 40);
 
 				int n = 0;
 
@@ -70,31 +78,80 @@ public class WorldSimulationUtil
 			}
 		};
 
-		frame.setContentPane(panel);
+		panel.addKeyListener(this);
 
-		frame.setVisible(true);
-		frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+		setContentPane(panel);
 
+		setVisible(true);
+		panel.requestFocusInWindow();
+		setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+	}
+
+	public void start()
+	{
 		while(true)
 		{
-			try
+			if(framesRemaining != 0)
 			{
-				long start = System.nanoTime();
-				SwingUtilities.invokeAndWait(() -> {
-					world.step(1f / 60f);
-					frame.repaint();
-				});
-				long toWait = 1000 / 60 - (System.nanoTime() - start) / 1_000_000;
+				try
+				{
+					long start = System.nanoTime();
+					SwingUtilities.invokeAndWait(() ->
+					{
+						world.step(1f / frameRate);
+						if(framesRemaining > 0)
+							framesRemaining--;
+						frames++;
+						repaint();
+					});
+					long toWait = Math.round(1000 / frameRate) - (System.nanoTime() - start) / 1_000_000;
 
-				if(toWait <= 0)
-					continue;
+					if(toWait <= 0)
+						continue;
 
-				Thread.sleep(toWait);
+					Thread.sleep(toWait);
+				}
+				catch(Exception ex)
+				{
+					ex.printStackTrace();
+				}
 			}
-			catch(Exception ex)
+			else
 			{
-				ex.printStackTrace();
+
+				try
+				{
+					SwingUtilities.invokeAndWait(() -> {
+						repaint();
+					});
+				}
+				catch(Exception ex)
+				{
+					ex.printStackTrace();
+				}
 			}
 		}
 	}
+
+	@Override
+	public void keyReleased(KeyEvent e)
+	{
+		if(e.getKeyCode() == KeyEvent.VK_P)
+		{
+			if(framesRemaining == -1)
+				framesRemaining = 0;
+			else
+				framesRemaining = -1;
+		}
+
+		if(e.getKeyCode() == KeyEvent.VK_SPACE)
+			if(framesRemaining != -1)
+				framesRemaining++;
+	}
+
+	@Override
+	public void keyTyped(KeyEvent e) {}
+
+	@Override
+	public void keyPressed(KeyEvent e) {}
 }

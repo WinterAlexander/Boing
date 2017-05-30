@@ -86,37 +86,34 @@ public class PlayerImpl extends BodyImpl implements UpdatableBody
 
 		static
 		{
-			KeyboardFocusManager.getCurrentKeyboardFocusManager().addKeyEventDispatcher(new KeyEventDispatcher() {
-				@Override
-				public boolean dispatchKeyEvent(KeyEvent ke) {
-					switch (ke.getID())
-					{
-						case KeyEvent.KEY_PRESSED:
-							if (ke.getKeyCode() == KeyEvent.VK_A)
-								aPressed = true;
+			KeyboardFocusManager.getCurrentKeyboardFocusManager().addKeyEventDispatcher(ke -> {
+				switch (ke.getID())
+				{
+					case KeyEvent.KEY_PRESSED:
+						if (ke.getKeyCode() == KeyEvent.VK_A)
+							aPressed = true;
 
-							if (ke.getKeyCode() == KeyEvent.VK_D)
-								dPressed = true;
+						if (ke.getKeyCode() == KeyEvent.VK_D)
+							dPressed = true;
 
-							if(ke.getKeyCode() == KeyEvent.VK_W)
-								jumpPressed = true;
+						if(ke.getKeyCode() == KeyEvent.VK_W)
+							jumpPressed = true;
 
-							break;
+						break;
 
-						case KeyEvent.KEY_RELEASED:
-							if (ke.getKeyCode() == KeyEvent.VK_A)
-								aPressed = false;
+					case KeyEvent.KEY_RELEASED:
+						if (ke.getKeyCode() == KeyEvent.VK_A)
+							aPressed = false;
 
-							if (ke.getKeyCode() == KeyEvent.VK_D)
-								dPressed = false;
+						if (ke.getKeyCode() == KeyEvent.VK_D)
+							dPressed = false;
 
-							if(ke.getKeyCode() == KeyEvent.VK_W)
-								jumpPressed = false;
+						if(ke.getKeyCode() == KeyEvent.VK_W)
+							jumpPressed = false;
 
-							break;
-					}
-					return false;
+						break;
 				}
+				return false;
 			});
 		}
 	}

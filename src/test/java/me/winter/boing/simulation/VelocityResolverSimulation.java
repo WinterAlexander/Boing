@@ -7,7 +7,7 @@ import me.winter.boing.colliders.Circle;
 import me.winter.boing.testimpl.BouncingBallImpl;
 import me.winter.boing.impl.BodyImpl;
 import me.winter.boing.testimpl.TestWorldImpl;
-import me.winter.boing.util.WorldSimulationUtil;
+import me.winter.boing.util.WorldSimulation;
 import org.junit.Ignore;
 import org.junit.Test;
 
@@ -101,7 +101,7 @@ public class VelocityResolverSimulation
 
 			world.add(wall1);
 		}
-		WorldSimulationUtil.simulate(world);
+		new WorldSimulation(world, 60f).start();
 	}
 
 	@Test
@@ -130,7 +130,7 @@ public class VelocityResolverSimulation
 		solid3.getVelocity().set(-10, 0);
 		world.add(solid3);
 
-		WorldSimulationUtil.simulate(world);
+		new WorldSimulation(world, 60f).start();
 	}
 
 	@Test
@@ -159,7 +159,7 @@ public class VelocityResolverSimulation
 		solid3.getVelocity().set(0, -10);
 		world.add(solid3);
 
-		WorldSimulationUtil.simulate(world);
+		new WorldSimulation(world, 60f).start();
 	}
 
 	@Test
@@ -179,7 +179,7 @@ public class VelocityResolverSimulation
 		box.getVelocity().set(150, -20);
 		world.add(box);
 
-		WorldSimulationUtil.simulate(world);
+		new WorldSimulation(world, 60f).start();
 	}
 
 	@Test
@@ -242,7 +242,7 @@ public class VelocityResolverSimulation
 			world.add(wall1);
 		}
 
-		WorldSimulationUtil.simulate(world);
+		new WorldSimulation(world, 60f).start();
 	}
 
 	@Test
@@ -269,7 +269,7 @@ public class VelocityResolverSimulation
 		solid3.getVelocity().set(0, 0);
 		world.add(solid3);
 
-		WorldSimulationUtil.simulate(world);
+		new WorldSimulation(world, 60f).start();
 	}
 
 	@Test
@@ -296,6 +296,6 @@ public class VelocityResolverSimulation
 		solid3.getVelocity().set(0, 0);
 		world.add(solid3);
 
-		WorldSimulationUtil.simulate(world);
+		new WorldSimulation(world, 60f).start();
 	}
 }

@@ -6,7 +6,7 @@ import me.winter.boing.impl.BodyImpl;
 import me.winter.boing.resolver.ReplaceResolver;
 import me.winter.boing.testimpl.BouncingBallImpl;
 import me.winter.boing.testimpl.TestWorldImpl;
-import me.winter.boing.util.WorldSimulationUtil;
+import me.winter.boing.util.WorldSimulation;
 import org.junit.Ignore;
 import org.junit.Test;
 
@@ -100,7 +100,7 @@ public class ReplaceResolverSimulation
 
 			world.add(wall1);
 		}
-		WorldSimulationUtil.simulate(world);
+		new WorldSimulation(world, 60f).start();
 	}
 
 	@Test
@@ -140,7 +140,7 @@ public class ReplaceResolverSimulation
 
 		world.add(solid4);
 
-		WorldSimulationUtil.simulate(world);
+		new WorldSimulation(world, 60f).start();
 	}
 	
 	@Test
@@ -209,8 +209,8 @@ public class ReplaceResolverSimulation
 
 			world.add(wall1);
 		}
-		
-		WorldSimulationUtil.simulate(world);
+
+		new WorldSimulation(world, 60f).start();
 	}
 
 	@Test
@@ -238,7 +238,7 @@ public class ReplaceResolverSimulation
 		solid3.getVelocity().set(-10, 0);
 		world.add(solid3);
 
-		WorldSimulationUtil.simulate(world);
+		new WorldSimulation(world, 60f).start();
 	}
 
 	@Test
@@ -266,7 +266,7 @@ public class ReplaceResolverSimulation
 		solid3.getVelocity().set(0, -10);
 		world.add(solid3);
 
-		WorldSimulationUtil.simulate(world);
+		new WorldSimulation(world, 60f).start();
 	}
 
 	@Test
@@ -285,7 +285,7 @@ public class ReplaceResolverSimulation
 		box.getVelocity().set(150, -20);
 		world.add(box);
 
-		WorldSimulationUtil.simulate(world);
+		new WorldSimulation(world, 60f).start();
 	}
 
 	@Test
@@ -347,7 +347,7 @@ public class ReplaceResolverSimulation
 			world.add(wall1);
 		}
 
-		WorldSimulationUtil.simulate(world);
+		new WorldSimulation(world, 60f).start();
 	}
 
 	@Test
@@ -373,7 +373,7 @@ public class ReplaceResolverSimulation
 		solid3.getVelocity().set(0, 0);
 		world.add(solid3);
 
-		WorldSimulationUtil.simulate(world);
+		new WorldSimulation(world, 60f).start();
 	}
 
 	@Test
@@ -399,7 +399,7 @@ public class ReplaceResolverSimulation
 		solid3.getVelocity().set(0, 0);
 		world.add(solid3);
 
-		WorldSimulationUtil.simulate(world);
+		new WorldSimulation(world, 60f).start();
 	}
 
 	@Test
@@ -419,7 +419,7 @@ public class ReplaceResolverSimulation
 		solid2.getVelocity().set(0, 70);
 		world.add(solid2);
 
-		WorldSimulationUtil.simulate(world);
+		new WorldSimulation(world, 60f).start();
 	}
 
 	@Test
@@ -439,6 +439,6 @@ public class ReplaceResolverSimulation
 		solid2.getVelocity().set(70, 0);
 		world.add(solid2);
 
-		WorldSimulationUtil.simulate(world);
+		new WorldSimulation(world, 60f).start();
 	}
 }

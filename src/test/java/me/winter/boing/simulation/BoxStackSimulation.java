@@ -9,7 +9,7 @@ import me.winter.boing.colliders.Limit;
 import me.winter.boing.testimpl.GravityAffected;
 import me.winter.boing.testimpl.PlayerImpl;
 import me.winter.boing.testimpl.TestWorldImpl;
-import me.winter.boing.util.WorldSimulationUtil;
+import me.winter.boing.util.WorldSimulation;
 import org.junit.Ignore;
 import org.junit.Test;
 
@@ -48,7 +48,7 @@ public class BoxStackSimulation
 		ground.addCollider(new Box(ground, 0, 0, 800, 400));
 		world.add(ground);
 
-		WorldSimulationUtil.simulate(world);
+		new WorldSimulation(world, 60f).start();
 	}
 
 	@Test
@@ -73,7 +73,7 @@ public class BoxStackSimulation
 		ground.addCollider(new Box(ground, 0, 0, 800, 400));
 		world.add(ground);
 
-		WorldSimulationUtil.simulate(world);
+		new WorldSimulation(world, 60f).start();
 	}
 
 	@Test
@@ -106,7 +106,7 @@ public class BoxStackSimulation
 		ground.addCollider(new Box(ground, 0, 0, 800, 400));
 		world.add(ground);
 
-		WorldSimulationUtil.simulate(world);
+		new WorldSimulation(world, 60f).start();
 	}
 
 	@Test
@@ -139,7 +139,7 @@ public class BoxStackSimulation
 		ground.addCollider(new Box(ground, 0, 0, 800, 400));
 		world.add(ground);
 
-		WorldSimulationUtil.simulate(world);
+		new WorldSimulation(world, 60f).start();
 	}
 
 	@Test
@@ -187,7 +187,7 @@ public class BoxStackSimulation
 		ground.addCollider(new Box(ground, 0, 0, 800, 400));
 		world.add(ground);
 
-		WorldSimulationUtil.simulate(world);
+		new WorldSimulation(world, 60f).start();
 	}
 
 	@Test
@@ -218,7 +218,7 @@ public class BoxStackSimulation
 		ground.addCollider(new Box(ground, 0, 0, 800, 400));
 		world.add(ground);
 
-		WorldSimulationUtil.simulate(world);
+		new WorldSimulation(world, 60f).start();
 	}
 
 	@Test
@@ -254,7 +254,7 @@ public class BoxStackSimulation
 		platform.addCollider(new Limit(platform, 0, 0, UP, 100));
 		world.add(platform);
 
-		WorldSimulationUtil.simulate(world);
+		new WorldSimulation(world, 60f).start();
 	}
 
 	@Test
@@ -290,7 +290,7 @@ public class BoxStackSimulation
 		platform.addCollider(new Limit(platform, 0, 0, RIGHT, 50));
 		world.add(platform);
 
-		WorldSimulationUtil.simulate(world);
+		new WorldSimulation(world, 60f).start();
 	}
 
 	@Test
@@ -327,7 +327,7 @@ public class BoxStackSimulation
 		ground.addCollider(new Limit(ground, 0, 0, UP, 800));
 		world.add(ground);
 
-		WorldSimulationUtil.simulate(world);
+		new WorldSimulation(world, 60f).start();
 	}
 
 	@Test
@@ -371,7 +371,7 @@ public class BoxStackSimulation
 		ground.addCollider(new Box(ground, 0, 0, 800, 400));
 		world.add(ground);
 
-		WorldSimulationUtil.simulate(world);
+		new WorldSimulation(world, 60f).start();
 	}
 
 	@Test
@@ -413,6 +413,6 @@ public class BoxStackSimulation
 		ground.addCollider(new Box(ground, 0, 0, 800, 400));
 		world.add(ground);
 
-		WorldSimulationUtil.simulate(world);
+		new WorldSimulation(world, 60f).start();
 	}
 }
