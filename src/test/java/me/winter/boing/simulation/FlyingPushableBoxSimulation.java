@@ -200,6 +200,16 @@ public class FlyingPushableBoxSimulation
 			}
 		}
 
+		BodyImpl limit1 = new BodyImpl();
+		limit1.getPosition().set(600, 400);
+		limit1.addCollider(new Limit(limit1, 0, 0, LEFT, 40));
+		testWorld.add(limit1);
+
+		BodyImpl limit2 = new BodyImpl();
+		limit2.getPosition().set(400, 200);
+		limit2.addCollider(new Limit(limit2, 0, 0, UP, 50));
+		testWorld.add(limit2);
+
 		new WorldSimulation(testWorld, 60f).start();
 	}
 }

@@ -20,12 +20,12 @@ public strictfp class FloatUtil
 
 	public static boolean isGreaterOrEqual(float a, float b, float epsilon)
 	{
-		return a - b > epsilon;
+		return a - b >= epsilon;
 	}
 
 	public static boolean isSmallerOrEqual(float a, float b, float epsilon)
 	{
-		return a - b < epsilon;
+		return a - b <= epsilon;
 	}
 
 	public static boolean areEqual(float a, float b)

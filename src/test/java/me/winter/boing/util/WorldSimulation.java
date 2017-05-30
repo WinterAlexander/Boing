@@ -118,12 +118,9 @@ public class WorldSimulation extends JFrame implements KeyListener
 			}
 			else
 			{
-
 				try
 				{
-					SwingUtilities.invokeAndWait(() -> {
-						repaint();
-					});
+					SwingUtilities.invokeAndWait(this::repaint);
 				}
 				catch(Exception ex)
 				{

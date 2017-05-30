@@ -55,7 +55,7 @@ public class ReplaceResolver implements CollisionResolver
 			else if(dirY == 0 || replaceY * dirY > solid.getCollisionShifting().y * dirY)
 				solid.getCollisionShifting().y = replaceY;
 		}
-
+/*
 		Collision swapped = world.getCollisionPool().obtain();
 
 		try
@@ -85,7 +85,7 @@ public class ReplaceResolver implements CollisionResolver
 		finally
 		{
 			world.getCollisionPool().free(swapped);
-		}
+		}*/
 	}
 
 	private DynamicBody resolveWeights(Collision collision, World world)

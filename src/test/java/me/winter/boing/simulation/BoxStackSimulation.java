@@ -77,6 +77,44 @@ public class BoxStackSimulation
 	}
 
 	@Test
+	public void shortLimitBoxStack()
+	{
+		TestWorldImpl world = new TestWorldImpl(new ReplaceResolver());
+
+		PlayerImpl player = new PlayerImpl();
+
+		player.getPosition().set(400, 200);
+		player.addCollider(new Limit(player, 0, 22.5f, UP, 20));
+		player.addCollider(new Limit(player, 0, -22.5f, DOWN, 20));
+		player.addCollider(new Limit(player, -10f, 0, LEFT, 45));
+		player.addCollider(new Limit(player, 10f, 0, RIGHT, 45));
+		world.add(player);
+
+		GravityAffected test = new GravityAffected();
+		test.getPosition().set(400, 150);
+		test.addCollider(new Limit(test, 0, 25, UP, 50));
+		test.addCollider(new Limit(test, 0, -25, DOWN, 50));
+		test.addCollider(new Limit(test, -25, 0, LEFT, 50));
+		test.addCollider(new Limit(test, 25, 0, RIGHT, 50));
+		world.add(test);
+
+		BodyImpl wall = new BodyImpl();
+
+		wall.getPosition().set(600, 100);
+		wall.addCollider(new Limit(wall, 0, 0, LEFT, 100));
+		world.add(wall);
+
+
+		BodyImpl ground = new BodyImpl();
+
+		ground.getPosition().set(400, 100);
+		ground.addCollider(new Limit(ground, 0, 0, UP, 800));
+		world.add(ground);
+
+		new WorldSimulation(world, 60f).start();
+	}
+
+	@Test
 	public void simpleBoxStackWithSolidBlock()
 	{
 		TestWorldImpl world = new TestWorldImpl(new ReplaceResolver());
