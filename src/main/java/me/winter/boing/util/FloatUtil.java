@@ -15,17 +15,17 @@ public strictfp class FloatUtil
 
 	public static boolean areEqual(float a, float b, float epsilon)
 	{
-		return abs(a - b) < epsilon;
+		return abs(a - b) <= epsilon;
 	}
 
 	public static boolean isGreaterOrEqual(float a, float b, float epsilon)
 	{
-		return a - b >= epsilon;
+		return b - a <= epsilon;
 	}
 
 	public static boolean isSmallerOrEqual(float a, float b, float epsilon)
 	{
-		return a - b <= epsilon;
+		return b - a >= -epsilon;
 	}
 
 	public static boolean areEqual(float a, float b)
