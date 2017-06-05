@@ -89,6 +89,14 @@ public class WorldSimulation extends JFrame implements KeyListener
 
 	public void start()
 	{
+		start(false);
+	}
+
+	public void start(boolean paused)
+	{
+		if(paused)
+			framesRemaining = 0;
+
 		while(true)
 		{
 			if(framesRemaining != 0)

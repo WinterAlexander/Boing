@@ -40,6 +40,11 @@ public interface DynamicBody extends Body
 	Vector2 getCollisionShifting();
 
 	/**
+	 * @return Position of this DynamicBody at the start of the previous frame.
+	 */
+	Vector2 getPreviousPosition();
+
+	/**
 	 *
 	 * @return the precision needed to do float operations with this body
 	 */

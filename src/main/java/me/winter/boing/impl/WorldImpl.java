@@ -88,6 +88,7 @@ public class WorldImpl extends OptimizedWorld implements Iterable<Body>
 	{
 		for(DynamicBody dynamic : dynamics)
 		{
+			dynamic.getPreviousPosition().set(dynamic.getPosition());
 			dynamic.getPosition().add(dynamic.getMovement());
 			dynamic.getPosition().add(dynamic.getCollisionShifting());
 		}

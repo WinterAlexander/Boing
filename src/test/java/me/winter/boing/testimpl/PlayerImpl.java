@@ -22,7 +22,7 @@ import static me.winter.boing.util.VectorUtil.DOWN;
 public class PlayerImpl extends BodyImpl implements UpdatableBody
 {
 	protected boolean onGround;
-	protected Vector2 velocity = new Vector2(), movement = new Vector2(), shifting = new Vector2();
+	protected Vector2 velocity = new Vector2(), movement = new Vector2(), shifting = new Vector2(), prevPos = new Vector2();
 
 
 	@Override
@@ -78,6 +78,12 @@ public class PlayerImpl extends BodyImpl implements UpdatableBody
 	public float getWeight()
 	{
 		return 100f;
+	}
+
+	@Override
+	public Vector2 getPreviousPosition()
+	{
+		return prevPos;
 	}
 
 	public static class IsKeyPressed

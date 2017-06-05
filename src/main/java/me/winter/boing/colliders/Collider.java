@@ -26,6 +26,16 @@ public interface Collider
 	float getAbsY();
 
 	/**
+	 * @return absolute previous x position of this collider
+	 */
+	float getPrevX();
+
+	/**
+	 * @return absolute previous y position of this collider
+	 */
+	float getPrevY();
+
+	/**
 	 *
 	 * @return width of the collider
 	 */
