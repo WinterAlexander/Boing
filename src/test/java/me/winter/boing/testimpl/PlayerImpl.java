@@ -1,9 +1,12 @@
 package me.winter.boing.testimpl;
 
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.Array;
+import me.winter.boing.Body;
 import me.winter.boing.Collision;
 import me.winter.boing.UpdatableBody;
 import me.winter.boing.impl.BodyImpl;
+import me.winter.boing.impl.DynamicBodyImpl;
 
 import java.awt.KeyEventDispatcher;
 import java.awt.KeyboardFocusManager;
@@ -19,32 +22,30 @@ import static me.winter.boing.util.VectorUtil.DOWN;
  * <p>
  * Created by Alexander Winter on 2017-04-13.
  */
-public class PlayerImpl extends BodyImpl implements UpdatableBody
+public class PlayerImpl extends DynamicBodyImpl implements UpdatableBody
 {
 	protected boolean onGround;
-	protected Vector2 velocity = new Vector2(), movement = new Vector2(), shifting = new Vector2();
-
 
 	@Override
 	public void update(float delta)
 	{
-		velocity.x *= 0.9f;
+		getVelocity().x *= 0.9f;
 
 
 		if(aPressed)
-			velocity.add(onGround ? -30 : -20, 0);
+			getVelocity().add(onGround ? -30 : -20, 0);
 		else if(dPressed)
-			velocity.add(onGround ? 30 : 20, 0);
+			getVelocity().add(onGround ? 30 : 20, 0);
 
 		if(onGround)
 		{
-			if(velocity.y < 0)
-				velocity.y = 0;
+			if(getVelocity().y < 0)
+				getVelocity().y = 0;
 			if(jumpPressed)
-				velocity.add(0, 200);
+				getVelocity().add(0, 200);
 		}
 
-		velocity.y -= 5;
+		getVelocity().y -= 5;
 
 		onGround = false;
 	}
@@ -54,24 +55,6 @@ public class PlayerImpl extends BodyImpl implements UpdatableBody
 	{
 		if(collision.normal.dot(DOWN) > 0.7 && collision.impactVelA.dot(DOWN) > 0.7)
 			onGround = true;
-	}
-
-	@Override
-	public Vector2 getVelocity()
-	{
-		return velocity;
-	}
-
-	@Override
-	public Vector2 getMovement()
-	{
-		return movement;
-	}
-
-	@Override
-	public Vector2 getCollisionShifting()
-	{
-		return shifting;
 	}
 
 	@Override

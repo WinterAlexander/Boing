@@ -9,7 +9,7 @@ import me.winter.boing.util.VelocityUtil;
 import static java.lang.Math.signum;
 
 /**
- * CollisionResolver resolving collisions by changing their velocity
+ * CollisionResolver resolving collisions by changing the velocity of objects colliding
  * <p>
  * Created by Alexander Winter on 2017-04-10.
  */

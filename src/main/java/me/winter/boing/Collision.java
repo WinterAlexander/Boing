@@ -48,6 +48,17 @@ public class Collision
 	 */
 	public Collider colliderB;
 
+	public void set(Collision collision)
+	{
+		normal.set(collision.normal);
+		impactVelA.set(collision.impactVelA);
+		impactVelB.set(collision.impactVelB);
+		penetration = collision.penetration;
+		contactSurface = collision.contactSurface;
+		colliderA = collision.colliderA;
+		colliderB = collision.colliderB;
+	}
+
 	/**
 	 * Sets this collision as a swapped copy of another collision.
 	 *

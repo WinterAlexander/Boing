@@ -6,29 +6,40 @@ import me.winter.boing.World;
 
 import static java.lang.Float.POSITIVE_INFINITY;
 import static java.lang.Math.signum;
+import static me.winter.boing.util.VelocityUtil.weightRatio;
 
 /**
- * CollisionResolver resolving collisions by replacing the objects colliding (if they are Dynamic)
+ * CollisionResolver resolving collisions by replacing the position of the objects colliding
  * <p>
  * Created by Alexander Winter on 2017-04-11.
  */
 public class ReplaceResolver implements CollisionResolver
 {
+	private boolean capWeight;
+
+	public ReplaceResolver()
+	{
+		this(true);
+	}
+
+	public ReplaceResolver(boolean capWeight)
+	{
+		this.capWeight = capWeight;
+	}
+
 	@Override
 	public void resolve(Collision collision, World world)
 	{
 		if(collision.penetration == 0)
 			return;
 
-		DynamicBody toPush = resolveWeights(collision, world);
+		float ratio = resolveWeights(collision);
 
-		if(toPush == null)
-			return;
+		if(ratio != 1)
+			replace((DynamicBody)collision.colliderA.getBody(), -collision.normal.x, -collision.normal.y, (1f - ratio) * collision.penetration);
 
-		float nx = toPush == collision.colliderA.getBody() ? -collision.normal.x : collision.normal.x;
-		float ny = toPush == collision.colliderA.getBody() ? -collision.normal.y : collision.normal.y;
-
-		replace(toPush, nx, ny, collision.penetration);
+		if(ratio != 0)
+			replace((DynamicBody)collision.colliderB.getBody(), collision.normal.x, collision.normal.y, ratio * collision.penetration);
 	}
 
 	private void replace(DynamicBody solid, float nx, float ny, float pene)
@@ -61,62 +72,36 @@ public class ReplaceResolver implements CollisionResolver
 		solid.getPosition().add(solid.getCollisionShifting());
 	}
 
-	private DynamicBody resolveWeights(Collision collision, World world)
+	private float resolveWeights(Collision collision)
 	{
 		if(!(collision.colliderA.getBody() instanceof DynamicBody))
-		{
-			if(!(collision.colliderB.getBody() instanceof DynamicBody))
-				return null;
+			return 1f;
 
-			return (DynamicBody)collision.colliderB.getBody();
-		}
-		else if(!(collision.colliderB.getBody() instanceof DynamicBody))
-		{
-			if(!(collision.colliderA.getBody() instanceof DynamicBody))
-				return null;
+		if(!(collision.colliderB.getBody() instanceof DynamicBody))
+			return 0f;
 
-			return (DynamicBody)collision.colliderA.getBody();
-		}
+		float weightA = getWeight((DynamicBody)collision.colliderA.getBody(), -collision.normal.x, -collision.normal.y);
+		float weightB = getWeight((DynamicBody)collision.colliderB.getBody(), collision.normal.x, collision.normal.y);
 
-		DynamicBody dynA = (DynamicBody)collision.colliderA.getBody();
-		DynamicBody dynB = (DynamicBody)collision.colliderB.getBody();
+		if(capWeight)
+			return weightA > weightB ? 1 : 0;
 
+		return weightRatio(weightA, weightB);
 
-		Collision swapped = world.getCollisionPool().obtain();
-
-		float weightA = getWeight(world, dynA, -collision.normal.x, -collision.normal.y, swapped);
-		float weightB = getWeight(world, dynB, collision.normal.x, collision.normal.y, swapped);
-
-		world.getCollisionPool().free(swapped);
-
-		if(weightA > weightB)
-			return dynB;
-		return dynA;
 	}
 
-	private float getWeight(World world, DynamicBody body, float nx, float ny, Collision tmpSwp)
+	private float getWeight(DynamicBody dynamic, float nx, float ny)
 	{
-		float weight = body.getWeight();
+		float weight = dynamic.getWeight();
 
-		for(int i = 0; i < world.getCollisions().size; i++)
+		for(Collision collision : dynamic.getCollisions())
 		{
-			Collision collision = world.getCollisions().get(i);
-
-			if(collision.colliderB.getBody() == body)
+			if(collision.normal.dot(nx, ny) == 1f)
 			{
-				tmpSwp.setAsSwapped(collision);
-				collision = tmpSwp;
-			}
+				if(!(collision.colliderB.getBody() instanceof DynamicBody))
+					return POSITIVE_INFINITY;
 
-			if(collision.colliderA.getBody() == body)
-			{
-				if(collision.normal.dot(nx, ny) == 1f)
-				{
-					if(!(collision.colliderB.getBody() instanceof DynamicBody))
-						return POSITIVE_INFINITY;
-
-					weight += getWeight(world, (DynamicBody)collision.colliderB.getBody(), nx, ny, tmpSwp);
-				}
+				weight += getWeight((DynamicBody)collision.colliderB.getBody(), nx, ny);
 			}
 		}
 

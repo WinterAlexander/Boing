@@ -55,6 +55,8 @@ public abstract class OptimizedWorld extends AbstractWorld
 
 	protected void detect(Body bodyA, Body bodyB, Collision swappedBuffer)
 	{
+		boolean atLeastOneDyn = bodyB instanceof DynamicBody || bodyA instanceof DynamicBody;
+
 		for(Collider colliderA : bodyA.getColliders())
 		{
 			for(Collider colliderB : bodyB.getColliders())
@@ -69,9 +71,23 @@ public abstract class OptimizedWorld extends AbstractWorld
 				if(colliderA.getBody().cancelCollision(collision) || colliderB.getBody().cancelCollision(swappedBuffer))
 					continue;
 
-				if(bodyB instanceof DynamicBody || bodyA instanceof DynamicBody) //at least one have to be able to move to resolve it...
+				if(atLeastOneDyn) //at least one have to be able to move to resolve it...
 				{
 					collisions.add(collision);
+
+					if(bodyA instanceof DynamicBody)
+					{
+						Collision copy = collisionPool.obtain();
+						copy.set(collision);
+						((DynamicBody)bodyA).getCollisions().add(copy);
+					}
+
+					if(bodyB instanceof DynamicBody)
+					{
+						Collision copy = collisionPool.obtain();
+						copy.setAsSwapped(collision);
+						((DynamicBody)bodyB).getCollisions().add(copy);
+					}
 				}
 				else
 				{

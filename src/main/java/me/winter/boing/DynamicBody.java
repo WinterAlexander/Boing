@@ -1,6 +1,7 @@
 package me.winter.boing;
 
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.Array;
 
 import static java.lang.Math.abs;
 import static java.lang.Math.ulp;
@@ -38,6 +39,12 @@ public interface DynamicBody extends Body
 	 * @return shifting imposed by collision resolver on previous frame
 	 */
 	Vector2 getCollisionShifting();
+
+	/**
+	 *
+	 * @return list of bodies this body is touching
+	 */
+	Array<Collision> getCollisions();
 
 	/**
 	 *
