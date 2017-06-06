@@ -23,8 +23,8 @@ public class CircleCircleDetector extends PooledDetector<Circle, Circle>
 	@Override
 	public Collision collides(Circle shapeA, Circle shapeB)
 	{
-		float dx = shapeB.getAbsX() + shapeB.getMovement().x - (shapeA.getAbsX() + shapeA.getMovement().x);
-		float dy = shapeB.getAbsY() + shapeB.getMovement().y - (shapeA.getAbsY() + shapeA.getMovement().y);
+		float dx = shapeB.getAbsX() - shapeA.getAbsX();
+		float dy = shapeB.getAbsY() - shapeA.getAbsY();
 
 		float r = shapeA.radius + shapeB.radius;
 		float r2 = r * r;

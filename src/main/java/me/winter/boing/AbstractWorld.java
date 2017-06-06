@@ -28,8 +28,6 @@ public abstract class AbstractWorld implements World
 		detectCollisions();
 
 		resolveCollisions();
-
-		moveBodies();
 	}
 
 
@@ -49,9 +47,6 @@ public abstract class AbstractWorld implements World
 	 * Resolve all collisions in the collision array and update the LastShifting to all DynamicBody
 	 */
 	protected abstract void resolveCollisions();
-
-
-	protected abstract void moveBodies();
 
 	@Override
 	public Pool<Collision> getCollisionPool()

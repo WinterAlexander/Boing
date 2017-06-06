@@ -52,10 +52,10 @@ public class LimitLimitDetector extends PooledDetector<Limit, Limit>
 
 		float epsilon = DEFAULT_ULPS * max(limitA.getPrecision(), limitB.getPrecision());
 
-		float pax = limitA.getAbsX();
-		float pay = limitA.getAbsY();
-		float pbx = limitB.getAbsX();
-		float pby = limitB.getAbsY();
+		float pax = limitA.getAbsX() - limitA.getMovement().x;
+		float pay = limitA.getAbsY() - limitA.getMovement().y;
+		float pbx = limitB.getAbsX() - limitB.getMovement().x;
+		float pby = limitB.getAbsY() - limitB.getMovement().y;
 
 		if(limitA.normal.dot(limitA.getCollisionShifting()) > 0)
 		{

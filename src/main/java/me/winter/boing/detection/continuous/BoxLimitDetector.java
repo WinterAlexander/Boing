@@ -33,10 +33,11 @@ public class BoxLimitDetector extends PooledDetector<Box, Limit>
 	{
 		float epsilon = DEFAULT_ULPS * max(boxA.getPrecision(), limitB.getPrecision());
 
-		float pax = boxA.getAbsX(); //abs X for a
-		float pay = boxA.getAbsY(); //abs Y for a
-		float pbx = limitB.getAbsX(); //abs X for b
-		float pby = limitB.getAbsY(); //abs Y for b
+		float pax = boxA.getAbsX() - boxA.getMovement().x;
+		float pay = boxA.getAbsY() - boxA.getMovement().y;
+		float pbx = limitB.getAbsX() - limitB.getMovement().x;
+		float pby = limitB.getAbsY() - limitB.getMovement().y;
+
 		float hsA; //half size of A (as a Limit)
 
 		float nx = -limitB.normal.x; //normal X

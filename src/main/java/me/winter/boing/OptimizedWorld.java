@@ -1,13 +1,9 @@
 package me.winter.boing;
 
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
+import me.winter.boing.colliders.Collider;
 import me.winter.boing.detection.DetectionHandler;
 import me.winter.boing.resolver.CollisionResolver;
-import me.winter.boing.colliders.Collider;
-import me.winter.boing.util.VelocityUtil;
-
-import static java.lang.Float.POSITIVE_INFINITY;
 
 /**
  * Undocumented :(
@@ -20,14 +16,12 @@ public abstract class OptimizedWorld extends AbstractWorld
 	 * Collisions occuring in the current frame
 	 */
 	protected Array<Collision> collisions = new Array<>();
-	protected Array<Collision> prevCollisions = new Array<>();
 
 	protected DetectionHandler detector;
 	protected CollisionResolver resolver;
 
 	protected boolean refresh;
 
-	private Vector2 tmpVector = new Vector2();
 
 	public OptimizedWorld(CollisionResolver resolver)
 	{
@@ -105,13 +99,8 @@ public abstract class OptimizedWorld extends AbstractWorld
 		}
 
 		collisionPool.free(swapped);
-		collisionPool.freeAll(prevCollisions);
-		prevCollisions.clear();
-
-		Array<Collision> tmp = prevCollisions;
-
-		prevCollisions = collisions;
-		collisions = tmp;
+		collisionPool.freeAll(collisions);
+		collisions.clear();
 	}
 
 	public boolean isRefreshing()

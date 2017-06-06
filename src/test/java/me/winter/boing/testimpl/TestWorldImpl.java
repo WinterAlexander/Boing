@@ -10,13 +10,22 @@ import me.winter.boing.resolver.CollisionResolver;
  */
 public class TestWorldImpl extends WorldImpl
 {
+	private int collisionCount;
+
 	public TestWorldImpl(CollisionResolver resolver)
 	{
 		super(resolver);
 	}
 
+	@Override
+	protected void resolveCollisions()
+	{
+		collisionCount = collisions.size;
+		super.resolveCollisions();
+	}
+
 	public int collisionCount()
 	{
-		return prevCollisions.size;
+		return collisionCount;
 	}
 }

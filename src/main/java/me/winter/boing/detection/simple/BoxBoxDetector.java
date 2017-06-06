@@ -22,8 +22,8 @@ public class BoxBoxDetector extends PooledDetector<Box, Box>
 	@Override
 	public Collision collides(Box shapeA, Box shapeB)
 	{
-		float dx = shapeB.getAbsX() + shapeB.getMovement().x - (shapeA.getAbsX() + shapeA.getMovement().x);
-		float dy = shapeB.getAbsY() + shapeB.getMovement().y - (shapeA.getAbsY() + shapeA.getMovement().y);
+		float dx = shapeB.getAbsX() - shapeA.getAbsX();
+		float dy = shapeB.getAbsY() - shapeA.getAbsY();
 
 		float peneX = shapeA.width / 2 + shapeB.width / 2 - abs(dx);
 		float peneY = shapeA.height / 2 + shapeB.height / 2 - abs(dy);

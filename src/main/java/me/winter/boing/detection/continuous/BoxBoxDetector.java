@@ -38,10 +38,10 @@ public class BoxBoxDetector extends PooledDetector<Box, Box>
 
 		float epsilon = DEFAULT_ULPS * max(boxA.getPrecision(), boxB.getPrecision());
 
-		float pax = boxA.getAbsX();
-		float pay = boxA.getAbsY();
-		float pbx = boxB.getAbsX();
-		float pby = boxB.getAbsY();
+		float pax = boxA.getAbsX() - boxA.getMovement().x;
+		float pay = boxA.getAbsY() - boxA.getMovement().y;
+		float pbx = boxB.getAbsX() - boxB.getMovement().x;
+		float pby = boxB.getAbsY() - boxB.getMovement().y;
 
 		//TODO find which limits collide and stop this cancer
 
