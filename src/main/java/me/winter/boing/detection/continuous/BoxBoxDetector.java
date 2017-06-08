@@ -38,37 +38,37 @@ public class BoxBoxDetector extends PooledDetector<Box, Box>
 
 		float epsilon = DEFAULT_ULPS * max(boxA.getPrecision(), boxB.getPrecision());
 
-		float pax = boxA.getAbsX() - boxA.getMovement().x;
-		float pay = boxA.getAbsY() - boxA.getMovement().y;
-		float pbx = boxB.getAbsX() - boxB.getMovement().x;
-		float pby = boxB.getAbsY() - boxB.getMovement().y;
+		float ax = boxA.getAbsX();
+		float ay = boxA.getAbsY();
+		float bx = boxB.getAbsX();
+		float by = boxB.getAbsY();
 
 		//TODO find which limits collide and stop this cancer
 
 		Collision collision = collides(
-				boxA.width / 2, vecA.x, vecA.y, pax, pay + boxA.height / 2, csA.x, csA.y,
-				boxB.width / 2, vecB.x, vecB.y, pbx, pby - boxB.height / 2, csB.x, csB.y,
+				boxA.width / 2, vecA.x, vecA.y, ax, ay + boxA.height / 2, csA.x, csA.y,
+				boxB.width / 2, vecB.x, vecB.y, bx, by - boxB.height / 2, csB.x, csB.y,
 				epsilon, 0, 1);
 
 		if(collision == null)
 		{
 			collision = collides(
-					boxA.width / 2, vecA.x, vecA.y, pax, pay - boxA.height / 2, csA.x, csA.y,
-					boxB.width / 2, vecB.x, vecB.y, pbx, pby + boxB.height / 2, csB.x, csB.y,
+					boxA.width / 2, vecA.x, vecA.y, ax, ay - boxA.height / 2, csA.x, csA.y,
+					boxB.width / 2, vecB.x, vecB.y, bx, by + boxB.height / 2, csB.x, csB.y,
 					epsilon, 0, -1);
 
 			if(collision == null)
 			{
 				collision = collides(
-						boxA.height / 2, vecA.x, vecA.y, pax + boxA.width / 2, pay, csA.x, csA.y,
-						boxB.height / 2, vecB.x, vecB.y, pbx - boxB.width / 2, pby, csB.x, csB.y,
+						boxA.height / 2, vecA.x, vecA.y, ax + boxA.width / 2, ay, csA.x, csA.y,
+						boxB.height / 2, vecB.x, vecB.y, bx - boxB.width / 2, by, csB.x, csB.y,
 						epsilon, 1, 0);
 
 				if(collision == null)
 				{
 					collision = collides(
-							boxA.height / 2, vecA.x, vecA.y, pax - boxA.width / 2, pay, csA.x, csA.y,
-							boxB.height / 2, vecB.x, vecB.y, pbx + boxB.width / 2, pby, csB.x, csB.y,
+							boxA.height / 2, vecA.x, vecA.y, ax - boxA.width / 2, ay, csA.x, csA.y,
+							boxB.height / 2, vecB.x, vecB.y, bx + boxB.width / 2, by, csB.x, csB.y,
 							epsilon, -1, 0);
 
 					if(collision == null)
@@ -81,54 +81,33 @@ public class BoxBoxDetector extends PooledDetector<Box, Box>
 		collision.colliderB = boxB;
 		collision.setImpactVelocities(boxA.getBody(), boxB.getBody());
 
-
-
-		//if(collision.colliderA.getBody() instanceof DynamicBody && collision.colliderB.getBody() instanceof DynamicBody)
-		//	System.out.println(collision.contactSurface);
-
 		return collision;
 	}
 
-	public Collision collides(float hsA, float vax, float vay, float pax, float pay, float csax, float csay,
-	                          float hsB, float vbx, float vby, float pbx, float pby, float csbx, float csby,
+	public Collision collides(float hsA, float vax, float vay, float ax, float ay, float csax, float csay,
+	                          float hsB, float vbx, float vby, float bx, float by, float csbx, float csby,
 	                          float epsilon, float nx, float ny)
 	{
 
-		if(dot(nx, ny, vax, vay) < 0)
-		{
-			vax = 0f;
-			vay = 0f;
-		}
-
-		if(dot(-nx, -ny, vbx, vby) < 0)
-		{
-			vbx = 0f;
-			vby = 0f;
-		}
+		if(!isGreaterOrEqual(ax * nx + ay * ny, bx * nx + by * ny, epsilon)) //if limitB with his velocity isn't after limitA with his velocity
+			return null; //no collision
 
 		if(dot(nx, ny, csax, csay) > 0)
 		{
-			pax -= csax;
-			pay -= csay;
 			vax += csax;
 			vay += csay;
 		}
 
 		if(dot(-nx, -ny, csbx, csby) > 0)
 		{
-			pbx -= csbx;
-			pby -= csby;
 			vbx += csbx;
 			vby += csby;
 		}
 
-		float ax = pax + vax;
-		float ay = pay + vay;
-		float bx = pbx + vbx;
-		float by = pby + vby;
-
-		if(!isGreaterOrEqual(ax * nx + ay * ny, bx * nx + by * ny, epsilon)) //if limitB with his velocity isn't after limitA with his velocity
-			return null; //no collision
+		float pax = ax - vax;
+		float pay = ay - vay;
+		float pbx = bx - vbx;
+		float pby = by - vby;
 
 		if(!isSmallerOrEqual(pax * nx + pay * ny, pbx * nx + pby * ny, epsilon)) //if limitB isn't before limitA
 			return null; //no collision

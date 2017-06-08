@@ -33,69 +33,41 @@ public class BoxLimitDetector extends PooledDetector<Box, Limit>
 	{
 		float epsilon = DEFAULT_ULPS * max(boxA.getPrecision(), limitB.getPrecision());
 
-		float pax = boxA.getAbsX() - boxA.getMovement().x;
-		float pay = boxA.getAbsY() - boxA.getMovement().y;
-		float pbx = limitB.getAbsX() - limitB.getMovement().x;
-		float pby = limitB.getAbsY() - limitB.getMovement().y;
-
-		float hsA; //half size of A (as a Limit)
-
 		float nx = -limitB.normal.x; //normal X
 		float ny = -limitB.normal.y; //normal Y
 
-		if(abs(limitB.normal.x) > abs(limitB.normal.y)) //if collision is more horizontal than vertical
-		{
-			pax += nx * boxA.width / 2; //extends to side
-			hsA = boxA.height / 2;
-		}
-		else
-		{
-			pay += ny * boxA.height / 2; //extend to top/bottom
-			hsA = boxA.width / 2;
-		}
+		float ax = boxA.getAbsX() + nx * boxA.width / 2; //extends to side
+		float ay = boxA.getAbsY() + ny * boxA.height / 2; //extends to side
+		float bx = limitB.getAbsX();
+		float by = limitB.getAbsY();
+
+
+		if(!isGreaterOrEqual(ax * nx + ay * ny, bx * nx + by * ny, epsilon)) //if limitB with his velocity isn't after boxA with his velocity
+			return null; //no collision
 
 		float vax = boxA.getMovement().x;
 		float vay = boxA.getMovement().y;
 		float vbx = limitB.getMovement().x;
 		float vby = limitB.getMovement().y;
 
-		if(dot(nx, ny, vax, vay) < 0)
-		{
-			vax = 0f;
-			vay = 0f;
-		}
-
-		if(dot(-nx, -ny, vbx, vby) < 0)
-		{
-			vbx = 0f;
-			vby = 0f;
-		}
-
 		if(dot(nx, ny, boxA.getCollisionShifting().x, boxA.getCollisionShifting().y) > 0)
 		{
-			pax -= boxA.getCollisionShifting().x;
-			pay -= boxA.getCollisionShifting().y;
 			vax += boxA.getCollisionShifting().x;
 			vay += boxA.getCollisionShifting().y;
 		}
 
 		if(limitB.normal.dot(limitB.getCollisionShifting()) > 0)
 		{
-			pbx -= limitB.getCollisionShifting().x;
-			pby -= limitB.getCollisionShifting().y;
 			vbx += limitB.getCollisionShifting().x;
 			vby += limitB.getCollisionShifting().y;
 		}
 
+		float pax = ax - vax;
+		float pay = ay - vay;
+		float pbx = bx - vbx;
+		float pby = by - vby;
+
 		if(!isSmallerOrEqual(pax * nx + pay * ny, pbx * nx + pby * ny, epsilon)) //if limitB isn't before boxA
-			return null; //no collision
-
-		float ax = pax + vax; //previous x for A
-		float ay = pay + vay; //previous y for A
-		float bx = pbx + vbx; //previous x for B
-		float by = pby + vby; //previous y for B
-
-		if(!isGreaterOrEqual(ax * nx + ay * ny, bx * nx + by * ny, epsilon)) //if limitB with his velocity isn't after boxA with his velocity
 			return null; //no collision
 
 		float diff = (pbx - pax) * nx + (pby - pay) * ny;
@@ -108,6 +80,7 @@ public class BoxLimitDetector extends PooledDetector<Box, Limit>
 		float mxB = bx - vbx * midpoint; //midpoint x for B
 		float myB = by - vby * midpoint; //midpoint y for B
 
+		float hsA = nx * boxA.height / 2 + ny * boxA.width / 2; //half size of A (as a Limit)
 		float hsB = limitB.size / 2; //half size for B
 
 		float limitA1 = -ny * (mxA + hsA) + nx * (myA + hsA);
