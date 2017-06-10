@@ -2,6 +2,7 @@ package me.winter.boing;
 
 import com.badlogic.gdx.math.Vector2;
 import me.winter.boing.colliders.Collider;
+import me.winter.boing.util.DynamicFloat;
 
 /**
  * Represents a collision between 2 solids. This object should be pooled
@@ -29,12 +30,12 @@ public class Collision
 	/**
 	 * penetration of the collision, combined distance of the colliders within each other
 	 */
-	public float penetration;
+	public DynamicFloat penetration;
 
 	/**
 	 * the amount of surface where solids are touching
 	 */
-	public float contactSurface;
+	public DynamicFloat contactSurface;
 
 	/**
 	 * Collider involved in the collision.

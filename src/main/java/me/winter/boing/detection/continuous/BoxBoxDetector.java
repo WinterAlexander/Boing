@@ -127,7 +127,7 @@ public class BoxBoxDetector extends PooledDetector<Box, Box>
 		float limitB1 = -ny * (mxB + hsB) + nx * (myB + hsB);
 		float limitB2 = -ny * (mxB - hsB) + nx * (myB - hsB);
 
-		float surface = min(max(limitA1, limitA2), max(limitB1, limitB2)) //minimum of the maximums
+		final float surface = min(max(limitA1, limitA2), max(limitB1, limitB2)) //minimum of the maximums
 				- max(min(limitA1, limitA2), min(limitB1, limitB2)); //maximum of the minimums
 
 		if(areEqual(surface, 0, epsilon))
@@ -146,13 +146,11 @@ public class BoxBoxDetector extends PooledDetector<Box, Box>
 			limitB1 = -ny * (mxB + hsB) + nx * (myB + hsB);
 			limitB2 = -ny * (mxB - hsB) + nx * (myB - hsB);
 
-			surface = min(max(limitA1, limitA2), max(limitB1, limitB2)) //minimum of the maximums
+			float surface2 = min(max(limitA1, limitA2), max(limitB1, limitB2)) //minimum of the maximums
 					- max(min(limitA1, limitA2), min(limitB1, limitB2)); //maximum of the minimums
 
-			if(isSmallerOrEqual(surface, 0, epsilon))
+			if(isSmallerOrEqual(surface2, 0, epsilon))
 				return null;
-
-			surface = 0f;
 		}
 		else if(surface < 0)
 			return null;
@@ -160,9 +158,9 @@ public class BoxBoxDetector extends PooledDetector<Box, Box>
 		Collision collision = collisionPool.obtain();
 
 		collision.normal.set(nx, ny);
-		collision.penetration = -((bx - ax) * nx + (by - ay) * ny);
+		collision.penetration = () -> -((bx - ax) * nx + (by - ay) * ny);
 
-		collision.contactSurface = surface;
+		collision.contactSurface = () -> surface;
 
 		return collision;
 	}

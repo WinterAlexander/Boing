@@ -30,16 +30,18 @@ public class ReplaceResolver implements CollisionResolver
 	@Override
 	public void resolve(Collision collision, World world)
 	{
-		if(collision.penetration == 0)
+		float pene = collision.penetration.getValue();
+
+		if(pene <= 0)
 			return;
 
 		float ratio = resolveWeights(collision);
 
 		if(ratio != 1)
-			replace((DynamicBody)collision.colliderA.getBody(), -collision.normal.x, -collision.normal.y, (1f - ratio) * collision.penetration);
+			replace((DynamicBody)collision.colliderA.getBody(), -collision.normal.x, -collision.normal.y, (1f - ratio) * pene);
 
 		if(ratio != 0)
-			replace((DynamicBody)collision.colliderB.getBody(), collision.normal.x, collision.normal.y, ratio * collision.penetration);
+			replace((DynamicBody)collision.colliderB.getBody(), collision.normal.x, collision.normal.y, ratio * pene);
 	}
 
 	private void replace(DynamicBody solid, float nx, float ny, float pene)

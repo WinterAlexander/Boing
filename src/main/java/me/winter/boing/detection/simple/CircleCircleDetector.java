@@ -39,9 +39,8 @@ public class CircleCircleDetector extends PooledDetector<Circle, Circle>
 		float dst = (float)sqrt(dst2);
 
 		divide(collision.normal.set(dx, dy), dst);
-		collision.penetration = r - dst;
-		//collision.contactSurface = 2 * (float)sqrt(r2 - dst2);
-		collision.contactSurface = 0f; //theorically 0 since circles can other touch each other on one point
+		collision.penetration = () -> r - (float)sqrt((shapeB.getAbsX() - shapeA.getAbsX()) * (shapeB.getAbsX() - shapeA.getAbsX()) + (shapeB.getAbsY() - shapeA.getAbsY()) * (shapeB.getAbsY() - shapeA.getAbsY()));
+		collision.contactSurface = () -> 0f; //0 since circles can other touch each other at one point
 
 		collision.colliderA = shapeA;
 		collision.colliderB = shapeB;
