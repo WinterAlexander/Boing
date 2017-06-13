@@ -42,6 +42,12 @@ public interface DynamicBody extends Body
 
 	/**
 	 *
+	 * @return
+	 */
+	Vector2 getInfluencedMovement();
+
+	/**
+	 *
 	 * @return list of bodies this body is touching
 	 */
 	Array<Collision> getCollisions();

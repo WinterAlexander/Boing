@@ -1,5 +1,6 @@
 package me.winter.boing.impl;
 
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Queue;
 import me.winter.boing.Body;
 import me.winter.boing.Collision;
@@ -12,6 +13,7 @@ import java.util.Iterator;
 
 import static java.lang.Math.abs;
 import static me.winter.boing.util.FloatUtil.DEFAULT_ULPS;
+import static me.winter.boing.util.VectorUtil.DOWN;
 
 /**
  * Simple implementation of a World detecting and resolving collisions.
@@ -40,34 +42,47 @@ public class WorldImpl extends OptimizedWorld implements Iterable<Body>
 
 		for(DynamicBody dynamic : dynamics)
 		{
-			dynamic.getMovement().set(dynamic.getVelocity());
-
-			for(Collision collision : dynamic.getCollisions())
-			{
-				if(collision.colliderB.getBody() instanceof DynamicBody
-				&& collision.normal.x == 0
-				&& collision.normal.y == -1
-				&& collision.normal.dot(collision.impactVelA) > 0)
-				{
-
-					dynamic.getMovement().add(((DynamicBody)collision.colliderB.getBody()).getVelocity());
-					collisionPool.free(collision);
-				}
-			}
-			dynamic.getMovement().scl(delta);
-
-			dynamic.getCollisions().clear();
+			dynamic.getMovement().set(dynamic.getVelocity()).scl(delta);
+			dynamic.getMovement().add(getInfluenceMovement(dynamic, delta));
 
 			dynamic.getPosition().add(dynamic.getMovement());
 
 		}
 	}
 
+	private Vector2 getInfluenceMovement(DynamicBody dynamic, float delta)
+	{
+		if(!Float.isNaN(dynamic.getInfluencedMovement().len2()))
+			return dynamic.getInfluencedMovement();
+
+		dynamic.getInfluencedMovement().set(0, 0);
+
+		for(Collision collision : dynamic.getCollisions())
+		{
+			if(collision.colliderB.getBody() instanceof DynamicBody
+					&& collision.normal.dot(DOWN) == 1)
+			{
+				Vector2 vel = ((DynamicBody)collision.colliderB.getBody()).getVelocity();
+
+				dynamic.getInfluencedMovement().add(vel.x * delta, vel.y * delta);
+				dynamic.getInfluencedMovement().add(getInfluenceMovement((DynamicBody)collision.colliderB.getBody(), delta));
+			}
+
+			collisionPool.free(collision);
+		}
+		dynamic.getCollisions().clear();
+
+		return dynamic.getInfluencedMovement();
+	}
+
 	@Override
 	protected void resolveCollisions()
 	{
 		for(DynamicBody dynamic : dynamics)
+		{
 			dynamic.getCollisionShifting().setZero();
+			dynamic.getInfluencedMovement().set(Float.NaN, Float.NaN);
+		}
 
 		super.resolveCollisions();
 	}

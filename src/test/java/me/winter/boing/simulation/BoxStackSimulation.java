@@ -260,6 +260,37 @@ public class BoxStackSimulation
 	}
 
 	@Test
+	public void reverseOrderTowerTest()
+	{
+		TestWorldImpl world = new TestWorldImpl(new ReplaceResolver());
+
+		PlayerImpl player = new PlayerImpl();
+		player.getPosition().set(400, 800);
+		player.addCollider(new Box(player, 0, 0, 20, 45));
+		world.add(player);
+
+		for(int i = 9; i >= 0; i--)
+		{
+			GravityAffected test = new GravityAffected();
+			test.getPosition().set(400, 750 - i * 50);
+			test.addCollider(new Box(test, 0, 0, 30, 30));
+			world.add(test);
+		}
+
+		BodyImpl solidBlock = new BodyImpl();
+		solidBlock.getPosition().set(600, 110);
+		solidBlock.addCollider(new Box(solidBlock, 0, 0, 100, 100));
+		world.add(solidBlock);
+
+		BodyImpl ground = new BodyImpl();
+		ground.getPosition().set(400, -100);
+		ground.addCollider(new Box(ground, 0, 0, 800, 400));
+		world.add(ground);
+
+		new WorldSimulation(world, 60f).start();
+	}
+
+	@Test
 	public void towerTestWithPlatform()
 	{
 		TestWorldImpl world = new TestWorldImpl(new ReplaceResolver());
