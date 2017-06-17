@@ -2,6 +2,7 @@ package me.winter.boing.detection.continuous;
 
 import com.badlogic.gdx.utils.Pool;
 import me.winter.boing.Collision;
+import me.winter.boing.World;
 import me.winter.boing.detection.PooledDetector;
 import me.winter.boing.colliders.Limit;
 
@@ -29,7 +30,7 @@ public class LimitLimitDetector extends PooledDetector<Limit, Limit>
 	}
 
 	@Override
-	public Collision collides(Limit limitA, Limit limitB)
+	public Collision collides(World world, Limit limitA, Limit limitB)
 	{
 		if(!areEqual(limitA.normal.dot(limitB.normal), -1))
 			return null;
@@ -42,26 +43,26 @@ public class LimitLimitDetector extends PooledDetector<Limit, Limit>
 		float nx = limitA.normal.x; //normal X
 		float ny = limitA.normal.y; //normal Y
 
-		float vax = limitA.getMovement().x;
-		float vay = limitA.getMovement().y;
-		float vbx = limitB.getMovement().x;
-		float vby = limitB.getMovement().y;
+		float vax = limitA.getMovement(world).x;
+		float vay = limitA.getMovement(world).y;
+		float vbx = limitB.getMovement(world).x;
+		float vby = limitB.getMovement(world).y;
 
 		float epsilon = DEFAULT_ULPS * getGreatestULP(ax, ay, bx, by, vax, vay, vbx, vby, limitA.size, limitB.size);
 
 		if(!isGreaterOrEqual(ax * nx + ay * ny, bx * nx + by * ny, epsilon)) //if limitB with his velocity isn't after limitA with his velocity
 			return null; //no collision
 
-		if(limitA.normal.dot(limitA.getCollisionShifting()) > 0)
+		if(limitA.normal.dot(limitA.getCollisionShifting(world)) > 0)
 		{
-			vax += limitA.getCollisionShifting().x;
-			vay += limitA.getCollisionShifting().y;
+			vax += limitA.getCollisionShifting(world).x;
+			vay += limitA.getCollisionShifting(world).y;
 		}
 
-		if(limitB.normal.dot(limitB.getCollisionShifting()) > 0)
+		if(limitB.normal.dot(limitB.getCollisionShifting(world)) > 0)
 		{
-			vbx += limitB.getCollisionShifting().x;
-			vby += limitB.getCollisionShifting().y;
+			vbx += limitB.getCollisionShifting(world).x;
+			vby += limitB.getCollisionShifting(world).y;
 		}
 
 		float pax = ax - vax; //previous x for A

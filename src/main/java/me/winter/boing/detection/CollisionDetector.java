@@ -1,6 +1,7 @@
 package me.winter.boing.detection;
 
 import me.winter.boing.Collision;
+import me.winter.boing.World;
 import me.winter.boing.colliders.Collider;
 
 /**
@@ -10,5 +11,5 @@ import me.winter.boing.colliders.Collider;
  */
 public interface CollisionDetector<A extends Collider, B extends Collider>
 {
-	Collision collides(A shapeA, B shapeB);
+	Collision collides(World world, A shapeA, B shapeB);
 }

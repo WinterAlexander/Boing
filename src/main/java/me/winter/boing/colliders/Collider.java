@@ -2,6 +2,7 @@ package me.winter.boing.colliders;
 
 import com.badlogic.gdx.math.Vector2;
 import me.winter.boing.Body;
+import me.winter.boing.World;
 
 import static java.lang.Math.abs;
 import static java.lang.Math.ulp;
@@ -45,13 +46,13 @@ public interface Collider
 	 *
 	 * @return the current movement of the body of this collider
 	 */
-	Vector2 getMovement();
+	Vector2 getMovement(World world);
 
 	/**
 	 *
 	 * @return the last movement imposed by collision resolving
 	 */
-	Vector2 getCollisionShifting();
+	Vector2 getCollisionShifting(World world);
 
 	/**
 	 * A tag can be used to keep track of a Collider within it's use

@@ -1,5 +1,6 @@
 package me.winter.boing.resolver;
 
+import com.badlogic.gdx.math.Vector2;
 import me.winter.boing.Collision;
 import me.winter.boing.DynamicBody;
 import me.winter.boing.World;
@@ -33,46 +34,54 @@ public class ReplaceResolver implements CollisionResolver
 		if(collision.penetration == 0)
 			return;
 
-		float ratio = resolveWeights(collision);
+		float ratio = resolveWeights(collision, world);
 
 		if(ratio != 1)
-			replace((DynamicBody)collision.colliderA.getBody(), -collision.normal.x, -collision.normal.y, (1f - ratio) * collision.penetration);
+			replace((DynamicBody)collision.colliderA.getBody(),
+					world.getStep((DynamicBody)collision.colliderA.getBody()).getCollisionShifting(),
+					-collision.normal.x,
+					-collision.normal.y,
+					(1f - ratio) * collision.penetration);
 
 		if(ratio != 0)
-			replace((DynamicBody)collision.colliderB.getBody(), collision.normal.x, collision.normal.y, ratio * collision.penetration);
+			replace((DynamicBody)collision.colliderB.getBody(),
+					world.getStep((DynamicBody)collision.colliderB.getBody()).getCollisionShifting(),
+					collision.normal.x,
+					collision.normal.y,
+					ratio * collision.penetration);
 	}
 
-	private void replace(DynamicBody solid, float nx, float ny, float pene)
+	private void replace(DynamicBody solid, Vector2 collisionShifting, float nx, float ny, float pene)
 	{
 		float replaceX = nx * pene;
 		float replaceY = ny * pene;
 
-		solid.getPosition().sub(solid.getCollisionShifting());
+		solid.getPosition().sub(collisionShifting);
 
 		if(replaceX != 0f)
 		{
-			float dirX = signum(solid.getCollisionShifting().x);
+			float dirX = signum(collisionShifting.x);
 
 			if(dirX != signum(replaceX))
-				solid.getCollisionShifting().x += replaceX;
-			else if(dirX == 0 || replaceX * dirX > solid.getCollisionShifting().x * dirX)
-				solid.getCollisionShifting().x = replaceX;
+				collisionShifting.x += replaceX;
+			else if(dirX == 0 || replaceX * dirX > collisionShifting.x * dirX)
+				collisionShifting.x = replaceX;
 		}
 
 		if(replaceY != 0f)
 		{
-			float dirY = signum(solid.getCollisionShifting().y);
+			float dirY = signum(collisionShifting.y);
 
 			if(dirY != signum(replaceY))
-				solid.getCollisionShifting().y += replaceY;
-			else if(dirY == 0 || replaceY * dirY > solid.getCollisionShifting().y * dirY)
-				solid.getCollisionShifting().y = replaceY;
+				collisionShifting.y += replaceY;
+			else if(dirY == 0 || replaceY * dirY > collisionShifting.y * dirY)
+				collisionShifting.y = replaceY;
 		}
 
-		solid.getPosition().add(solid.getCollisionShifting());
+		solid.getPosition().add(collisionShifting);
 	}
 
-	private float resolveWeights(Collision collision)
+	private float resolveWeights(Collision collision, World world)
 	{
 		if(!(collision.colliderA.getBody() instanceof DynamicBody))
 			return 1f;
@@ -80,8 +89,8 @@ public class ReplaceResolver implements CollisionResolver
 		if(!(collision.colliderB.getBody() instanceof DynamicBody))
 			return 0f;
 
-		float weightA = getWeight((DynamicBody)collision.colliderA.getBody(), -collision.normal.x, -collision.normal.y);
-		float weightB = getWeight((DynamicBody)collision.colliderB.getBody(), collision.normal.x, collision.normal.y);
+		float weightA = getWeight(world, (DynamicBody)collision.colliderA.getBody(), -collision.normal.x, -collision.normal.y);
+		float weightB = getWeight(world, (DynamicBody)collision.colliderB.getBody(), collision.normal.x, collision.normal.y);
 
 		if(capWeight)
 			return weightA > weightB ? 1 : 0;
@@ -90,18 +99,18 @@ public class ReplaceResolver implements CollisionResolver
 
 	}
 
-	private float getWeight(DynamicBody dynamic, float nx, float ny)
+	private float getWeight(World world, DynamicBody dynamic, float nx, float ny)
 	{
 		float weight = dynamic.getWeight();
 
-		for(Collision collision : dynamic.getCollisions())
+		for(Collision collision : world.getStep(dynamic).getCollisions())
 		{
 			if(collision.normal.dot(nx, ny) == 1f)
 			{
 				if(!(collision.colliderB.getBody() instanceof DynamicBody))
 					return POSITIVE_INFINITY;
 
-				weight += getWeight((DynamicBody)collision.colliderB.getBody(), nx, ny);
+				weight += getWeight(world, (DynamicBody)collision.colliderB.getBody(), nx, ny);
 			}
 		}
 

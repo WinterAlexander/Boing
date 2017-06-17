@@ -1,12 +1,15 @@
 package me.winter.boing.impl;
 
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.IdentityMap;
 import com.badlogic.gdx.utils.Queue;
 import me.winter.boing.Body;
+import me.winter.boing.BodyStep;
 import me.winter.boing.Collision;
 import me.winter.boing.DynamicBody;
 import me.winter.boing.OptimizedWorld;
 import me.winter.boing.UpdatableBody;
+import me.winter.boing.WorldImplBodyStep;
 import me.winter.boing.resolver.CollisionResolver;
 
 import java.util.Iterator;
@@ -25,6 +28,7 @@ public class WorldImpl extends OptimizedWorld implements Iterable<Body>
 	private Queue<DynamicBody> dynamics = new Queue<>();
 	private Queue<Body> all = new Queue<>();
 
+	private IdentityMap<DynamicBody, WorldImplBodyStep> steps = new IdentityMap<>();
 
 	public WorldImpl(CollisionResolver resolver)
 	{
@@ -42,37 +46,39 @@ public class WorldImpl extends OptimizedWorld implements Iterable<Body>
 
 		for(DynamicBody dynamic : dynamics)
 		{
-			dynamic.getMovement().set(dynamic.getVelocity()).scl(delta);
-			dynamic.getMovement().add(getInfluenceMovement(dynamic, delta));
+			getStep(dynamic).getMovement().set(dynamic.getVelocity()).scl(delta);
+			getStep(dynamic).getMovement().add(getInfluenceMovement(dynamic, delta));
 
-			dynamic.getPosition().add(dynamic.getMovement());
+			dynamic.getPosition().add(getStep(dynamic).getMovement());
 
 		}
 	}
 
 	private Vector2 getInfluenceMovement(DynamicBody dynamic, float delta)
 	{
-		if(!Float.isNaN(dynamic.getInfluencedMovement().len2()))
-			return dynamic.getInfluencedMovement();
+		Vector2 influencedMovement = getStep(dynamic).getInfluencedMovement();
 
-		dynamic.getInfluencedMovement().set(0, 0);
+		if(!Float.isNaN(influencedMovement.len2()))
+			return influencedMovement;
 
-		for(Collision collision : dynamic.getCollisions())
+		influencedMovement.set(0, 0);
+
+		for(Collision collision : getStep(dynamic).getCollisions())
 		{
 			if(collision.colliderB.getBody() instanceof DynamicBody
 					&& collision.normal.dot(DOWN) == 1)
 			{
 				Vector2 vel = ((DynamicBody)collision.colliderB.getBody()).getVelocity();
 
-				dynamic.getInfluencedMovement().add(vel.x * delta, vel.y * delta);
-				dynamic.getInfluencedMovement().add(getInfluenceMovement((DynamicBody)collision.colliderB.getBody(), delta));
+				influencedMovement.add(vel.x * delta, vel.y * delta);
+				influencedMovement.add(getInfluenceMovement((DynamicBody)collision.colliderB.getBody(), delta));
 			}
 
 			collisionPool.free(collision);
 		}
-		dynamic.getCollisions().clear();
+		getStep(dynamic).getCollisions().clear();
 
-		return dynamic.getInfluencedMovement();
+		return influencedMovement;
 	}
 
 	@Override
@@ -80,8 +86,8 @@ public class WorldImpl extends OptimizedWorld implements Iterable<Body>
 	{
 		for(DynamicBody dynamic : dynamics)
 		{
-			dynamic.getCollisionShifting().setZero();
-			dynamic.getInfluencedMovement().set(Float.NaN, Float.NaN);
+			getStep(dynamic).getCollisionShifting().setZero();
+			getStep(dynamic).getInfluencedMovement().set(Float.NaN, Float.NaN);
 		}
 
 		super.resolveCollisions();
@@ -134,6 +140,7 @@ public class WorldImpl extends OptimizedWorld implements Iterable<Body>
 		{
 			dynamics.addFirst((DynamicBody)body);
 			all.addFirst(body);
+			steps.put((DynamicBody)body, new WorldImplBodyStep());
 		}
 		else
 		{
@@ -146,8 +153,17 @@ public class WorldImpl extends OptimizedWorld implements Iterable<Body>
 	{
 		all.removeValue(body, true);
 		if(body instanceof DynamicBody)
+		{
 			dynamics.removeValue((DynamicBody)body, true);
+			steps.remove((DynamicBody)body);
+		}
 		refresh();
+	}
+
+	@Override
+	public BodyStep getStep(DynamicBody body)
+	{
+		return steps.get(body);
 	}
 
 	@Override

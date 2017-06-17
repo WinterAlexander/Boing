@@ -20,17 +20,6 @@ public interface Body
 	 */
 	Vector2 getPosition();
 
-	/**
-	 *
-	 * @return width of the whole body
-	 */
-	float getWidth();
-
-	/**
-	 *
-	 * @return height of the whole body
-	 */
-	float getHeight();
 
 	/**
 	 * @return the list of colliders this body have

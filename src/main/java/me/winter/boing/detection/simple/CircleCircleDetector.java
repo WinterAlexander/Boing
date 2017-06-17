@@ -2,6 +2,7 @@ package me.winter.boing.detection.simple;
 
 import com.badlogic.gdx.utils.Pool;
 import me.winter.boing.Collision;
+import me.winter.boing.World;
 import me.winter.boing.detection.PooledDetector;
 import me.winter.boing.colliders.Circle;
 
@@ -21,7 +22,7 @@ public class CircleCircleDetector extends PooledDetector<Circle, Circle>
 	}
 
 	@Override
-	public Collision collides(Circle shapeA, Circle shapeB)
+	public Collision collides(World world,  Circle shapeA, Circle shapeB)
 	{
 		float dx = shapeB.getAbsX() - shapeA.getAbsX();
 		float dy = shapeB.getAbsY() - shapeA.getAbsY();

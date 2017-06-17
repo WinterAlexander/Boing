@@ -3,6 +3,7 @@ package me.winter.boing.colliders;
 import com.badlogic.gdx.math.Vector2;
 import me.winter.boing.Body;
 import me.winter.boing.DynamicBody;
+import me.winter.boing.World;
 
 import static com.badlogic.gdx.math.Vector2.Zero;
 import static java.lang.Math.max;
@@ -47,18 +48,18 @@ public abstract class AbstractCollider implements Collider
 	}
 
 	@Override
-	public Vector2 getMovement()
+	public Vector2 getMovement(World world)
 	{
 		return body instanceof DynamicBody
-				? ((DynamicBody)body).getMovement()
+				? world.getStep((DynamicBody)body).getMovement()
 				: Zero;
 	}
 
 	@Override
-	public Vector2 getCollisionShifting()
+	public Vector2 getCollisionShifting(World world)
 	{
 		return body instanceof DynamicBody
-				? ((DynamicBody)body).getCollisionShifting()
+				? world.getStep((DynamicBody)body).getCollisionShifting()
 				: Zero;
 	}
 

@@ -61,7 +61,7 @@ public abstract class OptimizedWorld extends AbstractWorld
 		{
 			for(Collider colliderB : bodyB.getColliders())
 			{
-				Collision collision = detector.collides(colliderA, colliderB);
+				Collision collision = detector.collides(this, colliderA, colliderB);
 
 				if(collision == null)
 					continue;
@@ -79,14 +79,14 @@ public abstract class OptimizedWorld extends AbstractWorld
 					{
 						Collision copy = collisionPool.obtain();
 						copy.set(collision);
-						((DynamicBody)bodyA).getCollisions().add(copy);
+						getStep((DynamicBody)bodyA).getCollisions().add(copy);
 					}
 
 					if(bodyB instanceof DynamicBody)
 					{
 						Collision copy = collisionPool.obtain();
 						copy.setAsSwapped(collision);
-						((DynamicBody)bodyB).getCollisions().add(copy);
+						getStep((DynamicBody)bodyB).getCollisions().add(copy);
 					}
 				}
 				else

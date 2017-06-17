@@ -34,30 +34,6 @@ public class DynamicBodyImpl extends BodyImpl implements DynamicBody
 	}
 
 	@Override
-	public Vector2 getMovement()
-	{
-		return movement;
-	}
-
-	@Override
-	public Vector2 getInfluencedMovement()
-	{
-		return im;
-	}
-
-	@Override
-	public Vector2 getCollisionShifting()
-	{
-		return shifting;
-	}
-
-	@Override
-	public Array<Collision> getCollisions()
-	{
-		return contacts;
-	}
-
-	@Override
 	public float getWeight()
 	{
 		return weight;

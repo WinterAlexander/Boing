@@ -3,6 +3,7 @@ package me.winter.boing.detection.continuous;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Pool;
 import me.winter.boing.Collision;
+import me.winter.boing.World;
 import me.winter.boing.detection.PooledDetector;
 import me.winter.boing.colliders.Box;
 
@@ -29,13 +30,13 @@ public class BoxBoxDetector extends PooledDetector<Box, Box>
 	}
 
 	@Override
-	public Collision collides(Box boxA, Box boxB)
+	public Collision collides(World world, Box boxA, Box boxB)
 	{
-		Vector2 vecA = boxA.getMovement();
-		Vector2 vecB = boxB.getMovement();
+		Vector2 vecA = boxA.getMovement(world);
+		Vector2 vecB = boxB.getMovement(world);
 
-		Vector2 csA = boxA.getCollisionShifting();
-		Vector2 csB = boxB.getCollisionShifting();
+		Vector2 csA = boxA.getCollisionShifting(world);
+		Vector2 csB = boxB.getCollisionShifting(world);
 
 		float ax = boxA.getAbsX();
 		float ay = boxA.getAbsY();

@@ -2,6 +2,7 @@ package me.winter.boing.detection.continuous;
 
 import com.badlogic.gdx.utils.Pool;
 import me.winter.boing.Collision;
+import me.winter.boing.World;
 import me.winter.boing.detection.PooledDetector;
 import me.winter.boing.colliders.Box;
 import me.winter.boing.colliders.Limit;
@@ -30,7 +31,7 @@ public class BoxLimitDetector extends PooledDetector<Box, Limit>
 	}
 
 	@Override
-	public Collision collides(Box boxA, Limit limitB)
+	public Collision collides(World world, Box boxA, Limit limitB)
 	{
 		float nx = -limitB.normal.x; //normal X
 		float ny = -limitB.normal.y; //normal Y
@@ -40,26 +41,26 @@ public class BoxLimitDetector extends PooledDetector<Box, Limit>
 		float bx = limitB.getAbsX();
 		float by = limitB.getAbsY();
 
-		float vax = boxA.getMovement().x;
-		float vay = boxA.getMovement().y;
-		float vbx = limitB.getMovement().x;
-		float vby = limitB.getMovement().y;
+		float vax = boxA.getMovement(world).x;
+		float vay = boxA.getMovement(world).y;
+		float vbx = limitB.getMovement(world).x;
+		float vby = limitB.getMovement(world).y;
 
 		float epsilon = DEFAULT_ULPS * getGreatestULP(ax, ay, bx, by, vax, vay, vbx, vby, boxA.width, boxA.height, limitB.size);
 
 		if(!isGreaterOrEqual(ax * nx + ay * ny, bx * nx + by * ny, epsilon)) //if limitB with his velocity isn't after boxA with his velocity
 			return null; //no collision
 
-		if(dot(nx, ny, boxA.getCollisionShifting().x, boxA.getCollisionShifting().y) > 0)
+		if(dot(nx, ny, boxA.getCollisionShifting(world).x, boxA.getCollisionShifting(world).y) > 0)
 		{
-			vax += boxA.getCollisionShifting().x;
-			vay += boxA.getCollisionShifting().y;
+			vax += boxA.getCollisionShifting(world).x;
+			vay += boxA.getCollisionShifting(world).y;
 		}
 
-		if(limitB.normal.dot(limitB.getCollisionShifting()) > 0)
+		if(limitB.normal.dot(limitB.getCollisionShifting(world)) > 0)
 		{
-			vbx += limitB.getCollisionShifting().x;
-			vby += limitB.getCollisionShifting().y;
+			vbx += limitB.getCollisionShifting(world).x;
+			vby += limitB.getCollisionShifting(world).y;
 		}
 
 		float pax = ax - vax;

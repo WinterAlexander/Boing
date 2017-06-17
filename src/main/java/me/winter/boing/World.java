@@ -19,6 +19,7 @@ public interface World
 	 */
 	void step(float delta);
 
+	BodyStep getStep(DynamicBody body);
 
 	Pool<Collision> getCollisionPool();
 

@@ -23,36 +23,6 @@ public interface DynamicBody extends Body
 	Vector2 getVelocity();
 
 	/**
-	 * The movement of a DynamicBody is how much it moved in this frame.
-	 * <p>
-	 * It is calculated by multiplying the current velocity with the delta of the frame.
-	 *
-	 * @return unit-scaled movement of this frame
-	 */
-	Vector2 getMovement();
-
-	/**
-	 * The collision shifting is a way to represents the movement imposed by the
-	 * collision resolver when dynamic bodies collides. If two bodies overlap, they
-	 * need to be shifted in order to stop overlapping.
-	 *
-	 * @return shifting imposed by collision resolver on previous frame
-	 */
-	Vector2 getCollisionShifting();
-
-	/**
-	 *
-	 * @return
-	 */
-	Vector2 getInfluencedMovement();
-
-	/**
-	 *
-	 * @return list of bodies this body is touching
-	 */
-	Array<Collision> getCollisions();
-
-	/**
 	 * The weight of a DynamicBody is used by a CollisionResolver to choose how
 	 * to handle their shifing.
 	 * <p>

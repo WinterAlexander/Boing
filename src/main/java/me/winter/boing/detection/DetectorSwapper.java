@@ -1,6 +1,7 @@
 package me.winter.boing.detection;
 
 import me.winter.boing.Collision;
+import me.winter.boing.World;
 import me.winter.boing.colliders.Collider;
 
 /**
@@ -20,9 +21,9 @@ public class DetectorSwapper<A extends Collider, B extends Collider> implements 
 	}
 
 	@Override
-	public Collision collides(A shapeA, B shapeB)
+	public Collision collides(World world, A shapeA, B shapeB)
 	{
-		Collision collision = detector.collides(shapeB, shapeA);
+		Collision collision = detector.collides(world, shapeB, shapeA);
 
 		if(collision == null)
 			return null;
