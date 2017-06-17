@@ -11,6 +11,7 @@ import static java.lang.Math.min;
 import static java.lang.Math.signum;
 import static me.winter.boing.util.FloatUtil.DEFAULT_ULPS;
 import static me.winter.boing.util.FloatUtil.areEqual;
+import static me.winter.boing.util.FloatUtil.getGreatestULP;
 import static me.winter.boing.util.FloatUtil.isGreaterOrEqual;
 import static me.winter.boing.util.FloatUtil.isSmallerOrEqual;
 
@@ -33,8 +34,6 @@ public class LimitLimitDetector extends PooledDetector<Limit, Limit>
 		if(!areEqual(limitA.normal.dot(limitB.normal), -1))
 			return null;
 
-		float epsilon = DEFAULT_ULPS * max(limitA.getPrecision(), limitB.getPrecision());
-
 		float ax = limitA.getAbsX();
 		float ay = limitA.getAbsY();
 		float bx = limitB.getAbsX();
@@ -43,13 +42,15 @@ public class LimitLimitDetector extends PooledDetector<Limit, Limit>
 		float nx = limitA.normal.x; //normal X
 		float ny = limitA.normal.y; //normal Y
 
-		if(!isGreaterOrEqual(ax * nx + ay * ny, bx * nx + by * ny, epsilon)) //if limitB with his velocity isn't after limitA with his velocity
-			return null; //no collision
-
 		float vax = limitA.getMovement().x;
 		float vay = limitA.getMovement().y;
 		float vbx = limitB.getMovement().x;
 		float vby = limitB.getMovement().y;
+
+		float epsilon = DEFAULT_ULPS * getGreatestULP(ax, ay, bx, by, vax, vay, vbx, vby, limitA.size, limitB.size);
+
+		if(!isGreaterOrEqual(ax * nx + ay * ny, bx * nx + by * ny, epsilon)) //if limitB with his velocity isn't after limitA with his velocity
+			return null; //no collision
 
 		if(limitA.normal.dot(limitA.getCollisionShifting()) > 0)
 		{

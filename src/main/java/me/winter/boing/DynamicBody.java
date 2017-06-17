@@ -53,16 +53,6 @@ public interface DynamicBody extends Body
 	Array<Collision> getCollisions();
 
 	/**
-	 *
-	 * @return the precision needed to do float operations with this body
-	 */
-	@Override
-	default float getPrecision()
-	{
-		return ulp(max(abs(getPosition().x), abs(getPosition().y), getWidth(), getHeight(), abs(getMovement().x), abs(getMovement().y)));
-	}
-
-	/**
 	 * The weight of a DynamicBody is used by a CollisionResolver to choose how
 	 * to handle their shifing.
 	 * <p>

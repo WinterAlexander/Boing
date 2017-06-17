@@ -22,15 +22,6 @@ public interface Body
 
 	/**
 	 *
-	 * @return the precision needed to do float operations with this body
-	 */
-	default float getPrecision()
-	{
-		return ulp(max(abs(getPosition().x), abs(getPosition().y), getWidth(), getHeight()));
-	}
-
-	/**
-	 *
 	 * @return width of the whole body
 	 */
 	float getWidth();

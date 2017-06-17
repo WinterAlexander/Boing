@@ -12,6 +12,7 @@ import static java.lang.Math.min;
 import static java.lang.Math.signum;
 import static me.winter.boing.util.FloatUtil.DEFAULT_ULPS;
 import static me.winter.boing.util.FloatUtil.areEqual;
+import static me.winter.boing.util.FloatUtil.getGreatestULP;
 import static me.winter.boing.util.FloatUtil.isGreaterOrEqual;
 import static me.winter.boing.util.FloatUtil.isSmallerOrEqual;
 
@@ -36,12 +37,13 @@ public class BoxBoxDetector extends PooledDetector<Box, Box>
 		Vector2 csA = boxA.getCollisionShifting();
 		Vector2 csB = boxB.getCollisionShifting();
 
-		float epsilon = DEFAULT_ULPS * max(boxA.getPrecision(), boxB.getPrecision());
-
 		float ax = boxA.getAbsX();
 		float ay = boxA.getAbsY();
 		float bx = boxB.getAbsX();
 		float by = boxB.getAbsY();
+
+		float epsilon = DEFAULT_ULPS * getGreatestULP(ax, ay, bx, by, vecA.x, vecA.y, vecB.x, vecB.y, boxA.width, boxA.height, boxB.width, boxB.height);
+
 
 		//TODO find which limits collide and stop this cancer
 

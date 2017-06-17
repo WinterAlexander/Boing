@@ -3,6 +3,10 @@ package me.winter.boing.colliders;
 import com.badlogic.gdx.math.Vector2;
 import me.winter.boing.Body;
 
+import static java.lang.Math.abs;
+import static java.lang.Math.ulp;
+import static me.winter.boing.util.FloatUtil.max;
+
 /**
  * Represents a shape that can enter in collision with another
  * <p>
@@ -36,14 +40,6 @@ public interface Collider
 	 * @return height of the collider
 	 */
 	float getHeight();
-
-	/**
-	 * @return precision needed when comparing this collider with others
-	 */
-	default float getPrecision()
-	{
-		return getBody().getPrecision();
-	}
 
 	/**
 	 *
