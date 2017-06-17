@@ -9,13 +9,11 @@ import me.winter.boing.Collision;
 import me.winter.boing.DynamicBody;
 import me.winter.boing.OptimizedWorld;
 import me.winter.boing.UpdatableBody;
-import me.winter.boing.WorldImplBodyStep;
 import me.winter.boing.resolver.CollisionResolver;
 
 import java.util.Iterator;
 
 import static java.lang.Math.abs;
-import static me.winter.boing.util.FloatUtil.DEFAULT_ULPS;
 import static me.winter.boing.util.VectorUtil.DOWN;
 
 /**
@@ -28,7 +26,7 @@ public class WorldImpl extends OptimizedWorld implements Iterable<Body>
 	private Queue<DynamicBody> dynamics = new Queue<>();
 	private Queue<Body> all = new Queue<>();
 
-	private IdentityMap<DynamicBody, WorldImplBodyStep> steps = new IdentityMap<>();
+	private IdentityMap<DynamicBody, BodyStepImpl> steps = new IdentityMap<>();
 
 	public WorldImpl(CollisionResolver resolver)
 	{
@@ -140,7 +138,7 @@ public class WorldImpl extends OptimizedWorld implements Iterable<Body>
 		{
 			dynamics.addFirst((DynamicBody)body);
 			all.addFirst(body);
-			steps.put((DynamicBody)body, new WorldImplBodyStep());
+			steps.put((DynamicBody)body, new BodyStepImpl());
 		}
 		else
 		{
