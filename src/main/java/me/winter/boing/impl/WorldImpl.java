@@ -68,7 +68,7 @@ public class WorldImpl extends OptimizedWorld implements Iterable<Body>
 			{
 				Vector2 vel = ((DynamicBody)collision.colliderB.getBody()).getVelocity();
 
-				influence.add(vel.x * delta * 1000, vel.y * delta * 1000);
+				influence.add(vel.x * delta, vel.y * delta);
 				influence.add(getInfluence((DynamicBody)collision.colliderB.getBody(), delta));
 			}
 
