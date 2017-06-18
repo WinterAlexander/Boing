@@ -51,7 +51,7 @@ public abstract class AbstractCollider implements Collider
 	public Vector2 getMovement(World world)
 	{
 		return body instanceof DynamicBody
-				? world.getStep((DynamicBody)body).getMovement()
+				? world.getState((DynamicBody)body).getMovement()
 				: Zero;
 	}
 
@@ -59,7 +59,7 @@ public abstract class AbstractCollider implements Collider
 	public Vector2 getCollisionShifting(World world)
 	{
 		return body instanceof DynamicBody
-				? world.getStep((DynamicBody)body).getCollisionShifting()
+				? world.getState((DynamicBody)body).getCollisionShifting()
 				: Zero;
 	}
 

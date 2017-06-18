@@ -79,14 +79,14 @@ public abstract class OptimizedWorld extends AbstractWorld
 					{
 						Collision copy = collisionPool.obtain();
 						copy.set(collision);
-						getStep((DynamicBody)bodyA).getCollisions().add(copy);
+						getState((DynamicBody)bodyA).getCollisions().add(copy);
 					}
 
 					if(bodyB instanceof DynamicBody)
 					{
 						Collision copy = collisionPool.obtain();
 						copy.setAsSwapped(collision);
-						getStep((DynamicBody)bodyB).getCollisions().add(copy);
+						getState((DynamicBody)bodyB).getCollisions().add(copy);
 					}
 				}
 				else

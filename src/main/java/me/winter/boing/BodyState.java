@@ -9,7 +9,7 @@ import com.badlogic.gdx.utils.Array;
  * <p>
  * Created by Alexander Winter on 2017-06-17.
  */
-public interface BodyStep
+public interface BodyState
 {
 	/**
 	 * The movement of a DynamicBody is how much it moved in this frame.
@@ -31,9 +31,9 @@ public interface BodyStep
 
 	/**
 	 *
-	 * @return
+	 * @return vector of movement moving this body in function of the movement of other objects
 	 */
-	Vector2 getInfluencedMovement();
+	Vector2 getInfluence();
 
 	/**
 	 *

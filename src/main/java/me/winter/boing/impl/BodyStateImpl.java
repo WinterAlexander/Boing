@@ -2,7 +2,7 @@ package me.winter.boing.impl;
 
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
-import me.winter.boing.BodyStep;
+import me.winter.boing.BodyState;
 import me.winter.boing.Collision;
 
 /**
@@ -10,9 +10,9 @@ import me.winter.boing.Collision;
  * <p>
  * Created by Alexander Winter on 2017-06-17.
  */
-public class BodyStepImpl implements BodyStep
+public class BodyStateImpl implements BodyState
 {
-	private Vector2 movement = new Vector2(), cs = new Vector2(), im = new Vector2();
+	private Vector2 movement = new Vector2(), cs = new Vector2(), influence = new Vector2(Float.NaN, Float.NaN);
 	private Array<Collision> collisions = new Array<>();
 
 	@Override
@@ -28,9 +28,9 @@ public class BodyStepImpl implements BodyStep
 	}
 
 	@Override
-	public Vector2 getInfluencedMovement()
+	public Vector2 getInfluence()
 	{
-		return im;
+		return influence;
 	}
 
 	@Override

@@ -38,14 +38,14 @@ public class ReplaceResolver implements CollisionResolver
 
 		if(ratio != 1)
 			replace((DynamicBody)collision.colliderA.getBody(),
-					world.getStep((DynamicBody)collision.colliderA.getBody()).getCollisionShifting(),
+					world.getState((DynamicBody)collision.colliderA.getBody()).getCollisionShifting(),
 					-collision.normal.x,
 					-collision.normal.y,
 					(1f - ratio) * collision.penetration);
 
 		if(ratio != 0)
 			replace((DynamicBody)collision.colliderB.getBody(),
-					world.getStep((DynamicBody)collision.colliderB.getBody()).getCollisionShifting(),
+					world.getState((DynamicBody)collision.colliderB.getBody()).getCollisionShifting(),
 					collision.normal.x,
 					collision.normal.y,
 					ratio * collision.penetration);
@@ -103,7 +103,7 @@ public class ReplaceResolver implements CollisionResolver
 	{
 		float weight = dynamic.getWeight();
 
-		for(Collision collision : world.getStep(dynamic).getCollisions())
+		for(Collision collision : world.getState(dynamic).getCollisions())
 		{
 			if(collision.normal.dot(nx, ny) == 1f)
 			{

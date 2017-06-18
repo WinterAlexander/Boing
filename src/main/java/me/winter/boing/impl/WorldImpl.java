@@ -4,7 +4,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.IdentityMap;
 import com.badlogic.gdx.utils.Queue;
 import me.winter.boing.Body;
-import me.winter.boing.BodyStep;
+import me.winter.boing.BodyState;
 import me.winter.boing.Collision;
 import me.winter.boing.DynamicBody;
 import me.winter.boing.OptimizedWorld;
@@ -26,7 +26,7 @@ public class WorldImpl extends OptimizedWorld implements Iterable<Body>
 	private Queue<DynamicBody> dynamics = new Queue<>();
 	private Queue<Body> all = new Queue<>();
 
-	private IdentityMap<DynamicBody, BodyStepImpl> steps = new IdentityMap<>();
+	private IdentityMap<DynamicBody, BodyStateImpl> steps = new IdentityMap<>();
 
 	public WorldImpl(CollisionResolver resolver)
 	{
@@ -44,39 +44,39 @@ public class WorldImpl extends OptimizedWorld implements Iterable<Body>
 
 		for(DynamicBody dynamic : dynamics)
 		{
-			getStep(dynamic).getMovement().set(dynamic.getVelocity()).scl(delta);
-			getStep(dynamic).getMovement().add(getInfluenceMovement(dynamic, delta));
+			getState(dynamic).getMovement().set(dynamic.getVelocity()).scl(delta);
+			getState(dynamic).getMovement().add(getInfluence(dynamic, delta));
 
-			dynamic.getPosition().add(getStep(dynamic).getMovement());
+			dynamic.getPosition().add(getState(dynamic).getMovement());
 
 		}
 	}
 
-	private Vector2 getInfluenceMovement(DynamicBody dynamic, float delta)
+	private Vector2 getInfluence(DynamicBody dynamic, float delta)
 	{
-		Vector2 influencedMovement = getStep(dynamic).getInfluencedMovement();
+		Vector2 influence = getState(dynamic).getInfluence();
 
-		if(!Float.isNaN(influencedMovement.len2()))
-			return influencedMovement;
+		if(!Float.isNaN(influence.len2()))
+			return influence;
 
-		influencedMovement.set(0, 0);
+		influence.set(0, 0);
 
-		for(Collision collision : getStep(dynamic).getCollisions())
+		for(Collision collision : getState(dynamic).getCollisions())
 		{
 			if(collision.colliderB.getBody() instanceof DynamicBody
 					&& collision.normal.dot(DOWN) == 1)
 			{
 				Vector2 vel = ((DynamicBody)collision.colliderB.getBody()).getVelocity();
 
-				influencedMovement.add(vel.x * delta, vel.y * delta);
-				influencedMovement.add(getInfluenceMovement((DynamicBody)collision.colliderB.getBody(), delta));
+				influence.add(vel.x * delta * 1000, vel.y * delta * 1000);
+				influence.add(getInfluence((DynamicBody)collision.colliderB.getBody(), delta));
 			}
 
 			collisionPool.free(collision);
 		}
-		getStep(dynamic).getCollisions().clear();
+		getState(dynamic).getCollisions().clear();
 
-		return influencedMovement;
+		return influence;
 	}
 
 	@Override
@@ -84,8 +84,8 @@ public class WorldImpl extends OptimizedWorld implements Iterable<Body>
 	{
 		for(DynamicBody dynamic : dynamics)
 		{
-			getStep(dynamic).getCollisionShifting().setZero();
-			getStep(dynamic).getInfluencedMovement().set(Float.NaN, Float.NaN);
+			getState(dynamic).getCollisionShifting().setZero();
+			getState(dynamic).getInfluence().set(Float.NaN, Float.NaN);
 		}
 
 		super.resolveCollisions();
@@ -138,7 +138,7 @@ public class WorldImpl extends OptimizedWorld implements Iterable<Body>
 		{
 			dynamics.addFirst((DynamicBody)body);
 			all.addFirst(body);
-			steps.put((DynamicBody)body, new BodyStepImpl());
+			steps.put((DynamicBody)body, new BodyStateImpl());
 		}
 		else
 		{
@@ -159,7 +159,7 @@ public class WorldImpl extends OptimizedWorld implements Iterable<Body>
 	}
 
 	@Override
-	public BodyStep getStep(DynamicBody body)
+	public BodyState getState(DynamicBody body)
 	{
 		return steps.get(body);
 	}
