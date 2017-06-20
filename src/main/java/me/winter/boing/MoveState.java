@@ -9,8 +9,23 @@ import com.badlogic.gdx.utils.Array;
  * <p>
  * Created by Alexander Winter on 2017-06-17.
  */
-public interface BodyState
+public interface MoveState
 {
+	/**
+	 * World in which this MoveState is valid.
+	 *
+	 * @return world reference of this MoveState
+	 */
+	World getWorld();
+
+	/**
+	 * Each MoveState keeps data about body in context of a world.
+	 * This returns the body this MoveState keeps track of.
+	 *
+	 * @return the body this MoveState represent the movement of
+	 */
+	DynamicBody getBody();
+
 	/**
 	 * The movement of a DynamicBody is how much it moved in this frame.
 	 * <p>
@@ -40,4 +55,12 @@ public interface BodyState
 	 * @return list of bodies this body is touching in this step
 	 */
 	Array<Collision> getCollisions();
+
+	/**
+	 * Shifts this body by the specified vector, as response of a collision
+	 *
+	 * @param x x component of the vector to shift this body with
+	 * @param y y component of the vector to shift this body with
+	 */
+	void shift(float x, float y);
 }

@@ -50,7 +50,7 @@ public class WorldSimulation extends JFrame implements KeyListener
 
 				int n = 0;
 
-				for(Body body : world)
+				for(Body body : world.getBodies())
 				{
 					g.setColor(new Color(body.hashCode()));
 

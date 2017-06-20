@@ -37,48 +37,18 @@ public class ReplaceResolver implements CollisionResolver
 		float ratio = resolveWeights(collision, world);
 
 		if(ratio != 1)
-			replace((DynamicBody)collision.colliderA.getBody(),
-					world.getState((DynamicBody)collision.colliderA.getBody()).getCollisionShifting(),
-					-collision.normal.x,
-					-collision.normal.y,
-					(1f - ratio) * collision.penetration);
+		{
+			float amount = (1f - ratio) * collision.penetration;
+
+			world.getState((DynamicBody)collision.colliderA.getBody()).shift(amount * -collision.normal.x, amount * -collision.normal.y);
+		}
 
 		if(ratio != 0)
-			replace((DynamicBody)collision.colliderB.getBody(),
-					world.getState((DynamicBody)collision.colliderB.getBody()).getCollisionShifting(),
-					collision.normal.x,
-					collision.normal.y,
-					ratio * collision.penetration);
-	}
-
-	private void replace(DynamicBody solid, Vector2 collisionShifting, float nx, float ny, float pene)
-	{
-		float replaceX = nx * pene;
-		float replaceY = ny * pene;
-
-		solid.getPosition().sub(collisionShifting);
-
-		if(replaceX != 0f)
 		{
-			float dirX = signum(collisionShifting.x);
+			float amount = ratio * collision.penetration;
 
-			if(dirX != signum(replaceX))
-				collisionShifting.x += replaceX;
-			else if(dirX == 0 || replaceX * dirX > collisionShifting.x * dirX)
-				collisionShifting.x = replaceX;
+			world.getState((DynamicBody)collision.colliderB.getBody()).shift(amount * collision.normal.x, amount * collision.normal.y);
 		}
-
-		if(replaceY != 0f)
-		{
-			float dirY = signum(collisionShifting.y);
-
-			if(dirY != signum(replaceY))
-				collisionShifting.y += replaceY;
-			else if(dirY == 0 || replaceY * dirY > collisionShifting.y * dirY)
-				collisionShifting.y = replaceY;
-		}
-
-		solid.getPosition().add(collisionShifting);
 	}
 
 	private float resolveWeights(Collision collision, World world)

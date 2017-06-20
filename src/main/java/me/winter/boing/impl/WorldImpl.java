@@ -3,30 +3,27 @@ package me.winter.boing.impl;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.IdentityMap;
 import com.badlogic.gdx.utils.Queue;
+import me.winter.boing.AbstractWorld;
 import me.winter.boing.Body;
-import me.winter.boing.BodyState;
 import me.winter.boing.Collision;
 import me.winter.boing.DynamicBody;
-import me.winter.boing.OptimizedWorld;
+import me.winter.boing.MoveState;
 import me.winter.boing.UpdatableBody;
 import me.winter.boing.resolver.CollisionResolver;
 
-import java.util.Iterator;
-
-import static java.lang.Math.abs;
 import static me.winter.boing.util.VectorUtil.DOWN;
 
 /**
- * Simple implementation of a World detecting and resolving collisions.
+ * Simple implementation of a World using an Queue.
  * <p>
  * Created by Alexander Winter on 2017-04-25.
  */
-public class WorldImpl extends OptimizedWorld implements Iterable<Body>
+public class WorldImpl extends AbstractWorld
 {
 	private Queue<DynamicBody> dynamics = new Queue<>();
 	private Queue<Body> all = new Queue<>();
 
-	private IdentityMap<DynamicBody, BodyStateImpl> steps = new IdentityMap<>();
+	private IdentityMap<DynamicBody, MoveStateImpl> steps = new IdentityMap<>();
 
 	public WorldImpl(CollisionResolver resolver)
 	{
@@ -38,6 +35,8 @@ public class WorldImpl extends OptimizedWorld implements Iterable<Body>
 	{
 		for(DynamicBody dynamic : dynamics)
 		{
+
+			getState(dynamic).getInfluence().set(Float.NaN, Float.NaN);
 			if(dynamic instanceof UpdatableBody)
 				((UpdatableBody)dynamic).update(delta);
 		}
@@ -85,7 +84,6 @@ public class WorldImpl extends OptimizedWorld implements Iterable<Body>
 		for(DynamicBody dynamic : dynamics)
 		{
 			getState(dynamic).getCollisionShifting().setZero();
-			getState(dynamic).getInfluence().set(Float.NaN, Float.NaN);
 		}
 
 		super.resolveCollisions();
@@ -138,7 +136,7 @@ public class WorldImpl extends OptimizedWorld implements Iterable<Body>
 		{
 			dynamics.addFirst((DynamicBody)body);
 			all.addFirst(body);
-			steps.put((DynamicBody)body, new BodyStateImpl());
+			steps.put((DynamicBody)body, new MoveStateImpl(this, (DynamicBody)body));
 		}
 		else
 		{
@@ -159,14 +157,14 @@ public class WorldImpl extends OptimizedWorld implements Iterable<Body>
 	}
 
 	@Override
-	public BodyState getState(DynamicBody body)
+	public MoveState getState(DynamicBody body)
 	{
 		return steps.get(body);
 	}
 
 	@Override
-	public Iterator<Body> iterator()
+	public Iterable<Body> getBodies()
 	{
-		return all.iterator();
+		return all;
 	}
 }

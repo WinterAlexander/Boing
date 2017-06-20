@@ -1,8 +1,5 @@
 package me.winter.boing;
 
-import com.badlogic.gdx.utils.Array;
-import com.badlogic.gdx.utils.Pool;
-
 /**
  * Represents a World for a physics simulation. Note that the usage of World
  * and World derived classes isn't mandatory for Body objects but might
@@ -19,10 +16,23 @@ public interface World
 	 */
 	void step(float delta);
 
-	BodyState getState(DynamicBody body);
+	/**
+	 * Fetches the MoveState for the passed body. MoveStep is used to store data about the
+	 * body that only make sense in a physics world context.
+	 *
+	 * @param body body to get state of
+	 * @return state of the passed body
+	 */
+	MoveState getState(DynamicBody body);
 
-	Pool<Collision> getCollisionPool();
-
-	Array<Collision> getCollisions();
+	/**
+	 * Iterates through all the bodies of the world.
+	 *
+	 * This operation can be slow, a should implementation of World should
+	 * provide an iterator of its active bodies.
+	 *
+	 * @return all the bodies
+	 */
+	Iterable<Body> getBodies();
 }
 
