@@ -63,4 +63,15 @@ public interface MoveState
 	 * @param y y component of the vector to shift this body with
 	 */
 	void shift(float x, float y);
+
+	/**
+	 * Makes a step in the simulation, calculating the movement from the velocity and ready to
+	 * resolve collisions.
+	 *
+	 * Also has the job to clear the collisions from the previous step
+	 *
+	 * @param frame get the number of frames (frame id or step id)
+	 * @param delta get the delta to step it with
+	 */
+	void step(int frame, float delta);
 }

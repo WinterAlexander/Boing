@@ -1,6 +1,5 @@
 package me.winter.boing.impl;
 
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.IdentityMap;
 import com.badlogic.gdx.utils.Queue;
 import me.winter.boing.AbstractWorld;
@@ -8,10 +7,7 @@ import me.winter.boing.Body;
 import me.winter.boing.Collision;
 import me.winter.boing.DynamicBody;
 import me.winter.boing.MoveState;
-import me.winter.boing.UpdatableBody;
 import me.winter.boing.resolver.CollisionResolver;
-
-import static me.winter.boing.util.VectorUtil.DOWN;
 
 /**
  * Simple implementation of a World using an Queue.
@@ -30,63 +26,14 @@ public class WorldImpl extends AbstractWorld
 		super(resolver);
 	}
 
+	private int frame;
+
 	@Override
 	protected void update(float delta)
 	{
+		frame++;
 		for(DynamicBody dynamic : dynamics)
-		{
-
-			getState(dynamic).getInfluence().set(Float.NaN, Float.NaN);
-			if(dynamic instanceof UpdatableBody)
-				((UpdatableBody)dynamic).update(delta);
-		}
-
-		for(DynamicBody dynamic : dynamics)
-		{
-			getState(dynamic).getMovement().set(dynamic.getVelocity()).scl(delta);
-			getState(dynamic).getMovement().add(getInfluence(dynamic, delta));
-
-			dynamic.getPosition().add(getState(dynamic).getMovement());
-
-		}
-	}
-
-	private Vector2 getInfluence(DynamicBody dynamic, float delta)
-	{
-		Vector2 influence = getState(dynamic).getInfluence();
-
-		if(!Float.isNaN(influence.len2()))
-			return influence;
-
-		influence.set(0, 0);
-
-		for(Collision collision : getState(dynamic).getCollisions())
-		{
-			if(collision.colliderB.getBody() instanceof DynamicBody
-					&& collision.normal.dot(DOWN) == 1)
-			{
-				Vector2 vel = ((DynamicBody)collision.colliderB.getBody()).getVelocity();
-
-				influence.add(vel.x * delta, vel.y * delta);
-				influence.add(getInfluence((DynamicBody)collision.colliderB.getBody(), delta));
-			}
-
-			collisionPool.free(collision);
-		}
-		getState(dynamic).getCollisions().clear();
-
-		return influence;
-	}
-
-	@Override
-	protected void resolveCollisions()
-	{
-		for(DynamicBody dynamic : dynamics)
-		{
-			getState(dynamic).getCollisionShifting().setZero();
-		}
-
-		super.resolveCollisions();
+			getState(dynamic).step(frame, delta);
 	}
 
 	/**

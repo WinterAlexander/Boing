@@ -1,8 +1,6 @@
 package me.winter.boing.impl;
 
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.utils.Array;
-import me.winter.boing.Collision;
 import me.winter.boing.DynamicBody;
 
 /**
@@ -12,8 +10,7 @@ import me.winter.boing.DynamicBody;
  */
 public class DynamicBodyImpl extends BodyImpl implements DynamicBody
 {
-	private Vector2 velocity = new Vector2(), movement = new Vector2(), shifting = new Vector2(), im = new Vector2(Float.NaN, Float.NaN);
-	private Array<Collision> contacts = new Array<>();
+	private Vector2 velocity = new Vector2();
 
 	private float weight;
 

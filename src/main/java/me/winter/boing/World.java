@@ -1,10 +1,18 @@
 package me.winter.boing;
 
+import com.badlogic.gdx.utils.Pool;
+
 /**
  * Represents a World for a physics simulation. Note that the usage of World
  * and World derived classes isn't mandatory for Body objects but might
  * become in the future. To prevent issues, you should let your world class
  * implement this interface.
+ *
+ * Since Boing is a library designed for usage with LibGDX, a collision pool
+ * has to be implemented and accessible through the getCollisionPool method.
+ *
+ * If you want not to use the collision pool, you will have to make sure all the
+ * implementations (Body, DynamicBody, MoveState, World) does not require it.
  * <p>
  * Created by Alexander Winter on 2017-04-25.
  */
@@ -34,5 +42,14 @@ public interface World
 	 * @return all the bodies
 	 */
 	Iterable<Body> getBodies();
+
+
+	/**
+	 * Let's you access the pool of collisions. You can obtain and free objects
+	 * with this pool without using regular Garbage Collector.
+	 *
+	 * @return the pool of objects for collisions
+	 */
+	Pool<Collision> getCollisionPool();
 }
 

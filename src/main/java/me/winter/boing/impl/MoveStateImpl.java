@@ -5,9 +5,11 @@ import com.badlogic.gdx.utils.Array;
 import me.winter.boing.DynamicBody;
 import me.winter.boing.MoveState;
 import me.winter.boing.Collision;
+import me.winter.boing.UpdatableBody;
 import me.winter.boing.World;
 
 import static java.lang.Math.signum;
+import static me.winter.boing.util.VectorUtil.DOWN;
 
 /**
  * Undocumented :(
@@ -22,6 +24,9 @@ public class MoveStateImpl implements MoveState
 	private final Vector2 movement = new Vector2(), shifting = new Vector2(), influence = new Vector2(Float.NaN, Float.NaN);
 	private final Array<Collision> collisions = new Array<>();
 
+	private int frame;
+	private boolean stepped;
+
 	public MoveStateImpl(World world, DynamicBody body)
 	{
 		this.world = world;
@@ -29,9 +34,64 @@ public class MoveStateImpl implements MoveState
 	}
 
 	@Override
+	public void step(int frame, float delta)
+	{
+		if(this.frame >= frame)
+			return;
+		this.frame = frame;
+		stepped = true;
+
+		if(body instanceof UpdatableBody)
+			((UpdatableBody)body).update(delta);
+
+		getMovement().set(body.getVelocity()).scl(delta);
+		getMovement().add(getInfluence(body, delta));
+
+		body.getPosition().add(getMovement());
+	}
+
+
+	private Vector2 getInfluence(DynamicBody dynamic, float delta)
+	{
+		Vector2 influence = world.getState(dynamic).getInfluence();
+
+		if(!Float.isNaN(influence.len2()))
+			return influence;
+
+		influence.set(0, 0);
+
+		for(Collision collision : world.getState(dynamic).getCollisions())
+		{
+			if(collision.colliderB.getBody() instanceof DynamicBody && collision.normal.dot(DOWN) == 1)
+			{
+				DynamicBody other = ((DynamicBody)collision.colliderB.getBody());
+
+				world.getState(other).step(frame, delta);
+
+				Vector2 vel = other.getVelocity();
+
+				influence.add(vel.x * delta, vel.y * delta);
+				influence.add(getInfluence((DynamicBody)collision.colliderB.getBody(), delta));
+			}
+
+			world.getCollisionPool().free(collision);
+		}
+		world.getState(dynamic).getCollisions().clear();
+
+		return influence;
+	}
+
+	@Override
 	public void shift(float x, float y)
 	{
-		body.getPosition().sub(shifting);
+		if(stepped)
+		{
+			shifting.setZero();
+			influence.set(Float.NaN, Float.NaN);
+			stepped = false;
+		}
+		else
+			body.getPosition().sub(shifting);
 
 		if(x != 0f)
 		{
