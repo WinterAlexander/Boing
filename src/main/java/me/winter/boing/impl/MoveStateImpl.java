@@ -42,6 +42,8 @@ public class MoveStateImpl implements MoveState
 		this.frame = frame;
 		stepped = true;
 
+		influence.set(Float.NaN, Float.NaN);
+
 		if(body instanceof UpdatableBody)
 			((UpdatableBody)body).update(delta);
 
@@ -90,7 +92,6 @@ public class MoveStateImpl implements MoveState
 		if(stepped)
 		{
 			shifting.setZero();
-			influence.set(Float.NaN, Float.NaN);
 			stepped = false;
 		}
 		else
