@@ -38,6 +38,13 @@ public class Collision
 	public DynamicFloat contactSurface;
 
 	/**
+	 * Priority of the collision, collisions should be sorted using this field before resolving
+	 *
+	 * The smaller this value is, the first it should be resolved
+	 */
+	public float priority;
+
+	/**
 	 * Collider involved in the collision.
 	 * <p>
 	 * In the notify method of a solid, this collider is a collider of your solid.
@@ -56,6 +63,7 @@ public class Collision
 		impactVelB.set(collision.impactVelB);
 		penetration = collision.penetration;
 		contactSurface = collision.contactSurface;
+		priority = collision.priority;
 		colliderA = collision.colliderA;
 		colliderB = collision.colliderB;
 	}
@@ -72,6 +80,7 @@ public class Collision
 		impactVelB.set(collision.impactVelA);
 		penetration = collision.penetration;
 		contactSurface = collision.contactSurface;
+		priority = collision.priority;
 		colliderA = collision.colliderB;
 		colliderB = collision.colliderA;
 	}

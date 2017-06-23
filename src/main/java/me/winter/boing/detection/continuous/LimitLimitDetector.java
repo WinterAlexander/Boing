@@ -82,11 +82,12 @@ public class LimitLimitDetector extends PooledDetector<Limit, Limit>
 			return null; //no collision
 
 		final float hsA = limitA.size / 2; //half size for A
-		final float hsB = limitB.size / 2; //half size for B
+		final float hsB = limitB.size / 2; //half size for
+
+		final float diff = (pbx - pax) * nx + (pby - pay) * ny;
+		final float vecDiff = (vbx - vax) * nx + (vby - vay) * ny;
 
 		DynamicFloat surfaceFormula = () -> {
-			float diff = (pbx - pax) * nx + (pby - pay) * ny;
-			float vecDiff = (vbx - vax) * nx + (vby - vay) * ny;
 
 			float midpoint = vecDiff != 0 ? (diff + vecDiff) / vecDiff : 0f;
 
@@ -108,9 +109,6 @@ public class LimitLimitDetector extends PooledDetector<Limit, Limit>
 
 		if(areEqual(surface, 0, epsilon))
 		{
-			float diff = (pbx - pax) * nx + (pby - pay) * ny;
-			float vecDiff = (vbx - vax) * nx + (vby - vay) * ny;
-
 			float sizeDiff = (hsB + hsA) * abs(nx) + (hsB + hsA) * abs(ny);
 
 			float midpoint = vecDiff != 0 ? (diff + vecDiff + sizeDiff) / vecDiff : 0f;
@@ -144,6 +142,9 @@ public class LimitLimitDetector extends PooledDetector<Limit, Limit>
 		collision.penetration = () -> {
 			return -((limitB.getAbsX() - limitA.getAbsX()) * nx + (limitB.getAbsY() - limitA.getAbsY()) * ny); //TODO
 		};
+
+
+		collision.priority = diff / vecDiff;
 
 		collision.contactSurface = surfaceFormula;
 

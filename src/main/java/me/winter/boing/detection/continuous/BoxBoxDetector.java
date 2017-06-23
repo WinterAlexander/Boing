@@ -141,9 +141,10 @@ public class BoxBoxDetector extends PooledDetector<Box, Box>
 		final float hsA = abs(ny * boxA.width / 2 + nx * boxA.height / 2);
 		final float hsB = abs(ny * boxB.width / 2 + nx * boxB.height / 2);
 
+		final float diff = (pbx - pax) * nx + (pby - pay) * ny;
+		final float vecDiff = (vbx - vax) * nx + (vby - vay) * ny;
+
 		DynamicFloat surfaceFormula = () -> {
-			float diff = (pbx - pax) * nx + (pby - pay) * ny;
-			float vecDiff = (vbx - vax) * nx + (vby - vay) * ny;
 
 			float midpoint = vecDiff != 0 ? (diff + vecDiff) / vecDiff : 0f;
 
@@ -165,9 +166,6 @@ public class BoxBoxDetector extends PooledDetector<Box, Box>
 
 		if(areEqual(surface, 0, epsilon))
 		{
-			float diff = (pbx - pax) * nx + (pby - pay) * ny;
-			float vecDiff = (vbx - vax) * nx + (vby - vay) * ny;
-
 			float sizeDiff = (hsB + hsA) * abs(nx) + (hsB + hsA) * abs(ny);
 
 			float midpoint = vecDiff != 0 ? (diff + vecDiff + sizeDiff) / vecDiff : 0f;
@@ -199,6 +197,8 @@ public class BoxBoxDetector extends PooledDetector<Box, Box>
 			return -((boxB.getAbsX() - nx * boxB.width / 2 - (boxA.getAbsX() + nx * boxA.width / 2)) * nx
 					+ (boxB.getAbsY() - ny * boxB.height / 2 - (boxA.getAbsY() + ny * boxA.height / 2)) * ny);
 		};
+
+		collision.priority = diff / vecDiff;
 
 		collision.contactSurface = surfaceFormula;
 
