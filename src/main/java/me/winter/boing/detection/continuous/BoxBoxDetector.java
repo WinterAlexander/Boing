@@ -24,9 +24,12 @@ import static me.winter.boing.util.FloatUtil.isSmallerOrEqual;
  */
 public class BoxBoxDetector extends PooledDetector<Box, Box>
 {
+	private me.winter.boing.detection.simple.BoxBoxDetector simple;
+
 	public BoxBoxDetector(Pool<Collision> collisionPool)
 	{
 		super(collisionPool);
+		simple = new me.winter.boing.detection.simple.BoxBoxDetector(collisionPool);
 	}
 
 	@Override
@@ -75,7 +78,7 @@ public class BoxBoxDetector extends PooledDetector<Box, Box>
 							epsilon, -1, 0);
 
 					if(collision == null)
-						return null;
+						return simple.collides(world, boxA, boxB);
 				}
 			}
 		}

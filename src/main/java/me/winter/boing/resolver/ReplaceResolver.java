@@ -16,19 +16,7 @@ import static me.winter.boing.util.VelocityUtil.weightRatio;
  */
 public class ReplaceResolver implements CollisionResolver
 {
-	private boolean capWeight;
-
 	private final Array<DynamicBody> alreadyChecked = new Array<>();
-
-	public ReplaceResolver()
-	{
-		this(true);
-	}
-
-	public ReplaceResolver(boolean capWeight)
-	{
-		this.capWeight = capWeight;
-	}
 
 	@Override
 	public void resolve(Collision collision, World world)
@@ -67,10 +55,7 @@ public class ReplaceResolver implements CollisionResolver
 		alreadyChecked.clear();
 		float weightB = getWeight(world, (DynamicBody)collision.colliderB.getBody(), collision.normal.x, collision.normal.y);
 
-		if(capWeight)
-			return weightA > weightB ? 1 : 0;
-
-		return weightRatio(weightA, weightB);
+		return weightA > weightB ? 1 : 0;
 
 	}
 

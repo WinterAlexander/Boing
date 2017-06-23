@@ -1,7 +1,7 @@
 package me.winter.boing.util;
 
 /**
- * Undocumented :(
+ * Used to share a integer between a lambda and it's scope
  * <p>
  * Created by Alexander Winter on 2017-04-26.
  */
