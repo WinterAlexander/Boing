@@ -2,6 +2,11 @@ package me.winter.boing.colliders;
 
 import com.badlogic.gdx.math.Vector2;
 import me.winter.boing.Body;
+import me.winter.boing.World;
+
+import static java.lang.Math.abs;
+import static java.lang.Math.ulp;
+import static me.winter.boing.util.FloatUtil.max;
 
 /**
  * Represents a shape that can enter in collision with another
@@ -26,6 +31,16 @@ public interface Collider
 	float getAbsY();
 
 	/**
+	 * @return relative x position of this collider to its body
+	 */
+	float getRelX();
+
+	/**
+	 * @return relative y position of this collider to its body
+	 */
+	float getRelY();
+
+	/**
 	 *
 	 * @return width of the collider
 	 */
@@ -38,24 +53,16 @@ public interface Collider
 	float getHeight();
 
 	/**
-	 * @return precision needed when comparing this collider with others
-	 */
-	default float getPrecision()
-	{
-		return getBody().getPrecision();
-	}
-
-	/**
 	 *
 	 * @return the current movement of the body of this collider
 	 */
-	Vector2 getMovement();
+	Vector2 getMovement(World world);
 
 	/**
 	 *
 	 * @return the last movement imposed by collision resolving
 	 */
-	Vector2 getCollisionShifting();
+	Vector2 getCollisionShifting(World world);
 
 	/**
 	 * A tag can be used to keep track of a Collider within it's use

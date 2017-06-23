@@ -2,6 +2,7 @@ package me.winter.boing.detection.continuous;
 
 import com.badlogic.gdx.utils.Pool;
 import me.winter.boing.Collision;
+import me.winter.boing.World;
 import me.winter.boing.detection.PooledDetector;
 import me.winter.boing.colliders.Limit;
 import me.winter.boing.util.DynamicFloat;
@@ -12,6 +13,7 @@ import static java.lang.Math.min;
 import static java.lang.Math.signum;
 import static me.winter.boing.util.FloatUtil.DEFAULT_ULPS;
 import static me.winter.boing.util.FloatUtil.areEqual;
+import static me.winter.boing.util.FloatUtil.getGreatestULP;
 import static me.winter.boing.util.FloatUtil.isGreaterOrEqual;
 import static me.winter.boing.util.FloatUtil.isSmallerOrEqual;
 
@@ -29,12 +31,10 @@ public class LimitLimitDetector extends PooledDetector<Limit, Limit>
 	}
 
 	@Override
-	public Collision collides(Limit limitA, Limit limitB)
+	public Collision collides(World world, Limit limitA, Limit limitB)
 	{
 		if(!areEqual(limitA.normal.dot(limitB.normal), -1))
 			return null;
-
-		float epsilon = DEFAULT_ULPS * max(limitA.getPrecision(), limitB.getPrecision());
 
 		float ax = limitA.getAbsX();
 		float ay = limitA.getAbsY();
@@ -44,32 +44,35 @@ public class LimitLimitDetector extends PooledDetector<Limit, Limit>
 		float nx = limitA.normal.x; //normal X
 		float ny = limitA.normal.y; //normal Y
 
+		final float vax, vay, vbx, vby;
+
+		if(limitA.normal.dot(limitA.getCollisionShifting(world)) > 0)
+		{
+			vax = limitA.getMovement(world).x + limitA.getCollisionShifting(world).x;
+			vay = limitA.getMovement(world).y + limitA.getCollisionShifting(world).y;
+		}
+		else
+		{
+			vax = limitA.getMovement(world).x;
+			vay = limitA.getMovement(world).y;
+		}
+
+		if(limitB.normal.dot(limitB.getCollisionShifting(world)) > 0)
+		{
+			vbx = limitB.getMovement(world).x + limitB.getCollisionShifting(world).x;
+			vby = limitB.getMovement(world).y + limitB.getCollisionShifting(world).y;
+		}
+		else
+		{
+			vbx = limitB.getMovement(world).x;
+			vby = limitB.getMovement(world).y;
+		}
+
+		float epsilon = DEFAULT_ULPS * getGreatestULP(ax, ay, bx, by, vax, vay, vbx, vby, limitA.size, limitB.size);
+
 		if(!isGreaterOrEqual(ax * nx + ay * ny, bx * nx + by * ny, epsilon)) //if limitB with his velocity isn't after limitA with his velocity
 			return null; //no collision
 
-		final float vax, vay, vbx, vby;
-
-		if(limitA.normal.dot(limitA.getCollisionShifting()) > 0)
-		{
-			vax = limitA.getMovement().x + limitA.getCollisionShifting().x;
-			vay = limitA.getMovement().y + limitA.getCollisionShifting().y;
-		}
-		else
-		{
-			vax = limitA.getMovement().x;
-			vay = limitA.getMovement().y;
-		}
-
-		if(limitB.normal.dot(limitB.getCollisionShifting()) > 0)
-		{
-			vbx = limitB.getMovement().x + limitB.getCollisionShifting().x;
-			vby = limitB.getMovement().y + limitB.getCollisionShifting().y;
-		}
-		else
-		{
-			vbx = limitB.getMovement().x;
-			vby = limitB.getMovement().y;
-		}
 
 		float pax = ax - vax; //previous x for A
 		float pay = ay - vay; //previous y for A

@@ -65,16 +65,4 @@ public class BodyImpl implements Body
 		width = maxX - minX;
 		height = maxY - minY;
 	}
-
-	@Override
-	public float getWidth()
-	{
-		return width;
-	}
-
-	@Override
-	public float getHeight()
-	{
-		return height;
-	}
 }

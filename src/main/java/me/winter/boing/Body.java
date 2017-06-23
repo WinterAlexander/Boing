@@ -1,7 +1,6 @@
 package me.winter.boing;
 
 import com.badlogic.gdx.math.Vector2;
-import me.winter.boing.colliders.Box;
 import me.winter.boing.colliders.Collider;
 
 import static java.lang.Math.abs;
@@ -21,27 +20,9 @@ public interface Body
 	Vector2 getPosition();
 
 	/**
+	 * The array of colliders this body currently has. When this array changes,
+	 * the world must be notified using the method World.updateColliders(Body body)
 	 *
-	 * @return the precision needed to do float operations with this body
-	 */
-	default float getPrecision()
-	{
-		return ulp(max(abs(getPosition().x), abs(getPosition().y), getWidth(), getHeight()));
-	}
-
-	/**
-	 *
-	 * @return width of the whole body
-	 */
-	float getWidth();
-
-	/**
-	 *
-	 * @return height of the whole body
-	 */
-	float getHeight();
-
-	/**
 	 * @return the list of colliders this body have
 	 */
 	Collider[] getColliders();
@@ -67,5 +48,4 @@ public interface Body
 	 * @param collision detected collision about to be resolved
 	 */
 	default void notifyCollision(Collision collision) {}
-
 }

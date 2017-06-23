@@ -50,21 +50,23 @@ public class WorldSimulation extends JFrame implements KeyListener
 
 				int n = 0;
 
-				for(Body body : world)
+				for(Body body : world.getBodies())
 				{
 					g.setColor(new Color(body.hashCode()));
 
 					for(Collider collider : body.getColliders())
 						if(collider instanceof Circle)
 						{
+							Circle circle = (Circle)collider;
 							float r = ((Circle)collider).radius;
-							g.fillOval((int)(body.getPosition().x - r), (int)(600 - body.getPosition().y - r), (int)r * 2, (int)r * 2);
+							g.fillOval((int)(circle.getAbsX() - r), (int)(600 - circle.getAbsY() - r), (int)r * 2, (int)r * 2);
 						}
 						else if(collider instanceof Box)
 						{
-							float w = ((Box)collider).width;
-							float h = ((Box)collider).height;
-							g.fillRect((int)(body.getPosition().x - w / 2), (int)(600 - body.getPosition().y - h / 2), (int)w, (int)h);
+							Box box = ((Box)collider);
+							float w = box.width;
+							float h = box.height;
+							g.fillRect((int)(box.getAbsX() - w / 2), (int)(600 - box.getAbsY() - h / 2), (int)w, (int)h);
 						}
 						else if(collider instanceof Limit)
 						{

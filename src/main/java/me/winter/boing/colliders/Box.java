@@ -29,21 +29,4 @@ public class Box extends AbstractCollider
 	{
 		return height;
 	}
-
-	public boolean overlaps(Box box)
-	{
-		if(getAbsX() > box.getAbsX() + box.width)
-			return false;
-
-		if(getAbsX() + width < box.getAbsX())
-			return false;
-
-		if(getAbsY() > box.getAbsY() + box.height)
-			return false;
-
-		if(getAbsY() + height < box.getAbsY())
-			return false;
-
-		return true;
-	}
 }

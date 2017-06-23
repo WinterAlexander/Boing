@@ -1,56 +1,42 @@
 package me.winter.boing.impl;
 
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.IdentityMap;
 import com.badlogic.gdx.utils.Queue;
+import me.winter.boing.AbstractWorld;
 import me.winter.boing.Body;
 import me.winter.boing.Collision;
 import me.winter.boing.DynamicBody;
-import me.winter.boing.OptimizedWorld;
-import me.winter.boing.UpdatableBody;
+import me.winter.boing.MoveState;
+import me.winter.boing.detection.anticipation.PreAABB;
 import me.winter.boing.resolver.CollisionResolver;
 
-import java.util.Iterator;
-
-import static java.lang.Math.abs;
-import static me.winter.boing.util.FloatUtil.DEFAULT_ULPS;
-
 /**
- * Simple implementation of a World detecting and resolving collisions.
+ * Simple implementation of a World using an Queue.
  * <p>
  * Created by Alexander Winter on 2017-04-25.
  */
-public class WorldImpl extends OptimizedWorld implements Iterable<Body>
+public class WorldImpl extends AbstractWorld
 {
 	private Queue<DynamicBody> dynamics = new Queue<>();
 	private Queue<Body> all = new Queue<>();
 
+	private IdentityMap<DynamicBody, MoveStateImpl> steps = new IdentityMap<>();
+	private IdentityMap<Body, PreAABB> surroundingBoxes = new IdentityMap<>();
 
 	public WorldImpl(CollisionResolver resolver)
 	{
 		super(resolver);
 	}
 
+	private int frame;
+
 	@Override
 	protected void update(float delta)
 	{
+		frame++;
 		for(DynamicBody dynamic : dynamics)
-		{
-			if(dynamic instanceof UpdatableBody)
-				((UpdatableBody)dynamic).update(delta);
-
-			dynamic.getMovement().set(dynamic.getVelocity()).scl(delta);
-			dynamic.getPosition().add(dynamic.getMovement());
-			collisionPool.freeAll(dynamic.getCollisions());
-			dynamic.getCollisions().clear();
-		}
-	}
-
-	@Override
-	protected void resolveCollisions()
-	{
-		for(DynamicBody dynamic : dynamics)
-			dynamic.getCollisionShifting().setZero();
-
-		super.resolveCollisions();
+			getState(dynamic).step(frame, delta);
 	}
 
 	/**
@@ -94,15 +80,28 @@ public class WorldImpl extends OptimizedWorld implements Iterable<Body>
 		collisionPool.free(swapped);
 	}
 
+	@Override
+	protected void detect(Body bodyA, Body bodyB, Collision swappedBuffer)
+	{
+		if(!surroundingBoxes.get(bodyA).overlaps(surroundingBoxes.get(bodyB)))
+			return;
+
+		super.detect(bodyA, bodyB, swappedBuffer);
+	}
+
 	public void add(Body body)
 	{
 		if(body instanceof DynamicBody)
 		{
 			dynamics.addFirst((DynamicBody)body);
 			all.addFirst(body);
+			MoveStateImpl moveState = new MoveStateImpl(this, (DynamicBody)body);
+			steps.put((DynamicBody)body, moveState);
+			surroundingBoxes.put(body, new PreAABB(body, moveState.getMovement()));
 		}
 		else
 		{
+			surroundingBoxes.put(body, new PreAABB(body, Vector2.Zero));
 			all.addLast(body);
 		}
 		refresh();
@@ -112,13 +111,29 @@ public class WorldImpl extends OptimizedWorld implements Iterable<Body>
 	{
 		all.removeValue(body, true);
 		if(body instanceof DynamicBody)
+		{
 			dynamics.removeValue((DynamicBody)body, true);
+			steps.remove((DynamicBody)body);
+		}
+		surroundingBoxes.remove(body);
 		refresh();
 	}
 
 	@Override
-	public Iterator<Body> iterator()
+	public MoveState getState(DynamicBody body)
 	{
-		return all.iterator();
+		return steps.get(body);
+	}
+
+	@Override
+	public Iterable<Body> getBodies()
+	{
+		return all;
+	}
+
+	@Override
+	public void updateColliders(Body body)
+	{
+		surroundingBoxes.get(body).update();
 	}
 }
