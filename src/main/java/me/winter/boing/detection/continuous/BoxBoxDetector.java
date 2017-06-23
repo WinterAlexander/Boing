@@ -6,8 +6,11 @@ import me.winter.boing.Collision;
 import me.winter.boing.World;
 import me.winter.boing.detection.PooledDetector;
 import me.winter.boing.colliders.Box;
+import me.winter.boing.util.DynamicFloat;
+import me.winter.boing.util.FloatUtil;
 
 import static com.badlogic.gdx.math.Vector2.dot;
+import static java.lang.Math.abs;
 import static java.lang.Math.max;
 import static java.lang.Math.min;
 import static java.lang.Math.signum;
@@ -52,29 +55,29 @@ public class BoxBoxDetector extends PooledDetector<Box, Box>
 		//TODO find which limits collide and stop this cancer
 
 		Collision collision = collides(
-				boxA.width / 2, vecA.x, vecA.y, ax, ay + boxA.height / 2, csA.x, csA.y,
-				boxB.width / 2, vecB.x, vecB.y, bx, by - boxB.height / 2, csB.x, csB.y,
+				boxA, vecA, csA,
+				boxB, vecB, csB,
 				epsilon, 0, 1);
 
 		if(collision == null)
 		{
 			collision = collides(
-					boxA.width / 2, vecA.x, vecA.y, ax, ay - boxA.height / 2, csA.x, csA.y,
-					boxB.width / 2, vecB.x, vecB.y, bx, by + boxB.height / 2, csB.x, csB.y,
+					boxA, vecA, csA,
+					boxB, vecB, csB,
 					epsilon, 0, -1);
 
 			if(collision == null)
 			{
 				collision = collides(
-						boxA.height / 2, vecA.x, vecA.y, ax + boxA.width / 2, ay, csA.x, csA.y,
-						boxB.height / 2, vecB.x, vecB.y, bx - boxB.width / 2, by, csB.x, csB.y,
+						boxA, vecA, csA,
+						boxB, vecB, csB,
 						epsilon, 1, 0);
 
 				if(collision == null)
 				{
 					collision = collides(
-							boxA.height / 2, vecA.x, vecA.y, ax - boxA.width / 2, ay, csA.x, csA.y,
-							boxB.height / 2, vecB.x, vecB.y, bx + boxB.width / 2, by, csB.x, csB.y,
+							boxA, vecA, csA,
+							boxB, vecB, csB,
 							epsilon, -1, 0);
 
 					if(collision == null)
@@ -90,24 +93,41 @@ public class BoxBoxDetector extends PooledDetector<Box, Box>
 		return collision;
 	}
 
-	public Collision collides(float hsA, float vax, float vay, float ax, float ay, float csax, float csay,
-	                          float hsB, float vbx, float vby, float bx, float by, float csbx, float csby,
-	                          float epsilon, float nx, float ny)
+	public Collision collides(final Box boxA, final Vector2 vecA, final Vector2 csA,
+	                          final Box boxB, final Vector2 vecB, final Vector2 csB,
+	                          final float epsilon, final float nx, final float ny)
 	{
+		final float ax = boxA.getAbsX() + nx * boxA.width / 2;
+		final float ay = boxA.getAbsY() + ny * boxA.height / 2;
+
+		final float bx = boxB.getAbsX() - nx * boxB.width / 2;
+		final float by = boxB.getAbsY() - ny * boxB.height / 2;
 
 		if(!isGreaterOrEqual(ax * nx + ay * ny, bx * nx + by * ny, epsilon)) //if limitB with his velocity isn't after limitA with his velocity
 			return null; //no collision
 
-		if(dot(nx, ny, csax, csay) > 0)
+		final float vax, vay, vbx, vby;
+
+		if(dot(nx, ny, csA.x, csA.y) > 0)
 		{
-			vax += csax;
-			vay += csay;
+			vax = vecA.x + csA.x;
+			vay = vecA.y + csA.y;
+		}
+		else
+		{
+			vax = vecA.x;
+			vay = vecA.y;
 		}
 
-		if(dot(-nx, -ny, csbx, csby) > 0)
+		if(dot(-nx, -ny, csB.x, csB.y) > 0)
 		{
-			vbx += csbx;
-			vby += csby;
+			vbx = vecB.x + csB.x;
+			vby = vecB.y + csB.y;
+		}
+		else
+		{
+			vbx = vecB.x;
+			vby = vecB.y;
 		}
 
 		float pax = ax - vax;
@@ -118,44 +138,54 @@ public class BoxBoxDetector extends PooledDetector<Box, Box>
 		if(!isSmallerOrEqual(pax * nx + pay * ny, pbx * nx + pby * ny, epsilon)) //if limitB isn't before limitA
 			return null; //no collision
 
-		float diff = (pbx - pax) * nx + (pby - pay) * ny;
-		float vecDiff = (vbx - vax) * nx + (vby - vay) * ny;
+		final float hsA = abs(ny * boxA.width / 2 + nx * boxA.height / 2);
+		final float hsB = abs(ny * boxB.width / 2 + nx * boxB.height / 2);
 
-		float midpoint = vecDiff != 0 ? (diff + vecDiff) / vecDiff : 0f;
+		DynamicFloat surfaceFormula = () -> {
+			float diff = (pbx - pax) * nx + (pby - pay) * ny;
+			float vecDiff = (vbx - vax) * nx + (vby - vay) * ny;
 
-		float mxA = ax - vax * midpoint; //midpoint x for A
-		float myA = ay - vay * midpoint; //midpoint y for A
-		float mxB = bx - vbx * midpoint; //midpoint x for B
-		float myB = by - vby * midpoint; //midpoint y for B
+			float midpoint = vecDiff != 0 ? (diff + vecDiff) / vecDiff : 0f;
 
-		float limitA1 = -ny * (mxA + hsA) + nx * (myA + hsA);
-		float limitA2 = -ny * (mxA - hsA) + nx * (myA - hsA);
-		float limitB1 = -ny * (mxB + hsB) + nx * (myB + hsB);
-		float limitB2 = -ny * (mxB - hsB) + nx * (myB - hsB);
+			float mxA = boxA.getAbsX() + nx * boxA.width / 2 - vax * midpoint; //midpoint x for A
+			float myA = boxA.getAbsY() + ny * boxA.height / 2 - vay * midpoint; //midpoint y for A
+			float mxB = boxB.getAbsX() - nx * boxB.width / 2 - vbx * midpoint; //midpoint x for B
+			float myB = boxB.getAbsY() - ny * boxB.height / 2 - vby * midpoint; //midpoint y for B
 
-		final float surface = min(max(limitA1, limitA2), max(limitB1, limitB2)) //minimum of the maximums
-				- max(min(limitA1, limitA2), min(limitB1, limitB2)); //maximum of the minimums
+			float limitA1 = -ny * (mxA + hsA) + nx * (myA + hsA);
+			float limitA2 = -ny * (mxA - hsA) + nx * (myA - hsA);
+			float limitB1 = -ny * (mxB + hsB) + nx * (myB + hsB);
+			float limitB2 = -ny * (mxB - hsB) + nx * (myB - hsB);
+
+			return min(FloatUtil.max(limitA1, limitA2), FloatUtil.max(limitB1, limitB2)) //minimum of the maximums
+					- FloatUtil.max(min(limitA1, limitA2), min(limitB1, limitB2)); //maximum of the minimums
+		};
+
+		float surface = surfaceFormula.getValue();
 
 		if(areEqual(surface, 0, epsilon))
 		{
-			float sizeDiff = (hsB + hsA) * nx + (hsB + hsA) * ny;
+			float diff = (pbx - pax) * nx + (pby - pay) * ny;
+			float vecDiff = (vbx - vax) * nx + (vby - vay) * ny;
 
-			midpoint = vecDiff != 0 ? (diff + vecDiff + sizeDiff) / vecDiff : 0f;
+			float sizeDiff = (hsB + hsA) * abs(nx) + (hsB + hsA) * abs(ny);
 
-			mxA = ax - vax * midpoint; //midpoint x for A
-			myA = ay - vay * midpoint; //midpoint y for A
-			mxB = bx - vbx * midpoint; //midpoint x for B
-			myB = by - vby * midpoint; //midpoint y for B
+			float midpoint = vecDiff != 0 ? (diff + vecDiff + sizeDiff) / vecDiff : 0f;
 
-			limitA1 = -ny * (mxA + hsA) + nx * (myA + hsA);
-			limitA2 = -ny * (mxA - hsA) + nx * (myA - hsA);
-			limitB1 = -ny * (mxB + hsB) + nx * (myB + hsB);
-			limitB2 = -ny * (mxB - hsB) + nx * (myB - hsB);
+			float mxA = ax - vax * midpoint; //midpoint x for A
+			float myA = ay - vay * midpoint; //midpoint y for A
+			float mxB = bx - vbx * midpoint; //midpoint x for B
+			float myB = by - vby * midpoint; //midpoint y for B
 
-			float surface2 = min(max(limitA1, limitA2), max(limitB1, limitB2)) //minimum of the maximums
-					- max(min(limitA1, limitA2), min(limitB1, limitB2)); //maximum of the minimums
+			float limitA1 = -ny * (mxA + hsA) + nx * (myA + hsA);
+			float limitA2 = -ny * (mxA - hsA) + nx * (myA - hsA);
+			float limitB1 = -ny * (mxB + hsB) + nx * (myB + hsB);
+			float limitB2 = -ny * (mxB - hsB) + nx * (myB - hsB);
 
-			if(isSmallerOrEqual(surface2, 0, epsilon))
+			surface = min(FloatUtil.max(limitA1, limitA2), FloatUtil.max(limitB1, limitB2)) //minimum of the maximums
+					- FloatUtil.max(min(limitA1, limitA2), min(limitB1, limitB2)); //maximum of the minimums
+
+			if(isSmallerOrEqual(surface, 0, epsilon))
 				return null;
 		}
 		else if(surface < 0)
@@ -164,9 +194,13 @@ public class BoxBoxDetector extends PooledDetector<Box, Box>
 		Collision collision = collisionPool.obtain();
 
 		collision.normal.set(nx, ny);
-		collision.penetration = () -> -((bx - ax) * nx + (by - ay) * ny);
 
-		collision.contactSurface = () -> surface;
+		collision.penetration = () -> {
+			return -((boxB.getAbsX() - nx * boxB.width / 2 - (boxA.getAbsX() + nx * boxA.width / 2)) * nx
+					+ (boxB.getAbsY() - ny * boxB.height / 2 - (boxA.getAbsY() + ny * boxA.height / 2)) * ny);
+		};
+
+		collision.contactSurface = surfaceFormula;
 
 		return collision;
 	}

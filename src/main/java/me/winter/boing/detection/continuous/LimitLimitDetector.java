@@ -3,19 +3,18 @@ package me.winter.boing.detection.continuous;
 import com.badlogic.gdx.utils.Pool;
 import me.winter.boing.Collision;
 import me.winter.boing.World;
-import me.winter.boing.detection.PooledDetector;
 import me.winter.boing.colliders.Limit;
+import me.winter.boing.detection.PooledDetector;
 import me.winter.boing.util.DynamicFloat;
 
 import static java.lang.Math.abs;
-import static java.lang.Math.max;
 import static java.lang.Math.min;
-import static java.lang.Math.signum;
 import static me.winter.boing.util.FloatUtil.DEFAULT_ULPS;
 import static me.winter.boing.util.FloatUtil.areEqual;
 import static me.winter.boing.util.FloatUtil.getGreatestULP;
 import static me.winter.boing.util.FloatUtil.isGreaterOrEqual;
 import static me.winter.boing.util.FloatUtil.isSmallerOrEqual;
+import static me.winter.boing.util.FloatUtil.max;
 
 /**
  * Detects collisions between 2 Limits. This is the only
@@ -36,13 +35,13 @@ public class LimitLimitDetector extends PooledDetector<Limit, Limit>
 		if(!areEqual(limitA.normal.dot(limitB.normal), -1))
 			return null;
 
-		float ax = limitA.getAbsX();
-		float ay = limitA.getAbsY();
-		float bx = limitB.getAbsX();
-		float by = limitB.getAbsY();
+		final float ax = limitA.getAbsX();
+		final float ay = limitA.getAbsY();
+		final float bx = limitB.getAbsX();
+		final float by = limitB.getAbsY();
 
-		float nx = limitA.normal.x; //normal X
-		float ny = limitA.normal.y; //normal Y
+		final float nx = limitA.normal.x; //normal X
+		final float ny = limitA.normal.y; //normal Y
 
 		final float vax, vay, vbx, vby;
 
@@ -74,16 +73,16 @@ public class LimitLimitDetector extends PooledDetector<Limit, Limit>
 			return null; //no collision
 
 
-		float pax = ax - vax; //previous x for A
-		float pay = ay - vay; //previous y for A
-		float pbx = bx - vbx; //previous x for B
-		float pby = by - vby; //previous y for B
+		final float pax = ax - vax; //previous x for A
+		final float pay = ay - vay; //previous y for A
+		final float pbx = bx - vbx; //previous x for B
+		final float pby = by - vby; //previous y for B
 
 		if(!isSmallerOrEqual(pax * nx + pay * ny, pbx * nx + pby * ny, epsilon)) //if limitB isn't before limitA
 			return null; //no collision
 
-		float hsA = limitA.size / 2; //half size for A
-		float hsB = limitB.size / 2; //half size for B
+		final float hsA = limitA.size / 2; //half size for A
+		final float hsB = limitB.size / 2; //half size for B
 
 		DynamicFloat surfaceFormula = () -> {
 			float diff = (pbx - pax) * nx + (pby - pay) * ny;
@@ -91,7 +90,7 @@ public class LimitLimitDetector extends PooledDetector<Limit, Limit>
 
 			float midpoint = vecDiff != 0 ? (diff + vecDiff) / vecDiff : 0f;
 
-			float mxA = limitA.getAbsX() - vax * midpoint; //midpoint x for A TODO check if velocity should be dynamic too
+			float mxA = limitA.getAbsX() - vax * midpoint; //midpoint x for A
 			float myA = limitA.getAbsY() - vay * midpoint; //midpoint y for A
 			float mxB = limitB.getAbsX() - vbx * midpoint; //midpoint x for B
 			float myB = limitB.getAbsY() - vby * midpoint; //midpoint y for B
@@ -109,7 +108,6 @@ public class LimitLimitDetector extends PooledDetector<Limit, Limit>
 
 		if(areEqual(surface, 0, epsilon))
 		{
-
 			float diff = (pbx - pax) * nx + (pby - pay) * ny;
 			float vecDiff = (vbx - vax) * nx + (vby - vay) * ny;
 
@@ -143,7 +141,9 @@ public class LimitLimitDetector extends PooledDetector<Limit, Limit>
 
 		collision.normal.set(limitA.normal);
 		collision.setImpactVelocities(limitA.getBody(), limitB.getBody());
-		collision.penetration = () -> -((bx - ax) * nx + (by - ay) * ny); //TODO
+		collision.penetration = () -> {
+			return -((limitB.getAbsX() - limitA.getAbsX()) * nx + (limitB.getAbsY() - limitA.getAbsY()) * ny); //TODO
+		};
 
 		collision.contactSurface = surfaceFormula;
 
