@@ -18,14 +18,14 @@ import static me.winter.boing.util.VectorUtil.DOWN;
  */
 public class MoveStateImpl implements MoveState
 {
-	private final World world;
-	private final DynamicBody body;
+	protected final World world;
+	protected final DynamicBody body;
 
-	private final Vector2 movement = new Vector2(), shifting = new Vector2(), influence = new Vector2(Float.NaN, Float.NaN);
-	private final Array<Collision> collisions = new Array<>();
+	protected final Vector2 movement = new Vector2(), shifting = new Vector2(), influence = new Vector2(Float.NaN, Float.NaN);
+	protected final Array<Collision> collisions = new Array<>();
 
-	private int frame;
-	private boolean stepped;
+	protected int frame;
+	protected boolean stepped;
 
 	public MoveStateImpl(World world, DynamicBody body)
 	{
@@ -50,6 +50,7 @@ public class MoveStateImpl implements MoveState
 		body.getPosition().add(getMovement());
 	}
 
+	private Vector2 tmpInfluence = new Vector2();
 
 	private Vector2 getInfluence(DynamicBody dynamic, float delta)
 	{
@@ -68,10 +69,11 @@ public class MoveStateImpl implements MoveState
 
 				world.getState(other).step(frame, delta);
 
-				Vector2 vel = other.getVelocity();
+				tmpInfluence.set(other.getVelocity()).scl(delta);
+				tmpInfluence.add(getInfluence((DynamicBody)collision.colliderB.getBody(), delta));
 
-				influence.add(vel.x * delta, vel.y * delta);
-				influence.add(getInfluence((DynamicBody)collision.colliderB.getBody(), delta));
+				if(influence.len2() < tmpInfluence.len2())
+					influence.set(tmpInfluence);
 			}
 
 			world.getCollisionPool().free(collision);
