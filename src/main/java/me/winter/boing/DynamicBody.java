@@ -1,7 +1,6 @@
 package me.winter.boing;
 
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.utils.Array;
 
 import static java.lang.Math.abs;
 import static java.lang.Math.ulp;

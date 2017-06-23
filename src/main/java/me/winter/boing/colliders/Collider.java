@@ -31,6 +31,16 @@ public interface Collider
 	float getAbsY();
 
 	/**
+	 * @return relative x position of this collider to its body
+	 */
+	float getRelX();
+
+	/**
+	 * @return relative y position of this collider to its body
+	 */
+	float getRelY();
+
+	/**
 	 *
 	 * @return width of the collider
 	 */

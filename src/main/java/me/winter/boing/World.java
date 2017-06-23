@@ -51,5 +51,14 @@ public interface World
 	 * @return the pool of objects for collisions
 	 */
 	Pool<Collision> getCollisionPool();
+
+	/**
+	 * Updates the colliders for a body, letting know the world that the colliders
+	 * for a body has changed. Effect may vary depending on the implementation of
+	 * the World.
+	 *
+	 * @param body body with new colliders
+	 */
+	default void updateColliders(Body body) {};
 }
 

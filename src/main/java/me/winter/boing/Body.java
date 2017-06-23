@@ -1,7 +1,6 @@
 package me.winter.boing;
 
 import com.badlogic.gdx.math.Vector2;
-import me.winter.boing.colliders.Box;
 import me.winter.boing.colliders.Collider;
 
 import static java.lang.Math.abs;
@@ -22,6 +21,9 @@ public interface Body
 
 
 	/**
+	 * The array of colliders this body currently has. When this array changes,
+	 * the world must be notified using the method World.updateColliders(Body body)
+	 *
 	 * @return the list of colliders this body have
 	 */
 	Collider[] getColliders();

@@ -6,8 +6,6 @@ import me.winter.boing.DynamicBody;
 import me.winter.boing.World;
 
 import static com.badlogic.gdx.math.Vector2.Zero;
-import static java.lang.Math.max;
-import static java.lang.Math.ulp;
 
 /**
  * Abstract implementation of a Collider. Has a relative
@@ -45,6 +43,18 @@ public abstract class AbstractCollider implements Collider
 	public float getAbsY()
 	{
 		return y + body.getPosition().y;
+	}
+
+	@Override
+	public float getRelX()
+	{
+		return x;
+	}
+
+	@Override
+	public float getRelY()
+	{
+		return y;
 	}
 
 	@Override

@@ -1,5 +1,6 @@
 package me.winter.boing.impl;
 
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.IdentityMap;
 import com.badlogic.gdx.utils.Queue;
 import me.winter.boing.AbstractWorld;
@@ -7,6 +8,7 @@ import me.winter.boing.Body;
 import me.winter.boing.Collision;
 import me.winter.boing.DynamicBody;
 import me.winter.boing.MoveState;
+import me.winter.boing.detection.anticipation.PreAABB;
 import me.winter.boing.resolver.CollisionResolver;
 
 /**
@@ -20,6 +22,7 @@ public class WorldImpl extends AbstractWorld
 	private Queue<Body> all = new Queue<>();
 
 	private IdentityMap<DynamicBody, MoveStateImpl> steps = new IdentityMap<>();
+	private IdentityMap<Body, PreAABB> surroundingBoxes = new IdentityMap<>();
 
 	public WorldImpl(CollisionResolver resolver)
 	{
@@ -77,16 +80,28 @@ public class WorldImpl extends AbstractWorld
 		collisionPool.free(swapped);
 	}
 
+	@Override
+	protected void detect(Body bodyA, Body bodyB, Collision swappedBuffer)
+	{
+		if(!surroundingBoxes.get(bodyA).overlaps(surroundingBoxes.get(bodyB)))
+			return;
+
+		super.detect(bodyA, bodyB, swappedBuffer);
+	}
+
 	public void add(Body body)
 	{
 		if(body instanceof DynamicBody)
 		{
 			dynamics.addFirst((DynamicBody)body);
 			all.addFirst(body);
-			steps.put((DynamicBody)body, new MoveStateImpl(this, (DynamicBody)body));
+			MoveStateImpl moveState = new MoveStateImpl(this, (DynamicBody)body);
+			steps.put((DynamicBody)body, moveState);
+			surroundingBoxes.put(body, new PreAABB(body, moveState.getMovement()));
 		}
 		else
 		{
+			surroundingBoxes.put(body, new PreAABB(body, Vector2.Zero));
 			all.addLast(body);
 		}
 		refresh();
@@ -100,6 +115,7 @@ public class WorldImpl extends AbstractWorld
 			dynamics.removeValue((DynamicBody)body, true);
 			steps.remove((DynamicBody)body);
 		}
+		surroundingBoxes.remove(body);
 		refresh();
 	}
 
@@ -113,5 +129,11 @@ public class WorldImpl extends AbstractWorld
 	public Iterable<Body> getBodies()
 	{
 		return all;
+	}
+
+	@Override
+	public void updateColliders(Body body)
+	{
+		surroundingBoxes.get(body).update();
 	}
 }
