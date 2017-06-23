@@ -19,7 +19,6 @@ public interface Body
 	 */
 	Vector2 getPosition();
 
-
 	/**
 	 * The array of colliders this body currently has. When this array changes,
 	 * the world must be notified using the method World.updateColliders(Body body)
@@ -49,5 +48,4 @@ public interface Body
 	 * @param collision detected collision about to be resolved
 	 */
 	default void notifyCollision(Collision collision) {}
-
 }

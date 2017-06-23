@@ -1,12 +1,12 @@
 package me.winter.boing.resolver;
 
-import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.Array;
+import me.winter.boing.Body;
 import me.winter.boing.Collision;
 import me.winter.boing.DynamicBody;
 import me.winter.boing.World;
 
 import static java.lang.Float.POSITIVE_INFINITY;
-import static java.lang.Math.signum;
 import static me.winter.boing.util.VelocityUtil.weightRatio;
 
 /**
@@ -17,6 +17,8 @@ import static me.winter.boing.util.VelocityUtil.weightRatio;
 public class ReplaceResolver implements CollisionResolver
 {
 	private boolean capWeight;
+
+	private final Array<DynamicBody> alreadyChecked = new Array<>();
 
 	public ReplaceResolver()
 	{
@@ -59,7 +61,10 @@ public class ReplaceResolver implements CollisionResolver
 		if(!(collision.colliderB.getBody() instanceof DynamicBody))
 			return 0f;
 
+		alreadyChecked.clear();
 		float weightA = getWeight(world, (DynamicBody)collision.colliderA.getBody(), -collision.normal.x, -collision.normal.y);
+
+		alreadyChecked.clear();
 		float weightB = getWeight(world, (DynamicBody)collision.colliderB.getBody(), collision.normal.x, collision.normal.y);
 
 		if(capWeight)
@@ -72,6 +77,7 @@ public class ReplaceResolver implements CollisionResolver
 	private float getWeight(World world, DynamicBody dynamic, float nx, float ny)
 	{
 		float weight = dynamic.getWeight();
+		alreadyChecked.add(dynamic);
 
 		for(Collision collision : world.getState(dynamic).getCollisions())
 		{
@@ -80,7 +86,14 @@ public class ReplaceResolver implements CollisionResolver
 				if(!(collision.colliderB.getBody() instanceof DynamicBody))
 					return POSITIVE_INFINITY;
 
-				weight += getWeight(world, (DynamicBody)collision.colliderB.getBody(), nx, ny);
+				if(alreadyChecked.contains((DynamicBody)collision.colliderB.getBody(), true))
+					continue;
+
+				float w = getWeight(world, (DynamicBody)collision.colliderB.getBody(), nx, ny);
+
+				if(w == POSITIVE_INFINITY)
+					return w;
+				weight += w;
 			}
 		}
 

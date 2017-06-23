@@ -13,6 +13,8 @@ import me.winter.boing.util.WorldSimulation;
 import org.junit.Ignore;
 import org.junit.Test;
 
+import java.util.Random;
+
 import static me.winter.boing.util.VectorUtil.DOWN;
 import static me.winter.boing.util.VectorUtil.LEFT;
 import static me.winter.boing.util.VectorUtil.RIGHT;
@@ -515,6 +517,42 @@ public class BoxStackSimulation
 		BodyImpl ground = new BodyImpl();
 		ground.getPosition().set(400, -100);
 		ground.addCollider(new Box(ground, 0, 0, 800, 400));
+		world.add(ground);
+
+		new WorldSimulation(world, 60f).start();
+	}
+
+	@Test
+	public void bigMess()
+	{
+		TestWorldImpl world = new TestWorldImpl(new ReplaceResolver());
+
+		PlayerImpl player = new PlayerImpl();
+		player.getPosition().set(-200, 800);
+		player.addCollider(new Box(player, 0, 0, 20, 45));
+		world.add(player);
+
+		Random random = new Random();
+
+		for(int j = 0; j < 16; j++)
+		{
+			for(int i = 0; i < 15; i++)
+			{
+				GravityAffected test = new GravityAffected();
+				test.getPosition().set(25 + j * 50, 1000 - i * 50);
+				test.addCollider(new Box(test, 0, 0, random.nextInt(25) + 25, random.nextInt(25) + 25));
+				world.add(test);
+			}
+		}
+
+		/*BodyImpl solidBlock = new BodyImpl();
+		solidBlock.getPosition().set(600, 110);
+		solidBlock.addCollider(new Box(solidBlock, 0, 0, 100, 100));
+		world.add(solidBlock);*/
+
+		BodyImpl ground = new BodyImpl();
+		ground.getPosition().set(400, -100);
+		ground.addCollider(new Box(ground, -200, 0, 1800, 400));
 		world.add(ground);
 
 		new WorldSimulation(world, 60f).start();
