@@ -23,7 +23,7 @@ public class ReplaceResolver implements CollisionResolver
 		float pene = collision.penetration.getValue();
 		float surface = collision.contactSurface.getValue();
 
-		if(pene <= 0/* || surface < 0*/) //corner glitch causes trouble here
+		if(pene <= 0 || surface <= 0) //corner glitch causes trouble here
 			return;
 
 		float ratio = resolveWeights(collision, world);

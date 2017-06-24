@@ -44,6 +44,8 @@ public abstract class AbstractWorld implements World
 
 		detectCollisions();
 
+		collisions.sort((c1, c2) -> Float.compare(c1.priority, c2.priority));
+
 		resolveCollisions();
 	}
 
