@@ -48,7 +48,9 @@ public class MoveStateImpl implements MoveState
 			((UpdatableBody)body).update(delta);
 
 		getMovement().set(body.getVelocity()).scl(delta);
-		getMovement().add(getInfluence(body, delta));
+		getMovement().add(
+				getInfluence(body, delta)//;
+		);
 
 		body.getPosition().add(getMovement());
 	}
@@ -66,7 +68,7 @@ public class MoveStateImpl implements MoveState
 
 		for(Collision collision : world.getState(dynamic).getCollisions())
 		{
-			if(collision.colliderB.getBody() instanceof DynamicBody && collision.normal.dot(DOWN) == 1)
+			if(collision.colliderB.getBody() instanceof DynamicBody && collision.normal.dot(DOWN) == 1 && collision.contactSurface.getValue() > 0)
 			{
 				DynamicBody other = ((DynamicBody)collision.colliderB.getBody());
 
