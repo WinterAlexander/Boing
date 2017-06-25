@@ -81,7 +81,7 @@ public class BoxBoxDetector extends PooledDetector<Box, Box>
 							epsilon, -1, 0);
 
 					if(collision == null)
-						return simple.collides(world, boxA, boxB);
+						return null;//simple.collides(world, boxA, boxB);
 				}
 			}
 		}
@@ -105,6 +105,8 @@ public class BoxBoxDetector extends PooledDetector<Box, Box>
 
 		if(!isGreaterOrEqual(ax * nx + ay * ny, bx * nx + by * ny, epsilon)) //if limitB with his velocity isn't after limitA with his velocity
 			return null; //no collision
+
+		final boolean justTouching = areEqual(ax * nx + ay * ny, bx * nx + by * ny, epsilon);
 
 		final float vax, vay, vbx, vby;
 
@@ -141,6 +143,21 @@ public class BoxBoxDetector extends PooledDetector<Box, Box>
 		final float hsA = abs(ny * boxA.width / 2 + nx * boxA.height / 2);
 		final float hsB = abs(ny * boxB.width / 2 + nx * boxB.height / 2);
 
+		float surface;
+
+		if(justTouching)
+		{
+			float limitA1 = -ny * (pax + hsA) + nx * (pay + hsA);
+			float limitA2 = -ny * (pax - hsA) + nx * (pay - hsA);
+			float limitB1 = -ny * (pbx + hsB) + nx * (pby + hsB);
+			float limitB2 = -ny * (pbx - hsB) + nx * (pby - hsB);
+
+			surface = min(FloatUtil.max(limitA1, limitA2), FloatUtil.max(limitB1, limitB2)) //minimum of the maximums
+					- FloatUtil.max(min(limitA1, limitA2), min(limitB1, limitB2)); //maximum of the minimums
+
+			if(isSmallerOrEqual(surface, 0, epsilon))
+				return null;
+		}
 
 		DynamicFloat surfaceFormula = () -> {
 
@@ -168,7 +185,7 @@ public class BoxBoxDetector extends PooledDetector<Box, Box>
 					- FloatUtil.max(min(limitA1, limitA2), min(limitB1, limitB2)); //maximum of the minimums
 		};
 
-		float surface = surfaceFormula.getValue();
+		surface = surfaceFormula.getValue();
 
 		if(areEqual(surface, 0, epsilon))
 		{
@@ -210,6 +227,8 @@ public class BoxBoxDetector extends PooledDetector<Box, Box>
 		collision.priority = ((bx - ax) * nx + (by - ay) * ny) / ((vbx - vax) * nx + (vby - vay) * ny);
 
 		collision.contactSurface = surfaceFormula;
+
+		System.out.println((collision.normal.x != 0 ? "h" : "v") + collision.hashCode() + ": " + collision.contactSurface.getValue() + " p" + collision.priority);
 
 		return collision;
 	}

@@ -40,12 +40,15 @@ public abstract class AbstractWorld implements World
 	@Override
 	public void step(float delta)
 	{
+		System.out.println();
 		update(delta);
 
 		detectCollisions();
 
-		collisions.sort((c1, c2) -> Float.compare(c1.priority, c2.priority));
+		collisions.sort((c1, c2) -> -Float.compare(c1.priority, c2.priority));
 
+
+		System.out.println("Resolve:");
 		resolveCollisions();
 	}
 
@@ -58,15 +61,15 @@ public abstract class AbstractWorld implements World
 
 	protected void detectCollisions()
 	{
-		if(refresh)
+		/*if(refresh)
 		{
 			fullDetection();
 			refresh = false;
 		}
 		else
-		{
+		{//*/
 			dynamicDetection();
-		}
+		//}//*/
 	}
 
 	/**
@@ -132,11 +135,12 @@ public abstract class AbstractWorld implements World
 
 		for(Collision collision : collisions)
 		{
-			swapped.setAsSwapped(collision);
-			collision.colliderA.getBody().notifyCollision(collision);
-			collision.colliderB.getBody().notifyCollision(swapped);
-
-			resolver.resolve(collision, this);
+			if(resolver.resolve(collision, this))
+			{
+				swapped.setAsSwapped(collision);
+				collision.colliderA.getBody().notifyCollision(collision);
+				collision.colliderB.getBody().notifyCollision(swapped);
+			}
 		}
 
 		collisionPool.free(swapped);

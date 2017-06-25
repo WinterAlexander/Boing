@@ -16,13 +16,15 @@ import static java.lang.Math.signum;
 public class VelocityResolver implements CollisionResolver
 {
 	@Override
-	public void resolve(Collision collision, World world)
+	public boolean resolve(Collision collision, World world)
 	{
 		if(collision.colliderA.getBody() instanceof DynamicBody)
 			reflect((DynamicBody)collision.colliderA.getBody(), collision.normal);
 
 		if(collision.colliderB.getBody() instanceof DynamicBody)
 			reflect((DynamicBody)collision.colliderB.getBody(), collision.normal);
+
+		return true;
 	}
 
 	private void reflect(DynamicBody solid, Vector2 normal)

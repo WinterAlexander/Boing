@@ -80,4 +80,51 @@ public class TiledTerrainSimulation
 
 		new WorldSimulation(world, 60f).start();
 	}
+
+	@Test
+	public void tiledGroundAndWallsWithPushables()
+	{
+		TestWorldImpl world = new TestWorldImpl(new ReplaceResolver());
+
+		PlayerImpl player = new PlayerImpl();
+		player.getPosition().set(400, 200);
+		player.addCollider(new Box(player, 0, 0, 40, 50));
+		world.add(player);
+
+		for(int i = 0; i < 20; i++)
+		{
+			BodyImpl tile = new BodyImpl();
+			tile.getPosition().set(i * 40, 100);
+			tile.addCollider(new Box(tile, 0, 0, 40, 40));
+			world.add(tile);
+		}
+
+		for(int i = 0; i < 20; i++)
+		{
+			BodyImpl tile = new BodyImpl();
+			tile.getPosition().set(20, i * 40);
+			tile.addCollider(new Box(tile, 0, 0, 40, 40));
+			world.add(tile);
+
+			BodyImpl tile2 = new BodyImpl();
+			tile2.getPosition().set(780, i * 40);
+			tile2.addCollider(new Box(tile2, 0, 0, 40, 40));
+			world.add(tile2);
+		}
+
+		for(int j = 0; j < 8; j++)
+		{
+
+			for(int i = 0; i < 10; i++)
+			{
+				GravityAffected test = new GravityAffected();
+				test.getPosition().set(200 + j * 50, 750 - i * 50);
+				test.addCollider(new Box(test, 0, 0, 30, 30));
+				world.add(test);
+			}
+		}
+
+
+		new WorldSimulation(world, 60f).start();
+	}
 }

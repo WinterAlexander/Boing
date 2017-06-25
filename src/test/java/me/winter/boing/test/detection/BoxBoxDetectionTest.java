@@ -69,7 +69,10 @@ public class BoxBoxDetectionTest
 	{
 		MutableInt collisionCount = new MutableInt(0);
 
-		CollisionResolver resolver = (w, collision) -> collisionCount.value++;
+		CollisionResolver resolver = (w, c) -> {
+			collisionCount.value++;
+			return true;
+		};
 		WorldImpl world = new WorldImpl(resolver);
 
 		DynamicBodyImpl solidImpl = new DynamicBodyImpl(1f);
@@ -97,7 +100,10 @@ public class BoxBoxDetectionTest
 	{
 		MutableInt collisionCount = new MutableInt(0);
 
-		WorldImpl world = new WorldImpl((w, c) -> collisionCount.value++);
+		WorldImpl world = new WorldImpl((w, c) -> {
+			collisionCount.value++;
+			return true;
+		});
 
 		DynamicBodyImpl solidImpl = new DynamicBodyImpl(1f);
 		solidImpl.getPosition().set(0, 0);
@@ -125,7 +131,10 @@ public class BoxBoxDetectionTest
 	{
 		MutableInt collisionCount = new MutableInt(0);
 
-		CollisionResolver resolver = (w, c) -> collisionCount.value++;
+		CollisionResolver resolver = (w, c) -> {
+			collisionCount.value++;
+			return true;
+		};
 		WorldImpl world = new WorldImpl(resolver);
 
 		DynamicBodyImpl solidImpl = new DynamicBodyImpl(1f);

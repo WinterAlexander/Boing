@@ -18,13 +18,15 @@ public class ReplaceResolver implements CollisionResolver
 	private final Array<DynamicBody> alreadyChecked = new Array<>();
 
 	@Override
-	public void resolve(Collision collision, World world)
+	public boolean resolve(Collision collision, World world)
 	{
 		float pene = collision.penetration.getValue();
 		float surface = collision.contactSurface.getValue();
 
+		System.out.println((collision.normal.x != 0 ? "h" : "v") + collision.hashCode() + ": " + surface);
+
 		if(pene <= 0 || surface <= 0) //corner glitch causes trouble here
-			return;
+			return false;
 
 		float ratio = resolveWeights(collision, world);
 
@@ -41,6 +43,8 @@ public class ReplaceResolver implements CollisionResolver
 
 			world.getState((DynamicBody)collision.colliderB.getBody()).shift(amount * collision.normal.x, amount * collision.normal.y);
 		}
+
+		return true;
 	}
 
 	private float resolveWeights(Collision collision, World world)
