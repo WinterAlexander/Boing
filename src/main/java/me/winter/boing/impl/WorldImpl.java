@@ -91,6 +91,9 @@ public class WorldImpl extends AbstractWorld
 
 	public void add(Body body)
 	{
+		if("DABOX".equals(body.getColliders()[0].getTag()))
+			DEBUG_DABOX = true;
+
 		if(body instanceof DynamicBody)
 		{
 			dynamics.addFirst((DynamicBody)body);

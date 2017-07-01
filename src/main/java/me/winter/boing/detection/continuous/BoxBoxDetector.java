@@ -69,7 +69,7 @@ public class BoxBoxDetector extends PooledDetector<Box, Box>
 				collision = coll2;
 			else
 			{
-				if(collision.penetration.getValue() < coll2.penetration.getValue())
+				if(collision.priority < coll2.priority)
 					collision = coll2;
 			}
 		}

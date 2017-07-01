@@ -202,6 +202,46 @@ public class TiledTerrainSimulation
 	}
 
 	@Test
+	public void tiledGroundAndWallsAnd2Boxes()
+	{
+		TestWorldImpl world = new TestWorldImpl(new ReplaceResolver());
+
+		PlayerImpl player = new PlayerImpl();
+		player.getPosition().set(400, 200);
+		player.addCollider(new Box(player, 0, 0, 40, 50));
+		world.add(player);
+
+		for(int i = 0; i < 20; i++)
+		{
+			BodyImpl tile = new BodyImpl();
+			tile.getPosition().set(i * 40, 100);
+			tile.addCollider(new Box(tile, 0, 0, 40, 40));
+			world.add(tile);
+		}
+
+		for(int i = 0; i < 20; i++)
+		{
+			BodyImpl tile2 = new BodyImpl();
+			tile2.getPosition().set(780, i * 40);
+			tile2.addCollider(new Box(tile2, 0, 0, 40, 40));
+			world.add(tile2);
+		}
+
+		GravityAffected test = new GravityAffected();
+		test.getPosition().set(700, 200);
+		test.addCollider(new Box(test, 0, 0, 30, 30));
+		test.getColliders()[0].setTag("DABOX");
+		world.add(test);
+
+		GravityAffected test2 = new GravityAffected();
+		test2.getPosition().set(600, 200);
+		test2.addCollider(new Box(test2, 0, 0, 30, 30));
+		world.add(test2);
+
+		new WorldSimulation(world, 60f).start();
+	}
+
+	@Test
 	public void pushingBoxOnPushables()
 	{
 		TestWorldImpl world = new TestWorldImpl(new ReplaceResolver());

@@ -146,7 +146,8 @@ public class BoxLimitDetector extends PooledDetector<Box, Limit>
 
 		collision.contactSurface = surfaceFormula;
 
-		collision.priority = diff / vecDiff;
+		//boing v1 priority algorithm
+		collision.priority = ((bx - ax) * nx + (by - ay) * ny) / ((vbx - vax) * nx + (vby - vay) * ny);
 
 		return collision;
 	}

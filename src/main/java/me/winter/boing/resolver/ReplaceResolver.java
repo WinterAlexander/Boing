@@ -20,8 +20,8 @@ public class ReplaceResolver implements CollisionResolver
 	@Override
 	public boolean resolve(Collision collision, World world)
 	{
-		if(Float.isNaN(collision.priority))
-			return true;
+		//if(Float.isNaN(collision.priority))
+		//	return true;
 
 		float pene = collision.penetration.getValue();
 		float surface = collision.contactSurface.getValue();
