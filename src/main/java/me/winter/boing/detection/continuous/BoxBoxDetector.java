@@ -1,25 +1,23 @@
 package me.winter.boing.detection.continuous;
 
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Pool;
 import me.winter.boing.Collision;
 import me.winter.boing.World;
-import me.winter.boing.detection.PooledDetector;
 import me.winter.boing.colliders.Box;
+import me.winter.boing.detection.PooledDetector;
 import me.winter.boing.util.DynamicFloat;
 import me.winter.boing.util.FloatUtil;
 
 import static com.badlogic.gdx.math.Vector2.dot;
 import static java.lang.Math.abs;
-import static java.lang.Math.max;
-import static java.lang.Math.min;
-import static java.lang.Math.signum;
 import static me.winter.boing.util.FloatUtil.DEFAULT_ULPS;
 import static me.winter.boing.util.FloatUtil.areEqual;
 import static me.winter.boing.util.FloatUtil.getGreatestULP;
 import static me.winter.boing.util.FloatUtil.isGreaterOrEqual;
 import static me.winter.boing.util.FloatUtil.isSmallerOrEqual;
+import static me.winter.boing.util.FloatUtil.max;
+import static me.winter.boing.util.FloatUtil.min;
 
 /**
  * Detects collisions between 2 Axis Aligned Bounding Box
@@ -165,8 +163,8 @@ public class BoxBoxDetector extends PooledDetector<Box, Box>
 			float limitB1 = -ny * (mxB + hsB) + nx * (myB + hsB);
 			float limitB2 = -ny * (mxB - hsB) + nx * (myB - hsB);
 
-			return min(FloatUtil.max(limitA1, limitA2), FloatUtil.max(limitB1, limitB2)) //minimum of the maximums
-					- FloatUtil.max(min(limitA1, limitA2), min(limitB1, limitB2)); //maximum of the minimums
+			return FloatUtil.min(FloatUtil.max(limitA1, limitA2), FloatUtil.max(limitB1, limitB2)) //minimum of the maximums
+					- FloatUtil.max(FloatUtil.min(limitA1, limitA2), FloatUtil.min(limitB1, limitB2)); //maximum of the minimums
 		};
 
 		surface = surfaceFormula.getValue();
@@ -199,8 +197,8 @@ public class BoxBoxDetector extends PooledDetector<Box, Box>
 				float limitB1 = -ny * (mxB + hsB) + nx * (myB + hsB);
 				float limitB2 = -ny * (mxB - hsB) + nx * (myB - hsB);
 
-				return min(FloatUtil.max(limitA1, limitA2), FloatUtil.max(limitB1, limitB2)) //minimum of the maximums
-						- FloatUtil.max(min(limitA1, limitA2), min(limitB1, limitB2)); //maximum of the minimums
+				return min(max(limitA1, limitA2), max(limitB1, limitB2)) //minimum of the maximums
+						- max(min(limitA1, limitA2), min(limitB1, limitB2)); //maximum of the minimums
 			};
 
 			surface = surfaceFormula.getValue();

@@ -51,7 +51,6 @@ public class StepByStepSimulation
 		wall.getColliders()[0].setTag("WALL");
 		world.add(wall);
 
-
 		new WorldSimulation(world, 1f).start(true);
 	}
 

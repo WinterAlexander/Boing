@@ -8,7 +8,7 @@ import me.winter.boing.Body;
 import me.winter.boing.Collision;
 import me.winter.boing.DynamicBody;
 import me.winter.boing.MoveState;
-import me.winter.boing.detection.anticipation.PreAABB;
+import me.winter.boing.PreAABB;
 import me.winter.boing.resolver.CollisionResolver;
 
 /**
@@ -22,7 +22,7 @@ public class WorldImpl extends AbstractWorld
 	private Queue<Body> all = new Queue<>();
 
 	private IdentityMap<DynamicBody, MoveStateImpl> steps = new IdentityMap<>();
-	private IdentityMap<Body, PreAABB> surroundingBoxes = new IdentityMap<>();
+	protected IdentityMap<Body, PreAABB> surroundingBoxes = new IdentityMap<>();
 
 	public WorldImpl(CollisionResolver resolver)
 	{
@@ -40,7 +40,9 @@ public class WorldImpl extends AbstractWorld
 	}
 
 	/**
-	 * Detects collision with 1 + 2 + 3 + ... + (N - 1) iterations, N being the number of bodies.
+	 * Detects collision with 1 + 2 + 3 + ... + (N - 1) iterations,
+	 *
+	 * N being the number of bodies.
 	 */
 	@Override
 	protected void fullDetection()
@@ -60,7 +62,9 @@ public class WorldImpl extends AbstractWorld
 	}
 
 	/**
-	 * Detects collision with D + (D + 1) + (D + 2) + ... + (N - 1) iterations, N being the amount of bodies and D being the amount of dynamic bodies
+	 * Detects collision with D + (D + 1) + (D + 2) + ... + (N - 1) iterations,
+	 *
+	 * N being the amount of bodies and D being the amount of dynamic bodies
 	 */
 	@Override
 	protected void dynamicDetection()

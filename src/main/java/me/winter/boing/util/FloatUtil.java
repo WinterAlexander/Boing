@@ -103,6 +103,8 @@ public strictfp class FloatUtil
 	{
 		return (a >= b) ? a : b;
 	}
+	
+	//region Max function overloads
 
 	public static float max(float a, float b, float c)
 	{
@@ -208,4 +210,120 @@ public strictfp class FloatUtil
 		float a10 = (a9 >= k) ? a9 : k;
 		return (a10 >= l) ? a10 : l;
 	}
+	
+	//endregion
+
+	public static float min(float a, float b)
+	{
+		return (a <= b) ? a : b;
+	}
+
+	//region Min function overloads
+
+	public static float min(float a, float b, float c)
+	{
+		float a1 = (a <= b) ? a : b;
+		return (a1 <= c) ? a1 : c;
+	}
+
+	public static float min(float a, float b, float c, float d)
+	{
+		float a1 = (a <= b) ? a : b;
+		float a2 = (a1 <= c) ? a1 : c;
+		return (a2 <= d) ? a2 : d;
+	}
+
+	public static float min(float a, float b, float c, float d, float e)
+	{
+		float a1 = (a <= b) ? a : b;
+		float a2 = (a1 <= c) ? a1 : c;
+		float a3 = (a2 <= d) ? a2 : d;
+		return (a3 <= e) ? a3 : e;
+	}
+
+	public static float min(float a, float b, float c, float d, float e, float f)
+	{
+		float a1 = (a <= b) ? a : b;
+		float a2 = (a1 <= c) ? a1 : c;
+		float a3 = (a2 <= d) ? a2 : d;
+		float a4 = (a3 <= e) ? a3 : e;
+		return (a4 <= f) ? a4 : f;
+	}
+
+	public static float min(float a, float b, float c, float d, float e, float f, float g)
+	{
+		float a1 = (a <= b) ? a : b;
+		float a2 = (a1 <= c) ? a1 : c;
+		float a3 = (a2 <= d) ? a2 : d;
+		float a4 = (a3 <= e) ? a3 : e;
+		float a5 = (a4 <= f) ? a4 : f;
+		return (a5 <= g) ? a5 : g;
+	}
+
+	public static float min(float a, float b, float c, float d, float e, float f, float g, float h)
+	{
+		float a1 = (a <= b) ? a : b;
+		float a2 = (a1 <= c) ? a1 : c;
+		float a3 = (a2 <= d) ? a2 : d;
+		float a4 = (a3 <= e) ? a3 : e;
+		float a5 = (a4 <= f) ? a4 : f;
+		float a6 = (a5 <= g) ? a5 : g;
+		return (a6 <= h) ? a6 : h;
+	}
+
+	public static float min(float a, float b, float c, float d, float e, float f, float g, float h, float i)
+	{
+		float a1 = (a <= b) ? a : b;
+		float a2 = (a1 <= c) ? a1 : c;
+		float a3 = (a2 <= d) ? a2 : d;
+		float a4 = (a3 <= e) ? a3 : e;
+		float a5 = (a4 <= f) ? a4 : f;
+		float a6 = (a5 <= g) ? a5 : g;
+		float a7 = (a6 <= h) ? a6 : h;
+		return (a7 <= i) ? a7 : i;
+	}
+
+	public static float min(float a, float b, float c, float d, float e, float f, float g, float h, float i, float j)
+	{
+		float a1 = (a <= b) ? a : b;
+		float a2 = (a1 <= c) ? a1 : c;
+		float a3 = (a2 <= d) ? a2 : d;
+		float a4 = (a3 <= e) ? a3 : e;
+		float a5 = (a4 <= f) ? a4 : f;
+		float a6 = (a5 <= g) ? a5 : g;
+		float a7 = (a6 <= h) ? a6 : h;
+		float a8 = (a7 <= i) ? a7 : i;
+		return (a8 <= j) ? a8 : j;
+	}
+
+	public static float min(float a, float b, float c, float d, float e, float f, float g, float h, float i, float j, float k)
+	{
+		float a1 = (a <= b) ? a : b;
+		float a2 = (a1 <= c) ? a1 : c;
+		float a3 = (a2 <= d) ? a2 : d;
+		float a4 = (a3 <= e) ? a3 : e;
+		float a5 = (a4 <= f) ? a4 : f;
+		float a6 = (a5 <= g) ? a5 : g;
+		float a7 = (a6 <= h) ? a6 : h;
+		float a8 = (a7 <= i) ? a7 : i;
+		float a9 = (a8 <= j) ? a8 : j;
+		return (a9 <= k) ? a9 : k;
+	}
+
+	public static float min(float a, float b, float c, float d, float e, float f, float g, float h, float i, float j, float k, float l)
+	{
+		float a1 = (a <= b) ? a : b;
+		float a2 = (a1 <= c) ? a1 : c;
+		float a3 = (a2 <= d) ? a2 : d;
+		float a4 = (a3 <= e) ? a3 : e;
+		float a5 = (a4 <= f) ? a4 : f;
+		float a6 = (a5 <= g) ? a5 : g;
+		float a7 = (a6 <= h) ? a6 : h;
+		float a8 = (a7 <= i) ? a7 : i;
+		float a9 = (a8 <= j) ? a8 : j;
+		float a10 = (a9 <= k) ? a9 : k;
+		return (a10 <= l) ? a10 : l;
+	}
+
+	//endregion
 }

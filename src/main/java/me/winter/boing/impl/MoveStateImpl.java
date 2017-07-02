@@ -7,7 +7,6 @@ import me.winter.boing.MoveState;
 import me.winter.boing.Collision;
 import me.winter.boing.UpdatableBody;
 import me.winter.boing.World;
-import me.winter.boing.detection.anticipation.PreAABB;
 
 import static java.lang.Math.signum;
 import static me.winter.boing.util.VectorUtil.DOWN;

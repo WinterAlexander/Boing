@@ -1,5 +1,7 @@
 package me.winter.boing.testimpl;
 
+import me.winter.boing.Body;
+import me.winter.boing.PreAABB;
 import me.winter.boing.impl.WorldImpl;
 import me.winter.boing.resolver.CollisionResolver;
 
@@ -27,5 +29,10 @@ public class TestWorldImpl extends WorldImpl
 	public int collisionCount()
 	{
 		return collisionCount;
+	}
+
+	public PreAABB getSurroundingBox(Body body)
+	{
+		return surroundingBoxes.get(body);
 	}
 }
