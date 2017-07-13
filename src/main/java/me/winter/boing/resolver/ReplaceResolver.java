@@ -1,7 +1,6 @@
 package me.winter.boing.resolver;
 
-import com.badlogic.gdx.utils.Array;
-import me.winter.boing.Body;
+import com.badlogic.gdx.utils.ObjectSet;
 import me.winter.boing.Collision;
 import me.winter.boing.DynamicBody;
 import me.winter.boing.World;
@@ -15,7 +14,7 @@ import static java.lang.Float.POSITIVE_INFINITY;
  */
 public class ReplaceResolver implements CollisionResolver
 {
-	private final Array<DynamicBody> alreadyChecked = new Array<>();
+	private final ObjectSet<DynamicBody> alreadyChecked = new ObjectSet<>();
 
 	@Override
 	public boolean resolve(Collision collision, World world)
@@ -82,7 +81,7 @@ public class ReplaceResolver implements CollisionResolver
 				if(!(collision.colliderB.getBody() instanceof DynamicBody))
 					return POSITIVE_INFINITY;
 
-				if(alreadyChecked.contains((DynamicBody)collision.colliderB.getBody(), true))
+				if(alreadyChecked.contains((DynamicBody)collision.colliderB.getBody()))
 					continue;
 
 				float w = getWeight(world, (DynamicBody)collision.colliderB.getBody(), nx, ny);
