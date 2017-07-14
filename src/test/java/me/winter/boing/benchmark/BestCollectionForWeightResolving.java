@@ -5,7 +5,11 @@ import com.badlogic.gdx.utils.ObjectSet;
 import org.junit.Test;
 
 /**
- * Undocumented :(
+ * Benchmark to determine which of Array or ObjectSet is faster
+ * to store objects temporarily while resolving weight
+ * <p>
+ * Tests results showed that ObjectSet is faster in all cases,
+ * even when the collection size is as low as 1
  * <p>
  * Created by Alexander Winter on 2017-07-12.
  */
@@ -56,6 +60,30 @@ public class BestCollectionForWeightResolving
 	public void clusteredMessCollisionTest()
 	{
 
+		Array<TestCollision> collisions = new Array<>();
+
+		Object a = "A", b = "B", c = "C", d = "D", e = "E", f = "F", g = "G", h = "H", i = "I", j = "J";
+
+		collisions.add(new TestCollision(a, b));
+		collisions.add(new TestCollision(b, c));
+		collisions.add(new TestCollision(a, c));
+
+
+		collisions.add(new TestCollision(b, d));
+		collisions.add(new TestCollision(b, e));
+
+		collisions.add(new TestCollision(c, e));
+		collisions.add(new TestCollision(c, f));
+
+		collisions.add(new TestCollision(d, g));
+		collisions.add(new TestCollision(d, h));
+
+		collisions.add(new TestCollision(e, i));
+
+		collisions.add(new TestCollision(g, j));
+		collisions.add(new TestCollision(h, j));
+
+		execute(collisions, a);
 	}
 
 	private void execute(Array<TestCollision> collisions, Object startObject)
@@ -65,20 +93,25 @@ public class BestCollectionForWeightResolving
 
 		long start, end;
 
+		for(int i = 0; i < 100; i++) //warmup
+		{
+			array.clear();
+			recursiveExample(collisions, array, startObject);
+		}
+
+		start = System.nanoTime();
+
 		for(int i = 0; i < 100; i++)
 		{
 			array.clear();
 			recursiveExample(collisions, array, startObject);
 		}
 
-		array.clear();
-		start = System.nanoTime();
-		recursiveExample(collisions, array, startObject);
 		end = System.nanoTime();
 
-		System.out.println("Array: " + (end - start) + "ns");
+		System.out.println("Array: " + (end - start) / 1000.0f + "μs");
 
-		for(int i = 0; i < 100; i++)
+		for(int i = 0; i < 100; i++) //warmup
 		{
 			set.clear();
 			recursiveExample(collisions, set, startObject);
@@ -86,11 +119,17 @@ public class BestCollectionForWeightResolving
 
 		set.clear();
 		start = System.nanoTime();
-		recursiveExample(collisions, set, startObject);
+
+		for(int i = 0; i < 100; i++)
+		{
+			array.clear();
+			recursiveExample(collisions, set, startObject);
+		}
+
 		end = System.nanoTime();
 
 
-		System.out.println("Object set: " + (end - start) + "ns");
+		System.out.println("Object set: " + (end - start) / 1000.0f + "μs");
 	}
 
 	private int recursiveExample(Array<TestCollision> collisions, TestCollection collection, Object object)
