@@ -1,5 +1,5 @@
 # Boing
-A simple 2D physics engine currently in development made with Java and LibGDX.
+A simple 2D physics engine currently in development made with Java and LibGDX. You can follow its development on [Trello](https://trello.com/b/hOBzA1J5/boing).
 
 ### Features
 
