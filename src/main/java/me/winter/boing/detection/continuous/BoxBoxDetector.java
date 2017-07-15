@@ -171,15 +171,15 @@ public class BoxBoxDetector extends PooledDetector<Box, Box>
 		float surface;
 
 		//if they are just touching after movement
-		if(justTouching)
+		/*if(justTouching)  //doesn't seem to work or to make sense, don't remember the intention too
 		{
-			//get surface contact when limits are at their previous position
+			//get surface contact when limits were at their previous position
 			surface = getContactSurface(prevAx, prevAy, hsizeA, prevBx, prevBy, hsizeB, normalX, normalY);
 
 			//if nothing (TODO why does this make sense?)
 			if(isSmallerOrEqual(surface, 0, epsilon))
 				return null;
-		}
+		}*/
 
 		DynamicFloat surfaceFormula = () -> {
 
@@ -210,7 +210,7 @@ public class BoxBoxDetector extends PooledDetector<Box, Box>
 		//if 0, it might be a corner corner case
 		if(areEqual(surface, 0, epsilon))
 		{
-			surfaceFormula = () -> {
+			/*surfaceFormula = () -> {
 
 				float newAx = boxA.getAbsX() + normalX * boxA.width / 2;
 				float newAy = boxA.getAbsY() + normalY * boxA.height / 2;
@@ -233,7 +233,7 @@ public class BoxBoxDetector extends PooledDetector<Box, Box>
 
 			surface = surfaceFormula.getValue();
 
-			if(isSmallerOrEqual(surface, 0, epsilon))
+			if(isSmallerOrEqual(surface, 0, epsilon))*/
 				return null;
 		}
 		else if(surface < 0)

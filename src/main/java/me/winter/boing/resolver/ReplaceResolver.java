@@ -4,8 +4,10 @@ import com.badlogic.gdx.utils.ObjectSet;
 import me.winter.boing.Collision;
 import me.winter.boing.DynamicBody;
 import me.winter.boing.World;
+import me.winter.boing.util.FloatUtil;
 
 import static java.lang.Float.POSITIVE_INFINITY;
+import static me.winter.boing.util.FloatUtil.isSmallerOrEqual;
 
 /**
  * CollisionResolver resolving collisions by replacing the position of the objects colliding
@@ -29,7 +31,7 @@ public class ReplaceResolver implements CollisionResolver
 		|| "DABOX".equals(collision.colliderB.getTag()))
 			System.out.println((collision.normal.x != 0 ? "h" : "v") + collision.hashCode() + ": " + surface);
 
-		if(pene <= 0 || surface <= 0) //corner glitch causes trouble here
+		if(pene <= 0 || isSmallerOrEqual(surface, 0)) //corner glitch causes trouble here
 			return false;
 
 		float ratio = resolveWeights(collision, world);
