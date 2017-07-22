@@ -1,5 +1,6 @@
 package me.winter.boing.detection.continuous;
 
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Pool;
 import me.winter.boing.Collision;
 import me.winter.boing.World;
@@ -7,14 +8,12 @@ import me.winter.boing.colliders.Limit;
 import me.winter.boing.detection.PooledDetector;
 import me.winter.boing.util.DynamicFloat;
 
-import static java.lang.Math.abs;
-import static java.lang.Math.min;
+import static com.badlogic.gdx.math.Vector2.dot;
 import static me.winter.boing.util.FloatUtil.DEFAULT_ULPS;
 import static me.winter.boing.util.FloatUtil.areEqual;
 import static me.winter.boing.util.FloatUtil.getGreatestULP;
 import static me.winter.boing.util.FloatUtil.isGreaterOrEqual;
 import static me.winter.boing.util.FloatUtil.isSmallerOrEqual;
-import static me.winter.boing.util.FloatUtil.max;
 
 /**
  * Detects collisions between 2 Limits. This is the only
@@ -35,99 +34,115 @@ public class LimitLimitDetector extends PooledDetector<Limit, Limit>
 		if(!areEqual(limitA.normal.dot(limitB.normal), -1))
 			return null;
 
-		final float ax = limitA.getAbsX();
-		final float ay = limitA.getAbsY();
-		final float bx = limitB.getAbsX();
-		final float by = limitB.getAbsY();
+		final float normalX = limitA.normal.x; //normal X
+		final float normalY = limitA.normal.y; //normal Y
 
-		final float nx = limitA.normal.x; //normal X
-		final float ny = limitA.normal.y; //normal Y
+		//position of the limit
+		final float posAx = limitA.getAbsX();
+		final float posAy = limitA.getAbsY();
 
-		final float vax, vay, vbx, vby;
+		//same for b
+		final float posBx = limitB.getAbsX();
+		final float posBy = limitB.getAbsY();
 
-		if(limitA.normal.dot(limitA.getCollisionShifting(world)) > 0)
+		//movement of the bodies seen from each other
+		final float vecAx, vecAy, vecBx, vecBy;
+
+		Vector2 shiftA = limitA.getCollisionShifting(world);
+		Vector2 shiftB = limitB.getCollisionShifting(world);
+
+		Vector2 movA = limitA.getMovement(world);
+		Vector2 movB = limitB.getMovement(world);
+
+		//if collision shifting of A is going along it's normal
+		if(dot(normalX, normalY, shiftA.x, shiftA.y) > 0)
 		{
-			vax = limitA.getMovement(world).x + limitA.getCollisionShifting(world).x;
-			vay = limitA.getMovement(world).y + limitA.getCollisionShifting(world).y;
+			//then expect it to be pushed to there this frame to
+			//(we assume its getting pushed by something)
+			vecAx = movA.x + shiftA.x;
+			vecAy = movA.y + shiftA.y;
 		}
 		else
 		{
-			vax = limitA.getMovement(world).x;
-			vay = limitA.getMovement(world).y;
+			//else, collision shifting is going in the other direction
+			//ignoring it is safer since we don't know for sure if
+			//it will get pushed this frame too or if the pusher is B
+			//(in the case were the pusher is B, this collision must happen
+			//for the pushing not to drop)
+			vecAx = movA.x;
+			vecAy = movA.y;
 		}
 
-		if(limitB.normal.dot(limitB.getCollisionShifting(world)) > 0)
+		//same for B, B's normal is the opposite of A
+		if(dot(-normalX, -normalY, shiftB.x, shiftB.y) > 0)
 		{
-			vbx = limitB.getMovement(world).x + limitB.getCollisionShifting(world).x;
-			vby = limitB.getMovement(world).y + limitB.getCollisionShifting(world).y;
+			vecBx = movB.x + shiftB.x;
+			vecBy = movB.y + shiftB.y;
 		}
 		else
 		{
-			vbx = limitB.getMovement(world).x;
-			vby = limitB.getMovement(world).y;
+			vecBx = movB.x;
+			vecBy = movB.y;
 		}
 
-		float epsilon = DEFAULT_ULPS * getGreatestULP(ax, ay, bx, by, vax, vay, vbx, vby, limitA.size, limitB.size);
+		float epsilon = DEFAULT_ULPS * getGreatestULP(posAx, posAy, posBx, posBy, vecAx, vecAy, vecBx, vecBy, limitA.size, limitB.size);
 
-		if(!isGreaterOrEqual(ax * nx + ay * ny, bx * nx + by * ny, epsilon)) //if limitB with his velocity isn't after limitA with his velocity
+		//if limitB with his movement isn't after limitA with his movement
+		//(aka the limits are still facing each other after having moved)
+		if(!isGreaterOrEqual(posAx * normalX + posAy * normalY, posBx * normalX + posBy * normalY, epsilon))
 			return null; //no collision
 
+		//'previous' position is assumed to be the current position minus
+		//the fake movement we just assumed. This fake previous position is
+		//used to make sure no collision drops by collision shitfing
+		final float prevAx = posAx - vecAx;
+		final float prevAy = posAy - vecAy;
+		final float prevBx = posBx - vecBx;
+		final float prevBy = posBy - vecBy;
 
-		final float pax = ax - vax; //previous x for A
-		final float pay = ay - vay; //previous y for A
-		final float pbx = bx - vbx; //previous x for B
-		final float pby = by - vby; //previous y for B
-
-		if(!isSmallerOrEqual(pax * nx + pay * ny, pbx * nx + pby * ny, epsilon)) //if limitB isn't before limitA
+		//if limitB isn't before limitA
+		//(aka the limits at previous positions are not even facing each other)
+		if(!isSmallerOrEqual(prevAx * normalX + prevAy * normalY, prevBx * normalX + prevBy * normalY, epsilon)) //if limitB isn't before limitA
 			return null; //no collision
 
-		final float hsA = limitA.size / 2; //half size for A
-		final float hsB = limitB.size / 2; //half size for
+		final float hsizeA = limitA.size / 2; //half size for A
+		final float hsizeB = limitB.size / 2; //half size for B
 
-		final float diff = (pbx - pax) * nx + (pby - pay) * ny;
-		final float vecDiff = (vbx - vax) * nx + (vby - vay) * ny;
+		//contact surface, used to detect if limits are on the same plane and
+		//to fullfill the collision report
+		float surface;
 
 		DynamicFloat surfaceFormula = () -> {
 
+			//re-get the position from the original calculation
+			//since we are in a DynamicFloat, posAx, posAy etc. might
+			//be outdated (cached values)
+			float newAx = limitA.getAbsX();
+			float newAy = limitA.getAbsY();
+			float newBx = limitB.getAbsX();
+			float newBy = limitB.getAbsY();
+
+			float diff = ((newBx - vecBx) - (newAx - vecAx)) * normalX + ((newBy - vecBy) - (newAy - vecAy)) * normalY;
+			float vecDiff = (vecBx - vecAx) * normalX + (vecBy - vecAy) * normalY;
+
 			float midpoint = vecDiff != 0 ? (diff + vecDiff) / vecDiff : 0f;
 
-			float mxA = limitA.getAbsX() - vax * midpoint; //midpoint x for A
-			float myA = limitA.getAbsY() - vay * midpoint; //midpoint y for A
-			float mxB = limitB.getAbsX() - vbx * midpoint; //midpoint x for B
-			float myB = limitB.getAbsY() - vby * midpoint; //midpoint y for B
+			float midAx = newAx - vecAx * midpoint; //midpoint x for A
+			float midAy = newAy - vecAy * midpoint; //midpoint y for A
+			float midBx = newBx - vecBx * midpoint; //midpoint x for B
+			float midBy = newBy - vecBy * midpoint; //midpoint y for B
 
-			float limitA1 = -ny * (mxA + hsA) + nx * (myA + hsA);
-			float limitA2 = -ny * (mxA - hsA) + nx * (myA - hsA);
-			float limitB1 = -ny * (mxB + hsB) + nx * (myB + hsB);
-			float limitB2 = -ny * (mxB - hsB) + nx * (myB - hsB);
-
-			return min(max(limitA1, limitA2), max(limitB1, limitB2)) //minimum of the maximums
-					- max(min(limitA1, limitA2), min(limitB1, limitB2)); //maximum of the minimums
+			return BoxBoxDetector.getContactSurface(midAx, midAy, hsizeA, midBx, midBy, hsizeB, normalX, normalY);
 		};
 
-		float surface = surfaceFormula.getValue();
+		//calculates surface from formula
+		surface = surfaceFormula.getValue();
 
+		//if 0, it might be a corner corner case
 		if(areEqual(surface, 0, epsilon))
 		{
-			float sizeDiff = (hsB + hsA) * abs(nx) + (hsB + hsA) * abs(ny);
-
-			float midpoint = vecDiff != 0 ? (diff + vecDiff + sizeDiff) / vecDiff : 0f;
-
-			float mxA = ax - vax * midpoint; //midpoint x for A
-			float myA = ay - vay * midpoint; //midpoint y for A
-			float mxB = bx - vbx * midpoint; //midpoint x for B
-			float myB = by - vby * midpoint; //midpoint y for B
-
-			float limitA1 = -ny * (mxA + hsA) + nx * (myA + hsA);
-			float limitA2 = -ny * (mxA - hsA) + nx * (myA - hsA);
-			float limitB1 = -ny * (mxB + hsB) + nx * (myB + hsB);
-			float limitB2 = -ny * (mxB - hsB) + nx * (myB - hsB);
-
-			surface = min(max(limitA1, limitA2), max(limitB1, limitB2)) //minimum of the maximums
-					- max(min(limitA1, limitA2), min(limitB1, limitB2)); //maximum of the minimums
-
-			if(isSmallerOrEqual(surface, 0, epsilon))
-				return null;
+			//not handled for now
+			return null;
 		}
 		else if(surface < 0)
 			return null;
@@ -139,13 +154,11 @@ public class LimitLimitDetector extends PooledDetector<Limit, Limit>
 
 		collision.normal.set(limitA.normal);
 		collision.setImpactVelocities(limitA.getBody(), limitB.getBody());
-		collision.penetration = () -> {
-			return -((limitB.getAbsX() - limitA.getAbsX()) * nx + (limitB.getAbsY() - limitA.getAbsY()) * ny); //TODO
-		};
+		collision.penetration = () -> -((limitB.getAbsX() - limitA.getAbsX()) * normalX + (limitB.getAbsY() - limitA.getAbsY()) * normalY);
 
 
 		//boing v1 priority algorithm
-		collision.priority = ((bx - ax) * nx + (by - ay) * ny) / ((vbx - vax) * nx + (vby - vay) * ny);
+		collision.priority = ((posBx - posAx) * normalX + (posBy - posAy) * normalY) / ((vecBx - vecAx) * normalX + (vecBy - vecAy) * normalY);
 
 		collision.contactSurface = surfaceFormula;
 

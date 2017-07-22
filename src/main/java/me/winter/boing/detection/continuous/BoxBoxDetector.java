@@ -112,7 +112,8 @@ public class BoxBoxDetector extends PooledDetector<Box, Box>
 
 		//true if limits are touching after their movement
 		//(penetration about 0, just touching nothing else)
-		final boolean justTouching = areEqual(posAx * normalX + posAy * normalY, posBx * normalX + posBy * normalY, epsilon);
+		//TODO whats the point ?
+		//final boolean justTouching = areEqual(posAx * normalX + posAy * normalY, posBx * normalX + posBy * normalY, epsilon);
 
 		//movement of the bodies seen from each other
 		final float vecAx, vecAy, vecBx, vecBy;
@@ -279,7 +280,7 @@ public class BoxBoxDetector extends PooledDetector<Box, Box>
 	 *
 	 * @return how much of their surface match in relation to the normal
 	 */
-	public float getContactSurface(float ax, float ay, float hsA,
+	public static float getContactSurface(float ax, float ay, float hsA,
 	                                 float bx, float by, float hsB,
 	                                 float nx, float ny)
 	{
