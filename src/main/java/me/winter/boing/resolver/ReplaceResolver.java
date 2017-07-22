@@ -27,9 +27,9 @@ public class ReplaceResolver implements CollisionResolver
 		float pene = collision.penetration.getValue();
 		float surface = collision.contactSurface.getValue();
 
-		if("DABOX".equals(collision.colliderA.getTag())
-		|| "DABOX".equals(collision.colliderB.getTag()))
-			System.out.println((collision.normal.x != 0 ? "h" : "v") + collision.hashCode() + ": " + surface);
+		//if("DABOX".equals(collision.colliderA.getTag())
+		//|| "DABOX".equals(collision.colliderB.getTag()))
+		//	System.out.println((collision.normal.x != 0 ? "h" : "v") + collision.hashCode() + ": " + surface);
 
 		if(pene <= 0 || isSmallerOrEqual(surface, 0)) //corner glitch causes trouble here
 			return false;

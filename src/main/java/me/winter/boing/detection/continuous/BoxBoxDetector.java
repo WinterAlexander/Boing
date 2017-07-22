@@ -7,7 +7,6 @@ import me.winter.boing.World;
 import me.winter.boing.colliders.Box;
 import me.winter.boing.detection.PooledDetector;
 import me.winter.boing.util.DynamicFloat;
-import me.winter.boing.util.FloatUtil;
 
 import static com.badlogic.gdx.math.Vector2.dot;
 import static java.lang.Math.abs;
@@ -256,9 +255,9 @@ public class BoxBoxDetector extends PooledDetector<Box, Box>
 		collision.setImpactVelocities(boxA.getBody(), boxB.getBody());
 
 		//DEBUG
-		if("DABOX".equals(boxA.getTag())
-		|| "DABOX".equals(boxB.getTag()))
-			System.out.println((collision.normal.x != 0 ? "h" : "v") + collision.hashCode() + ": " + collision.contactSurface.getValue() + " p" + collision.priority);
+		//if("DABOX".equals(boxA.getTag())
+		//|| "DABOX".equals(boxB.getTag()))
+		//	System.out.println((collision.normal.x != 0 ? "h" : "v") + collision.hashCode() + ": " + collision.contactSurface.getValue() + " p" + collision.priority);
 
 
 		return collision;

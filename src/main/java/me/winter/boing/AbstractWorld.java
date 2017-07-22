@@ -37,21 +37,21 @@ public abstract class AbstractWorld implements World
 		this.resolver = resolver;
 	}
 
-	protected boolean DEBUG_DABOX = false;
+	//protected boolean DEBUG_DABOX = false;
 
 	@Override
 	public void step(float delta)
 	{
-		if(DEBUG_DABOX)
-			System.out.println();
+		//if(DEBUG_DABOX)
+		//	System.out.println();
 		update(delta);
 
 		detectCollisions();
 
 		collisions.sort((c1, c2) -> -Float.compare(c1.priority, c2.priority));
 
-		if(DEBUG_DABOX)
-			System.out.println("Resolve:");
+		//if(DEBUG_DABOX)
+		//	System.out.println("Resolve:");
 		resolveCollisions();
 	}
 
