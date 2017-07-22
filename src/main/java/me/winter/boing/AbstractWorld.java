@@ -4,7 +4,9 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Pool;
 import me.winter.boing.colliders.Collider;
 import me.winter.boing.detection.DetectionHandler;
+import me.winter.boing.resolver.CappedWeightResolver;
 import me.winter.boing.resolver.CollisionResolver;
+import me.winter.boing.resolver.WeightResolver;
 import me.winter.boing.util.CollisionPool;
 
 /**
@@ -28,13 +30,20 @@ public abstract class AbstractWorld implements World
 
 	protected DetectionHandler detector;
 	protected CollisionResolver resolver;
+	protected WeightResolver weightResolver;
 
 	private boolean refresh;
 
 	public AbstractWorld(CollisionResolver resolver)
 	{
+		this(resolver, new CappedWeightResolver());
+	}
+
+	public AbstractWorld(CollisionResolver resolver, WeightResolver weightResolver)
+	{
 		this.detector = new DetectionHandler(collisionPool);
 		this.resolver = resolver;
+		this.weightResolver = weightResolver;
 	}
 
 	//protected boolean DEBUG_DABOX = false;
@@ -123,7 +132,9 @@ public abstract class AbstractWorld implements World
 				}
 				else
 				{
+					collision.weightRatio = 0f;
 					colliderA.getBody().notifyCollision(collision);
+					swappedBuffer.weightRatio = 0f;
 					bodyB.notifyCollision(swappedBuffer);
 
 					collisionPool.free(collision);
@@ -138,7 +149,9 @@ public abstract class AbstractWorld implements World
 
 		for(Collision collision : collisions)
 		{
-			if(resolver.resolve(collision, this))
+			weightResolver.resolveWeight(collision, this);
+
+			if(resolver.resolveCollision(collision, this))
 			{
 				swapped.setAsSwapped(collision);
 				collision.colliderA.getBody().notifyCollision(collision);

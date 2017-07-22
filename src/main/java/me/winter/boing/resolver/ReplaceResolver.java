@@ -1,12 +1,9 @@
 package me.winter.boing.resolver;
 
-import com.badlogic.gdx.utils.ObjectSet;
 import me.winter.boing.Collision;
 import me.winter.boing.DynamicBody;
 import me.winter.boing.World;
-import me.winter.boing.util.FloatUtil;
 
-import static java.lang.Float.POSITIVE_INFINITY;
 import static me.winter.boing.util.FloatUtil.isSmallerOrEqual;
 
 /**
@@ -16,10 +13,9 @@ import static me.winter.boing.util.FloatUtil.isSmallerOrEqual;
  */
 public class ReplaceResolver implements CollisionResolver
 {
-	private final ObjectSet<DynamicBody> alreadyChecked = new ObjectSet<>();
 
 	@Override
-	public boolean resolve(Collision collision, World world)
+	public boolean resolveCollision(Collision collision, World world)
 	{
 		//if(Float.isNaN(collision.priority))
 		//	return true;
@@ -34,7 +30,7 @@ public class ReplaceResolver implements CollisionResolver
 		if(pene <= 0 || isSmallerOrEqual(surface, 0)) //corner glitch causes trouble here
 			return false;
 
-		float ratio = resolveWeights(collision, world);
+		float ratio = collision.weightRatio;
 
 		if(ratio != 1)
 		{
@@ -51,49 +47,5 @@ public class ReplaceResolver implements CollisionResolver
 		}
 
 		return true;
-	}
-
-	private float resolveWeights(Collision collision, World world)
-	{
-		if(!(collision.colliderA.getBody() instanceof DynamicBody))
-			return 1f;
-
-		if(!(collision.colliderB.getBody() instanceof DynamicBody))
-			return 0f;
-
-		alreadyChecked.clear();
-		float weightA = getWeight(world, (DynamicBody)collision.colliderA.getBody(), -collision.normal.x, -collision.normal.y);
-
-		alreadyChecked.clear();
-		float weightB = getWeight(world, (DynamicBody)collision.colliderB.getBody(), collision.normal.x, collision.normal.y);
-
-		return weightA > weightB ? 1 : 0;
-
-	}
-
-	private float getWeight(World world, DynamicBody dynamic, float nx, float ny)
-	{
-		float weight = dynamic.getWeight();
-		alreadyChecked.add(dynamic);
-
-		for(Collision collision : world.getState(dynamic).getCollisions())
-		{
-			if(collision.normal.dot(nx, ny) == 1f)
-			{
-				if(!(collision.colliderB.getBody() instanceof DynamicBody))
-					return POSITIVE_INFINITY;
-
-				if(alreadyChecked.contains((DynamicBody)collision.colliderB.getBody()))
-					continue;
-
-				float w = getWeight(world, (DynamicBody)collision.colliderB.getBody(), nx, ny);
-
-				if(w == POSITIVE_INFINITY)
-					return w;
-				weight += w;
-			}
-		}
-
-		return weight;
 	}
 }

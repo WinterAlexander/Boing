@@ -38,6 +38,11 @@ public class Collision
 	public DynamicFloat contactSurface;
 
 	/**
+	 * Weight of body A over body B
+	 */
+	public float weightRatio;
+
+	/**
 	 * Priority of the collision, collisions should be sorted using this field before resolving
 	 *
 	 * The smaller this value is, the first it should be resolved
@@ -62,6 +67,7 @@ public class Collision
 		impactVelA.set(collision.impactVelA);
 		impactVelB.set(collision.impactVelB);
 		penetration = collision.penetration;
+		weightRatio = collision.weightRatio;
 		contactSurface = collision.contactSurface;
 		priority = collision.priority;
 		colliderA = collision.colliderA;
@@ -79,6 +85,7 @@ public class Collision
 		impactVelA.set(collision.impactVelB);
 		impactVelB.set(collision.impactVelA);
 		penetration = collision.penetration;
+		weightRatio = 1f - collision.weightRatio;
 		contactSurface = collision.contactSurface;
 		priority = collision.priority;
 		colliderA = collision.colliderB;

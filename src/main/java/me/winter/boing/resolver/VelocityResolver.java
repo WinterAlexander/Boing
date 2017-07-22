@@ -16,7 +16,7 @@ import static java.lang.Math.signum;
 public class VelocityResolver implements CollisionResolver
 {
 	@Override
-	public boolean resolve(Collision collision, World world)
+	public boolean resolveCollision(Collision collision, World world)
 	{
 		if(collision.colliderA.getBody() instanceof DynamicBody)
 			reflect((DynamicBody)collision.colliderA.getBody(), collision.normal);

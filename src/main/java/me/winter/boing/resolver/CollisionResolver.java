@@ -18,5 +18,5 @@ public interface CollisionResolver
 	 * @param world world in which this collision occurred
 	 * @return true if the collision was resolved, otherwise false
 	 */
-	boolean resolve(Collision collision, World world);
+	boolean resolveCollision(Collision collision, World world);
 }
