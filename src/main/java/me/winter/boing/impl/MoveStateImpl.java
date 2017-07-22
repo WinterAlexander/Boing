@@ -7,7 +7,6 @@ import me.winter.boing.MoveState;
 import me.winter.boing.Collision;
 import me.winter.boing.UpdatableBody;
 import me.winter.boing.World;
-import me.winter.boing.detection.anticipation.PreAABB;
 
 import static java.lang.Math.signum;
 import static me.winter.boing.util.VectorUtil.DOWN;
@@ -48,7 +47,9 @@ public class MoveStateImpl implements MoveState
 			((UpdatableBody)body).update(delta);
 
 		getMovement().set(body.getVelocity()).scl(delta);
-		getMovement().add(getInfluence(body, delta));
+		getMovement().add(
+				getInfluence(body, delta)//;
+		);
 
 		body.getPosition().add(getMovement());
 	}
@@ -66,7 +67,7 @@ public class MoveStateImpl implements MoveState
 
 		for(Collision collision : world.getState(dynamic).getCollisions())
 		{
-			if(collision.colliderB.getBody() instanceof DynamicBody && collision.normal.dot(DOWN) == 1)
+			if(collision.colliderB.getBody() instanceof DynamicBody && collision.normal.dot(DOWN) == 1 && collision.contactSurface.getValue() > 0)
 			{
 				DynamicBody other = ((DynamicBody)collision.colliderB.getBody());
 

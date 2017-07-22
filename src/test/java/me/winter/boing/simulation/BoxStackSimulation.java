@@ -106,7 +106,6 @@ public class BoxStackSimulation
 		wall.addCollider(new Limit(wall, 0, 0, LEFT, 100));
 		world.add(wall);
 
-
 		BodyImpl ground = new BodyImpl();
 
 		ground.getPosition().set(400, 100);

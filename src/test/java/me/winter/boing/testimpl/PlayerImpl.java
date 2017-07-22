@@ -60,7 +60,7 @@ public class PlayerImpl extends DynamicBodyImpl implements UpdatableBody
 	@Override
 	public float getWeight()
 	{
-		return 100f;
+		return 10_000f;
 	}
 
 	public static class IsKeyPressed

@@ -10,5 +10,13 @@ import me.winter.boing.World;
  */
 public interface CollisionResolver
 {
-	void resolve(Collision collision, World world);
+	/**
+	 * Resolves the collision. The way it is resolved is based on the implentation.
+	 * (See ReplaceResolver, VelocityResolver)
+	 *
+	 * @param collision collision to resolve
+	 * @param world world in which this collision occurred
+	 * @return true if the collision was resolved, otherwise false
+	 */
+	boolean resolve(Collision collision, World world);
 }

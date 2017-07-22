@@ -1,22 +1,24 @@
 package me.winter.boing.detection.continuous;
 
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Pool;
 import me.winter.boing.Collision;
 import me.winter.boing.World;
-import me.winter.boing.detection.PooledDetector;
 import me.winter.boing.colliders.Box;
 import me.winter.boing.colliders.Limit;
+import me.winter.boing.detection.PooledDetector;
+import me.winter.boing.util.DynamicFloat;
 
 import static com.badlogic.gdx.math.Vector2.dot;
 import static java.lang.Math.abs;
-import static java.lang.Math.max;
 import static java.lang.Math.min;
-import static java.lang.Math.signum;
+import static me.winter.boing.detection.continuous.BoxBoxDetector.getContactSurface;
 import static me.winter.boing.util.FloatUtil.DEFAULT_ULPS;
 import static me.winter.boing.util.FloatUtil.areEqual;
 import static me.winter.boing.util.FloatUtil.getGreatestULP;
 import static me.winter.boing.util.FloatUtil.isGreaterOrEqual;
 import static me.winter.boing.util.FloatUtil.isSmallerOrEqual;
+import static me.winter.boing.util.FloatUtil.max;
 
 /**
  * Detects collisions between an Axis Aligned Bounding Box and a Limit
@@ -33,88 +35,111 @@ public class BoxLimitDetector extends PooledDetector<Box, Limit>
 	@Override
 	public Collision collides(World world, Box boxA, Limit limitB)
 	{
-		float nx = -limitB.normal.x; //normal X
-		float ny = -limitB.normal.y; //normal Y
+		final float normalX = -limitB.normal.x; //normal X
+		final float normalY = -limitB.normal.y; //normal Y
 
-		float ax = boxA.getAbsX() + nx * boxA.width / 2; //extends to side
-		float ay = boxA.getAbsY() + ny * boxA.height / 2; //extends to side
-		float bx = limitB.getAbsX();
-		float by = limitB.getAbsY();
+		//position of the limit (position of box + extend of the box)
+		final float posAx = boxA.getAbsX() + normalX * boxA.width / 2; //extends to side
+		final float posAy = boxA.getAbsY() + normalY * boxA.height / 2; //extends to side
 
-		float vax = boxA.getMovement(world).x;
-		float vay = boxA.getMovement(world).y;
-		float vbx = limitB.getMovement(world).x;
-		float vby = limitB.getMovement(world).y;
+		//b is simply a limit
+		final float posBx = limitB.getAbsX();
+		final float posBy = limitB.getAbsY();
 
-		float epsilon = DEFAULT_ULPS * getGreatestULP(ax, ay, bx, by, vax, vay, vbx, vby, boxA.width, boxA.height, limitB.size);
+		//movement of the bodies seen from each other
+		final float vecAx, vecAy, vecBx, vecBy;
 
-		if(!isGreaterOrEqual(ax * nx + ay * ny, bx * nx + by * ny, epsilon)) //if limitB with his velocity isn't after boxA with his velocity
-			return null; //no collision
+		Vector2 shiftA = boxA.getCollisionShifting(world);
+		Vector2 shiftB = limitB.getCollisionShifting(world);
 
-		if(dot(nx, ny, boxA.getCollisionShifting(world).x, boxA.getCollisionShifting(world).y) > 0)
+		Vector2 movA = boxA.getMovement(world);
+		Vector2 movB = limitB.getMovement(world);
+
+		//if collision shifting of A is going along it's normal
+		if(dot(normalX, normalY, shiftA.x, shiftA.y) > 0)
 		{
-			vax += boxA.getCollisionShifting(world).x;
-			vay += boxA.getCollisionShifting(world).y;
+			//then expect it to be pushed to there this frame to
+			//(we assume its getting pushed by something)
+			vecAx = movA.x + shiftA.x;
+			vecAy = movA.y + shiftA.y;
+		}
+		else
+		{
+			//else, collision shifting is going in the other direction
+			//ignoring it is safer since we don't know for sure if
+			//it will get pushed this frame too or if the pusher is B
+			//(in the case were the pusher is B, this collision must happen
+			//for the pushing not to drop)
+			vecAx = movA.x;
+			vecAy = movA.y;
 		}
 
-		if(limitB.normal.dot(limitB.getCollisionShifting(world)) > 0)
+		//same for B, B's normal is the opposite of A
+		if(dot(-normalX, -normalY, shiftB.x, shiftB.y) > 0)
 		{
-			vbx += limitB.getCollisionShifting(world).x;
-			vby += limitB.getCollisionShifting(world).y;
+			vecBx = movB.x + shiftB.x;
+			vecBy = movB.y + shiftB.y;
+		}
+		else
+		{
+			vecBx = movB.x;
+			vecBy = movB.y;
 		}
 
-		float pax = ax - vax;
-		float pay = ay - vay;
-		float pbx = bx - vbx;
-		float pby = by - vby;
+		float epsilon = DEFAULT_ULPS * getGreatestULP(posAx, posAy, posBx, posBy, vecAx, vecAy, vecBx, vecBy, boxA.width, boxA.height, limitB.size);
 
-		if(!isSmallerOrEqual(pax * nx + pay * ny, pbx * nx + pby * ny, epsilon)) //if limitB isn't before boxA
+		if(!isGreaterOrEqual(posAx * normalX + posAy * normalY, posBx * normalX + posBy * normalY, epsilon)) //if limitB with his velocity isn't after boxA with his velocity
 			return null; //no collision
 
-		float diff = (pbx - pax) * nx + (pby - pay) * ny;
-		float vecDiff = (vbx - vax) * nx + (vby - vay) * ny;
+		//'previous' position is assumed to be the current position minus
+		//the fake movement we just assumed. This fake previous position is
+		//used to make sure no collision drops by collision shitfing
+		final float prevAx = posAx - vecAx;
+		final float prevAy = posAy - vecAy;
+		final float prevBx = posBx - vecBx;
+		final float prevBy = posBy - vecBy;
 
-		float midpoint = vecDiff != 0 ? (diff + vecDiff) / vecDiff : 0f;
+		if(!isSmallerOrEqual(prevAx * normalX + prevAy * normalY, prevBx * normalX + prevBy * normalY, epsilon)) //if limitB isn't before boxA
+			return null; //no collision
 
-		float mxA = ax - vax * midpoint; //midpoint x for A
-		float myA = ay - vay * midpoint; //midpoint y for A
-		float mxB = bx - vbx * midpoint; //midpoint x for B
-		float myB = by - vby * midpoint; //midpoint y for B
+		//half the size for A and B, used in further calculations
+		final float hsizeA = abs(normalX * boxA.height / 2 + normalY * boxA.width / 2); //half size for A
+		final float hsizeB = limitB.size / 2; //half size for B
 
-		float hsA = nx * boxA.height / 2 + ny * boxA.width / 2; //half size of A (as a Limit)
-		float hsB = limitB.size / 2; //half size for B
+		//contact surface, used to detect if limits are on the same plane and
+		//to fullfill the collision report
+		float surface;
 
-		float limitA1 = -ny * (mxA + hsA) + nx * (myA + hsA);
-		float limitA2 = -ny * (mxA - hsA) + nx * (myA - hsA);
-		float limitB1 = -ny * (mxB + hsB) + nx * (myB + hsB);
-		float limitB2 = -ny * (mxB - hsB) + nx * (myB - hsB);
+		DynamicFloat surfaceFormula = () -> {
+			//re-get the position from the original calculation
+			//since we are in a DynamicFloat, posAx, posAy etc. might
+			//be outdated (cached values)
+			float newAx = boxA.getAbsX() + normalX * boxA.width / 2;
+			float newAy = boxA.getAbsY() + normalY * boxA.height / 2;
+			float newBx = limitB.getAbsX();
+			float newBy = limitB.getAbsY();
 
-		float surface = min(max(limitA1, limitA2), max(limitB1, limitB2)) //minimum of the maximums
-				- max(min(limitA1, limitA2), min(limitB1, limitB2)); //maximum of the minimums
+			float diff = ((newBx - vecBx) - (newAx - vecAx)) * normalX + ((newBy - vecBy) - (newAy - vecAy)) * normalY;
+			float vecDiff = (vecBx - vecAx) * normalX + (vecBy - vecAy) * normalY;
 
+			float midpoint = vecDiff != 0 ? (diff + vecDiff) / vecDiff : 0f;
+
+			float midAx = newAx - vecAx * midpoint; //midpoint x for A
+			float midAy = newAy - vecAy * midpoint; //midpoint y for A
+			float midBx = newBx - vecBx * midpoint; //midpoint x for B
+			float midBy = newBy - vecBy * midpoint; //midpoint y for B
+
+			return getContactSurface(midAx, midAy, hsizeA, midBx, midBy, hsizeB, normalX, normalY);
+		};
+
+		//calculates surface from formula
+		surface = surfaceFormula.getValue();
+
+		//if 0, it might be a corner corner case
 		if(areEqual(surface, 0, epsilon))
 		{
-			float sizeDiff = (hsB + hsA) * nx + (hsB + hsA) * ny;
-
-			midpoint = vecDiff != 0 ? (diff + vecDiff + sizeDiff) / vecDiff : 0f;
-
-			mxA = ax - vax * midpoint; //midpoint x for A
-			myA = ay - vay * midpoint; //midpoint y for A
-			mxB = bx - vbx * midpoint; //midpoint x for B
-			myB = by - vby * midpoint; //midpoint y for B
-
-			limitA1 = -ny * (mxA + hsA) + nx * (myA + hsA);
-			limitA2 = -ny * (mxA - hsA) + nx * (myA - hsA);
-			limitB1 = -ny * (mxB + hsB) + nx * (myB + hsB);
-			limitB2 = -ny * (mxB - hsB) + nx * (myB - hsB);
-
-			surface = min(max(limitA1, limitA2), max(limitB1, limitB2)) //minimum of the maximums
-					- max(min(limitA1, limitA2), min(limitB1, limitB2)); //maximum of the minimums
-
-			if(isSmallerOrEqual(surface, 0, epsilon))
-				return null;
-
-			surface = 0f;
+			//not handled for now
+			return null;
 		}
 		else if(surface < 0)
 			return null;
@@ -124,11 +149,14 @@ public class BoxLimitDetector extends PooledDetector<Box, Limit>
 		collision.colliderA = boxA;
 		collision.colliderB = limitB;
 
-		collision.normal.set(nx, ny);
+		collision.normal.set(normalX, normalY);
 		collision.setImpactVelocities(boxA.getBody(), limitB.getBody());
-		collision.penetration = -((bx - ax) * nx + (by - ay) * ny);
+		collision.penetration = () -> -((limitB.getAbsX() - (boxA.getAbsX() + normalX * boxA.width / 2)) * normalX + (limitB.getAbsY() - (boxA.getAbsY() + normalY * boxA.height / 2)) * normalY);
 
-		collision.contactSurface = surface;
+		collision.contactSurface = surfaceFormula;
+
+		//boing v1 priority algorithm
+		collision.priority = ((posBx - posAx) * normalX + (posBy - posAy) * normalY) / ((vecBx - vecAx) * normalX + (vecBy - vecAy) * normalY);
 
 		return collision;
 	}

@@ -2,6 +2,7 @@ package me.winter.boing;
 
 import com.badlogic.gdx.math.Vector2;
 import me.winter.boing.colliders.Collider;
+import me.winter.boing.util.DynamicFloat;
 
 /**
  * Represents a collision between 2 solids. This object should be pooled
@@ -29,12 +30,19 @@ public class Collision
 	/**
 	 * penetration of the collision, combined distance of the colliders within each other
 	 */
-	public float penetration;
+	public DynamicFloat penetration;
 
 	/**
 	 * the amount of surface where solids are touching
 	 */
-	public float contactSurface;
+	public DynamicFloat contactSurface;
+
+	/**
+	 * Priority of the collision, collisions should be sorted using this field before resolving
+	 *
+	 * The smaller this value is, the first it should be resolved
+	 */
+	public float priority;
 
 	/**
 	 * Collider involved in the collision.
@@ -55,6 +63,7 @@ public class Collision
 		impactVelB.set(collision.impactVelB);
 		penetration = collision.penetration;
 		contactSurface = collision.contactSurface;
+		priority = collision.priority;
 		colliderA = collision.colliderA;
 		colliderB = collision.colliderB;
 	}
@@ -71,6 +80,7 @@ public class Collision
 		impactVelB.set(collision.impactVelA);
 		penetration = collision.penetration;
 		contactSurface = collision.contactSurface;
+		priority = collision.priority;
 		colliderA = collision.colliderB;
 		colliderB = collision.colliderA;
 	}

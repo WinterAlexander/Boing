@@ -2,7 +2,6 @@ package me.winter.boing;
 
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
-import me.winter.boing.detection.anticipation.PreAABB;
 
 /**
  * Represents a step for a dynamic body, typically has a movement and collision shifing but

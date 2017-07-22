@@ -46,29 +46,34 @@ public class BoxCircleDetector extends PooledDetector<Box, Circle>
 		&& (absDx - halfW) * (absDx - halfW) + (absDy - halfH) * (absDy - halfH) > shapeB.radius * shapeB.radius) //and it's not in the middle
 			return null;
 
-		float closestX = clamp(dx, -halfW, halfW);
-		float closestY = clamp(dy, -halfH, halfH);
-
 		Collision collision = collisionPool.obtain();
 
 		if(absDx - halfW > absDy - halfH)
 		{
-			closestX = signum(closestX) * halfW;
-
 			collision.normal.set(dx < 0 ? -1 : 1, 0);
-			float len = Vector2.len(closestX - dx, closestY - dy);
-			collision.penetration = shapeB.radius - len;
+
+			collision.penetration = () -> {
+
+				float ddx = shapeB.getAbsX() - shapeA.getAbsX();
+				float ddy = shapeB.getAbsY() - shapeA.getAbsY();
+
+				return shapeB.radius - Vector2.len(signum(clamp(ddx, -halfW, halfW)) * halfW - ddx, clamp(ddy, -halfH, halfH) - ddy);
+			};
 		}
 		else
 		{
-			closestY = signum(closestY) * halfH;
-
 			collision.normal.set(0, dy < 0 ? -1 : 1);
-			float len = Vector2.len(closestX - dx, closestY - dy);
-			collision.penetration = shapeB.radius - len;
+
+			collision.penetration = () -> {
+
+				float ddx = shapeB.getAbsX() - shapeA.getAbsX();
+				float ddy = shapeB.getAbsY() - shapeA.getAbsY();
+
+				return shapeB.radius - Vector2.len(clamp(ddx, -halfW, halfW) - ddx, signum(clamp(ddy, -halfH, halfH)) * halfH - ddy);
+			};
 		}
 
-		collision.contactSurface = 0;
+		collision.contactSurface = () -> 0;
 		collision.colliderA = shapeA;
 		collision.colliderB = shapeB;
 		collision.setImpactVelocities(shapeA.getBody(), shapeB.getBody());

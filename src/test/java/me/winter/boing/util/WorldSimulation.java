@@ -136,6 +136,18 @@ public class WorldSimulation extends JFrame implements KeyListener
 				{
 					ex.printStackTrace();
 				}
+
+				synchronized(this)
+				{
+					try
+					{
+						wait();
+					}
+					catch(InterruptedException ex)
+					{
+						ex.printStackTrace();
+					}
+				}
 			}
 		}
 	}
@@ -149,11 +161,23 @@ public class WorldSimulation extends JFrame implements KeyListener
 				framesRemaining = 0;
 			else
 				framesRemaining = -1;
+
+			synchronized(this)
+			{
+				notify();
+			}
 		}
 
 		if(e.getKeyCode() == KeyEvent.VK_SPACE)
+		{
 			if(framesRemaining != -1)
 				framesRemaining++;
+
+			synchronized(this)
+			{
+				notify();
+			}
+		}
 	}
 
 	@Override

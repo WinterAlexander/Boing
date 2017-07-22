@@ -25,7 +25,10 @@ public class LimitCircleDetectionTest
 	{
 		MutableInt collisionCount = new MutableInt(0);
 
-		CollisionResolver resolver = (w, c) -> collisionCount.value++;
+		CollisionResolver resolver = (w, c) -> {
+			collisionCount.value++;
+			return true;
+		};
 		WorldImpl world = new WorldImpl(resolver);
 
 		DynamicBodyImpl solidImpl = new DynamicBodyImpl(1f);
@@ -53,7 +56,10 @@ public class LimitCircleDetectionTest
 	{
 		MutableInt collisionCount = new MutableInt(0);
 
-		CollisionResolver resolver = (w, c) -> collisionCount.value++;
+		CollisionResolver resolver = (w, c) -> {
+			collisionCount.value++;
+			return true;
+		};
 		WorldImpl world = new WorldImpl(resolver);
 
 		DynamicBodyImpl solidImpl = new DynamicBodyImpl(1f);
@@ -81,7 +87,10 @@ public class LimitCircleDetectionTest
 	{
 		MutableInt collisionCount = new MutableInt(0);
 
-		CollisionResolver resolver = (w, c) -> collisionCount.value++;
+		CollisionResolver resolver = (w, c) -> {
+			collisionCount.value++;
+			return true;
+		};
 		WorldImpl world = new WorldImpl(resolver);
 
 		DynamicBodyImpl solidImpl = new DynamicBodyImpl(1f);
@@ -109,7 +118,10 @@ public class LimitCircleDetectionTest
 	{
 		MutableInt collisionCount = new MutableInt(0);
 
-		CollisionResolver resolver = (w, c) -> collisionCount.value++;
+		CollisionResolver resolver = (w, c) -> {
+			collisionCount.value++;
+			return true;
+		};
 		WorldImpl world = new WorldImpl(resolver);
 
 		DynamicBodyImpl solidImpl = new DynamicBodyImpl();
