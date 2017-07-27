@@ -110,7 +110,36 @@ public class BoxLimitDetector extends PooledDetector<Box, Limit>
 		//to fullfill the collision report
 		float surface;
 
-		DynamicFloat surfaceFormula = () -> {
+		//get surface contact at mid point
+		float diff = ((posBx - vecBx) - (posAx - vecAx)) * normalX + ((posBy - vecBy) - (posAy - vecAy)) * normalY;
+		float vecDiff = (vecBx - vecAx) * normalX + (vecBy - vecAy) * normalY;
+
+		float midpoint = vecDiff != 0 ? (diff + vecDiff) / vecDiff : 0f;
+
+		float midAx = posAx - vecAx * midpoint; //midpoint x for A
+		float midAy = posAy - vecAy * midpoint; //midpoint y for A
+		float midBx = posBx - vecBx * midpoint; //midpoint x for B
+		float midBy = posBy - vecBy * midpoint; //midpoint y for B
+
+		surface = getContactSurface(midAx, midAy, hsizeA, midBx, midBy, hsizeB, normalX, normalY);
+
+		//if 0, it might be a corner corner case
+		if(!areEqual(surface, 0) && surface < 0)
+			return null;
+
+		Collision collision = collisionPool.obtain();
+
+		collision.normal.set(normalX, normalY);
+
+		collision.penetration = () -> -((limitB.getAbsX() - (boxA.getAbsX() + normalX * boxA.width / 2)) * normalX
+				+ (limitB.getAbsY() - (boxA.getAbsY() + normalY * boxA.height / 2)) * normalY);
+
+		//boing v2 priority algorithm
+		collision.priority = surface * collision.penetration.getValue();
+
+		//contact surface at current position
+		collision.contactSurface = () -> {
+
 			//re-get the position from the original calculation
 			//since we are in a DynamicFloat, posAx, posAy etc. might
 			//be outdated (cached values)
@@ -119,44 +148,12 @@ public class BoxLimitDetector extends PooledDetector<Box, Limit>
 			float newBx = limitB.getAbsX();
 			float newBy = limitB.getAbsY();
 
-			float diff = ((newBx - vecBx) - (newAx - vecAx)) * normalX + ((newBy - vecBy) - (newAy - vecAy)) * normalY;
-			float vecDiff = (vecBx - vecAx) * normalX + (vecBy - vecAy) * normalY;
-
-			float midpoint = vecDiff != 0 ? (diff + vecDiff) / vecDiff : 0f;
-
-			float midAx = newAx - vecAx * midpoint; //midpoint x for A
-			float midAy = newAy - vecAy * midpoint; //midpoint y for A
-			float midBx = newBx - vecBx * midpoint; //midpoint x for B
-			float midBy = newBy - vecBy * midpoint; //midpoint y for B
-
-			return getContactSurface(midAx, midAy, hsizeA, midBx, midBy, hsizeB, normalX, normalY);
+			return getContactSurface(newAx, newAy, hsizeA, newBx, newBy, hsizeB, normalX, normalY);
 		};
-
-		//calculates surface from formula
-		surface = surfaceFormula.getValue();
-
-		//if 0, it might be a corner corner case
-		if(areEqual(surface, 0, epsilon))
-		{
-			//not handled for now
-			return null;
-		}
-		else if(surface < 0)
-			return null;
-
-		Collision collision = collisionPool.obtain();
 
 		collision.colliderA = boxA;
 		collision.colliderB = limitB;
-
-		collision.normal.set(normalX, normalY);
 		collision.setImpactVelocities(boxA.getBody(), limitB.getBody());
-		collision.penetration = () -> -((limitB.getAbsX() - (boxA.getAbsX() + normalX * boxA.width / 2)) * normalX + (limitB.getAbsY() - (boxA.getAbsY() + normalY * boxA.height / 2)) * normalY);
-
-		collision.contactSurface = surfaceFormula;
-
-		//boing v1 priority algorithm
-		collision.priority = ((posBx - posAx) * normalX + (posBy - posAy) * normalY) / ((vecBx - vecAx) * normalX + (vecBy - vecAy) * normalY);
 
 		return collision;
 	}

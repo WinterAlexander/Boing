@@ -181,62 +181,22 @@ public class BoxBoxDetector extends PooledDetector<Box, Box>
 				return null;
 		}*/
 
-		DynamicFloat surfaceFormula = () -> {
+		
+		//get surface contact at mid point
+		float diff = ((posBx - vecBx) - (posAx - vecAx)) * normalX + ((posBy - vecBy) - (posAy - vecAy)) * normalY;
+		float vecDiff = (vecBx - vecAx) * normalX + (vecBy - vecAy) * normalY;
 
-			//re-get the position from the original calculation
-			//since we are in a DynamicFloat, posAx, posAy etc. might
-			//be outdated (cached values)
-			float newAx = boxA.getAbsX() + normalX * boxA.width / 2;
-			float newAy = boxA.getAbsY() + normalY * boxA.height / 2;
-			float newBx = boxB.getAbsX() - normalX * boxB.width / 2;
-			float newBy = boxB.getAbsY() - normalY * boxB.height / 2;
+		float midpoint = vecDiff != 0 ? (diff + vecDiff) / vecDiff : 0f;
 
-			float diff = ((newBx - vecBx) - (newAx - vecAx)) * normalX + ((newBy - vecBy) - (newAy - vecAy)) * normalY;
-			float vecDiff = (vecBx - vecAx) * normalX + (vecBy - vecAy) * normalY;
+		float midAx = posAx - vecAx * midpoint; //midpoint x for A
+		float midAy = posAy - vecAy * midpoint; //midpoint y for A
+		float midBx = posBx - vecBx * midpoint; //midpoint x for B
+		float midBy = posBy - vecBy * midpoint; //midpoint y for B
 
-			float midpoint = vecDiff != 0 ? (diff + vecDiff) / vecDiff : 0f;
-
-			float midAx = newAx - vecAx * midpoint; //midpoint x for A
-			float midAy = newAy - vecAy * midpoint; //midpoint y for A
-			float midBx = newBx - vecBx * midpoint; //midpoint x for B
-			float midBy = newBy - vecBy * midpoint; //midpoint y for B
-
-			return getContactSurface(midAx, midAy, hsizeA, midBx, midBy, hsizeB, normalX, normalY);
-		};
-
-		//calculates surface from formula
-		surface = surfaceFormula.getValue();
+		surface = getContactSurface(midAx, midAy, hsizeA, midBx, midBy, hsizeB, normalX, normalY);
 
 		//if 0, it might be a corner corner case
-		if(areEqual(surface, 0, epsilon))
-		{
-			/*surfaceFormula = () -> {
-
-				float newAx = boxA.getAbsX() + normalX * boxA.width / 2;
-				float newAy = boxA.getAbsY() + normalY * boxA.height / 2;
-				float newBx = boxB.getAbsX() - normalX * boxB.width / 2;
-				float newBy = boxB.getAbsY() - normalY * boxB.height / 2;
-
-				float diff = ((newBx - vecBx) - (newAx - vecAx)) * normalX + ((newBy - vecBy) - (newAy - vecAy)) * normalY;
-				float vecDiff = (vecBx - vecAx) * normalX + (vecBy - vecAy) * normalY;
-				float sizeDiff = (hsizeB + hsizeA) * abs(normalX) + (hsizeB + hsizeA) * abs(normalY);
-
-				float midpoint = vecDiff != 0 ? (diff + vecDiff + sizeDiff) / vecDiff : 0f;
-
-				float midAx = newAx - vecAx * midpoint; //midpoint x for A
-				float midAy = newAy - vecAy * midpoint; //midpoint y for A
-				float midBx = newBx - vecBx * midpoint; //midpoint x for B
-				float midBy = newBy - vecBy * midpoint; //midpoint y for B
-
-				return getContactSurface(midAx, midAy, hsizeA, midBx, midBy, hsizeB, normalX, normalY);
-			};
-
-			surface = surfaceFormula.getValue();
-
-			if(isSmallerOrEqual(surface, 0, epsilon))*/
-				return null;
-		}
-		else if(surface < 0)
+		if(!areEqual(surface, 0) && surface < 0)
 			return null;
 
 		Collision collision = collisionPool.obtain();
@@ -246,10 +206,22 @@ public class BoxBoxDetector extends PooledDetector<Box, Box>
 		collision.penetration = () -> -((boxB.getAbsX() - normalX * boxB.width / 2 - (boxA.getAbsX() + normalX * boxA.width / 2)) * normalX
 										+ (boxB.getAbsY() - normalY * boxB.height / 2 - (boxA.getAbsY() + normalY * boxA.height / 2)) * normalY);
 
-		//boing v1 priority algorithm
-		collision.priority = ((posBx - posAx) * normalX + (posBy - posAy) * normalY) / ((vecBx - vecAx) * normalX + (vecBy - vecAy) * normalY);
+		//boing v2 priority algorithm
+		collision.priority = surface * collision.penetration.getValue();
 
-		collision.contactSurface = surfaceFormula;
+		//contact surface at current position
+		collision.contactSurface = () -> {
+
+			//re-get the position from the original calculation
+			//since we are in a DynamicFloat, posAx, posAy etc. might
+			//be outdated (cached values)
+			float newAx = boxA.getAbsX() + normalX * boxA.width / 2;
+			float newAy = boxA.getAbsY() + normalY * boxA.height / 2;
+			float newBx = boxB.getAbsX() - normalX * boxB.width / 2;
+			float newBy = boxB.getAbsY() - normalY * boxB.height / 2;
+
+			return getContactSurface(newAx, newAy, hsizeA, newBx, newBy, hsizeB, normalX, normalY);
+		};
 
 		collision.colliderA = boxA;
 		collision.colliderB = boxB;

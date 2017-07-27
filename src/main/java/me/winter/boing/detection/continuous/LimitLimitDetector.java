@@ -9,6 +9,7 @@ import me.winter.boing.detection.PooledDetector;
 import me.winter.boing.util.DynamicFloat;
 
 import static com.badlogic.gdx.math.Vector2.dot;
+import static me.winter.boing.detection.continuous.BoxBoxDetector.getContactSurface;
 import static me.winter.boing.util.FloatUtil.DEFAULT_ULPS;
 import static me.winter.boing.util.FloatUtil.areEqual;
 import static me.winter.boing.util.FloatUtil.getGreatestULP;
@@ -112,55 +113,44 @@ public class LimitLimitDetector extends PooledDetector<Limit, Limit>
 		//to fullfill the collision report
 		float surface;
 
-		DynamicFloat surfaceFormula = () -> {
+		//get surface contact at mid point
+		float diff = ((posBx - vecBx) - (posAx - vecAx)) * normalX + ((posBy - vecBy) - (posAy - vecAy)) * normalY;
+		float vecDiff = (vecBx - vecAx) * normalX + (vecBy - vecAy) * normalY;
 
-			//re-get the position from the original calculation
-			//since we are in a DynamicFloat, posAx, posAy etc. might
-			//be outdated (cached values)
-			float newAx = limitA.getAbsX();
-			float newAy = limitA.getAbsY();
-			float newBx = limitB.getAbsX();
-			float newBy = limitB.getAbsY();
+		float midpoint = vecDiff != 0 ? (diff + vecDiff) / vecDiff : 0f;
 
-			float diff = ((newBx - vecBx) - (newAx - vecAx)) * normalX + ((newBy - vecBy) - (newAy - vecAy)) * normalY;
-			float vecDiff = (vecBx - vecAx) * normalX + (vecBy - vecAy) * normalY;
+		float midAx = posAx - vecAx * midpoint; //midpoint x for A
+		float midAy = posAy - vecAy * midpoint; //midpoint y for A
+		float midBx = posBx - vecBx * midpoint; //midpoint x for B
+		float midBy = posBy - vecBy * midpoint; //midpoint y for B
 
-			float midpoint = vecDiff != 0 ? (diff + vecDiff) / vecDiff : 0f;
-
-			float midAx = newAx - vecAx * midpoint; //midpoint x for A
-			float midAy = newAy - vecAy * midpoint; //midpoint y for A
-			float midBx = newBx - vecBx * midpoint; //midpoint x for B
-			float midBy = newBy - vecBy * midpoint; //midpoint y for B
-
-			return BoxBoxDetector.getContactSurface(midAx, midAy, hsizeA, midBx, midBy, hsizeB, normalX, normalY);
-		};
-
-		//calculates surface from formula
-		surface = surfaceFormula.getValue();
+		surface = getContactSurface(midAx, midAy, hsizeA, midBx, midBy, hsizeB, normalX, normalY);
 
 		//if 0, it might be a corner corner case
-		if(areEqual(surface, 0, epsilon))
-		{
-			//not handled for now
-			return null;
-		}
-		else if(surface < 0)
+		if(!areEqual(surface, 0) && surface < 0)
 			return null;
 
 		Collision collision = collisionPool.obtain();
 
-		collision.colliderA = limitA;
-		collision.colliderB = limitB;
+		collision.normal.set(normalX, normalY);
 
-		collision.normal.set(limitA.normal);
-		collision.setImpactVelocities(limitA.getBody(), limitB.getBody());
 		collision.penetration = () -> -((limitB.getAbsX() - limitA.getAbsX()) * normalX + (limitB.getAbsY() - limitA.getAbsY()) * normalY);
 
+		//boing v2 priority algorithm
+		collision.priority = surface * collision.penetration.getValue();
 
-		//boing v1 priority algorithm
-		collision.priority = ((posBx - posAx) * normalX + (posBy - posAy) * normalY) / ((vecBx - vecAx) * normalX + (vecBy - vecAy) * normalY);
+		//contact surface at current position
+		collision.contactSurface = () -> {
 
-		collision.contactSurface = surfaceFormula;
+			//re-get the position from the original calculation
+			//since we are in a DynamicFloat, posAx, posAy etc. might
+			//be outdated (cached values)
+			return getContactSurface(limitA.getAbsX(), limitA.getAbsY(), hsizeA, limitB.getAbsX(), limitB.getAbsY(), hsizeB, normalX, normalY);
+		};
+
+		collision.colliderA = limitA;
+		collision.colliderB = limitB;
+		collision.setImpactVelocities(limitA.getBody(), limitB.getBody());
 
 		return collision;
 	}
