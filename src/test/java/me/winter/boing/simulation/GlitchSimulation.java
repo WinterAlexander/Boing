@@ -12,6 +12,9 @@ import me.winter.boing.testimpl.TestWorldImpl;
 import me.winter.boing.util.WorldSimulation;
 import org.junit.Test;
 
+import static me.winter.boing.util.VectorUtil.LEFT;
+import static me.winter.boing.util.VectorUtil.UP;
+
 /**
  * Undocumented :(
  * <p>
@@ -117,6 +120,62 @@ public class GlitchSimulation
 
 		GravityAffected pushable = new GravityAffected();
 		pushable.getPosition().set(425, 280);
+		pushable.addCollider(new Box(pushable, 0, 15, 30, 30));
+		world.add(pushable);
+
+		new WorldSimulation(world, 60f).start();
+	}
+
+	@Test
+	public void pushingThroughWall()
+	{
+		TestWorldImpl world = new TestWorldImpl(new ReplaceResolver());
+
+		PlayerImpl player = new PlayerImpl();
+		player.getPosition().set(400, 200);
+		player.addCollider(new Box(player, 0, 25, 40, 50));
+		world.add(player);
+
+		BodyImpl ground = new BodyImpl();
+		ground.getPosition().set(400, 175);
+		ground.addCollider(new Box(ground, 0, 0, 200, 50));
+		world.add(ground);
+
+		BodyImpl wall = new BodyImpl();
+		wall.getPosition().set(450, 200);
+		wall.addCollider(new Box(wall, 0, 20, 30, 40));
+		world.add(wall);
+
+		GravityAffected pushable = new GravityAffected();
+		pushable.getPosition().set(450, 240);
+		pushable.addCollider(new Box(pushable, 0, 15, 30, 30));
+		world.add(pushable);
+
+		new WorldSimulation(world, 60f).start();
+	}
+
+	@Test
+	public void pushingThroughLimit()
+	{
+		TestWorldImpl world = new TestWorldImpl(new ReplaceResolver());
+
+		PlayerImpl player = new PlayerImpl();
+		player.getPosition().set(400, 200);
+		player.addCollider(new Box(player, 0, 25, 40, 50));
+		world.add(player);
+
+		BodyImpl ground = new BodyImpl();
+		ground.getPosition().set(400, 175);
+		ground.addCollider(new Box(ground, 0, 0, 200, 50));
+		world.add(ground);
+
+		BodyImpl wall = new BodyImpl();
+		wall.getPosition().set(450, 200);
+		wall.addCollider(new Limit(wall, 0, 20, LEFT, 40));
+		world.add(wall);
+
+		GravityAffected pushable = new GravityAffected();
+		pushable.getPosition().set(455, 200);
 		pushable.addCollider(new Box(pushable, 0, 15, 30, 30));
 		world.add(pushable);
 
