@@ -16,6 +16,8 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 
 /**
  * Undocumented :(
@@ -23,12 +25,13 @@ import java.awt.event.KeyListener;
  * Created by Alexander Winter on 2017-04-10.
  */
 @Ignore
-public class WorldSimulation extends JFrame implements KeyListener
+public class WorldSimulation extends JFrame implements KeyListener, MouseListener
 {
 	private TestWorldImpl world;
 	private float frameRate;
 
 	private long frames = 0, framesRemaining = -1;
+	private boolean deletePressed;
 
 	public WorldSimulation(TestWorldImpl world, float frameRate)
 	{
@@ -81,6 +84,7 @@ public class WorldSimulation extends JFrame implements KeyListener
 		};
 
 		panel.addKeyListener(this);
+		panel.addMouseListener(this);
 
 		setContentPane(panel);
 
@@ -106,8 +110,7 @@ public class WorldSimulation extends JFrame implements KeyListener
 				try
 				{
 					long start = System.nanoTime();
-					SwingUtilities.invokeAndWait(() ->
-					{
+					SwingUtilities.invokeAndWait(() -> {
 						world.step(1f / frameRate);
 						if(framesRemaining > 0)
 							framesRemaining--;
@@ -167,8 +170,7 @@ public class WorldSimulation extends JFrame implements KeyListener
 				notify();
 			}
 		}
-
-		if(e.getKeyCode() == KeyEvent.VK_SPACE)
+		else if(e.getKeyCode() == KeyEvent.VK_SPACE)
 		{
 			if(framesRemaining != -1)
 				framesRemaining++;
@@ -178,11 +180,104 @@ public class WorldSimulation extends JFrame implements KeyListener
 				notify();
 			}
 		}
+		else if(e.getKeyCode() == KeyEvent.VK_R)
+		{
+			deletePressed = false;
+		}
+
 	}
 
 	@Override
 	public void keyTyped(KeyEvent e) {}
 
 	@Override
-	public void keyPressed(KeyEvent e) {}
+	public void keyPressed(KeyEvent e)
+	{
+		if(e.getKeyCode() == KeyEvent.VK_R)
+		{
+			deletePressed = true;
+		}
+	}
+
+	@Override
+	public void mouseClicked(MouseEvent e)
+	{
+		if(!deletePressed || framesRemaining != 0)
+			return;
+
+		int x = e.getX();
+		int y = 600 - e.getY();
+
+		Body toRemove = null;
+
+		bodyLoop:
+		for(Body body : world.getBodies())
+		{
+			for(Collider collider : body.getColliders())
+				if(collider instanceof Circle)
+				{
+					Circle circle = (Circle)collider;
+					float r = ((Circle)collider).radius;
+
+					float dx = circle.getAbsX() - x;
+					float dy = circle.getAbsY() - y;
+
+					if(dx * dx + dy * dy < r * r)
+					{
+						toRemove = body;
+						break bodyLoop;
+					}
+				}
+				else if(collider instanceof Box)
+				{
+					Box box = ((Box)collider);
+					float dx = box.getAbsX() - x;
+					float dy = box.getAbsY() - y;
+					if(dx * dx + dy * dy < box.width * box.height) //lazy
+					{
+						toRemove = body;
+						break bodyLoop;
+					}
+				}
+				else if(collider instanceof Limit)
+				{
+					Limit limit = (Limit)collider;
+					float dx = limit.getAbsX() - x;
+					float dy = limit.getAbsY() - y;
+					if(dx * dx + dy * dy < limit.size * limit.size)
+					{
+						toRemove = body;
+						break bodyLoop;
+					}
+				}
+		}
+
+		final Body lambdaParam = toRemove;
+		if(toRemove != null)
+			world.remove(lambdaParam);
+	}
+
+	@Override
+	public void mousePressed(MouseEvent e)
+	{
+
+	}
+
+	@Override
+	public void mouseReleased(MouseEvent e)
+	{
+
+	}
+
+	@Override
+	public void mouseEntered(MouseEvent e)
+	{
+
+	}
+
+	@Override
+	public void mouseExited(MouseEvent e)
+	{
+
+	}
 }
