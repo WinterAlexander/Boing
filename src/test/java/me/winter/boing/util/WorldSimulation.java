@@ -27,11 +27,15 @@ import java.awt.event.MouseListener;
 @Ignore
 public class WorldSimulation extends JFrame implements KeyListener, MouseListener
 {
+	public static WorldSimulation last = null;
+
 	private TestWorldImpl world;
 	private float frameRate;
 
 	private long frames = 0, framesRemaining = -1;
 	private boolean deletePressed;
+
+	private JPanel panel;
 
 	public WorldSimulation(TestWorldImpl world, float frameRate)
 	{
@@ -40,7 +44,7 @@ public class WorldSimulation extends JFrame implements KeyListener, MouseListene
 
 		setSize(800, 600);
 
-		JPanel panel = new JPanel() {
+		panel = new JPanel() {
 			@Override
 			protected void paintComponent(Graphics g)
 			{
@@ -91,6 +95,13 @@ public class WorldSimulation extends JFrame implements KeyListener, MouseListene
 		setVisible(true);
 		panel.requestFocusInWindow();
 		setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+
+		last = this;
+	}
+
+	public void forceRepaint()
+	{
+		panel.paintImmediately(0, 0, 800, 600);
 	}
 
 	public void start()
