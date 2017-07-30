@@ -6,10 +6,8 @@ import me.winter.boing.Collision;
 import me.winter.boing.World;
 import me.winter.boing.colliders.Limit;
 import me.winter.boing.detection.PooledDetector;
-import me.winter.boing.util.DynamicFloat;
 
 import static com.badlogic.gdx.math.Vector2.dot;
-import static me.winter.boing.detection.continuous.BoxBoxDetector.getContactSurface;
 import static me.winter.boing.util.FloatUtil.DEFAULT_ULPS;
 import static me.winter.boing.util.FloatUtil.areEqual;
 import static me.winter.boing.util.FloatUtil.getGreatestULP;
@@ -124,7 +122,7 @@ public class LimitLimitDetector extends PooledDetector<Limit, Limit>
 		float midBx = posBx - vecBx * midpoint; //midpoint x for B
 		float midBy = posBy - vecBy * midpoint; //midpoint y for B
 
-		surface = getContactSurface(midAx, midAy, hsizeA, midBx, midBy, hsizeB, normalX, normalY);
+		surface = BoxBoxDetector.getContactSurface(midAx, midAy, hsizeA, midBx, midBy, hsizeB, normalX, normalY);
 
 		//if 0, it might be a corner corner case
 		if(!areEqual(surface, 0) && surface < 0)
@@ -134,24 +132,32 @@ public class LimitLimitDetector extends PooledDetector<Limit, Limit>
 
 		collision.normal.set(normalX, normalY);
 
-		collision.penetration = () -> -((limitB.getAbsX() - limitA.getAbsX()) * normalX + (limitB.getAbsY() - limitA.getAbsY()) * normalY);
+		collision.penetration = (cA, cB) -> getPenetration((Limit)cA, (Limit)cB);
 
 		//boing v2 priority algorithm
-		collision.priority = surface * collision.penetration.getValue();
+		collision.priority = surface * getPenetration(limitA, limitB);
 
-		//contact surface at current position
-		collision.contactSurface = () -> {
 
-			//re-get the position from the original calculation
-			//since we are in a DynamicFloat, posAx, posAy etc. might
-			//be outdated (cached values)
-			return getContactSurface(limitA.getAbsX(), limitA.getAbsY(), hsizeA, limitB.getAbsX(), limitB.getAbsY(), hsizeB, normalX, normalY);
-		};
+		//re-get the position from the original calculation
+		//since we are in a CollisionDynamicVariable, posAx, posAy etc. might
+		//be outdated (cached values)
+		collision.contactSurface = (cA, cB) -> getContactSurface((Limit)cA, (Limit)cB);
+
 
 		collision.colliderA = limitA;
 		collision.colliderB = limitB;
 		collision.setImpactVelocities(limitA.getBody(), limitB.getBody());
 
 		return collision;
+	}
+
+	public static float getPenetration(Limit limitA, Limit limitB)
+	{
+		return -((limitB.getAbsX() - limitA.getAbsX()) * limitA.normal.x + (limitB.getAbsY() - limitA.getAbsY()) * limitA.normal.y);
+	}
+
+	public static float getContactSurface(Limit limitA, Limit limitB)
+	{
+		return BoxBoxDetector.getContactSurface(limitA.getAbsX(), limitA.getAbsY(), limitA.size / 2, limitB.getAbsX(), limitB.getAbsY(), limitB.size / 2, limitA.normal.x, limitA.normal.y);
 	}
 }

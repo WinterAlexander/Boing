@@ -7,7 +7,6 @@ import me.winter.boing.World;
 import me.winter.boing.colliders.Box;
 import me.winter.boing.colliders.Limit;
 import me.winter.boing.detection.PooledDetector;
-import me.winter.boing.util.DynamicFloat;
 
 import static com.badlogic.gdx.math.Vector2.dot;
 import static java.lang.Math.abs;
@@ -129,32 +128,40 @@ public class BoxLimitDetector extends PooledDetector<Box, Limit>
 
 		Collision collision = collisionPool.obtain();
 
-		collision.normal.set(normalX, normalY);
-
-		collision.penetration = () -> -((limitB.getAbsX() - (boxA.getAbsX() + normalX * boxA.width / 2)) * normalX
-				+ (limitB.getAbsY() - (boxA.getAbsY() + normalY * boxA.height / 2)) * normalY);
+		collision.penetration = (colliderA, colliderB) -> getPenetration((Box)colliderA, (Limit)colliderB);
+		collision.contactSurface = (colliderA, colliderB) -> getContactSurface((Box)colliderA, (Limit)colliderB);
 
 		//boing v2 priority algorithm
-		collision.priority = surface * collision.penetration.getValue();
-
-		//contact surface at current position
-		collision.contactSurface = () -> {
-
-			//re-get the position from the original calculation
-			//since we are in a DynamicFloat, posAx, posAy etc. might
-			//be outdated (cached values)
-			float newAx = boxA.getAbsX() + normalX * boxA.width / 2;
-			float newAy = boxA.getAbsY() + normalY * boxA.height / 2;
-			float newBx = limitB.getAbsX();
-			float newBy = limitB.getAbsY();
-
-			return getContactSurface(newAx, newAy, hsizeA, newBx, newBy, hsizeB, normalX, normalY);
-		};
+		collision.priority = surface * getPenetration(boxA, limitB);
+		collision.normal.set(normalX, normalY);
 
 		collision.colliderA = boxA;
 		collision.colliderB = limitB;
 		collision.setImpactVelocities(boxA.getBody(), limitB.getBody());
 
 		return collision;
+	}
+
+
+	public static float getPenetration(Box boxA, Limit limitB)
+	{
+		return -((boxA.getAbsX() - limitB.getAbsX()) * limitB.normal.x
+				+ (boxA.getAbsY() - limitB.getAbsY()) * limitB.normal.y);
+	}
+
+	public static float getContactSurface(Box boxA, Limit limitB)
+	{
+		float normalX = -limitB.normal.x;
+		float normalY = -limitB.normal.y;
+
+		float hsizeA = abs(normalX * boxA.height / 2 + normalY * boxA.width / 2); //half size for A
+		float hsizeB = limitB.size / 2; //half size for B
+
+		float newAx = boxA.getAbsX() + normalX * boxA.width / 2;
+		float newAy = boxA.getAbsY() + normalY * boxA.height / 2;
+		float newBx = limitB.getAbsX();
+		float newBy = limitB.getAbsY();
+
+		return BoxBoxDetector.getContactSurface(newAx, newAy, hsizeA, newBx, newBy, hsizeB, normalX, normalY);
 	}
 }

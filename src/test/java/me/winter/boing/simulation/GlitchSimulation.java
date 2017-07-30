@@ -13,7 +13,6 @@ import me.winter.boing.util.WorldSimulation;
 import org.junit.Test;
 
 import static me.winter.boing.util.VectorUtil.LEFT;
-import static me.winter.boing.util.VectorUtil.UP;
 
 /**
  * Undocumented :(

@@ -5,7 +5,7 @@ import me.winter.boing.Collision;
 import me.winter.boing.World;
 import me.winter.boing.colliders.Box;
 import me.winter.boing.detection.PooledDetector;
-import me.winter.boing.util.DynamicFloat;
+import me.winter.boing.util.CollisionDynamicVariable;
 
 import static java.lang.Math.abs;
 
@@ -27,8 +27,8 @@ public class BoxBoxDetector extends PooledDetector<Box, Box>
 		float dx = shapeB.getAbsX() - shapeA.getAbsX();
 		float dy = shapeB.getAbsY() - shapeA.getAbsY();
 
-		DynamicFloat peneX = () -> shapeA.width / 2 + shapeB.width / 2 - abs(dx);
-		DynamicFloat peneY = () -> shapeA.height / 2 + shapeB.height / 2 - abs(dy);
+		CollisionDynamicVariable peneX = () -> shapeA.width / 2 + shapeB.width / 2 - abs(dx);
+		CollisionDynamicVariable peneY = () -> shapeA.height / 2 + shapeB.height / 2 - abs(dy);
 
 		float peneXVal = peneX.getValue();
 		float peneYVal = peneY.getValue();
