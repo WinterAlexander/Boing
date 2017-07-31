@@ -27,11 +27,11 @@ public class BoxBoxDetector extends PooledDetector<Box, Box>
 		float dx = shapeB.getAbsX() - shapeA.getAbsX();
 		float dy = shapeB.getAbsY() - shapeA.getAbsY();
 
-		CollisionDynamicVariable peneX = () -> shapeA.width / 2 + shapeB.width / 2 - abs(dx);
-		CollisionDynamicVariable peneY = () -> shapeA.height / 2 + shapeB.height / 2 - abs(dy);
+		CollisionDynamicVariable peneX = (cA, cB) -> ((Box)cA).width / 2 + ((Box)cB).width / 2 - abs(cB.getAbsX() - cA.getAbsX());
+		CollisionDynamicVariable peneY = (cA, cB) -> ((Box)cA).height / 2 + ((Box)cB).height / 2 - abs(cB.getAbsY() - cA.getAbsY());
 
-		float peneXVal = peneX.getValue();
-		float peneYVal = peneY.getValue();
+		float peneXVal = peneX.getValue(shapeA, shapeB);
+		float peneYVal = peneY.getValue(shapeA, shapeB);
 
 		if(peneXVal < 0 || peneYVal < 0)
 			return null;

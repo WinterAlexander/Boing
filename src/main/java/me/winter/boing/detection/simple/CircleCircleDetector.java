@@ -22,12 +22,12 @@ public class CircleCircleDetector extends PooledDetector<Circle, Circle>
 	}
 
 	@Override
-	public Collision collides(World world,  Circle shapeA, Circle shapeB)
+	public Collision collides(World world, Circle circleA, Circle circleB)
 	{
-		float dx = shapeB.getAbsX() - shapeA.getAbsX();
-		float dy = shapeB.getAbsY() - shapeA.getAbsY();
+		float dx = circleB.getAbsX() - circleA.getAbsX();
+		float dy = circleB.getAbsY() - circleA.getAbsY();
 
-		float r = shapeA.radius + shapeB.radius;
+		float r = circleA.radius + circleB.radius;
 		float r2 = r * r;
 
 		float dst2 = dx * dx + dy * dy;
@@ -40,12 +40,18 @@ public class CircleCircleDetector extends PooledDetector<Circle, Circle>
 		float dst = (float)sqrt(dst2);
 
 		divide(collision.normal.set(dx, dy), dst);
-		collision.penetration = () -> r - (float)sqrt((shapeB.getAbsX() - shapeA.getAbsX()) * (shapeB.getAbsX() - shapeA.getAbsX()) + (shapeB.getAbsY() - shapeA.getAbsY()) * (shapeB.getAbsY() - shapeA.getAbsY()));
-		collision.contactSurface = () -> 0f; //0 since circles can other touch each other at one point
+		collision.penetration = (cA, cB) -> {
+			float dynR = ((Circle)cA).radius + ((Circle)cB).radius;
+			float dynDx = cB.getAbsX() - cA.getAbsX();
+			float dynDy = cB.getAbsY() - cA.getAbsY();
 
-		collision.colliderA = shapeA;
-		collision.colliderB = shapeB;
-		collision.setImpactVelocities(shapeA.getBody(), shapeB.getBody());
+			return dynR - (float)sqrt(dynDx * dynDx + dynDy * dynDy);
+		};
+		collision.contactSurface = (cA, cB) -> 0f; //0 since circles can other touch each other at one point
+
+		collision.colliderA = circleA;
+		collision.colliderB = circleB;
+		collision.setImpactVelocities(circleA.getBody(), circleB.getBody());
 
 		return collision;
 	}

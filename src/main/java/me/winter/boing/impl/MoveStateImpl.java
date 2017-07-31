@@ -67,7 +67,7 @@ public class MoveStateImpl implements MoveState
 
 		for(Collision collision : world.getState(dynamic).getCollisions())
 		{
-			if(collision.colliderB.getBody() instanceof DynamicBody && collision.normal.dot(DOWN) == 1 && collision.contactSurface.getValue() > 0)
+			if(collision.colliderB.getBody() instanceof DynamicBody && collision.normal.dot(DOWN) == 1 && collision.getContactSurface() > 0)
 			{
 				DynamicBody other = ((DynamicBody)collision.colliderB.getBody());
 

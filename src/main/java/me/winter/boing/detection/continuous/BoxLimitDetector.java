@@ -120,7 +120,7 @@ public class BoxLimitDetector extends PooledDetector<Box, Limit>
 		float midBx = posBx - vecBx * midpoint; //midpoint x for B
 		float midBy = posBy - vecBy * midpoint; //midpoint y for B
 
-		surface = getContactSurface(midAx, midAy, hsizeA, midBx, midBy, hsizeB, normalX, normalY);
+		surface = BoxBoxDetector.getContactSurface(midAx, midAy, hsizeA, midBx, midBy, hsizeB, normalX, normalY);
 
 		//if 0, it might be a corner corner case
 		if(!areEqual(surface, 0) && surface < 0)

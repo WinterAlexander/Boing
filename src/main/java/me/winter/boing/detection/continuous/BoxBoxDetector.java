@@ -203,14 +203,13 @@ public class BoxBoxDetector extends PooledDetector<Box, Box>
 
 		collision.normal.set(normalX, normalY);
 
-		collision.penetration = () -> -((boxB.getAbsX() - normalX * boxB.width / 2 - (boxA.getAbsX() + normalX * boxA.width / 2)) * normalX
-										+ (boxB.getAbsY() - normalY * boxB.height / 2 - (boxA.getAbsY() + normalY * boxA.height / 2)) * normalY);
+		collision.penetration = (colliderA, colliderB) -> getPenetration((Box)colliderA, (Box)colliderB, normalX, normalY);
 
 		//boing v2 priority algorithm
-		collision.priority = surface * collision.penetration.getValue();
+		collision.priority = surface * getPenetration(boxA, boxB, normalX, normalY);
 
 		//contact surface at current position
-		collision.contactSurface = (colliderA, colliderB) -> getContactSurface((Box)colliderA, (Box)colliderB);
+		collision.contactSurface = (colliderA, colliderB) -> getContactSurface((Box)colliderA, (Box)colliderB, normalX, normalY);
 
 		collision.colliderA = boxA;
 		collision.colliderB = boxB;
@@ -227,7 +226,8 @@ public class BoxBoxDetector extends PooledDetector<Box, Box>
 
 	public static float getPenetration(Box boxA, Box boxB, float normalX, float normalY)
 	{
-
+		return -(boxB.getAbsX() - normalX * boxB.width / 2 - (boxA.getAbsX() + normalX * boxA.width / 2)) * normalX
+				+ (boxB.getAbsY() - normalY * boxB.height / 2 - (boxA.getAbsY() + normalY * boxA.height / 2)) * normalY;
 	}
 
 	public static float getContactSurface(Box boxA, Box boxB, float normalX, float normalY)
