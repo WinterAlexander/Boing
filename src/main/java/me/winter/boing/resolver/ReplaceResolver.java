@@ -20,8 +20,8 @@ public class ReplaceResolver implements CollisionResolver
 		//if(Float.isNaN(collision.priority))
 		//	return true;
 
-		float pene = collision.penetration.getValue();
-		float surface = collision.contactSurface.getValue();
+		float pene = collision.getPenetration();
+		float surface = collision.getContactSurface();
 
 		//if("DABOX".equals(collision.colliderA.getTag())
 		//|| "DABOX".equals(collision.colliderB.getTag()))

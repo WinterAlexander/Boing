@@ -6,7 +6,7 @@ import me.winter.boing.Collision;
 import me.winter.boing.World;
 import me.winter.boing.colliders.Box;
 import me.winter.boing.detection.PooledDetector;
-import me.winter.boing.util.DynamicFloat;
+import me.winter.boing.util.CollisionDynamicVariable;
 
 import static com.badlogic.gdx.math.Vector2.dot;
 import static java.lang.Math.abs;
@@ -25,12 +25,15 @@ import static me.winter.boing.util.FloatUtil.min;
  */
 public class BoxBoxDetector extends PooledDetector<Box, Box>
 {
-	private me.winter.boing.detection.simple.BoxBoxDetector simple;
+	//private me.winter.boing.detection.simple.BoxBoxDetector simple;
+
+	//private CollisionDynamicVariable[] penetrationFormulas = new CollisionDynamicVariable[4];
+	//private CollisionDynamicVariable[] contactSurfaceFormulas = new CollisionDynamicVariable[4];
 
 	public BoxBoxDetector(Pool<Collision> collisionPool)
 	{
 		super(collisionPool);
-		simple = new me.winter.boing.detection.simple.BoxBoxDetector(collisionPool);
+		//simple = new me.winter.boing.detection.simple.BoxBoxDetector(collisionPool);
 	}
 
 	@Override
@@ -203,25 +206,13 @@ public class BoxBoxDetector extends PooledDetector<Box, Box>
 
 		collision.normal.set(normalX, normalY);
 
-		collision.penetration = () -> -((boxB.getAbsX() - normalX * boxB.width / 2 - (boxA.getAbsX() + normalX * boxA.width / 2)) * normalX
-										+ (boxB.getAbsY() - normalY * boxB.height / 2 - (boxA.getAbsY() + normalY * boxA.height / 2)) * normalY);
+		collision.penetration = (colliderA, colliderB) -> getPenetration((Box)colliderA, (Box)colliderB, normalX, normalY);
 
 		//boing v2 priority algorithm
-		collision.priority = surface * collision.penetration.getValue();
+		collision.priority = surface * getPenetration(boxA, boxB, normalX, normalY);
 
 		//contact surface at current position
-		collision.contactSurface = () -> {
-
-			//re-get the position from the original calculation
-			//since we are in a DynamicFloat, posAx, posAy etc. might
-			//be outdated (cached values)
-			float newAx = boxA.getAbsX() + normalX * boxA.width / 2;
-			float newAy = boxA.getAbsY() + normalY * boxA.height / 2;
-			float newBx = boxB.getAbsX() - normalX * boxB.width / 2;
-			float newBy = boxB.getAbsY() - normalY * boxB.height / 2;
-
-			return getContactSurface(newAx, newAy, hsizeA, newBx, newBy, hsizeB, normalX, normalY);
-		};
+		collision.contactSurface = (colliderA, colliderB) -> getContactSurface((Box)colliderA, (Box)colliderB, normalX, normalY);
 
 		collision.colliderA = boxA;
 		collision.colliderB = boxB;
@@ -234,6 +225,25 @@ public class BoxBoxDetector extends PooledDetector<Box, Box>
 
 
 		return collision;
+	}
+
+	public static float getPenetration(Box boxA, Box boxB, float normalX, float normalY)
+	{
+		return normalX * (boxA.getAbsX() + normalX * boxA.width / 2 - boxB.getAbsX() + normalX * boxB.width / 2)
+				- normalY * (boxB.getAbsY() - normalY * boxB.height / 2 - boxA.getAbsY() - normalY * boxA.height / 2);
+	}
+
+	public static float getContactSurface(Box boxA, Box boxB, float normalX, float normalY)
+	{
+		float hsizeA = abs(normalY * boxA.width / 2 + normalX * boxA.height / 2);
+		float hsizeB = abs(normalY * boxB.width / 2 + normalX * boxB.height / 2);
+
+		float newAx = boxA.getAbsX() + normalX * boxA.width / 2;
+		float newAy = boxA.getAbsY() + normalY * boxA.height / 2;
+		float newBx = boxB.getAbsX() - normalX * boxB.width / 2;
+		float newBy = boxB.getAbsY() - normalY * boxB.height / 2;
+
+		return getContactSurface(newAx, newAy, hsizeA, newBx, newBy, hsizeB, normalX, normalY);
 	}
 
 	/**

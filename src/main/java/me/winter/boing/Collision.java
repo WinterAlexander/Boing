@@ -2,7 +2,7 @@ package me.winter.boing;
 
 import com.badlogic.gdx.math.Vector2;
 import me.winter.boing.colliders.Collider;
-import me.winter.boing.util.DynamicFloat;
+import me.winter.boing.util.CollisionDynamicVariable;
 
 /**
  * Represents a collision between 2 solids. This object should be pooled
@@ -28,14 +28,30 @@ public class Collision
 	public final Vector2 impactVelB = new Vector2();
 
 	/**
-	 * penetration of the collision, combined distance of the colliders within each other
+	 * formula for penetration of the collision, combined distance of the colliders within each other
 	 */
-	public DynamicFloat penetration;
+	public CollisionDynamicVariable penetration;
+
+	/**
+	 * @return current penetration of the collision
+	 */
+	public float getPenetration()
+	{
+		return penetration.getValue(colliderA, colliderB);
+	}
 
 	/**
 	 * the amount of surface where solids are touching
 	 */
-	public DynamicFloat contactSurface;
+	public CollisionDynamicVariable contactSurface;
+
+	/**
+	 * @return current contact surface of the collision
+	 */
+	public float getContactSurface()
+	{
+		return contactSurface.getValue(colliderA, colliderB);
+	}
 
 	/**
 	 * Weight of body A over body B
