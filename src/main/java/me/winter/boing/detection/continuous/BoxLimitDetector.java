@@ -145,8 +145,8 @@ public class BoxLimitDetector extends PooledDetector<Box, Limit>
 
 	public static float getPenetration(Box boxA, Limit limitB)
 	{
-		return -((boxA.getAbsX() - limitB.getAbsX()) * limitB.normal.x
-				+ (boxA.getAbsY() - limitB.getAbsY()) * limitB.normal.y);
+		return limitB.normal.x * (limitB.getAbsX() - boxA.getAbsX() + limitB.normal.x * boxA.width / 2)
+				+ limitB.normal.y * (limitB.getAbsY() - boxA.getAbsY() + limitB.normal.y * boxA.height / 2);
 	}
 
 	public static float getContactSurface(Box boxA, Limit limitB)

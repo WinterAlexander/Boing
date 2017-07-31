@@ -153,7 +153,8 @@ public class LimitLimitDetector extends PooledDetector<Limit, Limit>
 
 	public static float getPenetration(Limit limitA, Limit limitB)
 	{
-		return -((limitB.getAbsX() - limitA.getAbsX()) * limitA.normal.x + (limitB.getAbsY() - limitA.getAbsY()) * limitA.normal.y);
+		return -((limitB.getAbsX() - limitA.getAbsX()) * limitA.normal.x
+				+ (limitB.getAbsY() - limitA.getAbsY()) * limitA.normal.y);
 	}
 
 	public static float getContactSurface(Limit limitA, Limit limitB)

@@ -6,6 +6,7 @@ import me.winter.boing.Collision;
 import me.winter.boing.World;
 import me.winter.boing.colliders.Box;
 import me.winter.boing.detection.PooledDetector;
+import me.winter.boing.util.CollisionDynamicVariable;
 
 import static com.badlogic.gdx.math.Vector2.dot;
 import static java.lang.Math.abs;
@@ -26,6 +27,8 @@ public class BoxBoxDetector extends PooledDetector<Box, Box>
 {
 	//private me.winter.boing.detection.simple.BoxBoxDetector simple;
 
+	//private CollisionDynamicVariable[] penetrationFormulas = new CollisionDynamicVariable[4];
+	//private CollisionDynamicVariable[] contactSurfaceFormulas = new CollisionDynamicVariable[4];
 
 	public BoxBoxDetector(Pool<Collision> collisionPool)
 	{
@@ -226,8 +229,8 @@ public class BoxBoxDetector extends PooledDetector<Box, Box>
 
 	public static float getPenetration(Box boxA, Box boxB, float normalX, float normalY)
 	{
-		return -(boxB.getAbsX() - normalX * boxB.width / 2 - (boxA.getAbsX() + normalX * boxA.width / 2)) * normalX
-				+ (boxB.getAbsY() - normalY * boxB.height / 2 - (boxA.getAbsY() + normalY * boxA.height / 2)) * normalY;
+		return normalX * (boxA.getAbsX() + normalX * boxA.width / 2 - boxB.getAbsX() + normalX * boxB.width / 2)
+				- normalY * (boxB.getAbsY() - normalY * boxB.height / 2 - boxA.getAbsY() - normalY * boxA.height / 2);
 	}
 
 	public static float getContactSurface(Box boxA, Box boxB, float normalX, float normalY)
