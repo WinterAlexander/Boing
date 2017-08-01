@@ -47,9 +47,7 @@ public class MoveStateImpl implements MoveState
 			((UpdatableBody)body).update(delta);
 
 		getMovement().set(body.getVelocity()).scl(delta);
-		getMovement().add(
-				getInfluence(body, delta)//;
-		);
+		getMovement().add(getInfluence(body, delta));
 
 		body.getPosition().add(getMovement());
 	}

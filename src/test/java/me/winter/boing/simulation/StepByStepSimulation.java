@@ -107,18 +107,18 @@ public class StepByStepSimulation
 		boxLike.addCollider(new Box(boxLike, 0, 0, 50, 50));
 		world.add(boxLike);
 
-		for(int i = 0; i < 4; i++)
+		for(int i = 0; i < 3; i++)
 		{
 			DynamicBodyImpl fallingGround = new DynamicBodyImpl();
-			fallingGround.getPosition().set(350 + i * 50, 175);
+			fallingGround.getPosition().set(400 + i * 50, 175);
 			fallingGround.getVelocity().set(0, -25);
 			fallingGround.addCollider(new Box(fallingGround, 0, 0, 50, 50));
 			world.add(fallingGround);
 		}
 
 		BodyImpl ground = new BodyImpl();
-		ground.getPosition().set(425, 150);
-		ground.addCollider(new Limit(ground, 0, 0, UP, 200));
+		ground.getPosition().set(450, 150);
+		ground.addCollider(new Limit(ground, 0, 0, UP, 150));
 		world.add(ground);
 
 		new WorldSimulation(world, 1f).start(true);

@@ -81,7 +81,7 @@ public class BoxBoxDetector extends PooledDetector<Box, Box>
 				collision = coll2;
 			else //if there's a collision for both x and y (TODO is this corner corner ?)
 			{
-				if(collision.priority < coll2.priority) //take the one with higher priority
+				if(collision.priority <= coll2.priority) //take the one with higher priority
 					collision = coll2;
 			}
 		}

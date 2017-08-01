@@ -1,6 +1,7 @@
 package me.winter.boing.util;
 
 import me.winter.boing.Body;
+import me.winter.boing.DynamicBody;
 import me.winter.boing.colliders.Box;
 import me.winter.boing.colliders.Circle;
 import me.winter.boing.colliders.Collider;
@@ -33,7 +34,7 @@ public class WorldSimulation extends JFrame implements KeyListener, MouseListene
 	private float frameRate;
 
 	private long frames = 0, framesRemaining = -1;
-	private boolean deletePressed;
+	private boolean deletePressed, velsEnabled;
 
 	private JPanel panel;
 
@@ -80,6 +81,16 @@ public class WorldSimulation extends JFrame implements KeyListener, MouseListene
 							Limit limit = (Limit)collider;
 							g.drawLine((int)(limit.getAbsX() - limit.size / 2 * limit.normal.y), (int)(600 - limit.getAbsY() + limit.size / 2 * limit.normal.x), (int)(limit.getAbsX() + limit.size / 2 * limit.normal.y), (int)(600 - limit.getAbsY() - limit.size / 2 * limit.normal.x));
 						}
+
+					if(velsEnabled && body instanceof DynamicBody)
+					{
+						g.setColor(g.getColor().darker());
+						DynamicBody dyn = (DynamicBody)body;
+						g.drawLine((int)dyn.getPosition().x,
+								600 - (int)dyn.getPosition().y,
+								(int)(dyn.getPosition().x + dyn.getVelocity().x),
+								600 - (int)(dyn.getPosition().y + dyn.getVelocity().y));
+					}
 
 					g.setColor(body.getColliders().length > 0 && body.getColliders()[0] instanceof Limit ? Color.BLACK : Color.WHITE);
 					g.drawString("" + n++, (int)body.getPosition().x, (int)(600 - body.getPosition().y));
@@ -195,7 +206,11 @@ public class WorldSimulation extends JFrame implements KeyListener, MouseListene
 		{
 			deletePressed = false;
 		}
-
+		else if(e.getKeyCode() == KeyEvent.VK_V)
+		{
+			velsEnabled = !velsEnabled;
+			forceRepaint();
+		}
 	}
 
 	@Override
