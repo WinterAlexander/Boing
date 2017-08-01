@@ -27,13 +27,23 @@ public class BoxBoxDetector extends PooledDetector<Box, Box>
 {
 	//private me.winter.boing.detection.simple.BoxBoxDetector simple;
 
-	//private CollisionDynamicVariable[] penetrationFormulas = new CollisionDynamicVariable[4];
-	//private CollisionDynamicVariable[] contactSurfaceFormulas = new CollisionDynamicVariable[4];
+	private CollisionDynamicVariable[] penetrationFormulas = new CollisionDynamicVariable[4];
+	private CollisionDynamicVariable[] contactSurfaceFormulas = new CollisionDynamicVariable[4];
 
 	public BoxBoxDetector(Pool<Collision> collisionPool)
 	{
 		super(collisionPool);
 		//simple = new me.winter.boing.detection.simple.BoxBoxDetector(collisionPool);
+
+		penetrationFormulas[formulaKey(1f, 0f)] = (colliderA, colliderB) -> getPenetration((Box)colliderA, (Box)colliderB, 1f, 0f);
+		penetrationFormulas[formulaKey(0f, 1f)] = (colliderA, colliderB) -> getPenetration((Box)colliderA, (Box)colliderB, 0f, 1f);
+		penetrationFormulas[formulaKey(-1f, 0f)] = (colliderA, colliderB) -> getPenetration((Box)colliderA, (Box)colliderB, -1f, 0f);
+		penetrationFormulas[formulaKey(0f, -1f)] = (colliderA, colliderB) -> getPenetration((Box)colliderA, (Box)colliderB, 0f, -1f);
+
+		contactSurfaceFormulas[formulaKey(1f, 0f)] = (colliderA, colliderB) -> getContactSurface((Box)colliderA, (Box)colliderB, 1f, 0f);
+		contactSurfaceFormulas[formulaKey(0f, 1f)] = (colliderA, colliderB) -> getContactSurface((Box)colliderA, (Box)colliderB, 0f, 1f);
+		contactSurfaceFormulas[formulaKey(-1f, 0f)] = (colliderA, colliderB) -> getContactSurface((Box)colliderA, (Box)colliderB, -1f, 0f);
+		contactSurfaceFormulas[formulaKey(0f, -1f)] = (colliderA, colliderB) -> getContactSurface((Box)colliderA, (Box)colliderB, 0f, -1f);
 	}
 
 	@Override
@@ -206,13 +216,13 @@ public class BoxBoxDetector extends PooledDetector<Box, Box>
 
 		collision.normal.set(normalX, normalY);
 
-		collision.penetration = (colliderA, colliderB) -> getPenetration((Box)colliderA, (Box)colliderB, normalX, normalY);
+		collision.penetration = penetrationFormulas[formulaKey(normalX, normalY)];
 
 		//boing v2 priority algorithm
 		collision.priority = surface * getPenetration(boxA, boxB, normalX, normalY);
 
 		//contact surface at current position
-		collision.contactSurface = (colliderA, colliderB) -> getContactSurface((Box)colliderA, (Box)colliderB, normalX, normalY);
+		collision.contactSurface = contactSurfaceFormulas[formulaKey(normalX, normalY)];
 
 		collision.colliderA = boxA;
 		collision.colliderB = boxB;
@@ -273,5 +283,16 @@ public class BoxBoxDetector extends PooledDetector<Box, Box>
 
 		return min(max(limitA1, limitA2), max(limitB1, limitB2)) //minimum of the maximums
 				- max(min(limitA1, limitA2), min(limitB1, limitB2)); //maximum of the minimums
+	}
+
+	private int formulaKey(float nx, float ny)
+	{
+		if(nx == 1f)
+			return 0;
+		if(ny == 1f)
+			return 1;
+		if(nx == -1f)
+			return 2;
+		return 3;
 	}
 }
