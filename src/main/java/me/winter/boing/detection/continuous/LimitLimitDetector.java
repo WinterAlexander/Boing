@@ -33,19 +33,19 @@ public class LimitLimitDetector extends PooledDetector<Limit, Limit>
 		if(!areEqual(limitA.normal.dot(limitB.normal), -1))
 			return null;
 
-		final float normalX = limitA.normal.x; //normal X
-		final float normalY = limitA.normal.y; //normal Y
+		float normalX = limitA.normal.x; //normal X
+		float normalY = limitA.normal.y; //normal Y
 
 		//position of the limit
-		final float posAx = limitA.getAbsX();
-		final float posAy = limitA.getAbsY();
+		float posAx = limitA.getAbsX();
+		float posAy = limitA.getAbsY();
 
 		//same for b
-		final float posBx = limitB.getAbsX();
-		final float posBy = limitB.getAbsY();
+		float posBx = limitB.getAbsX();
+		float posBy = limitB.getAbsY();
 
 		//movement of the bodies seen from each other
-		final float vecAx, vecAy, vecBx, vecBy;
+		float vecAx, vecAy, vecBx, vecBy;
 
 		Vector2 shiftA = limitA.getCollisionShifting(world);
 		Vector2 shiftB = limitB.getCollisionShifting(world);
@@ -94,24 +94,19 @@ public class LimitLimitDetector extends PooledDetector<Limit, Limit>
 		//'previous' position is assumed to be the current position minus
 		//the fake movement we just assumed. This fake previous position is
 		//used to make sure no collision drops by collision shitfing
-		final float prevAx = posAx - vecAx;
-		final float prevAy = posAy - vecAy;
-		final float prevBx = posBx - vecBx;
-		final float prevBy = posBy - vecBy;
+		float prevAx = posAx - vecAx;
+		float prevAy = posAy - vecAy;
+		float prevBx = posBx - vecBx;
+		float prevBy = posBy - vecBy;
 
 		//if limitB isn't before limitA
 		//(aka the limits at previous positions are not even facing each other)
 		if(!isSmallerOrEqual(prevAx * normalX + prevAy * normalY, prevBx * normalX + prevBy * normalY, epsilon)) //if limitB isn't before limitA
 			return null; //no collision
 
-		final float hsizeA = limitA.size / 2; //half size for A
-		final float hsizeB = limitB.size / 2; //half size for B
+		float hsizeA = limitA.size / 2; //half size for A
+		float hsizeB = limitB.size / 2; //half size for B
 
-		//contact surface, used to detect if limits are on the same plane and
-		//to fullfill the collision report
-		float surface;
-
-		//get surface contact at mid point
 		float diff = ((posBx - vecBx) - (posAx - vecAx)) * normalX + ((posBy - vecBy) - (posAy - vecAy)) * normalY;
 		float vecDiff = (vecBx - vecAx) * normalX + (vecBy - vecAy) * normalY;
 
@@ -122,7 +117,10 @@ public class LimitLimitDetector extends PooledDetector<Limit, Limit>
 		float midBx = posBx - vecBx * midpoint; //midpoint x for B
 		float midBy = posBy - vecBy * midpoint; //midpoint y for B
 
-		surface = BoxBoxDetector.getContactSurface(midAx, midAy, hsizeA, midBx, midBy, hsizeB, normalX, normalY);
+		//contact surface, used to detect if limits are on the same plane and
+		//to fullfill the collision report
+		//get surface contact at mid point
+		float surface = BoxBoxDetector.getContactSurface(midAx, midAy, hsizeA, midBx, midBy, hsizeB, normalX, normalY);
 
 		//if 0, it might be a corner corner case
 		if(!areEqual(surface, 0) && surface < 0)

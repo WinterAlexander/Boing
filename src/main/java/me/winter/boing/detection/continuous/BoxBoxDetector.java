@@ -111,25 +111,20 @@ public class BoxBoxDetector extends PooledDetector<Box, Box>
 	                          final float epsilon, final float normalX, final float normalY)
 	{
 		//position of the limit (position of box + extend of the box)
-		final float posAx = boxA.getAbsX() + normalX * boxA.width / 2;
-		final float posAy = boxA.getAbsY() + normalY * boxA.height / 2;
+		float posAx = boxA.getAbsX() + normalX * boxA.width / 2;
+		float posAy = boxA.getAbsY() + normalY * boxA.height / 2;
 
 		//same for b
-		final float posBx = boxB.getAbsX() - normalX * boxB.width / 2;
-		final float posBy = boxB.getAbsY() - normalY * boxB.height / 2;
+		float posBx = boxB.getAbsX() - normalX * boxB.width / 2;
+		float posBy = boxB.getAbsY() - normalY * boxB.height / 2;
 
 		//if limitB with his movement isn't after limitA with his movement
 		//(aka the limits are still facing each other after having moved)
 		if(!isGreaterOrEqual(posAx * normalX + posAy * normalY, posBx * normalX + posBy * normalY, epsilon))
 			return null; //no collision
 
-		//true if limits are touching after their movement
-		//(penetration about 0, just touching nothing else)
-		//TODO whats the point ?
-		//final boolean justTouching = areEqual(posAx * normalX + posAy * normalY, posBx * normalX + posBy * normalY, epsilon);
-
 		//movement of the bodies seen from each other
-		final float vecAx, vecAy, vecBx, vecBy;
+		float vecAx, vecAy, vecBx, vecBy;
 
 		//if collision shifting of A is going along it's normal
 		if(dot(normalX, normalY, shiftA.x, shiftA.y) > 0)
@@ -176,26 +171,9 @@ public class BoxBoxDetector extends PooledDetector<Box, Box>
 			return null;
 
 		//half the size for A and B, used in further calculations
-		final float hsizeA = abs(normalY * boxA.width / 2 + normalX * boxA.height / 2);
-		final float hsizeB = abs(normalY * boxB.width / 2 + normalX * boxB.height / 2);
+		float hsizeA = abs(normalY * boxA.width / 2 + normalX * boxA.height / 2);
+		float hsizeB = abs(normalY * boxB.width / 2 + normalX * boxB.height / 2);
 
-		//contact surface, used to detect if limits are on the same plane and
-		//to fullfill the collision report
-		float surface;
-
-		//if they are just touching after movement
-		/*if(justTouching)  //doesn't seem to work or to make sense, don't remember the intention too
-		{
-			//get surface contact when limits were at their previous position
-			surface = getContactSurface(prevAx, prevAy, hsizeA, prevBx, prevBy, hsizeB, normalX, normalY);
-
-			//if nothing (TODO why does this make sense?)
-			if(isSmallerOrEqual(surface, 0, epsilon))
-				return null;
-		}*/
-
-		
-		//get surface contact at mid point
 		float diff = ((posBx - vecBx) - (posAx - vecAx)) * normalX + ((posBy - vecBy) - (posAy - vecAy)) * normalY;
 		float vecDiff = (vecBx - vecAx) * normalX + (vecBy - vecAy) * normalY;
 
@@ -206,7 +184,10 @@ public class BoxBoxDetector extends PooledDetector<Box, Box>
 		float midBx = posBx - vecBx * midpoint; //midpoint x for B
 		float midBy = posBy - vecBy * midpoint; //midpoint y for B
 
-		surface = getContactSurface(midAx, midAy, hsizeA, midBx, midBy, hsizeB, normalX, normalY);
+		//contact surface, used to detect if limits are on the same plane and
+		//to fullfill the collision report
+		//get surface contact at mid point
+		float surface = getContactSurface(midAx, midAy, hsizeA, midBx, midBy, hsizeB, normalX, normalY);
 
 		//if 0, it might be a corner corner case
 		if(!areEqual(surface, 0) && surface < 0)

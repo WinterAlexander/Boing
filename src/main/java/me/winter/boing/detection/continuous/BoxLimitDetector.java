@@ -34,16 +34,16 @@ public class BoxLimitDetector extends PooledDetector<Box, Limit>
 	@Override
 	public Collision collides(World world, Box boxA, Limit limitB)
 	{
-		final float normalX = -limitB.normal.x; //normal X
-		final float normalY = -limitB.normal.y; //normal Y
+		float normalX = -limitB.normal.x; //normal X
+		float normalY = -limitB.normal.y; //normal Y
 
 		//position of the limit (position of box + extend of the box)
-		final float posAx = boxA.getAbsX() + normalX * boxA.width / 2; //extends to side
-		final float posAy = boxA.getAbsY() + normalY * boxA.height / 2; //extends to side
+		float posAx = boxA.getAbsX() + normalX * boxA.width / 2; //extends to side
+		float posAy = boxA.getAbsY() + normalY * boxA.height / 2; //extends to side
 
 		//b is simply a limit
-		final float posBx = limitB.getAbsX();
-		final float posBy = limitB.getAbsY();
+		float posBx = limitB.getAbsX();
+		float posBy = limitB.getAbsY();
 
 		//movement of the bodies seen from each other
 		final float vecAx, vecAy, vecBx, vecBy;
@@ -93,23 +93,18 @@ public class BoxLimitDetector extends PooledDetector<Box, Limit>
 		//'previous' position is assumed to be the current position minus
 		//the fake movement we just assumed. This fake previous position is
 		//used to make sure no collision drops by collision shitfing
-		final float prevAx = posAx - vecAx;
-		final float prevAy = posAy - vecAy;
-		final float prevBx = posBx - vecBx;
-		final float prevBy = posBy - vecBy;
+		float prevAx = posAx - vecAx;
+		float prevAy = posAy - vecAy;
+		float prevBx = posBx - vecBx;
+		float prevBy = posBy - vecBy;
 
 		if(!isSmallerOrEqual(prevAx * normalX + prevAy * normalY, prevBx * normalX + prevBy * normalY, epsilon)) //if limitB isn't before boxA
 			return null; //no collision
 
 		//half the size for A and B, used in further calculations
-		final float hsizeA = abs(normalX * boxA.height / 2 + normalY * boxA.width / 2); //half size for A
-		final float hsizeB = limitB.size / 2; //half size for B
+		float hsizeA = abs(normalX * boxA.height / 2 + normalY * boxA.width / 2); //half size for A
+		float hsizeB = limitB.size / 2; //half size for B
 
-		//contact surface, used to detect if limits are on the same plane and
-		//to fullfill the collision report
-		float surface;
-
-		//get surface contact at mid point
 		float diff = ((posBx - vecBx) - (posAx - vecAx)) * normalX + ((posBy - vecBy) - (posAy - vecAy)) * normalY;
 		float vecDiff = (vecBx - vecAx) * normalX + (vecBy - vecAy) * normalY;
 
@@ -120,7 +115,10 @@ public class BoxLimitDetector extends PooledDetector<Box, Limit>
 		float midBx = posBx - vecBx * midpoint; //midpoint x for B
 		float midBy = posBy - vecBy * midpoint; //midpoint y for B
 
-		surface = BoxBoxDetector.getContactSurface(midAx, midAy, hsizeA, midBx, midBy, hsizeB, normalX, normalY);
+		//contact surface, used to detect if limits are on the same plane and
+		//to fullfill the collision report
+		//get surface contact at mid point
+		float surface = BoxBoxDetector.getContactSurface(midAx, midAy, hsizeA, midBx, midBy, hsizeB, normalX, normalY);
 
 		//if 0, it might be a corner corner case
 		if(!areEqual(surface, 0) && surface < 0)
