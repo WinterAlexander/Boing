@@ -11,6 +11,7 @@ import me.winter.boing.detection.PooledDetector;
 import static com.badlogic.gdx.math.Vector2.dot;
 import static java.lang.Math.abs;
 import static java.lang.Math.min;
+import static java.lang.Math.signum;
 import static me.winter.boing.detection.continuous.BoxBoxDetector.getContactSurface;
 import static me.winter.boing.util.FloatUtil.DEFAULT_ULPS;
 import static me.winter.boing.util.FloatUtil.areEqual;
@@ -45,45 +46,36 @@ public class BoxLimitDetector extends PooledDetector<Box, Limit>
 		float posBx = limitB.getAbsX();
 		float posBy = limitB.getAbsY();
 
+		Vector2 movA = boxA.getMovement(world);
+		Vector2 movB = limitB.getMovement(world);
+
 		//movement of the bodies seen from each other
-		final float vecAx, vecAy, vecBx, vecBy;
+		float vecAx = movA.x, vecAy = movA.y, vecBx = movB.x, vecBy = movB.y;
 
 		Vector2 shiftA = boxA.getCollisionShifting(world);
 		Vector2 shiftB = limitB.getCollisionShifting(world);
 
-		Vector2 movA = boxA.getMovement(world);
-		Vector2 movB = limitB.getMovement(world);
-
 		//if collision shifting of A is going along it's normal
-		if(dot(normalX, normalY, shiftA.x, shiftA.y) > 0)
-		{
+		if(signum(normalX) == signum(shiftA.x))
 			//then expect it to be pushed to there this frame to
 			//(we assume its getting pushed by something)
-			vecAx = movA.x + shiftA.x;
-			vecAy = movA.y + shiftA.y;
-		}
-		else
-		{
-			//else, collision shifting is going in the other direction
-			//ignoring it is safer since we don't know for sure if
-			//it will get pushed this frame too or if the pusher is B
-			//(in the case were the pusher is B, this collision must happen
-			//for the pushing not to drop)
-			vecAx = movA.x;
-			vecAy = movA.y;
-		}
+			vecAx += shiftA.x;
+		//else, collision shifting is going in the other direction
+		//ignoring it is safer since we don't know for sure if
+		//it will get pushed this frame too or if the pusher is B
+		//(in the case were the pusher is B, this collision must happen
+		//for the pushing not to drop)
+
+		//collision shifting is per component
+		if(signum(normalY) == signum(shiftA.y))
+			vecAy += shiftA.y;
 
 		//same for B, B's normal is the opposite of A
-		if(dot(-normalX, -normalY, shiftB.x, shiftB.y) > 0)
-		{
-			vecBx = movB.x + shiftB.x;
-			vecBy = movB.y + shiftB.y;
-		}
-		else
-		{
-			vecBx = movB.x;
-			vecBy = movB.y;
-		}
+		if(signum(-normalX) == signum(shiftB.x))
+			vecBx += shiftB.x;
+
+		if(signum(-normalY) == signum(shiftB.y))
+			vecBy += shiftB.y;
 
 		float epsilon = DEFAULT_ULPS * getGreatestULP(posAx, posAy, posBx, posBy, vecAx, vecAy, vecBx, vecBy, boxA.width, boxA.height, limitB.size);
 

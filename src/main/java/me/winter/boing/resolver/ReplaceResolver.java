@@ -13,7 +13,6 @@ import static me.winter.boing.util.FloatUtil.isSmallerOrEqual;
  */
 public class ReplaceResolver implements CollisionResolver
 {
-
 	@Override
 	public boolean resolveCollision(Collision collision, World world)
 	{
@@ -27,7 +26,7 @@ public class ReplaceResolver implements CollisionResolver
 		//|| "DABOX".equals(collision.colliderB.getTag()))
 		//	System.out.println((collision.normal.x != 0 ? "h" : "v") + collision.hashCode() + ": " + surface);
 
-		if(pene <= 0 || isSmallerOrEqual(surface, 0)) //corner glitch causes trouble here
+		if(pene <= 0 || isSmallerOrEqual(surface, 0))
 			return false;
 
 		float ratio = collision.weightRatio;

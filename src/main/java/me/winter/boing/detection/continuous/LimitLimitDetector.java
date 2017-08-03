@@ -8,11 +8,13 @@ import me.winter.boing.colliders.Limit;
 import me.winter.boing.detection.PooledDetector;
 
 import static com.badlogic.gdx.math.Vector2.dot;
+import static java.lang.Math.signum;
 import static me.winter.boing.util.FloatUtil.DEFAULT_ULPS;
 import static me.winter.boing.util.FloatUtil.areEqual;
 import static me.winter.boing.util.FloatUtil.getGreatestULP;
 import static me.winter.boing.util.FloatUtil.isGreaterOrEqual;
 import static me.winter.boing.util.FloatUtil.isSmallerOrEqual;
+import static me.winter.boing.util.FloatUtil.min;
 
 /**
  * Detects collisions between 2 Limits. This is the only
@@ -78,25 +80,26 @@ public class LimitLimitDetector extends PooledDetector<Limit, Limit>
 		}*/
 
 		//if collision shifting of A is going along it's normal
-		if(dot(normalX, normalY, shiftA.x, shiftA.y) > 0)
-		{
+		if(signum(normalX) == signum(shiftA.x))
 			//then expect it to be pushed to there this frame to
 			//(we assume its getting pushed by something)
 			vecAx += shiftA.x;
-			vecAy += shiftA.y;
-		}
 		//else, collision shifting is going in the other direction
 		//ignoring it is safer since we don't know for sure if
 		//it will get pushed this frame too or if the pusher is B
 		//(in the case were the pusher is B, this collision must happen
 		//for the pushing not to drop)
 
+		//collision shifting is per component
+		if(signum(normalY) == signum(shiftA.y))
+			vecAy += shiftA.y;
+
 		//same for B, B's normal is the opposite of A
-		if(dot(-normalX, -normalY, shiftB.x, shiftB.y) > 0)
-		{
+		if(signum(-normalX) == signum(shiftB.x))
 			vecBx += shiftB.x;
+
+		if(signum(-normalY) == signum(shiftB.y))
 			vecBy += shiftB.y;
-		}
 
 		float epsilon = DEFAULT_ULPS * getGreatestULP(posAx, posAy, posBx, posBy, vecAx, vecAy, vecBx, vecBy, limitA.size, limitB.size);
 
@@ -150,7 +153,7 @@ public class LimitLimitDetector extends PooledDetector<Limit, Limit>
 		//boing v2 priority algorithm
 		//collision.priority = surface * getPenetration(compAx, compAy, compBx, compBy, normalX, normalY);
 		collision.priority = surface * getPenetration(limitA, limitB);
-		System.out.println(collision.priority);
+		//System.out.println(collision.priority);
 
 		//re-get the position from the original calculation
 		//since we are in a CollisionDynamicVariable, posAx, posAy etc. might
