@@ -207,7 +207,9 @@ public class StepByStepSimulation
 		boxLike.getPosition().set(400, 225);
 		boxLike.getVelocity().set(25, -25);
 		boxLike.addCollider(new Limit(boxLike, 0, 25, UP, 50));
-		boxLike.addCollider(new Limit(boxLike, 0, -25, DOWN, 50));
+		Limit downLimit = new Limit(boxLike, 0, -25, DOWN, 50);
+		downLimit.setTag("DOWN_LIMIT");
+		boxLike.addCollider(downLimit);
 		boxLike.addCollider(new Limit(boxLike, -25, 0, LEFT, 50));
 		boxLike.addCollider(new Limit(boxLike, 25, 0, RIGHT, 50));
 		world.add(boxLike);
@@ -217,7 +219,49 @@ public class StepByStepSimulation
 			DynamicBodyImpl fallingGround = new DynamicBodyImpl();
 			fallingGround.getPosition().set(400 + i * 50, 175);
 			fallingGround.getVelocity().set(0, -25);
-			fallingGround.addCollider(new Limit(fallingGround, 0, 25, UP, 50));
+			Limit upLimit = new Limit(fallingGround, 0, 25, UP, 50);
+			if(i == 0)
+				upLimit.setTag("UP_LIMIT");
+			fallingGround.addCollider(upLimit);
+			fallingGround.addCollider(new Limit(fallingGround, 0, -25, DOWN, 50));
+			fallingGround.addCollider(new Limit(fallingGround, -25, 0, LEFT, 50));
+			fallingGround.addCollider(new Limit(fallingGround, 25, 0, RIGHT, 50));
+			world.add(fallingGround);
+		}
+
+		BodyImpl ground = new BodyImpl();
+		ground.getPosition().set(425, 150);
+		ground.addCollider(new Limit(ground, 0, 0, UP, 100));
+		world.add(ground);
+
+		new WorldSimulation(world, 1f).start(true);
+	}
+
+	@Test
+	public void minimalPerpetuallyFallingGroundCaseInLimitsGhostCollision()
+	{
+		TestWorldImpl world = new TestWorldImpl(new ReplaceResolver());
+
+		DynamicBodyImpl boxLike = new DynamicBodyImpl();
+		boxLike.getPosition().set(400, 225);
+		boxLike.getVelocity().set(20, -20);
+		boxLike.addCollider(new Limit(boxLike, 0, 25, UP, 50));
+		Limit downLimit = new Limit(boxLike, 0, -25, DOWN, 50);
+		downLimit.setTag("DOWN_LIMIT");
+		boxLike.addCollider(downLimit);
+		boxLike.addCollider(new Limit(boxLike, -25, 0, LEFT, 50));
+		boxLike.addCollider(new Limit(boxLike, 25, 0, RIGHT, 50));
+		world.add(boxLike);
+
+		for(int i = 0; i < 2; i++)
+		{
+			DynamicBodyImpl fallingGround = new DynamicBodyImpl();
+			fallingGround.getPosition().set(400 + i * 50, 175);
+			fallingGround.getVelocity().set(0, -25);
+			Limit upLimit = new Limit(fallingGround, 0, 25, UP, 50);
+			if(i == 0)
+				upLimit.setTag("UP_LIMIT");
+			fallingGround.addCollider(upLimit);
 			fallingGround.addCollider(new Limit(fallingGround, 0, -25, DOWN, 50));
 			fallingGround.addCollider(new Limit(fallingGround, -25, 0, LEFT, 50));
 			fallingGround.addCollider(new Limit(fallingGround, 25, 0, RIGHT, 50));
