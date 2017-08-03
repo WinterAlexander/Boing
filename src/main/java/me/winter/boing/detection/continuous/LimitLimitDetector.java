@@ -30,6 +30,11 @@ public class LimitLimitDetector extends PooledDetector<Limit, Limit>
 	@Override
 	public Collision collides(World world, Limit limitA, Limit limitB)
 	{
+		//if(("" + limitA.getTag()).endsWith("_LIMIT") && ("" + limitB.getTag()).endsWith("_LIMIT"))
+		//{
+		//	System.console();
+		//}
+
 		if(!areEqual(limitA.normal.dot(limitB.normal), -1))
 			return null;
 
@@ -44,50 +49,60 @@ public class LimitLimitDetector extends PooledDetector<Limit, Limit>
 		float posBx = limitB.getAbsX();
 		float posBy = limitB.getAbsY();
 
+		Vector2 movA = limitA.getMovement(world);
+		Vector2 movB = limitB.getMovement(world);
+
 		//movement of the bodies seen from each other
-		float vecAx, vecAy, vecBx, vecBy;
+		float vecAx = movA.x, vecAy = movA.y, vecBx = movB.x, vecBy = movB.y;
 
 		Vector2 shiftA = limitA.getCollisionShifting(world);
 		Vector2 shiftB = limitB.getCollisionShifting(world);
 
-		Vector2 movA = limitA.getMovement(world);
-		Vector2 movB = limitB.getMovement(world);
+		//compare values to check if collision occurs, if the other is getting away from the first,
+		// his velocity is subtracted to see if any collision could occur in the case where the one getting away gets pushed back on the first
+		/*float compAx = posAx, compAy = posAy, compBx = posBx, compBy = posBy;
+
+		//if the velocity is going along the normal (going where limit is pointing at)
+		if(dot(normalX, normalY, vecAx, vecAy) < 0)
+		{
+			//remove the velocity to feel the other body has it wasn't moving
+			compAx -= vecAx;
+			compAy -= vecAy;
+		}
+
+		//same
+		if(dot(-normalX, -normalY, vecBx, vecBy) < 0)
+		{
+			compBx -= vecBx;
+			compBy -= vecBy;
+		}*/
 
 		//if collision shifting of A is going along it's normal
 		if(dot(normalX, normalY, shiftA.x, shiftA.y) > 0)
 		{
 			//then expect it to be pushed to there this frame to
 			//(we assume its getting pushed by something)
-			vecAx = movA.x + shiftA.x;
-			vecAy = movA.y + shiftA.y;
+			vecAx += shiftA.x;
+			vecAy += shiftA.y;
 		}
-		else
-		{
-			//else, collision shifting is going in the other direction
-			//ignoring it is safer since we don't know for sure if
-			//it will get pushed this frame too or if the pusher is B
-			//(in the case were the pusher is B, this collision must happen
-			//for the pushing not to drop)
-			vecAx = movA.x;
-			vecAy = movA.y;
-		}
+		//else, collision shifting is going in the other direction
+		//ignoring it is safer since we don't know for sure if
+		//it will get pushed this frame too or if the pusher is B
+		//(in the case were the pusher is B, this collision must happen
+		//for the pushing not to drop)
 
 		//same for B, B's normal is the opposite of A
 		if(dot(-normalX, -normalY, shiftB.x, shiftB.y) > 0)
 		{
-			vecBx = movB.x + shiftB.x;
-			vecBy = movB.y + shiftB.y;
-		}
-		else
-		{
-			vecBx = movB.x;
-			vecBy = movB.y;
+			vecBx += shiftB.x;
+			vecBy += shiftB.y;
 		}
 
 		float epsilon = DEFAULT_ULPS * getGreatestULP(posAx, posAy, posBx, posBy, vecAx, vecAy, vecBx, vecBy, limitA.size, limitB.size);
 
 		//if limitB with his movement isn't after limitA with his movement
 		//(aka the limits are still facing each other after having moved)
+		//if(!isGreaterOrEqual(compAx * normalX + compAy * normalY, compBx * normalX + compBy * normalY, epsilon))
 		if(!isGreaterOrEqual(posAx * normalX + posAy * normalY, posBx * normalX + posBy * normalY, epsilon))
 			return null; //no collision
 
@@ -133,14 +148,14 @@ public class LimitLimitDetector extends PooledDetector<Limit, Limit>
 		collision.penetration = (cA, cB) -> getPenetration((Limit)cA, (Limit)cB);
 
 		//boing v2 priority algorithm
+		//collision.priority = surface * getPenetration(compAx, compAy, compBx, compBy, normalX, normalY);
 		collision.priority = surface * getPenetration(limitA, limitB);
-
+		System.out.println(collision.priority);
 
 		//re-get the position from the original calculation
 		//since we are in a CollisionDynamicVariable, posAx, posAy etc. might
 		//be outdated (cached values)
 		collision.contactSurface = (cA, cB) -> getContactSurface((Limit)cA, (Limit)cB);
-
 
 		collision.colliderA = limitA;
 		collision.colliderB = limitB;
@@ -151,8 +166,12 @@ public class LimitLimitDetector extends PooledDetector<Limit, Limit>
 
 	public static float getPenetration(Limit limitA, Limit limitB)
 	{
-		return -((limitB.getAbsX() - limitA.getAbsX()) * limitA.normal.x
-				+ (limitB.getAbsY() - limitA.getAbsY()) * limitA.normal.y);
+		return (limitA.getAbsX() - limitB.getAbsX()) * limitA.normal.x + (limitA.getAbsY() - limitB.getAbsY()) * limitA.normal.y;
+	}
+
+	public static float getPenetration(float ax, float ay, float bx, float by, float nx, float ny)
+	{
+		return (ax - bx) * nx + (ay - by) * ny;
 	}
 
 	public static float getContactSurface(Limit limitA, Limit limitB)
