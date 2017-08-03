@@ -62,22 +62,21 @@ public class LimitLimitDetector extends PooledDetector<Limit, Limit>
 
 		//compare values to check if collision occurs, if the other is getting away from the first,
 		// his velocity is subtracted to see if any collision could occur in the case where the one getting away gets pushed back on the first
-		/*float compAx = posAx, compAy = posAy, compBx = posBx, compBy = posBy;
+		float compAx = posAx, compAy = posAy, compBx = posBx, compBy = posBy;
 
 		//if the velocity is going along the normal (going where limit is pointing at)
-		if(dot(normalX, normalY, vecAx, vecAy) < 0)
-		{
+		if(signum(normalX) != signum(vecAx))
 			//remove the velocity to feel the other body has it wasn't moving
 			compAx -= vecAx;
-			compAy -= vecAy;
-		}
 
-		//same
-		if(dot(-normalX, -normalY, vecBx, vecBy) < 0)
-		{
+		if(signum(normalY) != signum(vecAy))
+			compAy -= vecAy;
+
+		if(signum(-normalX) != signum(vecBx))
 			compBx -= vecBx;
+
+		if(signum(-normalY) != signum(vecBy))
 			compBy -= vecBy;
-		}*/
 
 		//if collision shifting of A is going along it's normal
 		if(signum(normalX) == signum(shiftA.x))
@@ -105,9 +104,8 @@ public class LimitLimitDetector extends PooledDetector<Limit, Limit>
 
 		//if limitB with his movement isn't after limitA with his movement
 		//(aka the limits are still facing each other after having moved)
-		//if(!isGreaterOrEqual(compAx * normalX + compAy * normalY, compBx * normalX + compBy * normalY, epsilon))
-		if(!isGreaterOrEqual(posAx * normalX + posAy * normalY, posBx * normalX + posBy * normalY, epsilon))
-			return null; //no collision
+		if(!isGreaterOrEqual(compAx * normalX + compAy * normalY, compBx * normalX + compBy * normalY, epsilon))
+			return null;
 
 		//'previous' position is assumed to be the current position minus
 		//the fake movement we just assumed. This fake previous position is

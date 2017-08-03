@@ -55,6 +55,24 @@ public class BoxLimitDetector extends PooledDetector<Box, Limit>
 		Vector2 shiftA = boxA.getCollisionShifting(world);
 		Vector2 shiftB = limitB.getCollisionShifting(world);
 
+		//compare values to check if collision occurs, if the other is getting away from the first,
+		// his velocity is subtracted to see if any collision could occur in the case where the one getting away gets pushed back on the first
+		float compAx = posAx, compAy = posAy, compBx = posBx, compBy = posBy;
+
+		//if the velocity is going along the normal (going where limit is pointing at)
+		if(signum(normalX) != signum(vecAx))
+			//remove the velocity to feel the other body has it wasn't moving
+			compAx -= vecAx;
+
+		if(signum(normalY) != signum(vecAy))
+			compAy -= vecAy;
+
+		if(signum(-normalX) != signum(vecBx))
+			compBx -= vecBx;
+
+		if(signum(-normalY) != signum(vecBy))
+			compBy -= vecBy;
+
 		//if collision shifting of A is going along it's normal
 		if(signum(normalX) == signum(shiftA.x))
 			//then expect it to be pushed to there this frame to
@@ -79,7 +97,7 @@ public class BoxLimitDetector extends PooledDetector<Box, Limit>
 
 		float epsilon = DEFAULT_ULPS * getGreatestULP(posAx, posAy, posBx, posBy, vecAx, vecAy, vecBx, vecBy, boxA.width, boxA.height, limitB.size);
 
-		if(!isGreaterOrEqual(posAx * normalX + posAy * normalY, posBx * normalX + posBy * normalY, epsilon)) //if limitB with his velocity isn't after boxA with his velocity
+		if(!isGreaterOrEqual(compAx * normalX + compAy * normalY, compBx * normalX + compBy * normalY, epsilon)) //if limitB with his velocity isn't after boxA with his velocity
 			return null; //no collision
 
 		//'previous' position is assumed to be the current position minus
