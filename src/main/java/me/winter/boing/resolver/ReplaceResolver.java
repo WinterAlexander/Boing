@@ -4,6 +4,8 @@ import me.winter.boing.Collision;
 import me.winter.boing.DynamicBody;
 import me.winter.boing.World;
 
+import static me.winter.boing.util.FloatUtil.areEqual;
+import static me.winter.boing.util.FloatUtil.isGreaterOrEqual;
 import static me.winter.boing.util.FloatUtil.isSmallerOrEqual;
 
 /**
@@ -27,7 +29,11 @@ public class ReplaceResolver implements CollisionResolver
 		//	System.out.println((collision.normal.x != 0 ? "h" : "v") + collision.hashCode() + ": " + surface);
 
 		if(pene <= 0 || isSmallerOrEqual(surface, 0))
+		{
+			if(areEqual(pene, 0) && isGreaterOrEqual(surface, 0))
+				return true; //fake it
 			return false;
+		}
 
 		float ratio = collision.weightRatio;
 
