@@ -1,6 +1,7 @@
 package me.winter.boing;
 
 import me.winter.boing.colliders.Collider;
+import me.winter.boing.util.WrapSharer;
 
 /**
  * A variable within a collision, need
@@ -10,21 +11,20 @@ import me.winter.boing.colliders.Collider;
 @FunctionalInterface
 public interface CollisionDynamicVariable
 {
+	/**
+	 * Not thread safe
+	 */
+	@Deprecated
+	public static final Inverter inverter = new Inverter();
+
 	float getValue(Collider a, Collider b);
 
-	public class Inverter implements CollisionDynamicVariable
+	public class Inverter extends WrapSharer<CollisionDynamicVariable, CollisionDynamicVariable>
 	{
-		private CollisionDynamicVariable var;
-
-		public Inverter(CollisionDynamicVariable var)
-		{
-			this.var = var;
-		}
-
 		@Override
-		public float getValue(Collider a, Collider b)
+		public CollisionDynamicVariable newObject(CollisionDynamicVariable content)
 		{
-			return var.getValue(b, a);
+			return (cA, cB) -> content.getValue(cB, cA);
 		}
 	}
 }

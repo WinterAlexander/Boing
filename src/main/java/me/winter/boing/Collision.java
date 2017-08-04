@@ -101,8 +101,8 @@ public class Collision
 		impactVelA.set(collision.impactVelB);
 		impactVelB.set(collision.impactVelA);
 		weightRatio = 1f - collision.weightRatio;
-		contactSurface = new Inverter(collision.contactSurface);
-		penetration = new Inverter(collision.penetration);
+		contactSurface = CollisionDynamicVariable.inverter.wrap(collision.contactSurface);
+		penetration = CollisionDynamicVariable.inverter.wrap(collision.penetration);
 		priority = collision.priority;
 		colliderA = collision.colliderB;
 		colliderB = collision.colliderA;
