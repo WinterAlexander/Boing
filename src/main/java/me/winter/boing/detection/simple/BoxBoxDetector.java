@@ -5,7 +5,7 @@ import me.winter.boing.Collision;
 import me.winter.boing.World;
 import me.winter.boing.colliders.Box;
 import me.winter.boing.detection.PooledDetector;
-import me.winter.boing.util.CollisionDynamicVariable;
+import me.winter.boing.CollisionDynamicVariable;
 
 import static java.lang.Math.abs;
 

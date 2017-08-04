@@ -6,9 +6,8 @@ import me.winter.boing.Collision;
 import me.winter.boing.World;
 import me.winter.boing.colliders.Box;
 import me.winter.boing.detection.PooledDetector;
-import me.winter.boing.util.CollisionDynamicVariable;
+import me.winter.boing.CollisionDynamicVariable;
 
-import static com.badlogic.gdx.math.Vector2.dot;
 import static java.lang.Math.abs;
 import static java.lang.Math.signum;
 import static me.winter.boing.util.FloatUtil.DEFAULT_ULPS;

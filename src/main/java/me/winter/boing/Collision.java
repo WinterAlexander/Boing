@@ -1,8 +1,8 @@
 package me.winter.boing;
 
 import com.badlogic.gdx.math.Vector2;
+import me.winter.boing.CollisionDynamicVariable.Inverter;
 import me.winter.boing.colliders.Collider;
-import me.winter.boing.util.CollisionDynamicVariable;
 
 /**
  * Represents a collision between 2 solids. This object should be pooled
@@ -100,9 +100,9 @@ public class Collision
 		normal.set(collision.normal).scl(-1);
 		impactVelA.set(collision.impactVelB);
 		impactVelB.set(collision.impactVelA);
-		penetration = collision.penetration;
 		weightRatio = 1f - collision.weightRatio;
-		contactSurface = collision.contactSurface;
+		contactSurface = new Inverter(collision.contactSurface);
+		penetration = new Inverter(collision.penetration);
 		priority = collision.priority;
 		colliderA = collision.colliderB;
 		colliderB = collision.colliderA;

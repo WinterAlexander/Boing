@@ -1,6 +1,7 @@
 package me.winter.boing.detection;
 
 import me.winter.boing.Collision;
+import me.winter.boing.CollisionDynamicVariable.Inverter;
 import me.winter.boing.World;
 import me.winter.boing.colliders.Collider;
 
@@ -29,6 +30,8 @@ public class DetectorSwapper<A extends Collider, B extends Collider> implements 
 			return null;
 
 		collision.normal.scl(-1);
+		collision.contactSurface = new Inverter(collision.contactSurface);
+		collision.penetration = new Inverter(collision.penetration);
 
 		float tmpX = collision.impactVelA.x;
 		float tmpY = collision.impactVelA.y;
