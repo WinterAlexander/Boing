@@ -11,12 +11,6 @@ import me.winter.boing.util.WrapSharer;
 @FunctionalInterface
 public interface CollisionDynamicVariable
 {
-	/**
-	 * Not thread safe
-	 */
-	@Deprecated
-	public static final Inverter inverter = new Inverter();
-
 	float getValue(Collider a, Collider b);
 
 	public class Inverter extends WrapSharer<CollisionDynamicVariable, CollisionDynamicVariable>

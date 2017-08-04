@@ -4,6 +4,7 @@ import me.winter.boing.Collision;
 import me.winter.boing.CollisionDynamicVariable;
 import me.winter.boing.World;
 import me.winter.boing.colliders.Collider;
+import me.winter.boing.util.Wrapper;
 
 /**
  * Represents a CollisionDetector acting as the opposite of the specified CollisionDetector.
@@ -15,10 +16,12 @@ import me.winter.boing.colliders.Collider;
 public class DetectorSwapper<A extends Collider, B extends Collider> implements CollisionDetector<A, B>
 {
 	private CollisionDetector<B, A> detector;
+	private Wrapper<CollisionDynamicVariable, CollisionDynamicVariable> varInverter;
 
-	public DetectorSwapper(CollisionDetector<B, A> detector)
+	public DetectorSwapper(CollisionDetector<B, A> detector, Wrapper<CollisionDynamicVariable, CollisionDynamicVariable> varInverter)
 	{
 		this.detector = detector;
+		this.varInverter = varInverter;
 	}
 
 	@Override
@@ -30,8 +33,8 @@ public class DetectorSwapper<A extends Collider, B extends Collider> implements 
 			return null;
 
 		collision.normal.scl(-1);
-		collision.contactSurface = CollisionDynamicVariable.inverter.wrap(collision.contactSurface);
-		collision.penetration = CollisionDynamicVariable.inverter.wrap(collision.penetration);
+		collision.contactSurface = varInverter.wrap(collision.contactSurface);
+		collision.penetration = varInverter.wrap(collision.penetration);
 
 		float tmpX = collision.impactVelA.x;
 		float tmpY = collision.impactVelA.y;

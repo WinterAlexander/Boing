@@ -2,12 +2,14 @@ package me.winter.boing;
 
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Pool;
+import me.winter.boing.CollisionDynamicVariable.Inverter;
 import me.winter.boing.colliders.Collider;
 import me.winter.boing.detection.DetectionHandler;
 import me.winter.boing.resolver.CappedWeightResolver;
 import me.winter.boing.resolver.CollisionResolver;
 import me.winter.boing.resolver.WeightResolver;
 import me.winter.boing.util.CollisionPool;
+import me.winter.boing.util.Wrapper;
 
 /**
  * Abstract implementation for World. Pools its collision objects and
@@ -22,6 +24,8 @@ public abstract class AbstractWorld implements World
 	 * Collision pool to prevent creating new collisions objects.
 	 */
 	protected final Pool<Collision> collisionPool = new CollisionPool();
+
+	protected final Wrapper<CollisionDynamicVariable, CollisionDynamicVariable> varInverter = new Inverter();
 
 	/**
 	 * Collisions occuring in the current frame
@@ -41,7 +45,7 @@ public abstract class AbstractWorld implements World
 
 	public AbstractWorld(CollisionResolver resolver, WeightResolver weightResolver)
 	{
-		this.detector = new DetectionHandler(collisionPool);
+		this.detector = new DetectionHandler(collisionPool, varInverter);
 		this.resolver = resolver;
 		this.weightResolver = weightResolver;
 	}
@@ -107,7 +111,7 @@ public abstract class AbstractWorld implements World
 				if(collision == null)
 					continue;
 
-				swappedBuffer.setAsSwapped(collision);
+				swappedBuffer.setAsSwapped(collision, varInverter);
 
 				if(colliderA.getBody().cancelCollision(collision) || colliderB.getBody().cancelCollision(swappedBuffer))
 					continue;
@@ -126,7 +130,7 @@ public abstract class AbstractWorld implements World
 					if(bodyB instanceof DynamicBody)
 					{
 						Collision copy = collisionPool.obtain();
-						copy.setAsSwapped(collision);
+						copy.setAsSwapped(collision, varInverter);
 						getState((DynamicBody)bodyB).getCollisions().add(copy);
 					}
 				}
@@ -153,7 +157,7 @@ public abstract class AbstractWorld implements World
 
 			if(resolver.resolveCollision(collision, this))
 			{
-				swapped.setAsSwapped(collision);
+				swapped.setAsSwapped(collision, varInverter);
 				collision.colliderA.getBody().notifyCollision(collision);
 				collision.colliderB.getBody().notifyCollision(swapped);
 			}

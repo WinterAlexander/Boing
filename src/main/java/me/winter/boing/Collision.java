@@ -3,6 +3,7 @@ package me.winter.boing;
 import com.badlogic.gdx.math.Vector2;
 import me.winter.boing.CollisionDynamicVariable.Inverter;
 import me.winter.boing.colliders.Collider;
+import me.winter.boing.util.Wrapper;
 
 /**
  * Represents a collision between 2 solids. This object should be pooled
@@ -95,14 +96,14 @@ public class Collision
 	 *
 	 * @param collision collision to copy
 	 */
-	public void setAsSwapped(Collision collision)
+	public void setAsSwapped(Collision collision, Wrapper<CollisionDynamicVariable, CollisionDynamicVariable> varInverter)
 	{
 		normal.set(collision.normal).scl(-1);
 		impactVelA.set(collision.impactVelB);
 		impactVelB.set(collision.impactVelA);
 		weightRatio = 1f - collision.weightRatio;
-		contactSurface = CollisionDynamicVariable.inverter.wrap(collision.contactSurface);
-		penetration = CollisionDynamicVariable.inverter.wrap(collision.penetration);
+		contactSurface = varInverter.wrap(collision.contactSurface);
+		penetration = varInverter.wrap(collision.penetration);
 		priority = collision.priority;
 		colliderA = collision.colliderB;
 		colliderB = collision.colliderA;

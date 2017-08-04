@@ -3,6 +3,7 @@ package me.winter.boing.detection;
 import com.badlogic.gdx.utils.IntMap;
 import com.badlogic.gdx.utils.Pool;
 import me.winter.boing.Collision;
+import me.winter.boing.CollisionDynamicVariable;
 import me.winter.boing.World;
 import me.winter.boing.detection.continuous.BoxBoxDetector;
 import me.winter.boing.detection.continuous.BoxLimitDetector;
@@ -10,6 +11,7 @@ import me.winter.boing.detection.continuous.LimitLimitDetector;
 import me.winter.boing.colliders.Box;
 import me.winter.boing.colliders.Limit;
 import me.winter.boing.colliders.Collider;
+import me.winter.boing.util.Wrapper;
 
 /**
  * Collision detection handler providing full collision detection by selecting the valid CollisionDetector.
@@ -25,7 +27,7 @@ public class DetectionHandler
 	 *
 	 * @param collisionPool collisionPool to prevent creating new objects
 	 */
-	public DetectionHandler(Pool<Collision> collisionPool)
+	public DetectionHandler(Pool<Collision> collisionPool, Wrapper<CollisionDynamicVariable, CollisionDynamicVariable> variableWrapper)
 	{
 		//continuous.put(getKey(Circle.class, Circle.class), new CircleCircleDetector(collisionPool));
 		//continuous.put(getKey(Circle.class, Box.class), new DetectorSwapper<>(new BoxCircleDetector(collisionPool)));
@@ -36,7 +38,7 @@ public class DetectionHandler
 		detectors.put(getKey(Box.class, Limit.class), new BoxLimitDetector(collisionPool));
 
 		//continuous.put(getKey(Limit.class, Circle.class), new DetectorSwapper<>(new CircleLimitDetector(collisionPool)));
-		detectors.put(getKey(Limit.class, Box.class), new DetectorSwapper<>(new BoxLimitDetector(collisionPool)));
+		detectors.put(getKey(Limit.class, Box.class), new DetectorSwapper<>(new BoxLimitDetector(collisionPool), variableWrapper));
 		detectors.put(getKey(Limit.class, Limit.class), new LimitLimitDetector(collisionPool));
 	}
 
