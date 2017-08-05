@@ -36,7 +36,7 @@ public abstract class AbstractWorld implements World
 	protected CollisionResolver resolver;
 	protected WeightResolver weightResolver;
 
-	private boolean refresh;
+	private boolean refresh = true;
 
 	public AbstractWorld(CollisionResolver resolver)
 	{
@@ -77,15 +77,15 @@ public abstract class AbstractWorld implements World
 
 	protected void detectCollisions()
 	{
-		/*if(refresh)
+		if(refresh)
 		{
 			fullDetection();
 			refresh = false;
 		}
 		else
-		{//*/
+		{
 			dynamicDetection();
-		//}//*/
+		}
 	}
 
 	/**
