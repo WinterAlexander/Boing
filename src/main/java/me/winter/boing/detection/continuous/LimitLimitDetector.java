@@ -64,23 +64,25 @@ public class LimitLimitDetector extends PooledDetector<Limit, Limit>
 		// his velocity is subtracted to see if any collision could occur in the case where the one getting away gets pushed back on the first
 		float compAx = posAx, compAy = posAy, compBx = posBx, compBy = posBy;
 
-		//if the velocity is going along the normal (going where limit is pointing at)
+		//if the velocity is not going along the normal (going against the direction limit is pointing at)
 		if(signum(normalX) != signum(vecAx))
-			//remove the velocity to feel the other body has it wasn't moving
+			//remove the velocity to feel the other body as it isn't moving
 			compAx -= vecAx;
 
+		//per component
 		if(signum(normalY) != signum(vecAy))
 			compAy -= vecAy;
 
+		//same for B, B's normal is the opposite of A
 		if(signum(-normalX) != signum(vecBx))
 			compBx -= vecBx;
 
 		if(signum(-normalY) != signum(vecBy))
 			compBy -= vecBy;
 
-		//if collision shifting of A is going along it's normal
+		//if collision shifting is going along it's normal
 		if(signum(normalX) == signum(shiftA.x))
-			//then expect it to be pushed to there this frame to
+			//then expect it to be pushed to there this frame too
 			//(we assume its getting pushed by something)
 			vecAx += shiftA.x;
 		//else, collision shifting is going in the other direction
