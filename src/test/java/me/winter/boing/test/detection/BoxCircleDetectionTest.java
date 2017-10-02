@@ -5,7 +5,7 @@ import me.winter.boing.resolver.CollisionResolver;
 import me.winter.boing.colliders.Box;
 import me.winter.boing.colliders.Circle;
 import me.winter.boing.impl.DynamicBodyImpl;
-import me.winter.boing.util.MutableInt;
+import me.winter.boing.util.Counter;
 import org.junit.Ignore;
 import org.junit.Test;
 
@@ -22,7 +22,7 @@ public class BoxCircleDetectionTest
 	@Test
 	public void simpleStaticBoxCircle()
 	{
-		MutableInt collisionCount = new MutableInt(0);
+		Counter collisionCount = new Counter(0);
 
 		CollisionResolver resolver = (w, c) -> {
 			collisionCount.value++;
@@ -72,7 +72,7 @@ public class BoxCircleDetectionTest
 	@Test
 	public void circleCrashingIntoBox()
 	{
-		MutableInt collisionCount = new MutableInt(0);
+		Counter collisionCount = new Counter(0);
 
 		CollisionResolver resolver = (w, c) -> {
 			collisionCount.value++;
@@ -103,7 +103,7 @@ public class BoxCircleDetectionTest
 	@Test
 	public void boxTouchingCircleCollision()
 	{
-		MutableInt collisionCount = new MutableInt(0);
+		Counter collisionCount = new Counter(0);
 
 		CollisionResolver resolver = (w, c) -> {
 			collisionCount.value++;
@@ -130,7 +130,7 @@ public class BoxCircleDetectionTest
 	@Test
 	public void boxAndCircleCrashing()
 	{
-		MutableInt collisionCount = new MutableInt(0);
+		Counter collisionCount = new Counter(0);
 
 		CollisionResolver resolver = (w, c) -> {
 			collisionCount.value++;

@@ -6,7 +6,7 @@ import me.winter.boing.resolver.CollisionResolver;
 import me.winter.boing.colliders.Limit;
 import me.winter.boing.impl.DynamicBodyImpl;
 import me.winter.boing.testimpl.BouncingBallImpl;
-import me.winter.boing.util.MutableInt;
+import me.winter.boing.util.Counter;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
@@ -21,7 +21,7 @@ public class LimitLimitDetectionTest
 	@Test
 	public void simpleLimitLimitBothMoving()
 	{
-		MutableInt collisionCount = new MutableInt(0);
+		Counter collisionCount = new Counter(0);
 
 		CollisionResolver resolver = (w, c) -> {
 			collisionCount.value++;
@@ -56,7 +56,7 @@ public class LimitLimitDetectionTest
 	@Test
 	public void limitMissingLimit()
 	{
-		MutableInt collisionCount = new MutableInt(0);
+		Counter collisionCount = new Counter(0);
 
 		CollisionResolver resolver = (w, c) -> {
 			collisionCount.value++;
@@ -91,7 +91,7 @@ public class LimitLimitDetectionTest
 	@Test
 	public void limitCatchupLimit()
 	{
-		MutableInt collisionCount = new MutableInt(0);
+		Counter collisionCount = new Counter(0);
 
 		CollisionResolver resolver = (w, c) -> {
 			collisionCount.value++;
@@ -126,7 +126,7 @@ public class LimitLimitDetectionTest
 	@Test
 	public void limitTouchingLimit()
 	{
-		MutableInt collisionCount = new MutableInt(0);
+		Counter collisionCount = new Counter(0);
 
 		CollisionResolver resolver = (w, c) -> {
 			collisionCount.value++;
@@ -158,7 +158,7 @@ public class LimitLimitDetectionTest
 	@Test
 	public void cornerGlitchTest()
 	{
-		MutableInt collisionCount = new MutableInt(0);
+		Counter collisionCount = new Counter(0);
 
 		CollisionResolver resolver = (w, c) -> {
 			collisionCount.value++;

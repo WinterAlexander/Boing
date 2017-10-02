@@ -4,7 +4,7 @@ import me.winter.boing.impl.DynamicBodyImpl;
 import me.winter.boing.impl.WorldImpl;
 import me.winter.boing.resolver.CollisionResolver;
 import me.winter.boing.colliders.Box;
-import me.winter.boing.util.MutableInt;
+import me.winter.boing.util.Counter;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
@@ -20,7 +20,7 @@ public class BoxBoxDetectionTest
 	@Test
 	public void simpleStaticBoxBox()
 	{
-		MutableInt collisionCount = new MutableInt(0);
+		Counter collisionCount = new Counter(0);
 
 		CollisionResolver resolver = (collision) -> collisionCount.value++;
 		WorldImpl world = new WorldImpl(resolver);
@@ -67,10 +67,10 @@ public class BoxBoxDetectionTest
 	@Test
 	public void boxCrashingIntoBox()
 	{
-		MutableInt collisionCount = new MutableInt(0);
+		Counter collisionCount = new Counter(0);
 
 		CollisionResolver resolver = (w, c) -> {
-			collisionCount.value++;
+			collisionCount.increment();
 			return true;
 		};
 		WorldImpl world = new WorldImpl(resolver);
@@ -98,7 +98,7 @@ public class BoxBoxDetectionTest
 	@Test
 	public void boxTouchingBoxCollision()
 	{
-		MutableInt collisionCount = new MutableInt(0);
+		Counter collisionCount = new Counter(0);
 
 		WorldImpl world = new WorldImpl((w, c) -> {
 			collisionCount.value++;
@@ -129,7 +129,7 @@ public class BoxBoxDetectionTest
 	@Test
 	public void boxesCrashing()
 	{
-		MutableInt collisionCount = new MutableInt(0);
+		Counter collisionCount = new Counter(0);
 
 		CollisionResolver resolver = (w, c) -> {
 			collisionCount.value++;

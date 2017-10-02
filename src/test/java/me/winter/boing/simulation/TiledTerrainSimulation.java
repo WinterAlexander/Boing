@@ -269,17 +269,73 @@ public class TiledTerrainSimulation
 
 		for(int i = 0; i < 10; i++)
 		{
-			GravityAffected pushableGround = new GravityAffected() {
-				@Override
-				public void update(float delta)
-				{
-					super.update(delta);
-					getVelocity().setZero();
-				}
-			};
+			GravityAffected pushableGround = new GravityAffected();
 			pushableGround.getPosition().set(700 - i * 30, 135);
 			pushableGround.addCollider(new Box(pushableGround, 0, 0, 30, 30));
 			world.add(pushableGround);
+		}
+
+		GravityAffected test = new GravityAffected();
+		test.getPosition().set(500, 250);
+		test.addCollider(new Box(test, 0, 0, 30, 30));
+		test.getColliders()[0].setTag("DABOX");
+		world.add(test);
+
+		BodyImpl bound = new BodyImpl();
+		bound.getPosition().set(400, 150);
+		bound.addCollider(new Box(bound, 0, 0, 30, 60));
+		world.add(bound);
+
+		BodyImpl bound2 = new BodyImpl();
+		bound2.getPosition().set(730, 150);
+		bound2.addCollider(new Box(bound2, 0, 0, 30, 60));
+		world.add(bound2);
+
+		new WorldSimulation(world, 60f).start();
+	}
+
+	@Test
+	public void pushingBoxOnPushablesAndSolids()
+	{
+		TestWorldImpl world = new TestWorldImpl(new ReplaceResolver());
+
+		PlayerImpl player = new PlayerImpl();
+		player.getPosition().set(400, 250);
+		player.addCollider(new Box(player, 0, 0, 40, 50));
+		world.add(player);
+
+		for(int i = 0; i < 20; i++)
+		{
+			BodyImpl tile = new BodyImpl();
+			tile.getPosition().set(i * 40, 100);
+			tile.addCollider(new Box(tile, 0, 0, 40, 40));
+			world.add(tile);
+		}
+
+		for(int i = 0; i < 20; i++)
+		{
+			BodyImpl tile2 = new BodyImpl();
+			tile2.getPosition().set(780, i * 40);
+			tile2.addCollider(new Box(tile2, 0, 0, 40, 40));
+			world.add(tile2);
+		}
+
+		for(int i = 0; i < 10; i++)
+		{
+			if(i % 2 == 0)
+			{
+				GravityAffected pushableGround = new GravityAffected();
+				pushableGround.getPosition().set(700 - i * 30, 135);
+				pushableGround.addCollider(new Box(pushableGround, 0, 0, 30, 30));
+				world.add(pushableGround);
+			}
+			else
+			{
+				BodyImpl solidGround = new BodyImpl();
+				solidGround.getPosition().set(700 - i * 30, 135);
+				solidGround.addCollider(new Box(solidGround, 0, 0, 30, 30));
+				world.add(solidGround);
+			}
 		}
 
 		GravityAffected test = new GravityAffected();

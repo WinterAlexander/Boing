@@ -4,7 +4,7 @@ import me.winter.boing.impl.WorldImpl;
 import me.winter.boing.resolver.CollisionResolver;
 import me.winter.boing.colliders.Circle;
 import me.winter.boing.impl.DynamicBodyImpl;
-import me.winter.boing.util.MutableInt;
+import me.winter.boing.util.Counter;
 import org.junit.Ignore;
 import org.junit.Test;
 
@@ -21,7 +21,7 @@ public class CircleCircleDetectionTest
 	@Test
 	public void simpleStaticCircleCircle()
 	{
-		MutableInt collisionCount = new MutableInt(0);
+		Counter collisionCount = new Counter(0);
 
 		CollisionResolver resolver = (w, c) -> {
 			collisionCount.value++;
@@ -71,7 +71,7 @@ public class CircleCircleDetectionTest
 	@Test
 	public void circleCrashingIntoCircle()
 	{
-		MutableInt collisionCount = new MutableInt(0);
+		Counter collisionCount = new Counter(0);
 
 		CollisionResolver resolver = (w, c) -> {
 			collisionCount.value++;
@@ -102,7 +102,7 @@ public class CircleCircleDetectionTest
 	@Test
 	public void circleTouchingCircleCollision()
 	{
-		MutableInt collisionCount = new MutableInt(0);
+		Counter collisionCount = new Counter(0);
 
 		CollisionResolver resolver = (w, c) -> {
 			collisionCount.value++;
@@ -134,7 +134,7 @@ public class CircleCircleDetectionTest
 	@Test
 	public void circlesCrashing()
 	{
-		MutableInt collisionCount = new MutableInt(0);
+		Counter collisionCount = new Counter(0);
 
 		CollisionResolver resolver = (w, c) -> {
 			collisionCount.value++;

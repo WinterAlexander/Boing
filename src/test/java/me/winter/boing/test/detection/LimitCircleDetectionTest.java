@@ -5,7 +5,7 @@ import me.winter.boing.impl.WorldImpl;
 import me.winter.boing.resolver.CollisionResolver;
 import me.winter.boing.colliders.Circle;
 import me.winter.boing.colliders.Limit;
-import me.winter.boing.util.MutableInt;
+import me.winter.boing.util.Counter;
 import org.junit.Ignore;
 import org.junit.Test;
 
@@ -23,7 +23,7 @@ public class LimitCircleDetectionTest
 	@Test
 	public void testLimitGoingThroughCircle()
 	{
-		MutableInt collisionCount = new MutableInt(0);
+		Counter collisionCount = new Counter(0);
 
 		CollisionResolver resolver = (w, c) -> {
 			collisionCount.value++;
@@ -54,7 +54,7 @@ public class LimitCircleDetectionTest
 	@Test
 	public void testLimitGoingThroughCircle2()
 	{
-		MutableInt collisionCount = new MutableInt(0);
+		Counter collisionCount = new Counter(0);
 
 		CollisionResolver resolver = (w, c) -> {
 			collisionCount.value++;
@@ -85,7 +85,7 @@ public class LimitCircleDetectionTest
 	@Test
 	public void testLimitGoingThroughCircle3()
 	{
-		MutableInt collisionCount = new MutableInt(0);
+		Counter collisionCount = new Counter(0);
 
 		CollisionResolver resolver = (w, c) -> {
 			collisionCount.value++;
@@ -116,7 +116,7 @@ public class LimitCircleDetectionTest
 	@Test
 	public void testLimitTouchingCircle()
 	{
-		MutableInt collisionCount = new MutableInt(0);
+		Counter collisionCount = new Counter(0);
 
 		CollisionResolver resolver = (w, c) -> {
 			collisionCount.value++;

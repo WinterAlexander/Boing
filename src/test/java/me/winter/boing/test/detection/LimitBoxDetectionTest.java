@@ -5,7 +5,7 @@ import me.winter.boing.resolver.CollisionResolver;
 import me.winter.boing.colliders.Box;
 import me.winter.boing.colliders.Limit;
 import me.winter.boing.impl.DynamicBodyImpl;
-import me.winter.boing.util.MutableInt;
+import me.winter.boing.util.Counter;
 import org.junit.Test;
 
 import static me.winter.boing.util.VectorUtil.UP;
@@ -21,7 +21,7 @@ public class LimitBoxDetectionTest
 	@Test
 	public void testLimitGoingThroughBox()
 	{
-		MutableInt collisionCount = new MutableInt(0);
+		Counter collisionCount = new Counter(0);
 
 		CollisionResolver resolver = (w, c) -> {
 			collisionCount.value++;
@@ -52,7 +52,7 @@ public class LimitBoxDetectionTest
 	@Test
 	public void testLimitGoingThroughBox2()
 	{
-		MutableInt collisionCount = new MutableInt(0);
+		Counter collisionCount = new Counter(0);
 
 		CollisionResolver resolver = (w, c) -> {
 			collisionCount.value++;
@@ -83,7 +83,7 @@ public class LimitBoxDetectionTest
 	@Test
 	public void testLimitGoingThroughBox3()
 	{
-		MutableInt collisionCount = new MutableInt(0);
+		Counter collisionCount = new Counter(0);
 
 		CollisionResolver resolver = (w, c) -> {
 			collisionCount.value++;
@@ -114,7 +114,7 @@ public class LimitBoxDetectionTest
 	@Test
 	public void testLimitTouchingBox()
 	{
-		MutableInt collisionCount = new MutableInt(0);
+		Counter collisionCount = new Counter(0);
 
 		CollisionResolver resolver = (w, c) -> {
 			collisionCount.value++;

@@ -5,12 +5,22 @@ package me.winter.boing.util;
  * <p>
  * Created by Alexander Winter on 2017-04-26.
  */
-public class MutableInt
+public class Counter
 {
 	public int value;
 
-	public MutableInt(int value)
+	public Counter(int value)
 	{
 		this.value = value;
+	}
+
+	public void increment()
+	{
+		value++;
+	}
+
+	public int getValue()
+	{
+		return value;
 	}
 }
