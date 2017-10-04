@@ -354,6 +354,6 @@ public class TiledTerrainSimulation
 		bound2.addCollider(new Box(bound2, 0, 0, 30, 60));
 		world.add(bound2);
 
-		new WorldSimulation(world, 60f).start();
+		new WorldSimulation(world, 1f).start();
 	}
 }

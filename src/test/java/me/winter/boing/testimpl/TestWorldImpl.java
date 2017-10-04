@@ -13,6 +13,9 @@ import me.winter.boing.resolver.CollisionResolver;
 public class TestWorldImpl extends WorldImpl
 {
 	private int collisionCount;
+	public boolean splittedStep = false;
+
+	private boolean step = false;
 
 	public TestWorldImpl(CollisionResolver resolver)
 	{
@@ -24,6 +27,37 @@ public class TestWorldImpl extends WorldImpl
 	{
 		collisionCount = collisions.size;
 		super.resolveCollisions();
+	}
+
+	@Override
+	public void step(float delta)
+	{
+		if(!splittedStep)
+		{
+			update(delta);
+
+			detectCollisions();
+
+			collisions.sort((c1, c2) -> -Float.compare(c1.priority, c2.priority));
+
+			resolveCollisions();
+			return;
+		}
+
+		if(!step)
+		{
+			update(delta);
+			step = true;
+		}
+		else
+		{
+			detectCollisions();
+
+			collisions.sort((c1, c2) -> -Float.compare(c1.priority, c2.priority));
+
+			resolveCollisions();
+			step = false;
+		}
 	}
 
 	public int collisionCount()

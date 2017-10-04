@@ -211,6 +211,10 @@ public class WorldSimulation extends JFrame implements KeyListener, MouseListene
 			velsEnabled = !velsEnabled;
 			forceRepaint();
 		}
+		else if(e.getKeyCode() == KeyEvent.VK_S)
+		{
+			world.splittedStep = !world.splittedStep;
+		}
 	}
 
 	@Override
