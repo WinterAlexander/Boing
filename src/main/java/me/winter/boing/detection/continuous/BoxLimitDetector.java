@@ -140,7 +140,7 @@ public class BoxLimitDetector extends PooledDetector<Box, Limit>
 		collision.contactSurface = (colliderA, colliderB) -> getContactSurface((Box)colliderA, (Limit)colliderB);
 
 		//boing v2 priority algorithm
-		collision.priority = surface * getPenetration(boxA, limitB);
+		collision.priority = (cA, cB) -> collision.contactSurface.getValue(cA, cB) * collision.penetration.getValue(cA, cB);
 		collision.normal.set(normalX, normalY);
 
 		collision.colliderA = boxA;

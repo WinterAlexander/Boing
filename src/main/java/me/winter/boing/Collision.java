@@ -64,7 +64,12 @@ public class Collision
 	 *
 	 * The smaller this value is, the first it should be resolved
 	 */
-	public float priority;
+	public CollisionDynamicVariable priority;
+
+	public float getPriority()
+	{
+		return priority.getValue(colliderA, colliderB);
+	}
 
 	/**
 	 * Collider involved in the collision.

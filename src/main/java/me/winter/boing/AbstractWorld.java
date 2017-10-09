@@ -57,8 +57,6 @@ public abstract class AbstractWorld implements World
 
 		detectCollisions();
 
-		collisions.sort((c1, c2) -> -Float.compare(c1.priority, c2.priority));
-
 		resolveCollisions();
 	}
 
@@ -145,8 +143,13 @@ public abstract class AbstractWorld implements World
 	{
 		Collision swapped = collisionPool.obtain();
 
-		for(Collision collision : collisions)
+		while(collisions.size > 0)
 		{
+			collisions.sort((c1, c2) -> Float.compare(c1.getPriority(), c2.getPriority()));
+
+			int index = collisions.size - 1;
+			Collision collision = collisions.get(index);
+
 			weightResolver.resolveWeight(collision, this);
 
 			if(resolver.resolveCollision(collision, this))
@@ -155,11 +158,11 @@ public abstract class AbstractWorld implements World
 				collision.colliderA.getBody().notifyCollision(collision);
 				collision.colliderB.getBody().notifyCollision(swapped);
 			}
+
+			collisionPool.free(collisions.removeIndex(index));
 		}
 
 		collisionPool.free(swapped);
-		collisionPool.freeAll(collisions);
-		collisions.clear();
 	}
 
 

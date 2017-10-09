@@ -148,17 +148,19 @@ public class LimitLimitDetector extends PooledDetector<Limit, Limit>
 
 		collision.normal.set(normalX, normalY);
 
-		collision.penetration = (cA, cB) -> getPenetration((Limit)cA, (Limit)cB);
+		collision.penetration = (cA, cB) -> getPenetration(world, (Limit)cA, (Limit)cB);
 
-		//boing v2 priority algorithm
-		//collision.priority = surface * getPenetration(compAx, compAy, compBx, compBy, normalX, normalY);
-		collision.priority = surface * getPenetration(limitA, limitB);
-		//System.out.println(collision.priority);
 
 		//re-get the position from the original calculation
 		//since we are in a CollisionDynamicVariable, posAx, posAy etc. might
 		//be outdated (cached values)
 		collision.contactSurface = (cA, cB) -> getContactSurface((Limit)cA, (Limit)cB);
+
+		//boing v2 priority algorithm
+		//collision.priority = surface * getPenetration(compAx, compAy, compBx, compBy, normalX, normalY);
+		collision.priority = (cA, cB) -> collision.contactSurface.getValue(cA, cB) * collision.penetration.getValue(cA, cB);
+		//System.out.println(collision.priority);
+
 
 		collision.colliderA = limitA;
 		collision.colliderB = limitB;
@@ -167,9 +169,34 @@ public class LimitLimitDetector extends PooledDetector<Limit, Limit>
 		return collision;
 	}
 
-	public static float getPenetration(Limit limitA, Limit limitB)
+	public static float getPenetration(World world, Limit limitA, Limit limitB)
 	{
-		return (limitA.getAbsX() - limitB.getAbsX()) * limitA.normal.x + (limitA.getAbsY() - limitB.getAbsY()) * limitA.normal.y;
+		float compAx = limitA.getAbsX(),
+				compAy = limitA.getAbsY(),
+				compBx = limitB.getAbsX(),
+				compBy = limitB.getAbsY();
+
+
+		Vector2 movA = limitA.getMovement(world);
+		Vector2 movB = limitB.getMovement(world);
+
+		//if the velocity is not going along the normal (going against the direction limit is pointing at)
+		if(signum(limitA.normal.x) != signum(movA.x))
+			//remove the velocity to feel the other body as it isn't moving
+			compAx -= movA.x;
+
+		//per component
+		if(signum(limitA.normal.x) != signum(movA.y))
+			compAy -= movA.y;
+
+		//same for B, B's normal is the opposite of A
+		if(signum(-limitA.normal.x) != signum(movB.x))
+			compBx -= movB.x;
+
+		if(signum(-limitA.normal.y) != signum(movB.y))
+			compBy -= movB.y;
+
+		return getPenetration(compAx, compAy, compBx, compBy, limitA.normal.x, limitA.normal.y);
 	}
 
 	public static float getPenetration(float ax, float ay, float bx, float by, float nx, float ny)

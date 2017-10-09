@@ -38,8 +38,6 @@ public class TestWorldImpl extends WorldImpl
 
 			detectCollisions();
 
-			collisions.sort((c1, c2) -> -Float.compare(c1.priority, c2.priority));
-
 			resolveCollisions();
 			return;
 		}
@@ -52,8 +50,6 @@ public class TestWorldImpl extends WorldImpl
 		else
 		{
 			detectCollisions();
-
-			collisions.sort((c1, c2) -> -Float.compare(c1.priority, c2.priority));
 
 			resolveCollisions();
 			step = false;

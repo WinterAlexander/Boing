@@ -27,6 +27,8 @@ public class BoxBoxDetector extends PooledDetector<Box, Box>
 {
 	//private me.winter.boing.detection.simple.BoxBoxDetector simple;
 
+	private static World __world; //TODO TMP
+
 	private CollisionDynamicVariable[] penetrationFormulas = new CollisionDynamicVariable[4];
 	private CollisionDynamicVariable[] contactSurfaceFormulas = new CollisionDynamicVariable[4];
 
@@ -49,6 +51,7 @@ public class BoxBoxDetector extends PooledDetector<Box, Box>
 	@Override
 	public Collision collides(World world, Box boxA, Box boxB)
 	{
+		__world = world;
 		Vector2 vecA = boxA.getMovement(world); //movement of this frame
 		Vector2 vecB = boxB.getMovement(world);
 
@@ -81,7 +84,7 @@ public class BoxBoxDetector extends PooledDetector<Box, Box>
 				collision = coll2;
 			else //if there's a collision for both x and y (TODO is this corner corner ?)
 			{
-				if(collision.priority <= coll2.priority) //take the one with higher priority
+				if(collision.getPriority() <= coll2.getPriority()) //take the one with higher priority
 					collision = coll2;
 			}
 		}
@@ -210,11 +213,12 @@ public class BoxBoxDetector extends PooledDetector<Box, Box>
 
 		collision.penetration = penetrationFormulas[keyOf(normalX, normalY)];
 
-		//boing v2 priority algorithm
-		collision.priority = surface * getPenetration(boxA, boxB, normalX, normalY);
-
 		//contact surface at current position
 		collision.contactSurface = contactSurfaceFormulas[keyOf(normalX, normalY)];
+
+		//boing v2 priority algorithm
+		collision.priority = (cA, cB) -> collision.contactSurface.getValue(cA, cB) * collision.penetration.getValue(cA, cB);
+
 
 		collision.colliderA = boxA;
 		collision.colliderB = boxB;
@@ -231,8 +235,33 @@ public class BoxBoxDetector extends PooledDetector<Box, Box>
 
 	public static float getPenetration(Box boxA, Box boxB, float normalX, float normalY)
 	{
-		return normalX * (boxA.getAbsX() + normalX * boxA.width / 2 - boxB.getAbsX() + normalX * boxB.width / 2)
-				- normalY * (boxB.getAbsY() - normalY * boxB.height / 2 - boxA.getAbsY() - normalY * boxA.height / 2);
+		float compAx = boxA.getAbsX(),
+				compAy = boxA.getAbsY(),
+				compBx = boxB.getAbsX(),
+				compBy = boxB.getAbsY();
+
+
+		Vector2 movA = boxA.getMovement(__world);
+		Vector2 movB = boxB.getMovement(__world);
+
+		//if the velocity is not going along the normal (going against the direction limit is pointing at)
+		if(signum(normalX) != signum(movA.x))
+			//remove the velocity to feel the other body as it isn't moving
+			compAx -= movA.x;
+
+		//per component
+		if(signum(normalX) != signum(movA.y))
+			compAy -= movA.y;
+
+		//same for B, B's normal is the opposite of A
+		if(signum(-normalX) != signum(movB.x))
+			compBx -= movB.x;
+
+		if(signum(-normalY) != signum(movB.y))
+			compBy -= movB.y;
+
+		return normalX * (compAx + normalX * boxA.width / 2 - compBx + normalX * boxB.width / 2)
+				- normalY * (compBy - normalY * boxB.height / 2 - compAy - normalY * boxA.height / 2);
 	}
 
 	public static float getContactSurface(Box boxA, Box boxB, float normalX, float normalY)
