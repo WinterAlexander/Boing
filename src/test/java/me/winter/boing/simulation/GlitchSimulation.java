@@ -9,7 +9,7 @@ import me.winter.boing.testimpl.BouncingBallImpl;
 import me.winter.boing.testimpl.GravityAffected;
 import me.winter.boing.testimpl.PlayerImpl;
 import me.winter.boing.testimpl.TestWorldImpl;
-import me.winter.boing.util.WorldSimulation;
+import me.winter.boing.simulation.simulator.BoingSimulator;
 import org.junit.Test;
 
 import static me.winter.boing.util.VectorUtil.LEFT;
@@ -44,7 +44,7 @@ public class GlitchSimulation
 
 		world.add(ballImpl2);
 
-		new WorldSimulation(world, 60f).start();
+		new BoingSimulator(world, 60f).start();
 	}
 
 	@Test
@@ -68,7 +68,7 @@ public class GlitchSimulation
 
 		world.add(ballImpl2);
 
-		new WorldSimulation(world, 60f).start();
+		new BoingSimulator(world, 60f).start();
 	}
 
 	@Test
@@ -93,7 +93,7 @@ public class GlitchSimulation
 
 		world.add(ballImpl2);
 
-		new WorldSimulation(world, 60f).start();
+		new BoingSimulator(world, 60f).start();
 	}
 
 	@Test
@@ -122,7 +122,7 @@ public class GlitchSimulation
 		pushable.addCollider(new Box(pushable, 0, 15, 30, 30));
 		world.add(pushable);
 
-		new WorldSimulation(world, 60f).start();
+		new BoingSimulator(world, 60f).start();
 	}
 
 	@Test
@@ -150,7 +150,7 @@ public class GlitchSimulation
 		pushable.addCollider(new Box(pushable, 0, 15, 30, 30));
 		world.add(pushable);
 
-		new WorldSimulation(world, 60f).start();
+		new BoingSimulator(world, 60f).start();
 	}
 
 	@Test
@@ -178,6 +178,6 @@ public class GlitchSimulation
 		pushable.addCollider(new Box(pushable, 0, 15, 30, 30));
 		world.add(pushable);
 
-		new WorldSimulation(world, 60f).start();
+		new BoingSimulator(world, 60f).start();
 	}
 }

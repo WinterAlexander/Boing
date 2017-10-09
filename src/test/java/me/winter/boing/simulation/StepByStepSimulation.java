@@ -1,17 +1,17 @@
 package me.winter.boing.simulation;
 
-import me.winter.boing.DynamicBody;
+import me.winter.boing.Collision;
 import me.winter.boing.colliders.Box;
 import me.winter.boing.colliders.Limit;
 import me.winter.boing.impl.BodyImpl;
 import me.winter.boing.impl.DynamicBodyImpl;
-import me.winter.boing.impl.WorldImpl;
 import me.winter.boing.resolver.ReplaceResolver;
 import me.winter.boing.testimpl.TestWorldImpl;
-import me.winter.boing.util.WorldSimulation;
+import me.winter.boing.simulation.simulator.BoingSimulator;
 import org.junit.Ignore;
 import org.junit.Test;
 
+import static me.winter.boing.util.SleepUtil.sleep;
 import static me.winter.boing.util.VectorUtil.DOWN;
 import static me.winter.boing.util.VectorUtil.LEFT;
 import static me.winter.boing.util.VectorUtil.RIGHT;
@@ -53,7 +53,7 @@ public class StepByStepSimulation
 		wall.getColliders()[0].setTag("WALL");
 		world.add(wall);
 
-		new WorldSimulation(world, 1f).start(true);
+		new BoingSimulator(world, 1f).start(true);
 	}
 
 	@Test
@@ -86,7 +86,7 @@ public class StepByStepSimulation
 		world.add(pushed2);
 
 
-		new WorldSimulation(world, 1f).start(true);
+		new BoingSimulator(world, 1f).start(true);
 	}
 
 	@Test
@@ -121,7 +121,7 @@ public class StepByStepSimulation
 		ground.addCollider(new Limit(ground, 0, 0, UP, 150));
 		world.add(ground);
 
-		new WorldSimulation(world, 1f).start(true);
+		new BoingSimulator(world, 1f).start(true);
 	}
 
 
@@ -167,7 +167,7 @@ public class StepByStepSimulation
 		wall2.addCollider(new Limit(wall2, 0, 0, RIGHT, 100));
 		world.add(wall2);
 
-		new WorldSimulation(world, 1f).start(true);
+		new BoingSimulator(world, 1f).start(true);
 	}
 
 	@Test
@@ -195,7 +195,7 @@ public class StepByStepSimulation
 		ground.addCollider(new Limit(ground, 0, 0, UP, 100));
 		world.add(ground);
 
-		new WorldSimulation(world, 1f).start(true);
+		new BoingSimulator(world, 1f).start(true);
 	}
 
 	@Test
@@ -234,7 +234,7 @@ public class StepByStepSimulation
 		ground.addCollider(new Limit(ground, 0, 0, UP, 100));
 		world.add(ground);
 
-		new WorldSimulation(world, 1f).start(true);
+		new BoingSimulator(world, 1f).start(true);
 	}
 
 	@Test
@@ -242,38 +242,64 @@ public class StepByStepSimulation
 	{
 		TestWorldImpl world = new TestWorldImpl(new ReplaceResolver());
 
-		DynamicBodyImpl boxLike = new DynamicBodyImpl();
+		DynamicBodyImpl boxLike = new DynamicBodyImpl() {
+			@Override
+			public void notifyCollision(Collision collision)
+			{
+				displayAndWait();
+			}
+		};
 		boxLike.getPosition().set(400, 225);
 		boxLike.getVelocity().set(20, -20);
 		boxLike.addCollider(new Limit(boxLike, 0, 25, UP, 50));
-		Limit downLimit = new Limit(boxLike, 0, -25, DOWN, 50);
-		downLimit.setTag("DOWN_LIMIT");
-		boxLike.addCollider(downLimit);
+		boxLike.addCollider(new Limit(boxLike, 0, -25, DOWN, 50));
 		boxLike.addCollider(new Limit(boxLike, -25, 0, LEFT, 50));
 		boxLike.addCollider(new Limit(boxLike, 25, 0, RIGHT, 50));
+
+		boxLike.getColliders()[0].setTag("UP_LIMIT of top box");
+		boxLike.getColliders()[1].setTag("DOWN_LIMIT of top box");
+		boxLike.getColliders()[2].setTag("LEFT_LIMIT of top box");
+		boxLike.getColliders()[3].setTag("RIGHT_LIMIT of top box");
+
 		world.add(boxLike);
 
 		for(int i = 0; i < 2; i++)
 		{
-			DynamicBodyImpl fallingGround = new DynamicBodyImpl();
+			DynamicBodyImpl fallingGround = new DynamicBodyImpl() {
+				@Override
+				public void notifyCollision(Collision collision)
+				{
+					displayAndWait();
+				}
+			};
+
 			fallingGround.getPosition().set(400 + i * 50, 175);
 			fallingGround.getVelocity().set(0, -25);
-			Limit upLimit = new Limit(fallingGround, 0, 25, UP, 50);
-			if(i == 0)
-				upLimit.setTag("UP_LIMIT");
-			fallingGround.addCollider(upLimit);
+			fallingGround.addCollider(new Limit(fallingGround, 0, 25, UP, 50));
 			fallingGround.addCollider(new Limit(fallingGround, 0, -25, DOWN, 50));
 			fallingGround.addCollider(new Limit(fallingGround, -25, 0, LEFT, 50));
 			fallingGround.addCollider(new Limit(fallingGround, 25, 0, RIGHT, 50));
+
+			fallingGround.getColliders()[0].setTag("UP_LIMIT of " + (i == 0 ? "left" : "right") + " box");
+			fallingGround.getColliders()[1].setTag("DOWN_LIMIT of " + (i == 0 ? "left" : "right") + " box");
+			fallingGround.getColliders()[2].setTag("LEFT_LIMIT of " + (i == 0 ? "left" : "right") + " box");
+			fallingGround.getColliders()[3].setTag("RIGHT_LIMIT of " + (i == 0 ? "left" : "right") + " box");
+
 			world.add(fallingGround);
 		}
 
-		BodyImpl ground = new BodyImpl();
+		BodyImpl ground = new BodyImpl() {
+			@Override
+			public void notifyCollision(Collision collision)
+			{
+				displayAndWait();
+			}
+		};
 		ground.getPosition().set(425, 150);
 		ground.addCollider(new Limit(ground, 0, 0, UP, 100));
 		world.add(ground);
 
-		new WorldSimulation(world, 1f).start(true);
+		new BoingSimulator(world, 1f).start(true);
 	}
 
 	@Test
@@ -312,6 +338,12 @@ public class StepByStepSimulation
 		ground.addCollider(new Limit(ground, 0, 0, UP, 100));
 		world.add(ground);
 
-		new WorldSimulation(world, 1f).start(true);
+		new BoingSimulator(world, 1f).start(true);
+	}
+
+	private void displayAndWait()
+	{
+		BoingSimulator.__last.forceRepaint();
+		sleep(2000);
 	}
 }

@@ -84,4 +84,10 @@ public abstract class AbstractCollider implements Collider
 	{
 		this.tag = tag;
 	}
+
+	@Override
+	public String toString()
+	{
+		return this.getClass().getSimpleName() + "{" + "tag=" + tag + '}';
+	}
 }

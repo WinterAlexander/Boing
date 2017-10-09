@@ -9,7 +9,7 @@ import me.winter.boing.resolver.ReplaceResolver;
 import me.winter.boing.colliders.Limit;
 import me.winter.boing.testimpl.BouncingBallImpl;
 import me.winter.boing.testimpl.TestWorldImpl;
-import me.winter.boing.util.WorldSimulation;
+import me.winter.boing.simulation.simulator.BoingSimulator;
 import org.junit.Ignore;
 import org.junit.Test;
 
@@ -41,7 +41,7 @@ public class LimitTestSimulation
 		ballImpl2.getVelocity().set(0, -100);
 		world.add(ballImpl2);
 
-		new WorldSimulation(world, 60f).start();
+		new BoingSimulator(world, 60f).start();
 	}
 
 	@Test
@@ -61,7 +61,7 @@ public class LimitTestSimulation
 		ballImpl2.getVelocity().set(-100, 0);
 		world.add(ballImpl2);
 
-		new WorldSimulation(world, 60f).start();
+		new BoingSimulator(world, 60f).start();
 	}
 
 	@Test
@@ -81,7 +81,7 @@ public class LimitTestSimulation
 		ballImpl2.getVelocity().set(-100, 50);
 		world.add(ballImpl2);
 
-		new WorldSimulation(world, 60f).start();
+		new BoingSimulator(world, 60f).start();
 	}
 
 
@@ -110,7 +110,7 @@ public class LimitTestSimulation
 		ballImpl2.getVelocity().set(-100, -100);
 		world.add(ballImpl2);
 
-		new WorldSimulation(world, 60f).start();
+		new BoingSimulator(world, 60f).start();
 	}
 
 	@Test
@@ -131,7 +131,7 @@ public class LimitTestSimulation
 		ballImpl2.getVelocity().set(-10, -100);
 		world.add(ballImpl2);
 
-		new WorldSimulation(world, 60f).start();
+		new BoingSimulator(world, 60f).start();
 	}
 
 	@Test
@@ -150,6 +150,6 @@ public class LimitTestSimulation
 		ballImpl2.getVelocity().set(0, -100);
 		world.add(ballImpl2);
 
-		new WorldSimulation(world, 60f).start();
+		new BoingSimulator(world, 60f).start();
 	}
 }

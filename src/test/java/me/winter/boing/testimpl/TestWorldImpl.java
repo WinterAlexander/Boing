@@ -13,7 +13,7 @@ import me.winter.boing.resolver.CollisionResolver;
 public class TestWorldImpl extends WorldImpl
 {
 	private int collisionCount;
-	public boolean splittedStep = false;
+	public boolean splittedStep = false, collisionByCollision = false;
 
 	private boolean step = false;
 

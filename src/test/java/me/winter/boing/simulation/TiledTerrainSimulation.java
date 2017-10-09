@@ -1,20 +1,14 @@
 package me.winter.boing.simulation;
 
 import me.winter.boing.colliders.Box;
-import me.winter.boing.colliders.Limit;
 import me.winter.boing.impl.BodyImpl;
 import me.winter.boing.resolver.ReplaceResolver;
 import me.winter.boing.testimpl.GravityAffected;
 import me.winter.boing.testimpl.PlayerImpl;
 import me.winter.boing.testimpl.TestWorldImpl;
-import me.winter.boing.util.WorldSimulation;
+import me.winter.boing.simulation.simulator.BoingSimulator;
 import org.junit.Ignore;
 import org.junit.Test;
-
-import static me.winter.boing.util.VectorUtil.DOWN;
-import static me.winter.boing.util.VectorUtil.LEFT;
-import static me.winter.boing.util.VectorUtil.RIGHT;
-import static me.winter.boing.util.VectorUtil.UP;
 
 /**
  * Undocumented :(
@@ -43,7 +37,7 @@ public class TiledTerrainSimulation
 		}
 
 
-		new WorldSimulation(world, 60f).start();
+		new BoingSimulator(world, 60f).start();
 	}
 
 	@Test
@@ -78,7 +72,7 @@ public class TiledTerrainSimulation
 		}
 
 
-		new WorldSimulation(world, 60f).start();
+		new BoingSimulator(world, 60f).start();
 	}
 
 	@Test
@@ -124,7 +118,7 @@ public class TiledTerrainSimulation
 			}
 		}
 
-		new WorldSimulation(world, 60f).start();
+		new BoingSimulator(world, 60f).start();
 	}
 
 	@Test
@@ -161,7 +155,7 @@ public class TiledTerrainSimulation
 			world.add(test);
 		}
 
-		new WorldSimulation(world, 60f).start();
+		new BoingSimulator(world, 60f).start();
 	}
 
 	@Test
@@ -198,7 +192,7 @@ public class TiledTerrainSimulation
 			world.add(test);
 		}
 
-		new WorldSimulation(world, 60f).start();
+		new BoingSimulator(world, 60f).start();
 	}
 
 	@Test
@@ -238,7 +232,7 @@ public class TiledTerrainSimulation
 		test2.addCollider(new Box(test2, 0, 0, 30, 30));
 		world.add(test2);
 
-		new WorldSimulation(world, 60f).start();
+		new BoingSimulator(world, 60f).start();
 	}
 
 	@Test
@@ -291,7 +285,7 @@ public class TiledTerrainSimulation
 		bound2.addCollider(new Box(bound2, 0, 0, 30, 60));
 		world.add(bound2);
 
-		new WorldSimulation(world, 60f).start();
+		new BoingSimulator(world, 60f).start();
 	}
 
 	@Test
@@ -354,6 +348,6 @@ public class TiledTerrainSimulation
 		bound2.addCollider(new Box(bound2, 0, 0, 30, 60));
 		world.add(bound2);
 
-		new WorldSimulation(world, 1f).start();
+		new BoingSimulator(world, 1f).start();
 	}
 }

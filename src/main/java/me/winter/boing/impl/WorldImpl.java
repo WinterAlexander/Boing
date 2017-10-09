@@ -143,4 +143,9 @@ public class WorldImpl extends AbstractWorld
 	{
 		surroundingBoxes.get(body).update();
 	}
+
+	public int getFrame()
+	{
+		return frame;
+	}
 }
