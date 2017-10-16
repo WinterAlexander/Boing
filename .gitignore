@@ -19,3 +19,10 @@ out/
 classes/
 local.properties
 build/
+
+# Latex
+*.log
+*.out
+*.pdf
+*.synctex.gz
+*.aux
