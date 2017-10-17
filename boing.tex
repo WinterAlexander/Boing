@@ -1,0 +1,177 @@
+\documentclass[12pt]{article}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage[latin1]{inputenc}
+\usepackage{listings}
+\usepackage{color}
+\allowdisplaybreaks
+
+\definecolor{dkgreen}{rgb}{0,0.6,0}
+\definecolor{gray}{rgb}{0.5,0.5,0.5}
+\definecolor{mauve}{rgb}{0.58,0,0.82}
+
+\lstset{frame=tb,
+	language=Java,
+	aboveskip=3mm,
+	belowskip=3mm,
+	showstringspaces=false,
+	columns=flexible,
+	basicstyle={\small\ttfamily},
+	numbers=none,
+	numberstyle=\tiny\color{gray},
+	keywordstyle=\color{blue},
+	commentstyle=\color{dkgreen},
+	stringstyle=\color{mauve},
+	breaklines=true,
+	breakatwhitespace=true,
+	tabsize=3,
+	frame=single
+}
+
+\title{Boing}
+\author{Alexander Winter}
+\date{October 16, 2017}
+
+\begin{document}
+\maketitle
+	
+\newpage
+
+\begin{lstlisting}
+Collision detectCollision(Limit a, Limit b)
+{
+	if(a.normal.dot(b.normal) != -1)
+		return NO_COLLISION;
+	
+	Vector compA = a.pos;
+	Vector compB = b.pos;
+	//compare values to check if collision occurs, if the other is getting away from the first,
+	// his velocity is subtracted to see if any collision could occur in the case where the one getting away gets pushed back on the first
+	float compAx = posAx, compAy = posAy, compBx = posBx, compBy = posBy;
+
+	//if the velocity is not going along the normal (going against the direction limit is pointing at)
+	if(signum(a.normal.x) != signum(a.vel.x))
+		//remove the velocity to feel the other body as it isn't moving
+		compA.x -= a.vel.x;
+
+	//per component
+	if(signum(a.normal.y) != signum(a.vel.y))
+		compAy -= a.vel.y;
+
+	//same for B, B's normal is the opposite of A
+	if(signum(b.normal.x) != signum(b.vel.x))
+		compBx -= b.vel.x;
+
+	if(signum(b.normal.y) != signum(b.vel.y))
+		compBy -= b.vel.y;
+
+	//if collision shifting is going along it's normal
+	if(signum(a.normal.x) == signum(a.shift.x))
+		//then expect it to be pushed to there this frame too
+		//(we assume its getting pushed by something)
+		vecA.x += a.shift.x;
+	//else, collision shifting is going in the other direction
+	//ignoring it is safer since we don't know for sure if
+	//it will get pushed this frame too or if the pusher is B
+	//(in the case were the pusher is B, this collision must happen
+	//for the pushing not to drop)
+	
+	Vector vecA = a.vel;
+	Vector vecB = b.vel;
+	
+	//collision shifting is per component
+	if(signum(a.normal.y) == signum(a.shift.y))
+		vecA.y += shiftA.y;
+
+	//same for B, B's normal is the opposite of A
+	if(signum(b.normal.x) == signum(b.shift.x))
+		vecB.x += shiftB.x;
+
+	if(signum(b.normal.y) == signum(b.shift.y))
+		vecB.y += shiftB.y;
+	//if b with his movement isn't after a with his movement
+	//(aka the limits are still facing each other after having moved)
+	if(compAx * a.normal.x + compAy * a.normal.y < compBx * a.normal.x + compBy * a.normal.y)
+		return NO_COLLISION;
+
+	//'previous' position is assumed to be the current position minus
+	//the fake movement we just assumed. This fake previous position is
+	//used to make sure no collision drops by collision shitfing
+	float prevAx = a.pos.x - vecAx;
+	float prevAy = a.pos.y - vecAy;
+	float prevBx = b.pos.x - vecBx;
+	float prevBy = b.pos.y - vecBy;
+
+	//if b isn't before a
+	//(aka the limits at previous positions are not even facing each other)
+	if(prevAx * a.normal.x + prevAy * a.normal.y > prevBx * a.normal.x + prevBy * a.normal.y) //if b isn't before a
+		return NO_COLLISION; //no collision
+
+	float hsizeA = a.size / 2; //half size for A
+	float hsizeB = b.size / 2; //half size for B
+
+	float diff = ((b.pos.x - vecBx) - (a.pos.x - vecAx)) * a.normal.x + ((b.pos.y - vecBy) - (a.pos.y - vecAy)) * a.normal.y;
+	float vecDiff = (vecBx - vecAx) * a.normal.x + (vecBy - vecAy) * a.normal.y;
+
+	float midpoint = vecDiff != 0 ? (diff + vecDiff) / vecDiff : 0f;
+
+	float midAx = a.pos.x - vecAx * midpoint; //midpoint x for A
+	float midAy = a.pos.y - vecAy * midpoint; //midpoint y for A
+	float midBx = b.pos.x - vecBx * midpoint; //midpoint x for B
+	float midBy = b.pos.y - vecBy * midpoint; //midpoint y for B
+
+	//contact surface, used to detect if limits are on the same plane and
+	//to fullfill the collision report
+	//get surface contact at mid point
+	float surface = getContactSurface(new Vector(midAx, midAy), hsizeA, new Vector(midBx, midBy), hsizeB, a.normal);
+
+	//if 0, it might be a corner corner case
+	if(surface < 0)
+		return NO_COLLISION;
+
+	Collision collision = new Collision();
+	collision.normal = a.normal;
+
+	collision.penetration = (cA, cB) -> getPenetration(cA.pos, cB.pos);
+	collision.priority = surface * getPenetration(a.pos, b.pos, a.normal);
+	collision.contactSurface = (cA, cB) -> getContactSurface(cA.pos, cA.size / 2, cB.pos, cB.size / 2, cA.normal);
+
+	collision.a = a;
+	collision.b = b;
+
+	return collision;
+}
+
+
+float getPenetration(Vector posA, Vector posB, Vector normal)
+{
+	return (posA.x - posB.x) * normal.x + (posA.y - posB.y) * normal.y;
+}
+
+
+public static float getContactSurface(Vector posA, float extentA, Vector posB, float extentB, Vector normal)
+{
+	float limitA1 = normal.x * (posA.y + extentA) - normal.y * (posA.x + extentA);
+	float limitA2 = normal.x * (posA.y - extentA) - normal.y * (posA.x - extentA);
+	float limitB1 = normal.x * (posB.y + extentB) - normal.y * (posB.x + extentB);
+	float limitB2 = normal.x * (posB.y - extentB) - normal.y * (posB.x - extentB);
+	
+	//minimum of the maximums - maximum of the minimums
+
+	return min(max(limitA1, limitA2), max(limitB1, limitB2)) - max(min(limitA1, limitA2), min(limitB1, limitB2));
+}
+\end{lstlisting}
+
+$$S = min(max(L_{A1},\, L_{A2}),\, max(L_{B1},\, L_{B2})) - max(min(L_{A1},\, L_{A2}),\, min(L_{B1},\, L_{B2}))$$ 
+where 
+\begin{description}
+	\item $L_{A1} = N_y(A_x + A_e) + N_x(A_y + A_e)$, 
+	\item $L_{A2} = N_y(A_x - A_e) + N_x(A_y - A_e)$, 
+	\item $L_{B1} = N_y(B_x + B_e) + N_x(B_y + B_e)$, 
+	\item $L_{B2} = N_y(B_x - B_e) + N_x(B_y - B_e)$
+\end{description}
+
+
+\end{document}
