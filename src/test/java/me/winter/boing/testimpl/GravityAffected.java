@@ -24,7 +24,7 @@ public class GravityAffected extends DynamicBodyImpl implements UpdatableBody
 				getVelocity().y = 0;
 		}
 
-		getVelocity().y -= 5;
+		getVelocity().y -= 300 * delta;
 
 		onGround = false;
 	}

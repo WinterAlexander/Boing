@@ -42,10 +42,10 @@ public class PlayerImpl extends DynamicBodyImpl implements UpdatableBody
 			if(getVelocity().y < 0)
 				getVelocity().y = 0;
 			if(jumpPressed)
-				getVelocity().add(0, 200);
+				getVelocity().y = 200;
 		}
 
-		getVelocity().y -= 5;
+		getVelocity().y -= 300 * delta;
 
 		onGround = false;
 	}

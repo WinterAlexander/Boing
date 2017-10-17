@@ -397,7 +397,7 @@ public class BoxStackSimulation
 		ground.addCollider(new Limit(ground, 0, 0, UP, 800));
 		world.add(ground);
 
-		new BoingSimulator(world, 60f).start();
+		new BoingSimulator(world, 6f).start();
 	}
 
 	@Test
