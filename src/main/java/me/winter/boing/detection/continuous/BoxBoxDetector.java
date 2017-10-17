@@ -253,26 +253,28 @@ public class BoxBoxDetector extends PooledDetector<Box, Box>
 	 *
 	 * @param ax x position of limit A
 	 * @param ay y position of limit A
-	 * @param hsA half the size of limit A
+	 * @param extentA half the size of limit A
 	 *
 	 * @param bx x position of limit B
 	 * @param by y position of limit B
-	 * @param hsB half size of limit B
+	 * @param extentB half size of limit B
 	 *
 	 * @param nx normal x of the limit A
 	 * @param ny normal y of the limit A
 	 *
 	 * @return how much of their surface match in relation to the normal
 	 */
-	public static float getContactSurface(float ax, float ay, float hsA,
-	                                 float bx, float by, float hsB,
+	public static float getContactSurface(float ax, float ay, float extentA,
+	                                 float bx, float by, float extentB,
 	                                 float nx, float ny)
 	{
-		float limitA1 = -ny * (ax + hsA) + nx * (ay + hsA);
-		float limitA2 = -ny * (ax - hsA) + nx * (ay - hsA);
-		float limitB1 = -ny * (bx + hsB) + nx * (by + hsB);
-		float limitB2 = -ny * (bx - hsB) + nx * (by - hsB);
+		//we take the 2 extremities of the 2 limits
+		float limitA1 = ny * (ax + extentA) + nx * (ay + extentA);
+		float limitA2 = ny * (ax - extentA) + nx * (ay - extentA);
+		float limitB1 = ny * (bx + extentB) + nx * (by + extentB);
+		float limitB2 = ny * (bx - extentB) + nx * (by - extentB);
 
+		//yields the overlapping length
 		return min(max(limitA1, limitA2), max(limitB1, limitB2)) //minimum of the maximums
 				- max(min(limitA1, limitA2), min(limitB1, limitB2)); //maximum of the minimums
 	}

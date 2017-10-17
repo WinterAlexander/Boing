@@ -43,7 +43,7 @@
 Collision detectCollision(Limit a, Limit b)
 {
 	if(a.normal.dot(b.normal) != -1)
-		return null;
+		return NO_COLLISION;
 	
 	Vector compA = a.pos;
 	Vector compB = b.pos;
@@ -94,7 +94,7 @@ Collision detectCollision(Limit a, Limit b)
 	//if b with his movement isn't after a with his movement
 	//(aka the limits are still facing each other after having moved)
 	if(compAx * a.normal.x + compAy * a.normal.y < compBx * a.normal.x + compBy * a.normal.y)
-		return null;
+		return NO_COLLISION;
 
 	//'previous' position is assumed to be the current position minus
 	//the fake movement we just assumed. This fake previous position is
@@ -107,12 +107,12 @@ Collision detectCollision(Limit a, Limit b)
 	//if b isn't before a
 	//(aka the limits at previous positions are not even facing each other)
 	if(prevAx * a.normal.x + prevAy * a.normal.y > prevBx * a.normal.x + prevBy * a.normal.y) //if b isn't before a
-		return null; //no collision
+		return NO_COLLISION; //no collision
 
 	float hsizeA = a.size / 2; //half size for A
 	float hsizeB = b.size / 2; //half size for B
 
-	float diff = ((b.pos.x - vecBx) - (a.pos.x - vecAx)) * normalX + ((b.pos.y - vecBy) - (a.pos.y - vecAy)) * normalY;
+	float diff = ((b.pos.x - vecBx) - (a.pos.x - vecAx)) * a.normal.x + ((b.pos.y - vecBy) - (a.pos.y - vecAy)) * a.normal.y;
 	float vecDiff = (vecBx - vecAx) * a.normal.x + (vecBy - vecAy) * a.normal.y;
 
 	float midpoint = vecDiff != 0 ? (diff + vecDiff) / vecDiff : 0f;
@@ -125,32 +125,53 @@ Collision detectCollision(Limit a, Limit b)
 	//contact surface, used to detect if limits are on the same plane and
 	//to fullfill the collision report
 	//get surface contact at mid point
-	float surface = getContactSurface(midAx, midAy, hsizeA, midBx, midBy, hsizeB, a.normal.x, a.normal.y);
+	float surface = getContactSurface(new Vector(midAx, midAy), hsizeA, new Vector(midBx, midBy), hsizeB, a.normal);
 
 	//if 0, it might be a corner corner case
 	if(surface < 0)
-		return null;
+		return NO_COLLISION;
 
-	Collision collision;
-	collision.normal = { normalX, normalY };
+	Collision collision = new Collision();
+	collision.normal = a.normal;
 
-	collision.penetration = (cA, cB) -> getPenetration((Limit)cA, (Limit)cB);
-
-	//boing v2 priority algorithm
-	//collision.priority = surface * getPenetration(compAx, compAy, compBx, compBy, normalX, normalY);
-	collision.priority = surface * getPenetration(a, b);
-	//System.out.println(collision.priority);
-
-	//re-get the position from the original calculation
-	//since we are in a CollisionDynamicVariable, posAx, posAy etc. might
-	//be outdated (cached values)
-	collision.contactSurface = (cA, cB) -> getContactSurface((Limit)cA, (Limit)cB);
+	collision.penetration = (cA, cB) -> getPenetration(cA.pos, cB.pos);
+	collision.priority = surface * getPenetration(a.pos, b.pos, a.normal);
+	collision.contactSurface = (cA, cB) -> getContactSurface(cA.pos, cA.size / 2, cB.pos, cB.size / 2, cA.normal);
 
 	collision.a = a;
 	collision.b = b;
 
 	return collision;
 }
+
+
+float getPenetration(Vector posA, Vector posB, Vector normal)
+{
+	return (posA.x - posB.x) * normal.x + (posA.y - posB.y) * normal.y;
+}
+
+
+public static float getContactSurface(Vector posA, float extentA, Vector posB, float extentB, Vector normal)
+{
+	float limitA1 = normal.x * (posA.y + extentA) - normal.y * (posA.x + extentA);
+	float limitA2 = normal.x * (posA.y - extentA) - normal.y * (posA.x - extentA);
+	float limitB1 = normal.x * (posB.y + extentB) - normal.y * (posB.x + extentB);
+	float limitB2 = normal.x * (posB.y - extentB) - normal.y * (posB.x - extentB);
+	
+	//minimum of the maximums - maximum of the minimums
+
+	return min(max(limitA1, limitA2), max(limitB1, limitB2)) - max(min(limitA1, limitA2), min(limitB1, limitB2));
+}
 \end{lstlisting}
+
+$$S = min(max(L_{A1},\, L_{A2}),\, max(L_{B1},\, L_{B2})) - max(min(L_{A1},\, L_{A2}),\, min(L_{B1},\, L_{B2}))$$ 
+where 
+\begin{description}
+	\item $L_{A1} = N_y(A_x + A_e) + N_x(A_y + A_e)$, 
+	\item $L_{A2} = N_y(A_x - A_e) + N_x(A_y - A_e)$, 
+	\item $L_{B1} = N_y(B_x + B_e) + N_x(B_y + B_e)$, 
+	\item $L_{B2} = N_y(B_x - B_e) + N_x(B_y - B_e)$
+\end{description}
+
 
 \end{document}
