@@ -4,8 +4,6 @@ import com.badlogic.gdx.utils.Array;
 import me.winter.boing.Body;
 import me.winter.boing.DynamicBody;
 import me.winter.boing.colliders.Bound;
-import me.winter.boing.colliders.Box;
-import me.winter.boing.colliders.Circle;
 import me.winter.boing.colliders.Collider;
 import me.winter.boing.testimpl.TestWorldImpl;
 import org.junit.Ignore;
@@ -66,20 +64,7 @@ public class BoingSimulator extends JFrame implements KeyListener, MouseListener
 					g.setColor(new Color(body.hashCode()));
 
 					for(Collider collider : body.getColliders())
-						if(collider instanceof Circle)
-						{
-							Circle circle = (Circle)collider;
-							float r = ((Circle)collider).radius;
-							g.fillOval((int)(circle.getAbsX() - r), (int)(600 - circle.getAbsY() - r), (int)r * 2, (int)r * 2);
-						}
-						else if(collider instanceof Box)
-						{
-							Box box = ((Box)collider);
-							float w = box.width;
-							float h = box.height;
-							g.fillRect((int)(box.getAbsX() - w / 2), (int)(600 - box.getAbsY() - h / 2), (int)w, (int)h);
-						}
-						else if(collider instanceof Bound)
+						if(collider instanceof Bound)
 						{
 							Bound bound = (Bound)collider;
 							g.drawLine((int)(bound.getAbsX() - bound.size / 2 * bound.normal.y), (int)(600 - bound.getAbsY() + bound.size / 2 * bound.normal.x), (int)(bound.getAbsX() + bound.size / 2 * bound.normal.y), (int)(600 - bound.getAbsY() - bound.size / 2 * bound.normal.x));
@@ -250,32 +235,7 @@ public class BoingSimulator extends JFrame implements KeyListener, MouseListener
 		for(Body body : world.getBodies())
 		{
 			for(Collider collider : body.getColliders())
-				if(collider instanceof Circle)
-				{
-					Circle circle = (Circle)collider;
-					float r = ((Circle)collider).radius;
-
-					float dx = circle.getAbsX() - x;
-					float dy = circle.getAbsY() - y;
-
-					if(dx * dx + dy * dy < r * r)
-					{
-						toRemove = body;
-						break bodyLoop;
-					}
-				}
-				else if(collider instanceof Box)
-				{
-					Box box = ((Box)collider);
-					float dx = box.getAbsX() - x;
-					float dy = box.getAbsY() - y;
-					if(dx * dx + dy * dy < box.width * box.height) //lazy
-					{
-						toRemove = body;
-						break bodyLoop;
-					}
-				}
-				else if(collider instanceof Bound)
+				if(collider instanceof Bound)
 				{
 					Bound bound = (Bound)collider;
 					float dx = bound.getAbsX() - x;

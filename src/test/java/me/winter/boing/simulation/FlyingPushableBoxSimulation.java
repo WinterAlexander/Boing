@@ -1,7 +1,6 @@
 package me.winter.boing.simulation;
 
 import me.winter.boing.colliders.Bound;
-import me.winter.boing.colliders.Box;
 import me.winter.boing.impl.BodyImpl;
 import me.winter.boing.impl.DynamicBodyImpl;
 import me.winter.boing.resolver.ReplaceResolver;
@@ -24,23 +23,23 @@ import static me.winter.boing.util.VectorUtil.UP;
 @Ignore
 public class FlyingPushableBoxSimulation
 {
-	@Test
-	public void simpleBox()
-	{
-		TestWorldImpl testWorld = new TestWorldImpl(new ReplaceResolver());
-
-		FlyingPlayerImpl player = new FlyingPlayerImpl();
-		player.getPosition().set(400, 400);
-		player.addCollider(new Box(player, 0, 0, 50, 50));
-		testWorld.add(player);
-
-		DynamicBodyImpl solid = new DynamicBodyImpl();
-		solid.getPosition().set(200, 400);
-		solid.addCollider(new Box(solid, 0, 0, 50, 50));
-		testWorld.add(solid);
-
-		new BoingSimulator(testWorld, 60f).start();
-	}
+//	@Test
+//	public void simpleBox()
+//	{
+//		TestWorldImpl testWorld = new TestWorldImpl(new ReplaceResolver());
+//
+//		FlyingPlayerImpl player = new FlyingPlayerImpl();
+//		player.getPosition().set(400, 400);
+//		player.addCollider(new Box(player, 0, 0, 50, 50));
+//		testWorld.add(player);
+//
+//		DynamicBodyImpl solid = new DynamicBodyImpl();
+//		solid.getPosition().set(200, 400);
+//		solid.addCollider(new Box(solid, 0, 0, 50, 50));
+//		testWorld.add(solid);
+//
+//		new BoingSimulator(testWorld, 60f).start();
+//	}
 
 	@Test
 	public void simpleBoundBox()
@@ -99,72 +98,72 @@ public class FlyingPushableBoxSimulation
 		new BoingSimulator(testWorld, 60f).start();
 	}
 
-	@Test
-	public void boxWithBounds()
-	{
-		TestWorldImpl testWorld = new TestWorldImpl(new ReplaceResolver());
-
-		FlyingPlayerImpl player = new FlyingPlayerImpl();
-		player.getPosition().set(400, 400);
-		player.addCollider(new Box(player, 0, 0, 50, 50));
-		testWorld.add(player);
-
-		DynamicBodyImpl solid = new DynamicBodyImpl();
-		solid.getPosition().set(200, 400);
-		solid.addCollider(new Box(solid, 0, 0, 50, 50));
-		testWorld.add(solid);
-
-		BodyImpl bound1 = new BodyImpl();
-		bound1.getPosition().set(600, 400);
-		bound1.addCollider(new Bound(bound1, 0, 0, LEFT, 40));
-		testWorld.add(bound1);
-
-		BodyImpl bound2 = new BodyImpl();
-		bound2.getPosition().set(400, 200);
-		bound2.addCollider(new Bound(bound2, 0, 0, UP, 50));
-		testWorld.add(bound2);
-
-		new BoingSimulator(testWorld, 60f).start();
-	}
-
-	@Test
-	public void lotsOfBoxesWithBounds()
-	{
-		TestWorldImpl testWorld = new TestWorldImpl(new ReplaceResolver());
-
-		FlyingPlayerImpl player = new FlyingPlayerImpl();
-		player.getPosition().set(500, 400);
-		player.addCollider(new Box(player, 0, 0, 50, 50));
-		testWorld.add(player);
-
-		for(int i = 0; i < 10; i++)
-		{
-			for(int j = 0; j < 5; j++)
-			{
-				DynamicBodyImpl solid = new DynamicBodyImpl();
-				solid.getPosition().set(i * 50 + 25, j * 50 + 25);
-				solid.addCollider(new Box(solid, 0, 0, 20, 20));
-				testWorld.add(solid);
-			}
-		}
-
-		BodyImpl bound1 = new BodyImpl();
-		bound1.getPosition().set(600, 400);
-		bound1.addCollider(new Bound(bound1, 0, 0, LEFT, 40));
-		testWorld.add(bound1);
-
-		BodyImpl bound2 = new BodyImpl();
-		bound2.getPosition().set(400, 200);
-		bound2.addCollider(new Bound(bound2, 0, 0, UP, 50));
-		testWorld.add(bound2);
-
-		BodyImpl solid = new BodyImpl();
-		solid.getPosition().set(600, 600);
-		solid.addCollider(new Box(solid, 0, 0, 50, 50));
-		testWorld.add(solid);
-
-		new BoingSimulator(testWorld, 60f).start();
-	}
+//	@Test
+//	public void boxWithBounds()
+//	{
+//		TestWorldImpl testWorld = new TestWorldImpl(new ReplaceResolver());
+//
+//		FlyingPlayerImpl player = new FlyingPlayerImpl();
+//		player.getPosition().set(400, 400);
+//		player.addCollider(new Box(player, 0, 0, 50, 50));
+//		testWorld.add(player);
+//
+//		DynamicBodyImpl solid = new DynamicBodyImpl();
+//		solid.getPosition().set(200, 400);
+//		solid.addCollider(new Box(solid, 0, 0, 50, 50));
+//		testWorld.add(solid);
+//
+//		BodyImpl bound1 = new BodyImpl();
+//		bound1.getPosition().set(600, 400);
+//		bound1.addCollider(new Bound(bound1, 0, 0, LEFT, 40));
+//		testWorld.add(bound1);
+//
+//		BodyImpl bound2 = new BodyImpl();
+//		bound2.getPosition().set(400, 200);
+//		bound2.addCollider(new Bound(bound2, 0, 0, UP, 50));
+//		testWorld.add(bound2);
+//
+//		new BoingSimulator(testWorld, 60f).start();
+//	}
+//
+//	@Test
+//	public void lotsOfBoxesWithBounds()
+//	{
+//		TestWorldImpl testWorld = new TestWorldImpl(new ReplaceResolver());
+//
+//		FlyingPlayerImpl player = new FlyingPlayerImpl();
+//		player.getPosition().set(500, 400);
+//		player.addCollider(new Box(player, 0, 0, 50, 50));
+//		testWorld.add(player);
+//
+//		for(int i = 0; i < 10; i++)
+//		{
+//			for(int j = 0; j < 5; j++)
+//			{
+//				DynamicBodyImpl solid = new DynamicBodyImpl();
+//				solid.getPosition().set(i * 50 + 25, j * 50 + 25);
+//				solid.addCollider(new Box(solid, 0, 0, 20, 20));
+//				testWorld.add(solid);
+//			}
+//		}
+//
+//		BodyImpl bound1 = new BodyImpl();
+//		bound1.getPosition().set(600, 400);
+//		bound1.addCollider(new Bound(bound1, 0, 0, LEFT, 40));
+//		testWorld.add(bound1);
+//
+//		BodyImpl bound2 = new BodyImpl();
+//		bound2.getPosition().set(400, 200);
+//		bound2.addCollider(new Bound(bound2, 0, 0, UP, 50));
+//		testWorld.add(bound2);
+//
+//		BodyImpl solid = new BodyImpl();
+//		solid.getPosition().set(600, 600);
+//		solid.addCollider(new Box(solid, 0, 0, 50, 50));
+//		testWorld.add(solid);
+//
+//		new BoingSimulator(testWorld, 60f).start();
+//	}
 
 	@Test
 	public void lotsOfBoundBoxes()

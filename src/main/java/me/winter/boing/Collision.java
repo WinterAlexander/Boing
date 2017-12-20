@@ -1,7 +1,6 @@
 package me.winter.boing;
 
 import com.badlogic.gdx.math.Vector2;
-import me.winter.boing.CollisionDynamicVariable.Inverter;
 import me.winter.boing.colliders.Collider;
 import me.winter.boing.util.Wrapper;
 

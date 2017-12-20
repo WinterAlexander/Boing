@@ -3,8 +3,9 @@ package me.winter.boing;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Pool;
 import me.winter.boing.CollisionDynamicVariable.Inverter;
+import me.winter.boing.colliders.Bound;
 import me.winter.boing.colliders.Collider;
-import me.winter.boing.detection.DetectionHandler;
+import me.winter.boing.detection.continuous.BoundBoundDetector;
 import me.winter.boing.resolver.CappedWeightResolver;
 import me.winter.boing.resolver.CollisionResolver;
 import me.winter.boing.resolver.WeightResolver;
@@ -32,7 +33,7 @@ public abstract class AbstractWorld implements World
 	 */
 	protected Array<Collision> collisions = new Array<>();
 
-	protected DetectionHandler detector;
+	protected BoundBoundDetector detector;
 	protected CollisionResolver resolver;
 	protected WeightResolver weightResolver;
 
@@ -45,7 +46,7 @@ public abstract class AbstractWorld implements World
 
 	public AbstractWorld(CollisionResolver resolver, WeightResolver weightResolver)
 	{
-		this.detector = new DetectionHandler(collisionPool, varInverter);
+		this.detector = new BoundBoundDetector(collisionPool);
 		this.resolver = resolver;
 		this.weightResolver = weightResolver;
 	}
@@ -100,7 +101,7 @@ public abstract class AbstractWorld implements World
 		{
 			for(Collider colliderB : bodyB.getColliders())
 			{
-				Collision collision = detector.collides(this, colliderA, colliderB);
+				Collision collision = detector.collides(this, (Bound)colliderA, (Bound)colliderB);
 
 				if(collision == null)
 					continue;

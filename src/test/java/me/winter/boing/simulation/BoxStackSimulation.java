@@ -1,19 +1,14 @@
 package me.winter.boing.simulation;
 
-import me.winter.boing.Collision;
 import me.winter.boing.colliders.Bound;
 import me.winter.boing.impl.BodyImpl;
-import me.winter.boing.impl.DynamicBodyImpl;
 import me.winter.boing.resolver.ReplaceResolver;
-import me.winter.boing.colliders.Box;
+import me.winter.boing.simulation.simulator.BoingSimulator;
 import me.winter.boing.testimpl.GravityAffected;
 import me.winter.boing.testimpl.PlayerImpl;
 import me.winter.boing.testimpl.TestWorldImpl;
-import me.winter.boing.simulation.simulator.BoingSimulator;
 import org.junit.Ignore;
 import org.junit.Test;
-
-import java.util.Random;
 
 import static me.winter.boing.util.VectorUtil.DOWN;
 import static me.winter.boing.util.VectorUtil.LEFT;
@@ -28,55 +23,56 @@ import static me.winter.boing.util.VectorUtil.UP;
 @Ignore
 public class BoxStackSimulation
 {
-	@Test
-	public void simpleBoxStack()
-	{
-		TestWorldImpl world = new TestWorldImpl(new ReplaceResolver());
 
-		PlayerImpl player = new PlayerImpl();
-
-		player.getPosition().set(400, 400);
-		player.addCollider(new Box(player, 0, 0, 20, 45));
-		world.add(player);
-
-		GravityAffected test = new GravityAffected();
-		test.getPosition().set(400, 200);
-		test.addCollider(new Box(test, 0, 0, 50, 50));
-		world.add(test);
-
-		BodyImpl ground = new BodyImpl();
-
-		ground.getPosition().set(400, -100);
-		ground.addCollider(new Box(ground, 0, 0, 800, 400));
-		world.add(ground);
-
-		new BoingSimulator(world, 60f).start();
-	}
-
-	@Test
-	public void shortBoxStack()
-	{
-		TestWorldImpl world = new TestWorldImpl(new ReplaceResolver());
-
-		PlayerImpl player = new PlayerImpl();
-
-		player.getPosition().set(400, 200);
-		player.addCollider(new Box(player, 0, 0, 20, 45));
-		world.add(player);
-
-		GravityAffected test = new GravityAffected();
-		test.getPosition().set(400, 150);
-		test.addCollider(new Box(test, 0, 0, 50, 50));
-		world.add(test);
-
-		BodyImpl ground = new BodyImpl();
-
-		ground.getPosition().set(400, -100);
-		ground.addCollider(new Box(ground, 0, 0, 800, 400));
-		world.add(ground);
-
-		new BoingSimulator(world, 60f).start();
-	}
+//	@Test
+//	public void simpleBoxStack()
+//	{
+//		TestWorldImpl world = new TestWorldImpl(new ReplaceResolver());
+//
+//		PlayerImpl player = new PlayerImpl();
+//
+//		player.getPosition().set(400, 400);
+//		player.addCollider(new Box(player, 0, 0, 20, 45));
+//		world.add(player);
+//
+//		GravityAffected test = new GravityAffected();
+//		test.getPosition().set(400, 200);
+//		test.addCollider(new Box(test, 0, 0, 50, 50));
+//		world.add(test);
+//
+//		BodyImpl ground = new BodyImpl();
+//
+//		ground.getPosition().set(400, -100);
+//		ground.addCollider(new Box(ground, 0, 0, 800, 400));
+//		world.add(ground);
+//
+//		new BoingSimulator(world, 60f).start();
+//	}
+//
+//	@Test
+//	public void shortBoxStack()
+//	{
+//		TestWorldImpl world = new TestWorldImpl(new ReplaceResolver());
+//
+//		PlayerImpl player = new PlayerImpl();
+//
+//		player.getPosition().set(400, 200);
+//		player.addCollider(new Box(player, 0, 0, 20, 45));
+//		world.add(player);
+//
+//		GravityAffected test = new GravityAffected();
+//		test.getPosition().set(400, 150);
+//		test.addCollider(new Box(test, 0, 0, 50, 50));
+//		world.add(test);
+//
+//		BodyImpl ground = new BodyImpl();
+//
+//		ground.getPosition().set(400, -100);
+//		ground.addCollider(new Box(ground, 0, 0, 800, 400));
+//		world.add(ground);
+//
+//		new BoingSimulator(world, 60f).start();
+//	}
 
 	@Test
 	public void shortBoundBoxStack()
@@ -114,254 +110,254 @@ public class BoxStackSimulation
 
 		new BoingSimulator(world, 60f).start();
 	}
+//
+//	@Test
+//	public void simpleBoxStackWithSolidBlock()
+//	{
+//		TestWorldImpl world = new TestWorldImpl(new ReplaceResolver());
+//
+//		PlayerImpl player = new PlayerImpl();
+//		player.getPosition().set(400, 400);
+//		player.addCollider(new Box(player, 0, 0, 20, 45));
+//		world.add(player);
+//
+//		GravityAffected test = new GravityAffected();
+//		test.getPosition().set(400, 200);
+//		test.addCollider(new Box(test, 0, 0, 50, 50));
+//		world.add(test);
+//
+//		BodyImpl solidBlock = new BodyImpl();
+//		solidBlock.getPosition().set(600, 110);
+//		solidBlock.addCollider(new Box(solidBlock, 0, 0, 100, 100));
+//		world.add(solidBlock);
+//
+//		BodyImpl solidBlock2 = new BodyImpl();
+//		solidBlock2.getPosition().set(200, 110);
+//		solidBlock2.addCollider(new Box(solidBlock2, 0, 0, 100, 100));
+//		world.add(solidBlock2);
+//
+//		BodyImpl ground = new BodyImpl();
+//		ground.getPosition().set(400, -100);
+//		ground.addCollider(new Box(ground, 0, 0, 800, 400));
+//		world.add(ground);
+//
+//		new BoingSimulator(world, 60f).start();
+//	}
+//
+//	@Test
+//	public void bigBoxStack()
+//	{
+//		TestWorldImpl world = new TestWorldImpl(new ReplaceResolver());
+//
+//		GravityAffected test = new GravityAffected();
+//		test.getPosition().set(400, 500);
+//		test.addCollider(new Box(test, 0, 0, 30, 30));
+//		world.add(test);
+//
+//		PlayerImpl player = new PlayerImpl();
+//		player.getPosition().set(400, 600);
+//		player.addCollider(new Box(player, 0, 0, 20, 45));
+//		world.add(player);
+//
+//		GravityAffected test2 = new GravityAffected();
+//		test2.getPosition().set(400, 400);
+//		test2.addCollider(new Box(test2, 0, 0, 30, 30));
+//		world.add(test2);
+//
+//		GravityAffected test3 = new GravityAffected();
+//		test3.getPosition().set(400, 300);
+//		test3.addCollider(new Box(test3, 0, 0, 50, 50));
+//		world.add(test3);
+//
+//		BodyImpl ground = new BodyImpl();
+//		ground.getPosition().set(400, 0);
+//		ground.addCollider(new Box(ground, 0, 0, 800, 400));
+//		world.add(ground);
+//
+//		new BoingSimulator(world, 60f).start();
+//	}
+//
+//	@Test
+//	public void bigBoxStackWithLazyFloatyBox()
+//	{
+//		TestWorldImpl world = new TestWorldImpl(new ReplaceResolver());
+//
+//		GravityAffected test = new GravityAffected() {
+//			@Override
+//			public void update(float delta)
+//			{
+//				super.update(delta);
+//				getVelocity().y += 4;
+//			}
+//		};
+//		test.getPosition().set(400, 500);
+//		test.addCollider(new Box(test, 0, 0, 30, 30));
+//		world.add(test);
+//
+//		PlayerImpl player = new PlayerImpl() {
+//			@Override
+//			public void notifyCollision(Collision collision)
+//			{
+//				if(collision.normal.dot(DOWN) > 0.7 && collision.impactVelA.dot(DOWN) > 0.7 && collision.colliderB.getBody() != test)
+//					onGround = true;
+//			}
+//		};
+//
+//		player.getPosition().set(400, 600);
+//		player.addCollider(new Box(player, 0, 0, 20, 45));
+//		world.add(player);
+//
+//		GravityAffected test2 = new GravityAffected();
+//		test2.getPosition().set(400, 400);
+//		test2.addCollider(new Box(test2, 0, 0, 30, 30));
+//		world.add(test2);
+//
+//		GravityAffected test3 = new GravityAffected();
+//		test3.getPosition().set(400, 300);
+//		test3.addCollider(new Box(test3, 0, 0, 50, 50));
+//		world.add(test3);
+//
+//		BodyImpl ground = new BodyImpl();
+//		ground.getPosition().set(400, 0);
+//		ground.addCollider(new Box(ground, 0, 0, 800, 400));
+//		world.add(ground);
+//
+//		new BoingSimulator(world, 60f).start();
+//	}
+//
+//	@Test
+//	public void towerTest()
+//	{
+//		TestWorldImpl world = new TestWorldImpl(new ReplaceResolver());
+//
+//		PlayerImpl player = new PlayerImpl();
+//		player.getPosition().set(400, 800);
+//		player.addCollider(new Box(player, 0, 0, 20, 45));
+//		world.add(player);
+//
+//		for(int i = 0; i < 10; i++)
+//		{
+//			GravityAffected test = new GravityAffected();
+//			test.getPosition().set(400, 750 - i * 50);
+//			test.addCollider(new Box(test, 0, 0, 30, 30));
+//			world.add(test);
+//		}
+//
+//		BodyImpl solidBlock = new BodyImpl();
+//		solidBlock.getPosition().set(600, 110);
+//		solidBlock.addCollider(new Box(solidBlock, 0, 0, 100, 100));
+//		world.add(solidBlock);
+//
+//		BodyImpl ground = new BodyImpl();
+//		ground.getPosition().set(400, -100);
+//		ground.addCollider(new Box(ground, 0, 0, 800, 400));
+//		world.add(ground);
+//
+//		new BoingSimulator(world, 60f).start();
+//	}
+//
+//	@Test
+//	public void reverseOrderTowerTest()
+//	{
+//		TestWorldImpl world = new TestWorldImpl(new ReplaceResolver());
+//
+//		PlayerImpl player = new PlayerImpl();
+//		player.getPosition().set(400, 800);
+//		player.addCollider(new Box(player, 0, 0, 20, 45));
+//		world.add(player);
+//
+//		for(int i = 9; i >= 0; i--)
+//		{
+//			GravityAffected test = new GravityAffected();
+//			test.getPosition().set(400, 750 - i * 50);
+//			test.addCollider(new Box(test, 0, 0, 30, 30));
+//			world.add(test);
+//		}
+//
+//		BodyImpl solidBlock = new BodyImpl();
+//		solidBlock.getPosition().set(600, 110);
+//		solidBlock.addCollider(new Box(solidBlock, 0, 0, 100, 100));
+//		world.add(solidBlock);
+//
+//		BodyImpl ground = new BodyImpl();
+//		ground.getPosition().set(400, -100);
+//		ground.addCollider(new Box(ground, 0, 0, 800, 400));
+//		world.add(ground);
+//
+//		new BoingSimulator(world, 60f).start();
+//	}
+//
+//	@Test
+//	public void towerTestWithPlatform()
+//	{
+//		TestWorldImpl world = new TestWorldImpl(new ReplaceResolver());
+//
+//		PlayerImpl player = new PlayerImpl();
+//		player.getPosition().set(400, 800);
+//		player.addCollider(new Box(player, 0, 0, 20, 45));
+//		world.add(player);
+//
+//		for(int i = 0; i < 10; i++)
+//		{
+//			GravityAffected test = new GravityAffected();
+//			test.getPosition().set(400, 750 - i * 50);
+//			test.addCollider(new Box(test, 0, 0, 30, 30));
+//			world.add(test);
+//		}
+//
+//		BodyImpl solidBlock = new BodyImpl();
+//		solidBlock.getPosition().set(600, 110);
+//		solidBlock.addCollider(new Box(solidBlock, 0, 0, 100, 100));
+//		world.add(solidBlock);
+//
+//		BodyImpl ground = new BodyImpl();
+//		ground.getPosition().set(400, -100);
+//		ground.addCollider(new Box(ground, 0, 0, 800, 400));
+//		world.add(ground);
+//
+//		BodyImpl platform = new BodyImpl();
+//		platform.getPosition().set(400, 150);
+//		platform.addCollider(new Bound(platform, 0, 0, UP, 100));
+//		world.add(platform);
+//
+//		new BoingSimulator(world, 60f).start();
+//	}
 
-	@Test
-	public void simpleBoxStackWithSolidBlock()
-	{
-		TestWorldImpl world = new TestWorldImpl(new ReplaceResolver());
-
-		PlayerImpl player = new PlayerImpl();
-		player.getPosition().set(400, 400);
-		player.addCollider(new Box(player, 0, 0, 20, 45));
-		world.add(player);
-
-		GravityAffected test = new GravityAffected();
-		test.getPosition().set(400, 200);
-		test.addCollider(new Box(test, 0, 0, 50, 50));
-		world.add(test);
-
-		BodyImpl solidBlock = new BodyImpl();
-		solidBlock.getPosition().set(600, 110);
-		solidBlock.addCollider(new Box(solidBlock, 0, 0, 100, 100));
-		world.add(solidBlock);
-
-		BodyImpl solidBlock2 = new BodyImpl();
-		solidBlock2.getPosition().set(200, 110);
-		solidBlock2.addCollider(new Box(solidBlock2, 0, 0, 100, 100));
-		world.add(solidBlock2);
-
-		BodyImpl ground = new BodyImpl();
-		ground.getPosition().set(400, -100);
-		ground.addCollider(new Box(ground, 0, 0, 800, 400));
-		world.add(ground);
-
-		new BoingSimulator(world, 60f).start();
-	}
-
-	@Test
-	public void bigBoxStack()
-	{
-		TestWorldImpl world = new TestWorldImpl(new ReplaceResolver());
-
-		GravityAffected test = new GravityAffected();
-		test.getPosition().set(400, 500);
-		test.addCollider(new Box(test, 0, 0, 30, 30));
-		world.add(test);
-
-		PlayerImpl player = new PlayerImpl();
-		player.getPosition().set(400, 600);
-		player.addCollider(new Box(player, 0, 0, 20, 45));
-		world.add(player);
-
-		GravityAffected test2 = new GravityAffected();
-		test2.getPosition().set(400, 400);
-		test2.addCollider(new Box(test2, 0, 0, 30, 30));
-		world.add(test2);
-
-		GravityAffected test3 = new GravityAffected();
-		test3.getPosition().set(400, 300);
-		test3.addCollider(new Box(test3, 0, 0, 50, 50));
-		world.add(test3);
-
-		BodyImpl ground = new BodyImpl();
-		ground.getPosition().set(400, 0);
-		ground.addCollider(new Box(ground, 0, 0, 800, 400));
-		world.add(ground);
-
-		new BoingSimulator(world, 60f).start();
-	}
-
-	@Test
-	public void bigBoxStackWithLazyFloatyBox()
-	{
-		TestWorldImpl world = new TestWorldImpl(new ReplaceResolver());
-
-		GravityAffected test = new GravityAffected() {
-			@Override
-			public void update(float delta)
-			{
-				super.update(delta);
-				getVelocity().y += 4;
-			}
-		};
-		test.getPosition().set(400, 500);
-		test.addCollider(new Box(test, 0, 0, 30, 30));
-		world.add(test);
-
-		PlayerImpl player = new PlayerImpl() {
-			@Override
-			public void notifyCollision(Collision collision)
-			{
-				if(collision.normal.dot(DOWN) > 0.7 && collision.impactVelA.dot(DOWN) > 0.7 && collision.colliderB.getBody() != test)
-					onGround = true;
-			}
-		};
-
-		player.getPosition().set(400, 600);
-		player.addCollider(new Box(player, 0, 0, 20, 45));
-		world.add(player);
-
-		GravityAffected test2 = new GravityAffected();
-		test2.getPosition().set(400, 400);
-		test2.addCollider(new Box(test2, 0, 0, 30, 30));
-		world.add(test2);
-
-		GravityAffected test3 = new GravityAffected();
-		test3.getPosition().set(400, 300);
-		test3.addCollider(new Box(test3, 0, 0, 50, 50));
-		world.add(test3);
-
-		BodyImpl ground = new BodyImpl();
-		ground.getPosition().set(400, 0);
-		ground.addCollider(new Box(ground, 0, 0, 800, 400));
-		world.add(ground);
-
-		new BoingSimulator(world, 60f).start();
-	}
-
-	@Test
-	public void towerTest()
-	{
-		TestWorldImpl world = new TestWorldImpl(new ReplaceResolver());
-
-		PlayerImpl player = new PlayerImpl();
-		player.getPosition().set(400, 800);
-		player.addCollider(new Box(player, 0, 0, 20, 45));
-		world.add(player);
-
-		for(int i = 0; i < 10; i++)
-		{
-			GravityAffected test = new GravityAffected();
-			test.getPosition().set(400, 750 - i * 50);
-			test.addCollider(new Box(test, 0, 0, 30, 30));
-			world.add(test);
-		}
-
-		BodyImpl solidBlock = new BodyImpl();
-		solidBlock.getPosition().set(600, 110);
-		solidBlock.addCollider(new Box(solidBlock, 0, 0, 100, 100));
-		world.add(solidBlock);
-
-		BodyImpl ground = new BodyImpl();
-		ground.getPosition().set(400, -100);
-		ground.addCollider(new Box(ground, 0, 0, 800, 400));
-		world.add(ground);
-
-		new BoingSimulator(world, 60f).start();
-	}
-
-	@Test
-	public void reverseOrderTowerTest()
-	{
-		TestWorldImpl world = new TestWorldImpl(new ReplaceResolver());
-
-		PlayerImpl player = new PlayerImpl();
-		player.getPosition().set(400, 800);
-		player.addCollider(new Box(player, 0, 0, 20, 45));
-		world.add(player);
-
-		for(int i = 9; i >= 0; i--)
-		{
-			GravityAffected test = new GravityAffected();
-			test.getPosition().set(400, 750 - i * 50);
-			test.addCollider(new Box(test, 0, 0, 30, 30));
-			world.add(test);
-		}
-
-		BodyImpl solidBlock = new BodyImpl();
-		solidBlock.getPosition().set(600, 110);
-		solidBlock.addCollider(new Box(solidBlock, 0, 0, 100, 100));
-		world.add(solidBlock);
-
-		BodyImpl ground = new BodyImpl();
-		ground.getPosition().set(400, -100);
-		ground.addCollider(new Box(ground, 0, 0, 800, 400));
-		world.add(ground);
-
-		new BoingSimulator(world, 60f).start();
-	}
-
-	@Test
-	public void towerTestWithPlatform()
-	{
-		TestWorldImpl world = new TestWorldImpl(new ReplaceResolver());
-
-		PlayerImpl player = new PlayerImpl();
-		player.getPosition().set(400, 800);
-		player.addCollider(new Box(player, 0, 0, 20, 45));
-		world.add(player);
-
-		for(int i = 0; i < 10; i++)
-		{
-			GravityAffected test = new GravityAffected();
-			test.getPosition().set(400, 750 - i * 50);
-			test.addCollider(new Box(test, 0, 0, 30, 30));
-			world.add(test);
-		}
-
-		BodyImpl solidBlock = new BodyImpl();
-		solidBlock.getPosition().set(600, 110);
-		solidBlock.addCollider(new Box(solidBlock, 0, 0, 100, 100));
-		world.add(solidBlock);
-
-		BodyImpl ground = new BodyImpl();
-		ground.getPosition().set(400, -100);
-		ground.addCollider(new Box(ground, 0, 0, 800, 400));
-		world.add(ground);
-
-		BodyImpl platform = new BodyImpl();
-		platform.getPosition().set(400, 150);
-		platform.addCollider(new Bound(platform, 0, 0, UP, 100));
-		world.add(platform);
-
-		new BoingSimulator(world, 60f).start();
-	}
-
-	@Test
-	public void towerTestWithWall()
-	{
-		TestWorldImpl world = new TestWorldImpl(new ReplaceResolver());
-
-		PlayerImpl player = new PlayerImpl();
-		player.getPosition().set(400, 800);
-		player.addCollider(new Box(player, 0, 0, 20, 45));
-		world.add(player);
-
-		for(int i = 0; i < 10; i++)
-		{
-			GravityAffected test = new GravityAffected();
-			test.getPosition().set(400, 750 - i * 50);
-			test.addCollider(new Box(test, 0, 0, 30, 30));
-			world.add(test);
-		}
-
-		BodyImpl solidBlock = new BodyImpl();
-		solidBlock.getPosition().set(600, 110);
-		solidBlock.addCollider(new Box(solidBlock, 0, 0, 100, 100));
-		world.add(solidBlock);
-
-		BodyImpl ground = new BodyImpl();
-		ground.getPosition().set(400, -100);
-		ground.addCollider(new Box(ground, 0, 0, 800, 400));
-		world.add(ground);
-
-		BodyImpl platform = new BodyImpl();
-		platform.getPosition().set(100, 125);
-		platform.addCollider(new Bound(platform, 0, 0, RIGHT, 50));
-		world.add(platform);
-
-		new BoingSimulator(world, 60f).start();
-	}
+//	@Test
+//	public void towerTestWithWall()
+//	{
+//		TestWorldImpl world = new TestWorldImpl(new ReplaceResolver());
+//
+//		PlayerImpl player = new PlayerImpl();
+//		player.getPosition().set(400, 800);
+//		player.addCollider(new Box(player, 0, 0, 20, 45));
+//		world.add(player);
+//
+//		for(int i = 0; i < 10; i++)
+//		{
+//			GravityAffected test = new GravityAffected();
+//			test.getPosition().set(400, 750 - i * 50);
+//			test.addCollider(new Box(test, 0, 0, 30, 30));
+//			world.add(test);
+//		}
+//
+//		BodyImpl solidBlock = new BodyImpl();
+//		solidBlock.getPosition().set(600, 110);
+//		solidBlock.addCollider(new Box(solidBlock, 0, 0, 100, 100));
+//		world.add(solidBlock);
+//
+//		BodyImpl ground = new BodyImpl();
+//		ground.getPosition().set(400, -100);
+//		ground.addCollider(new Box(ground, 0, 0, 800, 400));
+//		world.add(ground);
+//
+//		BodyImpl platform = new BodyImpl();
+//		platform.getPosition().set(100, 125);
+//		platform.addCollider(new Bound(platform, 0, 0, RIGHT, 50));
+//		world.add(platform);
+//
+//		new BoingSimulator(world, 60f).start();
+//	}
 
 	@Test
 	public void towerBoundTest()
@@ -400,6 +396,7 @@ public class BoxStackSimulation
 		new BoingSimulator(world, 6f).start();
 	}
 
+	/*
 	@Test
 	public void flyingBoxesStack()
 	{
@@ -442,8 +439,9 @@ public class BoxStackSimulation
 		world.add(ground);
 
 		new BoingSimulator(world, 60f).start();
-	}
+	}*/
 
+	/*
 	@Test
 	public void pickyBoxStack()
 	{
@@ -547,7 +545,7 @@ public class BoxStackSimulation
 		/*BodyImpl solidBlock = new BodyImpl();
 		solidBlock.getPosition().set(600, 110);
 		solidBlock.addCollider(new Box(solidBlock, 0, 0, 100, 100));
-		world.add(solidBlock);*/
+		world.add(solidBlock);//
 
 		BodyImpl ground = new BodyImpl();
 		ground.getPosition().set(400, -100);
@@ -555,5 +553,5 @@ public class BoxStackSimulation
 		world.add(ground);
 
 		new BoingSimulator(world, 60f).start();
-	}
+	}*/
 }

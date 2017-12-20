@@ -7,12 +7,14 @@ import me.winter.boing.World;
 import me.winter.boing.colliders.Bound;
 import me.winter.boing.detection.PooledDetector;
 
+import static java.lang.Math.abs;
 import static java.lang.Math.signum;
 import static me.winter.boing.util.FloatUtil.DEFAULT_ULPS;
 import static me.winter.boing.util.FloatUtil.areEqual;
 import static me.winter.boing.util.FloatUtil.getGreatestULP;
 import static me.winter.boing.util.FloatUtil.isGreaterOrEqual;
 import static me.winter.boing.util.FloatUtil.isSmallerOrEqual;
+import static me.winter.boing.util.FloatUtil.max;
 import static me.winter.boing.util.FloatUtil.min;
 
 /**
@@ -137,7 +139,7 @@ public class BoundBoundDetector extends PooledDetector<Bound, Bound>
 		//contact surface, used to detect if bounds are on the same plane and
 		//to fullfill the collision report
 		//get surface contact at mid point
-		float surface = BoxBoxDetector.getContactSurface(midAx, midAy, hsizeA, midBx, midBy, hsizeB, normalX, normalY);
+		float surface = getContactSurface(midAx, midAy, hsizeA, midBx, midBy, hsizeB, normalX, normalY);
 
 		//if 0, it might be a corner corner case
 		if(!areEqual(surface, 0) && surface < 0)
@@ -178,6 +180,37 @@ public class BoundBoundDetector extends PooledDetector<Bound, Bound>
 
 	public static float getContactSurface(Bound boundA, Bound boundB)
 	{
-		return BoxBoxDetector.getContactSurface(boundA.getAbsX(), boundA.getAbsY(), boundA.size / 2, boundB.getAbsX(), boundB.getAbsY(), boundB.size / 2, boundA.normal.x, boundA.normal.y);
+		return getContactSurface(boundA.getAbsX(), boundA.getAbsY(), boundA.size / 2, boundB.getAbsX(), boundB.getAbsY(), boundB.size / 2, boundA.normal.x, boundA.normal.y);
+	}
+
+	/**
+	 * Finds the contact surface between 2 bounds at position (ax, ay) and (bx, by)
+	 *
+	 * @param ax x position of bound A
+	 * @param ay y position of bound A
+	 * @param extentA half the size of bound A
+	 *
+	 * @param bx x position of bound B
+	 * @param by y position of bound B
+	 * @param extentB half size of bound B
+	 *
+	 * @param nx normal x of the bound A
+	 * @param ny normal y of the bound A
+	 *
+	 * @return how much of their surface match in relation to the normal
+	 */
+	public static float getContactSurface(float ax, float ay, float extentA,
+	                                      float bx, float by, float extentB,
+	                                      float nx, float ny)
+	{
+		//we take the 2 extremities of the 2 bounds
+		float boundA1 = ny * (ax + extentA) + nx * (ay + extentA);
+		float boundA2 = ny * (ax - extentA) + nx * (ay - extentA);
+		float boundB1 = ny * (bx + extentB) + nx * (by + extentB);
+		float boundB2 = ny * (bx - extentB) + nx * (by - extentB);
+
+		//yields the overlapping length
+		return min(max(boundA1, boundA2), max(boundB1, boundB2)) //minimum of the maximums
+				- max(min(boundA1, boundA2), min(boundB1, boundB2)); //maximum of the minimums
 	}
 }
