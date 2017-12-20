@@ -6,16 +6,16 @@ import me.winter.boing.Body;
 import static java.lang.Math.abs;
 
 /**
- * An axis aligned limit collider. Basically a segment or an edge.
+ * An axis aligned bound collider. Basically a segment or an edge.
  * <p>
  * Created by Alexander Winter on 2017-04-12.
  */
-public class Limit extends AbstractCollider
+public class Bound extends AbstractCollider
 {
 	public Vector2 normal;
 	public float size;
 
-	public Limit(Body body, float x, float y, Vector2 normal, float size)
+	public Bound(Body body, float x, float y, Vector2 normal, float size)
 	{
 		super(body, x, y);
 

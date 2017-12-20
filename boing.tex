@@ -40,7 +40,7 @@
 \newpage
 
 \begin{lstlisting}
-Collision detectCollision(Limit a, Limit b)
+Collision detectCollision(Bound a, Bound b)
 {
 	if(a.normal.dot(b.normal) != -1)
 		return NO_COLLISION;
@@ -51,7 +51,7 @@ Collision detectCollision(Limit a, Limit b)
 	// his velocity is subtracted to see if any collision could occur in the case where the one getting away gets pushed back on the first
 	float compAx = posAx, compAy = posAy, compBx = posBx, compBy = posBy;
 
-	//if the velocity is not going along the normal (going against the direction limit is pointing at)
+	//if the velocity is not going along the normal (going against the direction bound is pointing at)
 	if(signum(a.normal.x) != signum(a.vel.x))
 		//remove the velocity to feel the other body as it isn't moving
 		compA.x -= a.vel.x;
@@ -92,7 +92,7 @@ Collision detectCollision(Limit a, Limit b)
 	if(signum(b.normal.y) == signum(b.shift.y))
 		vecB.y += shiftB.y;
 	//if b with his movement isn't after a with his movement
-	//(aka the limits are still facing each other after having moved)
+	//(aka the bounds are still facing each other after having moved)
 	if(compAx * a.normal.x + compAy * a.normal.y < compBx * a.normal.x + compBy * a.normal.y)
 		return NO_COLLISION;
 
@@ -105,7 +105,7 @@ Collision detectCollision(Limit a, Limit b)
 	float prevBy = b.pos.y - vecBy;
 
 	//if b isn't before a
-	//(aka the limits at previous positions are not even facing each other)
+	//(aka the bounds at previous positions are not even facing each other)
 	if(prevAx * a.normal.x + prevAy * a.normal.y > prevBx * a.normal.x + prevBy * a.normal.y) //if b isn't before a
 		return NO_COLLISION; //no collision
 
@@ -122,7 +122,7 @@ Collision detectCollision(Limit a, Limit b)
 	float midBx = b.pos.x - vecBx * midpoint; //midpoint x for B
 	float midBy = b.pos.y - vecBy * midpoint; //midpoint y for B
 
-	//contact surface, used to detect if limits are on the same plane and
+	//contact surface, used to detect if bounds are on the same plane and
 	//to fullfill the collision report
 	//get surface contact at mid point
 	float surface = getContactSurface(new Vector(midAx, midAy), hsizeA, new Vector(midBx, midBy), hsizeB, a.normal);
@@ -153,14 +153,14 @@ float getPenetration(Vector posA, Vector posB, Vector normal)
 
 public static float getContactSurface(Vector posA, float extentA, Vector posB, float extentB, Vector normal)
 {
-	float limitA1 = normal.x * (posA.y + extentA) - normal.y * (posA.x + extentA);
-	float limitA2 = normal.x * (posA.y - extentA) - normal.y * (posA.x - extentA);
-	float limitB1 = normal.x * (posB.y + extentB) - normal.y * (posB.x + extentB);
-	float limitB2 = normal.x * (posB.y - extentB) - normal.y * (posB.x - extentB);
+	float boundA1 = normal.x * (posA.y + extentA) - normal.y * (posA.x + extentA);
+	float boundA2 = normal.x * (posA.y - extentA) - normal.y * (posA.x - extentA);
+	float boundB1 = normal.x * (posB.y + extentB) - normal.y * (posB.x + extentB);
+	float boundB2 = normal.x * (posB.y - extentB) - normal.y * (posB.x - extentB);
 	
 	//minimum of the maximums - maximum of the minimums
 
-	return min(max(limitA1, limitA2), max(limitB1, limitB2)) - max(min(limitA1, limitA2), min(limitB1, limitB2));
+	return min(max(boundA1, boundA2), max(boundB1, boundB2)) - max(min(boundA1, boundA2), min(boundB1, boundB2));
 }
 \end{lstlisting}
 

@@ -90,7 +90,7 @@ public class BoxBoxDetector extends PooledDetector<Box, Box>
 	}
 
 	/**
-	 * Checks for collision for a specific side of the 2 boxes (check for collisions as limit)
+	 * Checks for collision for a specific side of the 2 boxes (check for collisions as bound)
 	 *
 	 * @param boxA collider A
 	 * @param movA movement of body A
@@ -110,7 +110,7 @@ public class BoxBoxDetector extends PooledDetector<Box, Box>
 	                          final Box boxB, final Vector2 movB, final Vector2 shiftB,
 	                          final float epsilon, final float normalX, final float normalY)
 	{
-		//position of the limit (position of box + extend of the box)
+		//position of the bound (position of box + extend of the box)
 		float posAx = boxA.getAbsX() + normalX * boxA.width / 2;
 		float posAy = boxA.getAbsY() + normalY * boxA.height / 2;
 
@@ -126,7 +126,7 @@ public class BoxBoxDetector extends PooledDetector<Box, Box>
 		// his velocity is subtracted to see if any collision could occur in the case where the one getting away gets pushed back on the first
 		float compAx = posAx, compAy = posAy, compBx = posBx, compBy = posBy;
 
-		//if the velocity is going along the normal (going where limit is pointing at)
+		//if the velocity is going along the normal (going where bound is pointing at)
 		if(signum(normalX) != signum(vecAx))
 			//remove the velocity to feel the other body has it wasn't moving
 			compAx -= vecAx;
@@ -140,8 +140,8 @@ public class BoxBoxDetector extends PooledDetector<Box, Box>
 		if(signum(-normalY) != signum(vecBy))
 			compBy -= vecBy;
 
-		//if limitB with his movement isn't after limitA with his movement
-		//(aka the limits are still facing each other after having moved)
+		//if boundB with his movement isn't after boundA with his movement
+		//(aka the bounds are still facing each other after having moved)
 		if(!isGreaterOrEqual(compAx * normalX + compAy * normalY, compBx * normalX + compBy * normalY, epsilon))
 			return null; //no collision
 
@@ -176,8 +176,8 @@ public class BoxBoxDetector extends PooledDetector<Box, Box>
 		float prevBx = posBx - vecBx;
 		float prevBy = posBy - vecBy;
 
-		//if limitB isn't before limitA
-		//(aka the limits at previous positions are not even facing each other)
+		//if boundB isn't before boundA
+		//(aka the bounds at previous positions are not even facing each other)
 		if(!isSmallerOrEqual(prevAx * normalX + prevAy * normalY, prevBx * normalX + prevBy * normalY, epsilon))
 			return null;
 
@@ -195,7 +195,7 @@ public class BoxBoxDetector extends PooledDetector<Box, Box>
 		float midBx = posBx - vecBx * midpoint; //midpoint x for B
 		float midBy = posBy - vecBy * midpoint; //midpoint y for B
 
-		//contact surface, used to detect if limits are on the same plane and
+		//contact surface, used to detect if bounds are on the same plane and
 		//to fullfill the collision report
 		//get surface contact at mid point
 		float surface = getContactSurface(midAx, midAy, hsizeA, midBx, midBy, hsizeB, normalX, normalY);
@@ -249,18 +249,18 @@ public class BoxBoxDetector extends PooledDetector<Box, Box>
 	}
 
 	/**
-	 * Finds the contact surface between 2 limits at position (ax, ay) and (bx, by)
+	 * Finds the contact surface between 2 bounds at position (ax, ay) and (bx, by)
 	 *
-	 * @param ax x position of limit A
-	 * @param ay y position of limit A
-	 * @param extentA half the size of limit A
+	 * @param ax x position of bound A
+	 * @param ay y position of bound A
+	 * @param extentA half the size of bound A
 	 *
-	 * @param bx x position of limit B
-	 * @param by y position of limit B
-	 * @param extentB half size of limit B
+	 * @param bx x position of bound B
+	 * @param by y position of bound B
+	 * @param extentB half size of bound B
 	 *
-	 * @param nx normal x of the limit A
-	 * @param ny normal y of the limit A
+	 * @param nx normal x of the bound A
+	 * @param ny normal y of the bound A
 	 *
 	 * @return how much of their surface match in relation to the normal
 	 */
@@ -268,15 +268,15 @@ public class BoxBoxDetector extends PooledDetector<Box, Box>
 	                                 float bx, float by, float extentB,
 	                                 float nx, float ny)
 	{
-		//we take the 2 extremities of the 2 limits
-		float limitA1 = ny * (ax + extentA) + nx * (ay + extentA);
-		float limitA2 = ny * (ax - extentA) + nx * (ay - extentA);
-		float limitB1 = ny * (bx + extentB) + nx * (by + extentB);
-		float limitB2 = ny * (bx - extentB) + nx * (by - extentB);
+		//we take the 2 extremities of the 2 bounds
+		float boundA1 = ny * (ax + extentA) + nx * (ay + extentA);
+		float boundA2 = ny * (ax - extentA) + nx * (ay - extentA);
+		float boundB1 = ny * (bx + extentB) + nx * (by + extentB);
+		float boundB2 = ny * (bx - extentB) + nx * (by - extentB);
 
 		//yields the overlapping length
-		return min(max(limitA1, limitA2), max(limitB1, limitB2)) //minimum of the maximums
-				- max(min(limitA1, limitA2), min(limitB1, limitB2)); //maximum of the minimums
+		return min(max(boundA1, boundA2), max(boundB1, boundB2)) //minimum of the maximums
+				- max(min(boundA1, boundA2), min(boundB1, boundB2)); //maximum of the minimums
 	}
 
 	private int keyOf(float nx, float ny)

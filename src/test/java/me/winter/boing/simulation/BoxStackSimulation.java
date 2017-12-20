@@ -1,11 +1,11 @@
 package me.winter.boing.simulation;
 
 import me.winter.boing.Collision;
+import me.winter.boing.colliders.Bound;
 import me.winter.boing.impl.BodyImpl;
 import me.winter.boing.impl.DynamicBodyImpl;
 import me.winter.boing.resolver.ReplaceResolver;
 import me.winter.boing.colliders.Box;
-import me.winter.boing.colliders.Limit;
 import me.winter.boing.testimpl.GravityAffected;
 import me.winter.boing.testimpl.PlayerImpl;
 import me.winter.boing.testimpl.TestWorldImpl;
@@ -79,37 +79,37 @@ public class BoxStackSimulation
 	}
 
 	@Test
-	public void shortLimitBoxStack()
+	public void shortBoundBoxStack()
 	{
 		TestWorldImpl world = new TestWorldImpl(new ReplaceResolver());
 
 		PlayerImpl player = new PlayerImpl();
 
 		player.getPosition().set(400, 200);
-		player.addCollider(new Limit(player, 0, 22.5f, UP, 20));
-		player.addCollider(new Limit(player, 0, -22.5f, DOWN, 20));
-		player.addCollider(new Limit(player, -10f, 0, LEFT, 45));
-		player.addCollider(new Limit(player, 10f, 0, RIGHT, 45));
+		player.addCollider(new Bound(player, 0, 22.5f, UP, 20));
+		player.addCollider(new Bound(player, 0, -22.5f, DOWN, 20));
+		player.addCollider(new Bound(player, -10f, 0, LEFT, 45));
+		player.addCollider(new Bound(player, 10f, 0, RIGHT, 45));
 		world.add(player);
 
 		GravityAffected test = new GravityAffected();
 		test.getPosition().set(400, 150);
-		test.addCollider(new Limit(test, 0, 25, UP, 50));
-		test.addCollider(new Limit(test, 0, -25, DOWN, 50));
-		test.addCollider(new Limit(test, -25, 0, LEFT, 50));
-		test.addCollider(new Limit(test, 25, 0, RIGHT, 50));
+		test.addCollider(new Bound(test, 0, 25, UP, 50));
+		test.addCollider(new Bound(test, 0, -25, DOWN, 50));
+		test.addCollider(new Bound(test, -25, 0, LEFT, 50));
+		test.addCollider(new Bound(test, 25, 0, RIGHT, 50));
 		world.add(test);
 
 		BodyImpl wall = new BodyImpl();
 
 		wall.getPosition().set(600, 100);
-		wall.addCollider(new Limit(wall, 0, 0, LEFT, 100));
+		wall.addCollider(new Bound(wall, 0, 0, LEFT, 100));
 		world.add(wall);
 
 		BodyImpl ground = new BodyImpl();
 
 		ground.getPosition().set(400, 100);
-		ground.addCollider(new Limit(ground, 0, 0, UP, 800));
+		ground.addCollider(new Bound(ground, 0, 0, UP, 800));
 		world.add(ground);
 
 		new BoingSimulator(world, 60f).start();
@@ -321,7 +321,7 @@ public class BoxStackSimulation
 
 		BodyImpl platform = new BodyImpl();
 		platform.getPosition().set(400, 150);
-		platform.addCollider(new Limit(platform, 0, 0, UP, 100));
+		platform.addCollider(new Bound(platform, 0, 0, UP, 100));
 		world.add(platform);
 
 		new BoingSimulator(world, 60f).start();
@@ -357,44 +357,44 @@ public class BoxStackSimulation
 
 		BodyImpl platform = new BodyImpl();
 		platform.getPosition().set(100, 125);
-		platform.addCollider(new Limit(platform, 0, 0, RIGHT, 50));
+		platform.addCollider(new Bound(platform, 0, 0, RIGHT, 50));
 		world.add(platform);
 
 		new BoingSimulator(world, 60f).start();
 	}
 
 	@Test
-	public void towerLimitTest()
+	public void towerBoundTest()
 	{
 		TestWorldImpl world = new TestWorldImpl(new ReplaceResolver());
 
 		PlayerImpl player = new PlayerImpl();
 		player.getPosition().set(400, 800);
-		player.addCollider(new Limit(player, -10, 25, LEFT, 50));
-		player.addCollider(new Limit(player, 10, 25, RIGHT, 50));
-		player.addCollider(new Limit(player, 0, 50, UP, 20));
-		player.addCollider(new Limit(player, 0, 0, DOWN, 20));
+		player.addCollider(new Bound(player, -10, 25, LEFT, 50));
+		player.addCollider(new Bound(player, 10, 25, RIGHT, 50));
+		player.addCollider(new Bound(player, 0, 50, UP, 20));
+		player.addCollider(new Bound(player, 0, 0, DOWN, 20));
 		world.add(player);
 
 		for(int i = 0; i < 10; i++)
 		{
 			GravityAffected test = new GravityAffected();
 			test.getPosition().set(400, 750 - i * 50);
-			test.addCollider(new Limit(test, -15, 0, LEFT, 30));
-			test.addCollider(new Limit(test, 15, 0, RIGHT, 30));
-			test.addCollider(new Limit(test, 0, 15, UP, 30));
-			test.addCollider(new Limit(test, 0, -15, DOWN, 30));
+			test.addCollider(new Bound(test, -15, 0, LEFT, 30));
+			test.addCollider(new Bound(test, 15, 0, RIGHT, 30));
+			test.addCollider(new Bound(test, 0, 15, UP, 30));
+			test.addCollider(new Bound(test, 0, -15, DOWN, 30));
 			world.add(test);
 		}
 
 		BodyImpl solidBlock = new BodyImpl();
 		solidBlock.getPosition().set(600, 110);
-		solidBlock.addCollider(new Limit(solidBlock, 0, 0, LEFT, 100));
+		solidBlock.addCollider(new Bound(solidBlock, 0, 0, LEFT, 100));
 		world.add(solidBlock);
 
 		BodyImpl ground = new BodyImpl();
 		ground.getPosition().set(400, 100);
-		ground.addCollider(new Limit(ground, 0, 0, UP, 800));
+		ground.addCollider(new Bound(ground, 0, 0, UP, 800));
 		world.add(ground);
 
 		new BoingSimulator(world, 6f).start();

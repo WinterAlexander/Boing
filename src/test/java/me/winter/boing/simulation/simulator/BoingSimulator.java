@@ -3,10 +3,10 @@ package me.winter.boing.simulation.simulator;
 import com.badlogic.gdx.utils.Array;
 import me.winter.boing.Body;
 import me.winter.boing.DynamicBody;
+import me.winter.boing.colliders.Bound;
 import me.winter.boing.colliders.Box;
 import me.winter.boing.colliders.Circle;
 import me.winter.boing.colliders.Collider;
-import me.winter.boing.colliders.Limit;
 import me.winter.boing.testimpl.TestWorldImpl;
 import org.junit.Ignore;
 
@@ -79,10 +79,10 @@ public class BoingSimulator extends JFrame implements KeyListener, MouseListener
 							float h = box.height;
 							g.fillRect((int)(box.getAbsX() - w / 2), (int)(600 - box.getAbsY() - h / 2), (int)w, (int)h);
 						}
-						else if(collider instanceof Limit)
+						else if(collider instanceof Bound)
 						{
-							Limit limit = (Limit)collider;
-							g.drawLine((int)(limit.getAbsX() - limit.size / 2 * limit.normal.y), (int)(600 - limit.getAbsY() + limit.size / 2 * limit.normal.x), (int)(limit.getAbsX() + limit.size / 2 * limit.normal.y), (int)(600 - limit.getAbsY() - limit.size / 2 * limit.normal.x));
+							Bound bound = (Bound)collider;
+							g.drawLine((int)(bound.getAbsX() - bound.size / 2 * bound.normal.y), (int)(600 - bound.getAbsY() + bound.size / 2 * bound.normal.x), (int)(bound.getAbsX() + bound.size / 2 * bound.normal.y), (int)(600 - bound.getAbsY() - bound.size / 2 * bound.normal.x));
 						}
 
 					if(velsEnabled && body instanceof DynamicBody)
@@ -95,7 +95,7 @@ public class BoingSimulator extends JFrame implements KeyListener, MouseListener
 								600 - (int)(dyn.getPosition().y + dyn.getVelocity().y));
 					}
 
-					g.setColor(body.getColliders().length > 0 && body.getColliders()[0] instanceof Limit ? Color.BLACK : Color.WHITE);
+					g.setColor(body.getColliders().length > 0 && body.getColliders()[0] instanceof Bound ? Color.BLACK : Color.WHITE);
 					g.drawString("" + n++, (int)body.getPosition().x, (int)(600 - body.getPosition().y));
 				}
 
@@ -275,12 +275,12 @@ public class BoingSimulator extends JFrame implements KeyListener, MouseListener
 						break bodyLoop;
 					}
 				}
-				else if(collider instanceof Limit)
+				else if(collider instanceof Bound)
 				{
-					Limit limit = (Limit)collider;
-					float dx = limit.getAbsX() - x;
-					float dy = limit.getAbsY() - y;
-					if(dx * dx + dy * dy < limit.size * limit.size)
+					Bound bound = (Bound)collider;
+					float dx = bound.getAbsX() - x;
+					float dy = bound.getAbsY() - y;
+					if(dx * dx + dy * dy < bound.size * bound.size)
 					{
 						toRemove = body;
 						break bodyLoop;

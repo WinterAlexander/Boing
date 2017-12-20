@@ -3,7 +3,7 @@ A simple 2D physics engine currently in development made with Java and LibGDX. Y
 
 ### Features
 
-The physic engine is designed to support Circle, AABB and Limit colliders. A limit is a part of a line (segment), 4 limits can make a rectangle in any rotation. This physic engine is not aiming to be realistic in anyway. The main reason is that realistic physic engines like Box2D gives non satisfactory results for 2D platformer games. As a game programmer, I wanted to have full control over my player movement and that's why I gave birth to this physic engine.
+The physic engine is designed to support Circle, AABB and Bound colliders. A bound is a part of a line (segment), 4 bounds can make a rectangle in any rotation. This physic engine is not aiming to be realistic in anyway. The main reason is that realistic physic engines like Box2D gives non satisfactory results for 2D platformer games. As a game programmer, I wanted to have full control over my player movement and that's why I gave birth to this physic engine.
 
 ### Inspiration
 
@@ -11,7 +11,7 @@ My first physic engine was very weird because it had basically no source of insp
 
 #### How it worked:
 
-There was only Axis Aligned Limits and all collision detection was continuous but only took in consideration the movement of one entity at the time. The entities had to be sorted to decide which has the collision replacement priority and the replacement was simply a teleportation to the edge of the other limit by fixing the movement vector. 
+There was only Axis Aligned Bounds and all collision detection was continuous but only took in consideration the movement of one entity at the time. The entities had to be sorted to decide which has the collision replacement priority and the replacement was simply a teleportation to the edge of the other bound by fixing the movement vector.
 
 The main problems were 
   - Impossibility for objects to push each other, no object were displaced farther than the original location of the frame

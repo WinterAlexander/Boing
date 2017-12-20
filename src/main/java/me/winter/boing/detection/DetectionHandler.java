@@ -5,11 +5,11 @@ import com.badlogic.gdx.utils.Pool;
 import me.winter.boing.Collision;
 import me.winter.boing.CollisionDynamicVariable;
 import me.winter.boing.World;
+import me.winter.boing.colliders.Bound;
 import me.winter.boing.detection.continuous.BoxBoxDetector;
-import me.winter.boing.detection.continuous.BoxLimitDetector;
-import me.winter.boing.detection.continuous.LimitLimitDetector;
+import me.winter.boing.detection.continuous.BoxBoundDetector;
+import me.winter.boing.detection.continuous.BoundBoundDetector;
 import me.winter.boing.colliders.Box;
-import me.winter.boing.colliders.Limit;
 import me.winter.boing.colliders.Collider;
 import me.winter.boing.util.Wrapper;
 
@@ -31,15 +31,15 @@ public class DetectionHandler
 	{
 		//continuous.put(getKey(Circle.class, Circle.class), new CircleCircleDetector(collisionPool));
 		//continuous.put(getKey(Circle.class, Box.class), new DetectorSwapper<>(new BoxCircleDetector(collisionPool)));
-		//continuous.put(getKey(Circle.class, Limit.class), new CircleLimitDetector(collisionPool));
+		//continuous.put(getKey(Circle.class, Bound.class), new CircleBoundDetector(collisionPool));
 
 		//continuous.put(getKey(Box.class, Circle.class), new BoxCircleDetector(collisionPool));
 		detectors.put(getKey(Box.class, Box.class), new BoxBoxDetector(collisionPool));
-		detectors.put(getKey(Box.class, Limit.class), new BoxLimitDetector(collisionPool));
+		detectors.put(getKey(Box.class, Bound.class), new BoxBoundDetector(collisionPool));
 
-		//continuous.put(getKey(Limit.class, Circle.class), new DetectorSwapper<>(new CircleLimitDetector(collisionPool)));
-		detectors.put(getKey(Limit.class, Box.class), new DetectorSwapper<>(new BoxLimitDetector(collisionPool), variableWrapper));
-		detectors.put(getKey(Limit.class, Limit.class), new LimitLimitDetector(collisionPool));
+		//continuous.put(getKey(Bound.class, Circle.class), new DetectorSwapper<>(new CircleBoundDetector(collisionPool)));
+		detectors.put(getKey(Bound.class, Box.class), new DetectorSwapper<>(new BoxBoundDetector(collisionPool), variableWrapper));
+		detectors.put(getKey(Bound.class, Bound.class), new BoundBoundDetector(collisionPool));
 	}
 
 	/**

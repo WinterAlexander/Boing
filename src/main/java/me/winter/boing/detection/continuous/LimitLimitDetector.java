@@ -4,10 +4,9 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Pool;
 import me.winter.boing.Collision;
 import me.winter.boing.World;
-import me.winter.boing.colliders.Limit;
+import me.winter.boing.colliders.Bound;
 import me.winter.boing.detection.PooledDetector;
 
-import static com.badlogic.gdx.math.Vector2.dot;
 import static java.lang.Math.signum;
 import static me.winter.boing.util.FloatUtil.DEFAULT_ULPS;
 import static me.winter.boing.util.FloatUtil.areEqual;
@@ -17,54 +16,54 @@ import static me.winter.boing.util.FloatUtil.isSmallerOrEqual;
 import static me.winter.boing.util.FloatUtil.min;
 
 /**
- * Detects collisions between 2 Limits. This is the only
- * continous collision detector since limits do not have any area.
+ * Detects collisions between 2 Bounds. This is the only
+ * continous collision detector since bounds do not have any area.
  * <p>
  * Created by Alexander Winter on 2017-04-12.
  */
-public class LimitLimitDetector extends PooledDetector<Limit, Limit>
+public class BoundBoundDetector extends PooledDetector<Bound, Bound>
 {
-	public LimitLimitDetector(Pool<Collision> collisionPool)
+	public BoundBoundDetector(Pool<Collision> collisionPool)
 	{
 		super(collisionPool);
 	}
 
 	@Override
-	public Collision collides(World world, Limit limitA, Limit limitB)
+	public Collision collides(World world, Bound boundA, Bound boundB)
 	{
-		//if(("" + limitA.getTag()).endsWith("_LIMIT") && ("" + limitB.getTag()).endsWith("_LIMIT"))
+		//if(("" + boundA.getTag()).endsWith("_BOUND") && ("" + boundB.getTag()).endsWith("_BOUND"))
 		//{
 		//	System.console();
 		//}
 
-		if(!areEqual(limitA.normal.dot(limitB.normal), -1))
+		if(!areEqual(boundA.normal.dot(boundB.normal), -1))
 			return null;
 
-		float normalX = limitA.normal.x; //normal X
-		float normalY = limitA.normal.y; //normal Y
+		float normalX = boundA.normal.x; //normal X
+		float normalY = boundA.normal.y; //normal Y
 
-		//position of the limit
-		float posAx = limitA.getAbsX();
-		float posAy = limitA.getAbsY();
+		//position of the bound
+		float posAx = boundA.getAbsX();
+		float posAy = boundA.getAbsY();
 
 		//same for b
-		float posBx = limitB.getAbsX();
-		float posBy = limitB.getAbsY();
+		float posBx = boundB.getAbsX();
+		float posBy = boundB.getAbsY();
 
-		Vector2 movA = limitA.getMovement(world);
-		Vector2 movB = limitB.getMovement(world);
+		Vector2 movA = boundA.getMovement(world);
+		Vector2 movB = boundB.getMovement(world);
 
 		//movement of the bodies seen from each other
 		float vecAx = movA.x, vecAy = movA.y, vecBx = movB.x, vecBy = movB.y;
 
-		Vector2 shiftA = limitA.getCollisionShifting(world);
-		Vector2 shiftB = limitB.getCollisionShifting(world);
+		Vector2 shiftA = boundA.getCollisionShifting(world);
+		Vector2 shiftB = boundB.getCollisionShifting(world);
 
 		//compare values to check if collision occurs, if the other is getting away from the first,
 		// his velocity is subtracted to see if any collision could occur in the case where the one getting away gets pushed back on the first
 		float compAx = posAx, compAy = posAy, compBx = posBx, compBy = posBy;
 
-		//if the velocity is not going along the normal (going against the direction limit is pointing at)
+		//if the velocity is not going along the normal (going against the direction bound is pointing at)
 		if(signum(normalX) != signum(vecAx))
 			//remove the velocity to feel the other body as it isn't moving
 			compAx -= vecAx;
@@ -102,10 +101,10 @@ public class LimitLimitDetector extends PooledDetector<Limit, Limit>
 		if(signum(-normalY) == signum(shiftB.y))
 			vecBy += shiftB.y;
 
-		float epsilon = DEFAULT_ULPS * getGreatestULP(posAx, posAy, posBx, posBy, vecAx, vecAy, vecBx, vecBy, limitA.size, limitB.size);
+		float epsilon = DEFAULT_ULPS * getGreatestULP(posAx, posAy, posBx, posBy, vecAx, vecAy, vecBx, vecBy, boundA.size, boundB.size);
 
-		//if limitB with his movement isn't after limitA with his movement
-		//(aka the limits are still facing each other after having moved)
+		//if boundB with his movement isn't after boundA with his movement
+		//(aka the bounds are still facing each other after having moved)
 		if(!isGreaterOrEqual(compAx * normalX + compAy * normalY, compBx * normalX + compBy * normalY, epsilon))
 			return null;
 
@@ -117,13 +116,13 @@ public class LimitLimitDetector extends PooledDetector<Limit, Limit>
 		float prevBx = posBx - vecBx;
 		float prevBy = posBy - vecBy;
 
-		//if limitB isn't before limitA
-		//(aka the limits at previous positions are not even facing each other)
-		if(!isSmallerOrEqual(prevAx * normalX + prevAy * normalY, prevBx * normalX + prevBy * normalY, epsilon)) //if limitB isn't before limitA
+		//if boundB isn't before boundA
+		//(aka the bounds at previous positions are not even facing each other)
+		if(!isSmallerOrEqual(prevAx * normalX + prevAy * normalY, prevBx * normalX + prevBy * normalY, epsilon)) //if boundB isn't before boundA
 			return null; //no collision
 
-		float hsizeA = limitA.size / 2; //half size for A
-		float hsizeB = limitB.size / 2; //half size for B
+		float hsizeA = boundA.size / 2; //half size for A
+		float hsizeB = boundB.size / 2; //half size for B
 
 		float diff = ((posBx - vecBx) - (posAx - vecAx)) * normalX + ((posBy - vecBy) - (posAy - vecAy)) * normalY;
 		float vecDiff = (vecBx - vecAx) * normalX + (vecBy - vecAy) * normalY;
@@ -135,7 +134,7 @@ public class LimitLimitDetector extends PooledDetector<Limit, Limit>
 		float midBx = posBx - vecBx * midpoint; //midpoint x for B
 		float midBy = posBy - vecBy * midpoint; //midpoint y for B
 
-		//contact surface, used to detect if limits are on the same plane and
+		//contact surface, used to detect if bounds are on the same plane and
 		//to fullfill the collision report
 		//get surface contact at mid point
 		float surface = BoxBoxDetector.getContactSurface(midAx, midAy, hsizeA, midBx, midBy, hsizeB, normalX, normalY);
@@ -148,28 +147,28 @@ public class LimitLimitDetector extends PooledDetector<Limit, Limit>
 
 		collision.normal.set(normalX, normalY);
 
-		collision.penetration = (cA, cB) -> getPenetration((Limit)cA, (Limit)cB);
+		collision.penetration = (cA, cB) -> getPenetration((Bound)cA, (Bound)cB);
 
 		//boing v2 priority algorithm
 		//collision.priority = surface * getPenetration(compAx, compAy, compBx, compBy, normalX, normalY);
-		collision.priority = surface * getPenetration(limitA, limitB);
+		collision.priority = surface * getPenetration(boundA, boundB);
 		//System.out.println(collision.priority);
 
 		//re-get the position from the original calculation
 		//since we are in a CollisionDynamicVariable, posAx, posAy etc. might
 		//be outdated (cached values)
-		collision.contactSurface = (cA, cB) -> getContactSurface((Limit)cA, (Limit)cB);
+		collision.contactSurface = (cA, cB) -> getContactSurface((Bound)cA, (Bound)cB);
 
-		collision.colliderA = limitA;
-		collision.colliderB = limitB;
-		collision.setImpactVelocities(limitA.getBody(), limitB.getBody());
+		collision.colliderA = boundA;
+		collision.colliderB = boundB;
+		collision.setImpactVelocities(boundA.getBody(), boundB.getBody());
 
 		return collision;
 	}
 
-	public static float getPenetration(Limit limitA, Limit limitB)
+	public static float getPenetration(Bound boundA, Bound boundB)
 	{
-		return (limitA.getAbsX() - limitB.getAbsX()) * limitA.normal.x + (limitA.getAbsY() - limitB.getAbsY()) * limitA.normal.y;
+		return (boundA.getAbsX() - boundB.getAbsX()) * boundA.normal.x + (boundA.getAbsY() - boundB.getAbsY()) * boundA.normal.y;
 	}
 
 	public static float getPenetration(float ax, float ay, float bx, float by, float nx, float ny)
@@ -177,8 +176,8 @@ public class LimitLimitDetector extends PooledDetector<Limit, Limit>
 		return (ax - bx) * nx + (ay - by) * ny;
 	}
 
-	public static float getContactSurface(Limit limitA, Limit limitB)
+	public static float getContactSurface(Bound boundA, Bound boundB)
 	{
-		return BoxBoxDetector.getContactSurface(limitA.getAbsX(), limitA.getAbsY(), limitA.size / 2, limitB.getAbsX(), limitB.getAbsY(), limitB.size / 2, limitA.normal.x, limitA.normal.y);
+		return BoxBoxDetector.getContactSurface(boundA.getAbsX(), boundA.getAbsY(), boundA.size / 2, boundB.getAbsX(), boundB.getAbsY(), boundB.size / 2, boundA.normal.x, boundA.normal.y);
 	}
 }

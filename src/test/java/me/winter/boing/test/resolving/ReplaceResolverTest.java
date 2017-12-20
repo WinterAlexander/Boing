@@ -6,7 +6,7 @@ import me.winter.boing.impl.BodyImpl;
 import me.winter.boing.impl.DynamicBodyImpl;
 import me.winter.boing.resolver.ReplaceResolver;
 import me.winter.boing.colliders.Box;
-import me.winter.boing.colliders.Limit;
+import me.winter.boing.colliders.Bound;
 import org.junit.Test;
 
 import static me.winter.boing.util.VectorUtil.LEFT;
@@ -96,7 +96,7 @@ public class ReplaceResolverTest
 	}
 
 	@Test
-	public void simpleBoxLimitReplaceTest()
+	public void simpleBoxBoundReplaceTest()
 	{
 		WorldImpl world = new WorldImpl(new ReplaceResolver());
 
@@ -108,7 +108,7 @@ public class ReplaceResolverTest
 
 		BodyImpl solidImpl2 = new BodyImpl();
 		solidImpl2.getPosition().set(30, 0);
-		solidImpl2.addCollider(new Limit(solidImpl2, -10, 0, LEFT, 20));
+		solidImpl2.addCollider(new Bound(solidImpl2, -10, 0, LEFT, 20));
 		world.add(solidImpl2);
 
 		assertEquals(new Vector2(0, 0), solidImpl.getPosition());
@@ -148,7 +148,7 @@ public class ReplaceResolverTest
 
 		BodyImpl ground = new BodyImpl();
 		ground.getPosition().set(0, 0);
-		ground.addCollider(new Limit(ground, 0, 0, UP, 100));
+		ground.addCollider(new Bound(ground, 0, 0, UP, 100));
 		world.add(ground);
 
 		assertEquals(new Vector2(0, 10), boxUnder.getPosition());

@@ -1,8 +1,8 @@
 package me.winter.boing.simulation;
 
 import com.badlogic.gdx.math.Vector2;
+import me.winter.boing.colliders.Bound;
 import me.winter.boing.colliders.Box;
-import me.winter.boing.colliders.Limit;
 import me.winter.boing.impl.BodyImpl;
 import me.winter.boing.resolver.ReplaceResolver;
 import me.winter.boing.testimpl.BouncingBallImpl;
@@ -29,8 +29,8 @@ public class GlitchSimulation
 		BouncingBallImpl ballImpl = new BouncingBallImpl();
 
 		ballImpl.getPosition().set(50, 50);
-		ballImpl.addCollider(new Limit(ballImpl, 25, 0, new Vector2(1, 0), 50));
-		ballImpl.addCollider(new Limit(ballImpl, 0, 25, new Vector2(0, 1), 50));
+		ballImpl.addCollider(new Bound(ballImpl, 25, 0, new Vector2(1, 0), 50));
+		ballImpl.addCollider(new Bound(ballImpl, 0, 25, new Vector2(0, 1), 50));
 		ballImpl.getVelocity().set(50, 50);
 
 		world.add(ballImpl);
@@ -38,8 +38,8 @@ public class GlitchSimulation
 		BouncingBallImpl ballImpl2 = new BouncingBallImpl();
 
 		ballImpl2.getPosition().set(500, 500);
-		ballImpl2.addCollider(new Limit(ballImpl2, -25, 0, new Vector2(-1, 0), 50));
-		ballImpl2.addCollider(new Limit(ballImpl2, 0, -25, new Vector2(0, -1), 50));
+		ballImpl2.addCollider(new Bound(ballImpl2, -25, 0, new Vector2(-1, 0), 50));
+		ballImpl2.addCollider(new Bound(ballImpl2, 0, -25, new Vector2(0, -1), 50));
 		ballImpl2.getVelocity().set(-100, -100);
 
 		world.add(ballImpl2);
@@ -72,7 +72,7 @@ public class GlitchSimulation
 	}
 
 	@Test
-	public void boxLimitCornerGlitch()
+	public void boxBoundCornerGlitch()
 	{
 		TestWorldImpl world = new TestWorldImpl(new ReplaceResolver());
 
@@ -87,8 +87,8 @@ public class GlitchSimulation
 		BouncingBallImpl ballImpl2 = new BouncingBallImpl();
 
 		ballImpl2.getPosition().set(500, 500);
-		ballImpl2.addCollider(new Limit(ballImpl2, -25, 0, new Vector2(-1, 0), 50));
-		ballImpl2.addCollider(new Limit(ballImpl2, 0, -25, new Vector2(0, -1), 50));
+		ballImpl2.addCollider(new Bound(ballImpl2, -25, 0, new Vector2(-1, 0), 50));
+		ballImpl2.addCollider(new Bound(ballImpl2, 0, -25, new Vector2(0, -1), 50));
 		ballImpl2.getVelocity().set(-100, -100);
 
 		world.add(ballImpl2);
@@ -154,7 +154,7 @@ public class GlitchSimulation
 	}
 
 	@Test
-	public void pushingThroughLimit()
+	public void pushingThroughBound()
 	{
 		TestWorldImpl world = new TestWorldImpl(new ReplaceResolver());
 
@@ -170,7 +170,7 @@ public class GlitchSimulation
 
 		BodyImpl wall = new BodyImpl();
 		wall.getPosition().set(450, 200);
-		wall.addCollider(new Limit(wall, 0, 20, LEFT, 40));
+		wall.addCollider(new Bound(wall, 0, 20, LEFT, 40));
 		world.add(wall);
 
 		GravityAffected pushable = new GravityAffected();
