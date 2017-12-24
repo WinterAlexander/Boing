@@ -7,7 +7,6 @@ import me.winter.boing.World;
 import me.winter.boing.colliders.Bound;
 import me.winter.boing.detection.PooledDetector;
 
-import static java.lang.Math.abs;
 import static java.lang.Math.signum;
 import static me.winter.boing.util.FloatUtil.DEFAULT_ULPS;
 import static me.winter.boing.util.FloatUtil.areEqual;
@@ -33,11 +32,6 @@ public class BoundBoundDetector extends PooledDetector<Bound, Bound>
 	@Override
 	public Collision collides(World world, Bound boundA, Bound boundB)
 	{
-		//if(("" + boundA.getTag()).endsWith("_BOUND") && ("" + boundB.getTag()).endsWith("_BOUND"))
-		//{
-		//	System.console();
-		//}
-
 		if(!areEqual(boundA.normal.dot(boundB.normal), -1))
 			return null;
 

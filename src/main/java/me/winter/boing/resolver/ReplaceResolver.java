@@ -18,15 +18,8 @@ public class ReplaceResolver implements CollisionResolver
 	@Override
 	public boolean resolveCollision(Collision collision, World world)
 	{
-		//if(Float.isNaN(collision.priority))
-		//	return true;
-
 		float pene = collision.getPenetration();
 		float surface = collision.getContactSurface();
-
-		//if("DABOX".equals(collision.colliderA.getTag())
-		//|| "DABOX".equals(collision.colliderB.getTag()))
-		//	System.out.println((collision.normal.x != 0 ? "h" : "v") + collision.hashCode() + ": " + surface);
 
 		if(pene <= 0 || isSmallerOrEqual(surface, 0))
 		{
