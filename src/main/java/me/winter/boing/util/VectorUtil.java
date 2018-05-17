@@ -1,7 +1,6 @@
 package me.winter.boing.util;
 
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.math.Vector3;
 
 import static java.lang.Math.signum;
 
@@ -16,6 +15,11 @@ public class VectorUtil
 	public static final Vector2 DOWN = new Vector2(0, -1);
 	public static final Vector2 LEFT = new Vector2(-1, 0);
 	public static final Vector2 RIGHT = new Vector2(1, 0);
+
+	public static final Vector2 UPLEFT = new Vector2(-1, 1).nor();
+	public static final Vector2 DOWNLEFT = new Vector2(-1, -1).nor();
+	public static final Vector2 UPRIGHT = new Vector2(1, 1).nor();
+	public static final Vector2 DOWNRIGHT = new Vector2(1, -1).nor();
 
 	private VectorUtil() {}
 
