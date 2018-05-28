@@ -3,11 +3,10 @@ package me.winter.boing.detection.continuous;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Pool;
 import me.winter.boing.Collision;
-import me.winter.boing.World;
+import me.winter.boing.PhysicsWorld;
 import me.winter.boing.colliders.Limit;
 import me.winter.boing.detection.PooledDetector;
 
-import static com.badlogic.gdx.math.Vector2.dot;
 import static java.lang.Math.signum;
 import static me.winter.boing.util.FloatUtil.DEFAULT_ULPS;
 import static me.winter.boing.util.FloatUtil.areEqual;
@@ -30,7 +29,7 @@ public class LimitLimitDetector extends PooledDetector<Limit, Limit>
 	}
 
 	@Override
-	public Collision collides(World world, Limit limitA, Limit limitB)
+	public Collision collides(PhysicsWorld world, Limit limitA, Limit limitB)
 	{
 		//if(("" + limitA.getTag()).endsWith("_LIMIT") && ("" + limitB.getTag()).endsWith("_LIMIT"))
 		//{

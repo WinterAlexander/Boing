@@ -1,7 +1,7 @@
 package me.winter.boing.resolver;
 
 import me.winter.boing.Collision;
-import me.winter.boing.World;
+import me.winter.boing.PhysicsWorld;
 
 /**
  * Object able to resolve the weight of 2 objects of a collision
@@ -10,5 +10,5 @@ import me.winter.boing.World;
  */
 public interface WeightResolver
 {
-	void resolveWeight(Collision collision, World world);
+	void resolveWeight(Collision collision, PhysicsWorld world);
 }

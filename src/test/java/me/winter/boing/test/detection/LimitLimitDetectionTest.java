@@ -1,7 +1,7 @@
 package me.winter.boing.test.detection;
 
 import com.badlogic.gdx.math.Vector2;
-import me.winter.boing.impl.WorldImpl;
+import me.winter.boing.impl.PhysicsWorldImpl;
 import me.winter.boing.resolver.CollisionResolver;
 import me.winter.boing.colliders.Limit;
 import me.winter.boing.impl.DynamicBodyImpl;
@@ -27,7 +27,7 @@ public class LimitLimitDetectionTest
 			collisionCount.value++;
 			return true;
 		};
-		WorldImpl world = new WorldImpl(resolver);
+		PhysicsWorldImpl world = new PhysicsWorldImpl(resolver);
 
 		DynamicBodyImpl solidImpl = new DynamicBodyImpl(1f);
 		solidImpl.getPosition().set(0, 0);
@@ -62,7 +62,7 @@ public class LimitLimitDetectionTest
 			collisionCount.value++;
 			return true;
 		};
-		WorldImpl world = new WorldImpl(resolver);
+		PhysicsWorldImpl world = new PhysicsWorldImpl(resolver);
 
 		DynamicBodyImpl solidImpl = new DynamicBodyImpl(1f);
 		solidImpl.getPosition().set(0, 20);
@@ -97,7 +97,7 @@ public class LimitLimitDetectionTest
 			collisionCount.value++;
 			return true;
 		};
-		WorldImpl world = new WorldImpl(resolver);
+		PhysicsWorldImpl world = new PhysicsWorldImpl(resolver);
 
 		DynamicBodyImpl solidImpl = new DynamicBodyImpl(1f);
 		solidImpl.getPosition().set(0, 0);
@@ -132,7 +132,7 @@ public class LimitLimitDetectionTest
 			collisionCount.value++;
 			return true;
 		};
-		WorldImpl world = new WorldImpl(resolver);
+		PhysicsWorldImpl world = new PhysicsWorldImpl(resolver);
 
 		DynamicBodyImpl solidImpl = new DynamicBodyImpl(1f);
 		solidImpl.getPosition().set(0, 0);
@@ -164,7 +164,7 @@ public class LimitLimitDetectionTest
 			collisionCount.value++;
 			return true;
 		};
-		WorldImpl world = new WorldImpl(resolver);
+		PhysicsWorldImpl world = new PhysicsWorldImpl(resolver);
 
 		BouncingBallImpl ballImpl = new BouncingBallImpl();
 

@@ -2,7 +2,7 @@ package me.winter.boing.detection.simple;
 
 import com.badlogic.gdx.utils.Pool;
 import me.winter.boing.Collision;
-import me.winter.boing.World;
+import me.winter.boing.PhysicsWorld;
 import me.winter.boing.colliders.Box;
 import me.winter.boing.detection.PooledDetector;
 import me.winter.boing.CollisionDynamicVariable;
@@ -22,7 +22,7 @@ public class BoxBoxDetector extends PooledDetector<Box, Box>
 	}
 
 	@Override
-	public Collision collides(World world, Box shapeA, Box shapeB)
+	public Collision collides(PhysicsWorld world, Box shapeA, Box shapeB)
 	{
 		float dx = shapeB.getAbsX() - shapeA.getAbsX();
 		float dy = shapeB.getAbsY() - shapeA.getAbsY();

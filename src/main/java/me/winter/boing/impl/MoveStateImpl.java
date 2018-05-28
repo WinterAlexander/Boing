@@ -6,7 +6,7 @@ import me.winter.boing.DynamicBody;
 import me.winter.boing.MoveState;
 import me.winter.boing.Collision;
 import me.winter.boing.UpdatableBody;
-import me.winter.boing.World;
+import me.winter.boing.PhysicsWorld;
 
 import static java.lang.Math.signum;
 import static me.winter.boing.util.VectorUtil.DOWN;
@@ -18,7 +18,7 @@ import static me.winter.boing.util.VectorUtil.DOWN;
  */
 public class MoveStateImpl implements MoveState
 {
-	protected final World world;
+	protected final PhysicsWorld world;
 	protected final DynamicBody body;
 
 	protected final Vector2 movement = new Vector2(), shifting = new Vector2(), influence = new Vector2(Float.NaN, Float.NaN);
@@ -27,7 +27,7 @@ public class MoveStateImpl implements MoveState
 	protected int frame;
 	protected boolean stepped;
 
-	public MoveStateImpl(World world, DynamicBody body)
+	public MoveStateImpl(PhysicsWorld world, DynamicBody body)
 	{
 		this.world = world;
 		this.body = body;
@@ -120,7 +120,7 @@ public class MoveStateImpl implements MoveState
 	}
 
 	@Override
-	public World getWorld()
+	public PhysicsWorld getWorld()
 	{
 		return world;
 	}

@@ -4,7 +4,7 @@ import com.badlogic.gdx.utils.IntMap;
 import com.badlogic.gdx.utils.Pool;
 import me.winter.boing.Collision;
 import me.winter.boing.CollisionDynamicVariable;
-import me.winter.boing.World;
+import me.winter.boing.PhysicsWorld;
 import me.winter.boing.detection.continuous.BoxBoxDetector;
 import me.winter.boing.detection.continuous.BoxLimitDetector;
 import me.winter.boing.detection.continuous.LimitLimitDetector;
@@ -50,7 +50,7 @@ public class DetectionHandler
 	 * @return the collision if there's one, otherwise null
 	 */
 	@SuppressWarnings("unchecked")
-	public Collision collides(World world, Collider colliderA, Collider colliderB)
+	public Collision collides(PhysicsWorld world, Collider colliderA, Collider colliderB)
 	{
 		CollisionDetector detector = detectors.get(getKey(colliderA.getClass(), colliderB.getClass()));
 

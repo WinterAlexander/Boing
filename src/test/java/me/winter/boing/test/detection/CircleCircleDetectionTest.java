@@ -1,6 +1,6 @@
 package me.winter.boing.test.detection;
 
-import me.winter.boing.impl.WorldImpl;
+import me.winter.boing.impl.PhysicsWorldImpl;
 import me.winter.boing.resolver.CollisionResolver;
 import me.winter.boing.colliders.Circle;
 import me.winter.boing.impl.DynamicBodyImpl;
@@ -27,7 +27,7 @@ public class CircleCircleDetectionTest
 			collisionCount.value++;
 			return true;
 		};
-		WorldImpl world = new WorldImpl(resolver);
+		PhysicsWorldImpl world = new PhysicsWorldImpl(resolver);
 
 		DynamicBodyImpl solidImpl = new DynamicBodyImpl(1f);
 		solidImpl.getPosition().set(0, 0);
@@ -77,7 +77,7 @@ public class CircleCircleDetectionTest
 			collisionCount.value++;
 			return true;
 		};
-		WorldImpl world = new WorldImpl(resolver);
+		PhysicsWorldImpl world = new PhysicsWorldImpl(resolver);
 
 		DynamicBodyImpl solidImpl = new DynamicBodyImpl(1f);
 		solidImpl.getPosition().set(0, 0);
@@ -108,7 +108,7 @@ public class CircleCircleDetectionTest
 			collisionCount.value++;
 			return true;
 		};
-		WorldImpl world = new WorldImpl(resolver);
+		PhysicsWorldImpl world = new PhysicsWorldImpl(resolver);
 
 		DynamicBodyImpl solidImpl = new DynamicBodyImpl(1f);
 		solidImpl.getPosition().set(0, 0);
@@ -140,7 +140,7 @@ public class CircleCircleDetectionTest
 			collisionCount.value++;
 			return true;
 		};
-		WorldImpl world = new WorldImpl(resolver);
+		PhysicsWorldImpl world = new PhysicsWorldImpl(resolver);
 
 		DynamicBodyImpl solidImpl = new DynamicBodyImpl(1f);
 		solidImpl.getPosition().set(0, 0);

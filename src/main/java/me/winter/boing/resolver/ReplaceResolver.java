@@ -2,7 +2,7 @@ package me.winter.boing.resolver;
 
 import me.winter.boing.Collision;
 import me.winter.boing.DynamicBody;
-import me.winter.boing.World;
+import me.winter.boing.PhysicsWorld;
 
 import static me.winter.boing.util.FloatUtil.areEqual;
 import static me.winter.boing.util.FloatUtil.isGreaterOrEqual;
@@ -16,7 +16,7 @@ import static me.winter.boing.util.FloatUtil.isSmallerOrEqual;
 public class ReplaceResolver implements CollisionResolver
 {
 	@Override
-	public boolean resolveCollision(Collision collision, World world)
+	public boolean resolveCollision(Collision collision, PhysicsWorld world)
 	{
 		//if(Float.isNaN(collision.priority))
 		//	return true;

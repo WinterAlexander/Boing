@@ -2,7 +2,7 @@ package me.winter.boing.detection;
 
 import me.winter.boing.Collision;
 import me.winter.boing.CollisionDynamicVariable;
-import me.winter.boing.World;
+import me.winter.boing.PhysicsWorld;
 import me.winter.boing.colliders.Collider;
 import me.winter.boing.util.Wrapper;
 
@@ -25,7 +25,7 @@ public class DetectorSwapper<A extends Collider, B extends Collider> implements 
 	}
 
 	@Override
-	public Collision collides(World world, A shapeA, B shapeB)
+	public Collision collides(PhysicsWorld world, A shapeA, B shapeB)
 	{
 		Collision collision = detector.collides(world, shapeB, shapeA);
 

@@ -6,7 +6,7 @@ import me.winter.boing.impl.BodyImpl;
 import me.winter.boing.impl.DynamicBodyImpl;
 import me.winter.boing.resolver.ReplaceResolver;
 import me.winter.boing.testimpl.FlyingPlayerImpl;
-import me.winter.boing.testimpl.TestWorldImpl;
+import me.winter.boing.testimpl.TestPhysicsWorldImpl;
 import me.winter.boing.simulation.simulator.BoingSimulator;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -27,7 +27,7 @@ public class FlyingPushableBoxSimulation
 	@Test
 	public void simpleBox()
 	{
-		TestWorldImpl testWorld = new TestWorldImpl(new ReplaceResolver());
+		TestPhysicsWorldImpl testWorld = new TestPhysicsWorldImpl(new ReplaceResolver());
 
 		FlyingPlayerImpl player = new FlyingPlayerImpl();
 		player.getPosition().set(400, 400);
@@ -45,7 +45,7 @@ public class FlyingPushableBoxSimulation
 	@Test
 	public void simpleLimitBox()
 	{
-		TestWorldImpl testWorld = new TestWorldImpl(new ReplaceResolver());
+		TestPhysicsWorldImpl testWorld = new TestPhysicsWorldImpl(new ReplaceResolver());
 
 		FlyingPlayerImpl player = new FlyingPlayerImpl();
 		player.getPosition().set(400, 400);
@@ -69,7 +69,7 @@ public class FlyingPushableBoxSimulation
 	@Test
 	public void uniDimensionnalCollisionShiftTest()
 	{
-		TestWorldImpl testWorld = new TestWorldImpl(new ReplaceResolver());
+		TestPhysicsWorldImpl testWorld = new TestPhysicsWorldImpl(new ReplaceResolver());
 
 		FlyingPlayerImpl player = new FlyingPlayerImpl() {
 
@@ -102,7 +102,7 @@ public class FlyingPushableBoxSimulation
 	@Test
 	public void boxWithLimits()
 	{
-		TestWorldImpl testWorld = new TestWorldImpl(new ReplaceResolver());
+		TestPhysicsWorldImpl testWorld = new TestPhysicsWorldImpl(new ReplaceResolver());
 
 		FlyingPlayerImpl player = new FlyingPlayerImpl();
 		player.getPosition().set(400, 400);
@@ -130,7 +130,7 @@ public class FlyingPushableBoxSimulation
 	@Test
 	public void lotsOfBoxesWithLimits()
 	{
-		TestWorldImpl testWorld = new TestWorldImpl(new ReplaceResolver());
+		TestPhysicsWorldImpl testWorld = new TestPhysicsWorldImpl(new ReplaceResolver());
 
 		FlyingPlayerImpl player = new FlyingPlayerImpl();
 		player.getPosition().set(500, 400);
@@ -169,7 +169,7 @@ public class FlyingPushableBoxSimulation
 	@Test
 	public void lotsOfLimitBoxes()
 	{
-		TestWorldImpl testWorld = new TestWorldImpl(new ReplaceResolver());
+		TestPhysicsWorldImpl testWorld = new TestPhysicsWorldImpl(new ReplaceResolver());
 
 		FlyingPlayerImpl player = new FlyingPlayerImpl()
 		/*{

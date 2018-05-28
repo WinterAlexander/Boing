@@ -3,12 +3,11 @@ package me.winter.boing.detection.continuous;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Pool;
 import me.winter.boing.Collision;
-import me.winter.boing.World;
+import me.winter.boing.PhysicsWorld;
 import me.winter.boing.colliders.Box;
 import me.winter.boing.colliders.Limit;
 import me.winter.boing.detection.PooledDetector;
 
-import static com.badlogic.gdx.math.Vector2.dot;
 import static java.lang.Math.abs;
 import static java.lang.Math.min;
 import static java.lang.Math.signum;
@@ -33,7 +32,7 @@ public class BoxLimitDetector extends PooledDetector<Box, Limit>
 	}
 
 	@Override
-	public Collision collides(World world, Box boxA, Limit limitB)
+	public Collision collides(PhysicsWorld world, Box boxA, Limit limitB)
 	{
 		float normalX = -limitB.normal.x; //normal X
 		float normalY = -limitB.normal.y; //normal Y

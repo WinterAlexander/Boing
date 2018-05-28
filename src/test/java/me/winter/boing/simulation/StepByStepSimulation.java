@@ -6,7 +6,7 @@ import me.winter.boing.colliders.Limit;
 import me.winter.boing.impl.BodyImpl;
 import me.winter.boing.impl.DynamicBodyImpl;
 import me.winter.boing.resolver.ReplaceResolver;
-import me.winter.boing.testimpl.TestWorldImpl;
+import me.winter.boing.testimpl.TestPhysicsWorldImpl;
 import me.winter.boing.simulation.simulator.BoingSimulator;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -28,7 +28,7 @@ public class StepByStepSimulation
 	@Test
 	public void fourFrameStackStabilizationTest()
 	{
-		TestWorldImpl world = new TestWorldImpl(new ReplaceResolver());
+		TestPhysicsWorldImpl world = new TestPhysicsWorldImpl(new ReplaceResolver());
 
 		DynamicBodyImpl pusher = new DynamicBodyImpl();
 		pusher.getPosition().set(0, 100);
@@ -59,7 +59,7 @@ public class StepByStepSimulation
 	@Test
 	public void pushChain()
 	{
-		TestWorldImpl world = new TestWorldImpl(new ReplaceResolver());
+		TestPhysicsWorldImpl world = new TestPhysicsWorldImpl(new ReplaceResolver());
 
 		DynamicBodyImpl pusher = new DynamicBodyImpl(5f);
 		pusher.getPosition().set(0, 100);
@@ -92,7 +92,7 @@ public class StepByStepSimulation
 	@Test
 	public void perpetuallyFallingGroundCaseWithoutWalls()
 	{
-		TestWorldImpl world = new TestWorldImpl(new ReplaceResolver());
+		TestPhysicsWorldImpl world = new TestPhysicsWorldImpl(new ReplaceResolver());
 
 		DynamicBodyImpl playerLike = new DynamicBodyImpl(5f);
 		playerLike.getPosition().set(400, 200);
@@ -128,7 +128,7 @@ public class StepByStepSimulation
 	@Test
 	public void perpetuallyFallingGroundCase()
 	{
-		TestWorldImpl world = new TestWorldImpl(new ReplaceResolver());
+		TestPhysicsWorldImpl world = new TestPhysicsWorldImpl(new ReplaceResolver());
 
 		DynamicBodyImpl playerLike = new DynamicBodyImpl(5f);
 		playerLike.getPosition().set(400, 200);
@@ -173,7 +173,7 @@ public class StepByStepSimulation
 	@Test
 	public void minimalPerpetuallyFallingGroundCase()
 	{
-		TestWorldImpl world = new TestWorldImpl(new ReplaceResolver());
+		TestPhysicsWorldImpl world = new TestPhysicsWorldImpl(new ReplaceResolver());
 
 		DynamicBodyImpl boxLike = new DynamicBodyImpl();
 		boxLike.getPosition().set(400, 225);
@@ -201,7 +201,7 @@ public class StepByStepSimulation
 	@Test
 	public void minimalPerpetuallyFallingGroundCaseInLimits()
 	{
-		TestWorldImpl world = new TestWorldImpl(new ReplaceResolver());
+		TestPhysicsWorldImpl world = new TestPhysicsWorldImpl(new ReplaceResolver());
 
 		DynamicBodyImpl boxLike = new DynamicBodyImpl();
 		boxLike.getPosition().set(400, 225);
@@ -240,7 +240,7 @@ public class StepByStepSimulation
 	@Test
 	public void minimalPerpetuallyFallingGroundCaseInLimitsGhostCollision()
 	{
-		TestWorldImpl world = new TestWorldImpl(new ReplaceResolver());
+		TestPhysicsWorldImpl world = new TestPhysicsWorldImpl(new ReplaceResolver());
 
 		DynamicBodyImpl boxLike = new DynamicBodyImpl() {
 			@Override
@@ -305,7 +305,7 @@ public class StepByStepSimulation
 	@Test
 	public void minimalPerpetuallyFallingGroundCaseInLimitsGhostCollisionNoSideMoving()
 	{
-		TestWorldImpl world = new TestWorldImpl(new ReplaceResolver());
+		TestPhysicsWorldImpl world = new TestPhysicsWorldImpl(new ReplaceResolver());
 
 		DynamicBodyImpl boxLike = new DynamicBodyImpl();
 		boxLike.getPosition().set(425, 225);

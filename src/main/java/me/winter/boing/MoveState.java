@@ -16,7 +16,7 @@ public interface MoveState
 	 *
 	 * @return world reference of this MoveState
 	 */
-	World getWorld();
+	PhysicsWorld getWorld();
 
 	/**
 	 * Each MoveState keeps data about body in context of a world.

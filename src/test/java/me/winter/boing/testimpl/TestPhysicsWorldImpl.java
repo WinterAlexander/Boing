@@ -2,7 +2,7 @@ package me.winter.boing.testimpl;
 
 import me.winter.boing.Body;
 import me.winter.boing.PreAABB;
-import me.winter.boing.impl.WorldImpl;
+import me.winter.boing.impl.PhysicsWorldImpl;
 import me.winter.boing.resolver.CollisionResolver;
 
 /**
@@ -10,14 +10,14 @@ import me.winter.boing.resolver.CollisionResolver;
  * <p>
  * Created by Alexander Winter on 2017-05-08.
  */
-public class TestWorldImpl extends WorldImpl
+public class TestPhysicsWorldImpl extends PhysicsWorldImpl
 {
 	private int collisionCount;
 	public boolean splittedStep = false, collisionByCollision = false;
 
 	private boolean step = false;
 
-	public TestWorldImpl(CollisionResolver resolver)
+	public TestPhysicsWorldImpl(CollisionResolver resolver)
 	{
 		super(resolver);
 	}

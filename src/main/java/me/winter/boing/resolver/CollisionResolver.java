@@ -1,7 +1,7 @@
 package me.winter.boing.resolver;
 
 import me.winter.boing.Collision;
-import me.winter.boing.World;
+import me.winter.boing.PhysicsWorld;
 
 /**
  * Represents a object able to resolve a collision between 2 bodies where at least one is dynamic.
@@ -18,5 +18,5 @@ public interface CollisionResolver
 	 * @param world world in which this collision occurred
 	 * @return true if the collision was resolved, otherwise false
 	 */
-	boolean resolveCollision(Collision collision, World world);
+	boolean resolveCollision(Collision collision, PhysicsWorld world);
 }

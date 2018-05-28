@@ -5,7 +5,7 @@ import me.winter.boing.impl.BodyImpl;
 import me.winter.boing.resolver.ReplaceResolver;
 import me.winter.boing.testimpl.GravityAffected;
 import me.winter.boing.testimpl.PlayerImpl;
-import me.winter.boing.testimpl.TestWorldImpl;
+import me.winter.boing.testimpl.TestPhysicsWorldImpl;
 import me.winter.boing.simulation.simulator.BoingSimulator;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -21,7 +21,7 @@ public class TiledTerrainSimulation
 	@Test
 	public void simpleGroundTest()
 	{
-		TestWorldImpl world = new TestWorldImpl(new ReplaceResolver());
+		TestPhysicsWorldImpl world = new TestPhysicsWorldImpl(new ReplaceResolver());
 
 		PlayerImpl player = new PlayerImpl();
 		player.getPosition().set(400, 200);
@@ -43,7 +43,7 @@ public class TiledTerrainSimulation
 	@Test
 	public void tiledGroundAndWalls()
 	{
-		TestWorldImpl world = new TestWorldImpl(new ReplaceResolver());
+		TestPhysicsWorldImpl world = new TestPhysicsWorldImpl(new ReplaceResolver());
 
 		PlayerImpl player = new PlayerImpl();
 		player.getPosition().set(400, 200);
@@ -78,7 +78,7 @@ public class TiledTerrainSimulation
 	@Test
 	public void tiledGroundAndWallsWithPushables()
 	{
-		TestWorldImpl world = new TestWorldImpl(new ReplaceResolver());
+		TestPhysicsWorldImpl world = new TestPhysicsWorldImpl(new ReplaceResolver());
 
 		PlayerImpl player = new PlayerImpl();
 		player.getPosition().set(400, 200);
@@ -124,7 +124,7 @@ public class TiledTerrainSimulation
 	@Test
 	public void tiledGroundAndWallsWithLessPushables()
 	{
-		TestWorldImpl world = new TestWorldImpl(new ReplaceResolver());
+		TestPhysicsWorldImpl world = new TestPhysicsWorldImpl(new ReplaceResolver());
 
 		PlayerImpl player = new PlayerImpl();
 		player.getPosition().set(400, 200);
@@ -161,7 +161,7 @@ public class TiledTerrainSimulation
 	@Test
 	public void tiledGroundAndWallsWalkingOnPushables()
 	{
-		TestWorldImpl world = new TestWorldImpl(new ReplaceResolver());
+		TestPhysicsWorldImpl world = new TestPhysicsWorldImpl(new ReplaceResolver());
 
 		PlayerImpl player = new PlayerImpl();
 		player.getPosition().set(400, 200);
@@ -198,7 +198,7 @@ public class TiledTerrainSimulation
 	@Test
 	public void tiledGroundAndWallsAnd2Boxes()
 	{
-		TestWorldImpl world = new TestWorldImpl(new ReplaceResolver());
+		TestPhysicsWorldImpl world = new TestPhysicsWorldImpl(new ReplaceResolver());
 
 		PlayerImpl player = new PlayerImpl();
 		player.getPosition().set(400, 200);
@@ -238,7 +238,7 @@ public class TiledTerrainSimulation
 	@Test
 	public void pushingBoxOnPushables()
 	{
-		TestWorldImpl world = new TestWorldImpl(new ReplaceResolver());
+		TestPhysicsWorldImpl world = new TestPhysicsWorldImpl(new ReplaceResolver());
 
 		PlayerImpl player = new PlayerImpl();
 		player.getPosition().set(400, 250);
@@ -291,7 +291,7 @@ public class TiledTerrainSimulation
 	@Test
 	public void pushingBoxOnPushablesAndSolids()
 	{
-		TestWorldImpl world = new TestWorldImpl(new ReplaceResolver());
+		TestPhysicsWorldImpl world = new TestPhysicsWorldImpl(new ReplaceResolver());
 
 		PlayerImpl player = new PlayerImpl();
 		player.getPosition().set(400, 250);

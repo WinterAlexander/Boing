@@ -8,7 +8,7 @@ import me.winter.boing.colliders.Box;
 import me.winter.boing.colliders.Limit;
 import me.winter.boing.testimpl.GravityAffected;
 import me.winter.boing.testimpl.PlayerImpl;
-import me.winter.boing.testimpl.TestWorldImpl;
+import me.winter.boing.testimpl.TestPhysicsWorldImpl;
 import me.winter.boing.simulation.simulator.BoingSimulator;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -31,7 +31,7 @@ public class BoxStackSimulation
 	@Test
 	public void simpleBoxStack()
 	{
-		TestWorldImpl world = new TestWorldImpl(new ReplaceResolver());
+		TestPhysicsWorldImpl world = new TestPhysicsWorldImpl(new ReplaceResolver());
 
 		PlayerImpl player = new PlayerImpl();
 
@@ -56,7 +56,7 @@ public class BoxStackSimulation
 	@Test
 	public void shortBoxStack()
 	{
-		TestWorldImpl world = new TestWorldImpl(new ReplaceResolver());
+		TestPhysicsWorldImpl world = new TestPhysicsWorldImpl(new ReplaceResolver());
 
 		PlayerImpl player = new PlayerImpl();
 
@@ -81,7 +81,7 @@ public class BoxStackSimulation
 	@Test
 	public void shortLimitBoxStack()
 	{
-		TestWorldImpl world = new TestWorldImpl(new ReplaceResolver());
+		TestPhysicsWorldImpl world = new TestPhysicsWorldImpl(new ReplaceResolver());
 
 		PlayerImpl player = new PlayerImpl();
 
@@ -118,7 +118,7 @@ public class BoxStackSimulation
 	@Test
 	public void simpleBoxStackWithSolidBlock()
 	{
-		TestWorldImpl world = new TestWorldImpl(new ReplaceResolver());
+		TestPhysicsWorldImpl world = new TestPhysicsWorldImpl(new ReplaceResolver());
 
 		PlayerImpl player = new PlayerImpl();
 		player.getPosition().set(400, 400);
@@ -151,7 +151,7 @@ public class BoxStackSimulation
 	@Test
 	public void bigBoxStack()
 	{
-		TestWorldImpl world = new TestWorldImpl(new ReplaceResolver());
+		TestPhysicsWorldImpl world = new TestPhysicsWorldImpl(new ReplaceResolver());
 
 		GravityAffected test = new GravityAffected();
 		test.getPosition().set(400, 500);
@@ -184,7 +184,7 @@ public class BoxStackSimulation
 	@Test
 	public void bigBoxStackWithLazyFloatyBox()
 	{
-		TestWorldImpl world = new TestWorldImpl(new ReplaceResolver());
+		TestPhysicsWorldImpl world = new TestPhysicsWorldImpl(new ReplaceResolver());
 
 		GravityAffected test = new GravityAffected() {
 			@Override
@@ -232,7 +232,7 @@ public class BoxStackSimulation
 	@Test
 	public void towerTest()
 	{
-		TestWorldImpl world = new TestWorldImpl(new ReplaceResolver());
+		TestPhysicsWorldImpl world = new TestPhysicsWorldImpl(new ReplaceResolver());
 
 		PlayerImpl player = new PlayerImpl();
 		player.getPosition().set(400, 800);
@@ -263,7 +263,7 @@ public class BoxStackSimulation
 	@Test
 	public void reverseOrderTowerTest()
 	{
-		TestWorldImpl world = new TestWorldImpl(new ReplaceResolver());
+		TestPhysicsWorldImpl world = new TestPhysicsWorldImpl(new ReplaceResolver());
 
 		PlayerImpl player = new PlayerImpl();
 		player.getPosition().set(400, 800);
@@ -294,7 +294,7 @@ public class BoxStackSimulation
 	@Test
 	public void towerTestWithPlatform()
 	{
-		TestWorldImpl world = new TestWorldImpl(new ReplaceResolver());
+		TestPhysicsWorldImpl world = new TestPhysicsWorldImpl(new ReplaceResolver());
 
 		PlayerImpl player = new PlayerImpl();
 		player.getPosition().set(400, 800);
@@ -330,7 +330,7 @@ public class BoxStackSimulation
 	@Test
 	public void towerTestWithWall()
 	{
-		TestWorldImpl world = new TestWorldImpl(new ReplaceResolver());
+		TestPhysicsWorldImpl world = new TestPhysicsWorldImpl(new ReplaceResolver());
 
 		PlayerImpl player = new PlayerImpl();
 		player.getPosition().set(400, 800);
@@ -366,7 +366,7 @@ public class BoxStackSimulation
 	@Test
 	public void towerLimitTest()
 	{
-		TestWorldImpl world = new TestWorldImpl(new ReplaceResolver());
+		TestPhysicsWorldImpl world = new TestPhysicsWorldImpl(new ReplaceResolver());
 
 		PlayerImpl player = new PlayerImpl();
 		player.getPosition().set(400, 800);
@@ -403,7 +403,7 @@ public class BoxStackSimulation
 	@Test
 	public void flyingBoxesStack()
 	{
-		TestWorldImpl world = new TestWorldImpl(new ReplaceResolver());
+		TestPhysicsWorldImpl world = new TestPhysicsWorldImpl(new ReplaceResolver());
 
 
 		BodyImpl ground = new BodyImpl();
@@ -447,7 +447,7 @@ public class BoxStackSimulation
 	@Test
 	public void pickyBoxStack()
 	{
-		TestWorldImpl world = new TestWorldImpl(new ReplaceResolver());
+		TestPhysicsWorldImpl world = new TestPhysicsWorldImpl(new ReplaceResolver());
 
 		PlayerImpl player = new PlayerImpl();
 
@@ -489,7 +489,7 @@ public class BoxStackSimulation
 	@Test
 	public void multiTowers()
 	{
-		TestWorldImpl world = new TestWorldImpl(new ReplaceResolver());
+		TestPhysicsWorldImpl world = new TestPhysicsWorldImpl(new ReplaceResolver());
 
 		PlayerImpl player = new PlayerImpl();
 		player.getPosition().set(400, 800);
@@ -524,7 +524,7 @@ public class BoxStackSimulation
 	@Test
 	public void bigMess()
 	{
-		TestWorldImpl world = new TestWorldImpl(new ReplaceResolver());
+		TestPhysicsWorldImpl world = new TestPhysicsWorldImpl(new ReplaceResolver());
 
 		PlayerImpl player = new PlayerImpl();
 		player.getPosition().set(-200, 800);

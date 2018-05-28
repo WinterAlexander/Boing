@@ -1,7 +1,7 @@
 package me.winter.boing.test.detection;
 
 import me.winter.boing.impl.DynamicBodyImpl;
-import me.winter.boing.impl.WorldImpl;
+import me.winter.boing.impl.PhysicsWorldImpl;
 import me.winter.boing.resolver.CollisionResolver;
 import me.winter.boing.colliders.Box;
 import me.winter.boing.util.Counter;
@@ -73,7 +73,7 @@ public class BoxBoxDetectionTest
 			collisionCount.increment();
 			return true;
 		};
-		WorldImpl world = new WorldImpl(resolver);
+		PhysicsWorldImpl world = new PhysicsWorldImpl(resolver);
 
 		DynamicBodyImpl solidImpl = new DynamicBodyImpl(1f);
 		solidImpl.getPosition().set(0, 0);
@@ -100,7 +100,7 @@ public class BoxBoxDetectionTest
 	{
 		Counter collisionCount = new Counter(0);
 
-		WorldImpl world = new WorldImpl((w, c) -> {
+		PhysicsWorldImpl world = new PhysicsWorldImpl((w, c) -> {
 			collisionCount.value++;
 			return true;
 		});
@@ -135,7 +135,7 @@ public class BoxBoxDetectionTest
 			collisionCount.value++;
 			return true;
 		};
-		WorldImpl world = new WorldImpl(resolver);
+		PhysicsWorldImpl world = new PhysicsWorldImpl(resolver);
 
 		DynamicBodyImpl solidImpl = new DynamicBodyImpl(1f);
 		solidImpl.getPosition().set(0, 0);

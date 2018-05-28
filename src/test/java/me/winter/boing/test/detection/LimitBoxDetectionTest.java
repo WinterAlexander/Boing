@@ -1,6 +1,6 @@
 package me.winter.boing.test.detection;
 
-import me.winter.boing.impl.WorldImpl;
+import me.winter.boing.impl.PhysicsWorldImpl;
 import me.winter.boing.resolver.CollisionResolver;
 import me.winter.boing.colliders.Box;
 import me.winter.boing.colliders.Limit;
@@ -27,7 +27,7 @@ public class LimitBoxDetectionTest
 			collisionCount.value++;
 			return true;
 		};
-		WorldImpl world = new WorldImpl(resolver);
+		PhysicsWorldImpl world = new PhysicsWorldImpl(resolver);
 
 		DynamicBodyImpl solidImpl = new DynamicBodyImpl(1f);
 		solidImpl.getPosition().set(0, 0);
@@ -58,7 +58,7 @@ public class LimitBoxDetectionTest
 			collisionCount.value++;
 			return true;
 		};
-		WorldImpl world = new WorldImpl(resolver);
+		PhysicsWorldImpl world = new PhysicsWorldImpl(resolver);
 
 		DynamicBodyImpl solidImpl = new DynamicBodyImpl(1f);
 		solidImpl.getPosition().set(0, 0);
@@ -89,7 +89,7 @@ public class LimitBoxDetectionTest
 			collisionCount.value++;
 			return true;
 		};
-		WorldImpl world = new WorldImpl(resolver);
+		PhysicsWorldImpl world = new PhysicsWorldImpl(resolver);
 
 		DynamicBodyImpl solidImpl = new DynamicBodyImpl(1f);
 		solidImpl.getPosition().set(0, 0);
@@ -120,7 +120,7 @@ public class LimitBoxDetectionTest
 			collisionCount.value++;
 			return true;
 		};
-		WorldImpl world = new WorldImpl(resolver);
+		PhysicsWorldImpl world = new PhysicsWorldImpl(resolver);
 
 		DynamicBodyImpl solidImpl = new DynamicBodyImpl();
 		solidImpl.getPosition().set(0, 0);

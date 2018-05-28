@@ -5,7 +5,7 @@ import me.winter.boing.colliders.Circle;
 import me.winter.boing.impl.BodyImpl;
 import me.winter.boing.resolver.ReplaceResolver;
 import me.winter.boing.testimpl.BouncingBallImpl;
-import me.winter.boing.testimpl.TestWorldImpl;
+import me.winter.boing.testimpl.TestPhysicsWorldImpl;
 import me.winter.boing.simulation.simulator.BoingSimulator;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -23,7 +23,7 @@ public class ReplaceResolverSimulation
 	@Test
 	public void testCirclesInBox()
 	{
-		TestWorldImpl world = new TestWorldImpl(new ReplaceResolver());
+		TestPhysicsWorldImpl world = new TestPhysicsWorldImpl(new ReplaceResolver());
 
 		BouncingBallImpl solid = new BouncingBallImpl(POSITIVE_INFINITY);
 
@@ -106,7 +106,7 @@ public class ReplaceResolverSimulation
 	@Test
 	public void testBug()
 	{
-		TestWorldImpl world = new TestWorldImpl(new ReplaceResolver());
+		TestPhysicsWorldImpl world = new TestPhysicsWorldImpl(new ReplaceResolver());
 
 		BouncingBallImpl solid = new BouncingBallImpl(POSITIVE_INFINITY);
 
@@ -146,7 +146,7 @@ public class ReplaceResolverSimulation
 	@Test
 	public void testFuckFest()
 	{
-		TestWorldImpl world = new TestWorldImpl(new ReplaceResolver());
+		TestPhysicsWorldImpl world = new TestPhysicsWorldImpl(new ReplaceResolver());
 		
 		for(int i = 200; i < 600; i += 20)
 		{
@@ -216,7 +216,7 @@ public class ReplaceResolverSimulation
 	@Test
 	public void testBoxBouncingOnBoxX()
 	{
-		TestWorldImpl world = new TestWorldImpl(new ReplaceResolver());
+		TestPhysicsWorldImpl world = new TestPhysicsWorldImpl(new ReplaceResolver());
 
 		BouncingBallImpl solid = new BouncingBallImpl();
 		solid.getPosition().set(400, 400);
@@ -244,7 +244,7 @@ public class ReplaceResolverSimulation
 	@Test
 	public void testBoxBouncingOnBoxY()
 	{
-		TestWorldImpl world = new TestWorldImpl(new ReplaceResolver());
+		TestPhysicsWorldImpl world = new TestPhysicsWorldImpl(new ReplaceResolver());
 
 		BouncingBallImpl solid = new BouncingBallImpl();
 		solid.getPosition().set(400, 400);
@@ -272,7 +272,7 @@ public class ReplaceResolverSimulation
 	@Test
 	public void testBoxWideBounce()
 	{
-		TestWorldImpl world = new TestWorldImpl(new ReplaceResolver());
+		TestPhysicsWorldImpl world = new TestPhysicsWorldImpl(new ReplaceResolver());
 
 		BodyImpl ground = new BodyImpl();
 		ground.getPosition().set(400, 0);
@@ -291,7 +291,7 @@ public class ReplaceResolverSimulation
 	@Test
 	public void testBoxesInBallCage()
 	{
-		TestWorldImpl world = new TestWorldImpl(new ReplaceResolver());
+		TestPhysicsWorldImpl world = new TestPhysicsWorldImpl(new ReplaceResolver());
 
 		BouncingBallImpl solid = new BouncingBallImpl();
 		solid.getPosition().set(400, 400);
@@ -353,7 +353,7 @@ public class ReplaceResolverSimulation
 	@Test
 	public void testCircleBouncingBetween2Circles()
 	{
-		TestWorldImpl world = new TestWorldImpl(new ReplaceResolver());
+		TestPhysicsWorldImpl world = new TestPhysicsWorldImpl(new ReplaceResolver());
 
 		BouncingBallImpl solid = new BouncingBallImpl();
 		solid.getPosition().set(400, 400);
@@ -379,7 +379,7 @@ public class ReplaceResolverSimulation
 	@Test
 	public void testCircleColling2Circles()
 	{
-		TestWorldImpl world = new TestWorldImpl(new ReplaceResolver());
+		TestPhysicsWorldImpl world = new TestPhysicsWorldImpl(new ReplaceResolver());
 
 		BouncingBallImpl solid = new BouncingBallImpl();
 		solid.getPosition().set(400, 400);
@@ -405,7 +405,7 @@ public class ReplaceResolverSimulation
 	@Test
 	public void testCircleBoxCollision()
 	{
-		TestWorldImpl world = new TestWorldImpl(new ReplaceResolver());
+		TestPhysicsWorldImpl world = new TestPhysicsWorldImpl(new ReplaceResolver());
 
 		BouncingBallImpl solid = new BouncingBallImpl();
 		solid.getPosition().set(400, 400);
@@ -425,7 +425,7 @@ public class ReplaceResolverSimulation
 	@Test
 	public void boxGoingNextToBoxX()
 	{
-		TestWorldImpl world = new TestWorldImpl(new ReplaceResolver());
+		TestPhysicsWorldImpl world = new TestPhysicsWorldImpl(new ReplaceResolver());
 
 		BouncingBallImpl solid = new BouncingBallImpl();
 		solid.getPosition().set(400, 400);

@@ -8,7 +8,7 @@ import me.winter.boing.resolver.ReplaceResolver;
 import me.winter.boing.testimpl.BouncingBallImpl;
 import me.winter.boing.testimpl.GravityAffected;
 import me.winter.boing.testimpl.PlayerImpl;
-import me.winter.boing.testimpl.TestWorldImpl;
+import me.winter.boing.testimpl.TestPhysicsWorldImpl;
 import me.winter.boing.simulation.simulator.BoingSimulator;
 import org.junit.Test;
 
@@ -24,7 +24,7 @@ public class GlitchSimulation
 	@Test
 	public void cornerGlitch()
 	{
-		TestWorldImpl world = new TestWorldImpl(new ReplaceResolver());
+		TestPhysicsWorldImpl world = new TestPhysicsWorldImpl(new ReplaceResolver());
 
 		BouncingBallImpl ballImpl = new BouncingBallImpl();
 
@@ -50,7 +50,7 @@ public class GlitchSimulation
 	@Test
 	public void boxCornerGlitch()
 	{
-		TestWorldImpl world = new TestWorldImpl(new ReplaceResolver());
+		TestPhysicsWorldImpl world = new TestPhysicsWorldImpl(new ReplaceResolver());
 
 		BouncingBallImpl ballImpl = new BouncingBallImpl();
 
@@ -74,7 +74,7 @@ public class GlitchSimulation
 	@Test
 	public void boxLimitCornerGlitch()
 	{
-		TestWorldImpl world = new TestWorldImpl(new ReplaceResolver());
+		TestPhysicsWorldImpl world = new TestPhysicsWorldImpl(new ReplaceResolver());
 
 		BouncingBallImpl ballImpl = new BouncingBallImpl();
 
@@ -99,7 +99,7 @@ public class GlitchSimulation
 	@Test
 	public void passingThroughBottomWhilePushingOnWall()
 	{
-		TestWorldImpl world = new TestWorldImpl(new ReplaceResolver());
+		TestPhysicsWorldImpl world = new TestPhysicsWorldImpl(new ReplaceResolver());
 
 
 		PlayerImpl player = new PlayerImpl();
@@ -128,7 +128,7 @@ public class GlitchSimulation
 	@Test
 	public void pushingThroughWall()
 	{
-		TestWorldImpl world = new TestWorldImpl(new ReplaceResolver());
+		TestPhysicsWorldImpl world = new TestPhysicsWorldImpl(new ReplaceResolver());
 
 		PlayerImpl player = new PlayerImpl();
 		player.getPosition().set(400, 200);
@@ -156,7 +156,7 @@ public class GlitchSimulation
 	@Test
 	public void pushingThroughLimit()
 	{
-		TestWorldImpl world = new TestWorldImpl(new ReplaceResolver());
+		TestPhysicsWorldImpl world = new TestPhysicsWorldImpl(new ReplaceResolver());
 
 		PlayerImpl player = new PlayerImpl();
 		player.getPosition().set(400, 200);

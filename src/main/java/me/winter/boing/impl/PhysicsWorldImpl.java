@@ -3,7 +3,7 @@ package me.winter.boing.impl;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.IdentityMap;
 import com.badlogic.gdx.utils.Queue;
-import me.winter.boing.AbstractWorld;
+import me.winter.boing.AbstractPhysicsWorldImpl;
 import me.winter.boing.Body;
 import me.winter.boing.Collision;
 import me.winter.boing.DynamicBody;
@@ -16,7 +16,7 @@ import me.winter.boing.resolver.CollisionResolver;
  * <p>
  * Created by Alexander Winter on 2017-04-25.
  */
-public class WorldImpl extends AbstractWorld
+public class PhysicsWorldImpl extends AbstractPhysicsWorldImpl
 {
 	private Queue<DynamicBody> dynamics = new Queue<>();
 	private Queue<Body> all = new Queue<>();
@@ -24,7 +24,7 @@ public class WorldImpl extends AbstractWorld
 	private IdentityMap<DynamicBody, MoveStateImpl> steps = new IdentityMap<>();
 	protected IdentityMap<Body, PreAABB> surroundingBoxes = new IdentityMap<>();
 
-	public WorldImpl(CollisionResolver resolver)
+	public PhysicsWorldImpl(CollisionResolver resolver)
 	{
 		super(resolver);
 	}

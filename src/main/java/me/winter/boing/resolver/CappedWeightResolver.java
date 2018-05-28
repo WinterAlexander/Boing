@@ -3,7 +3,7 @@ package me.winter.boing.resolver;
 import com.badlogic.gdx.utils.ObjectSet;
 import me.winter.boing.Collision;
 import me.winter.boing.DynamicBody;
-import me.winter.boing.World;
+import me.winter.boing.PhysicsWorld;
 
 import static java.lang.Float.POSITIVE_INFINITY;
 
@@ -17,7 +17,7 @@ public class CappedWeightResolver implements WeightResolver
 	private final ObjectSet<DynamicBody> alreadyChecked = new ObjectSet<>();
 
 	@Override
-	public void resolveWeight(Collision collision, World world)
+	public void resolveWeight(Collision collision, PhysicsWorld world)
 	{
 		if(!(collision.colliderA.getBody() instanceof DynamicBody))
 		{
@@ -41,7 +41,7 @@ public class CappedWeightResolver implements WeightResolver
 
 	}
 
-	private float getWeight(World world, DynamicBody dynamic, float nx, float ny)
+	private float getWeight(PhysicsWorld world, DynamicBody dynamic, float nx, float ny)
 	{
 		float weight = dynamic.getWeight();
 		alreadyChecked.add(dynamic);

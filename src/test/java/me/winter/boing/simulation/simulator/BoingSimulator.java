@@ -7,7 +7,7 @@ import me.winter.boing.colliders.Box;
 import me.winter.boing.colliders.Circle;
 import me.winter.boing.colliders.Collider;
 import me.winter.boing.colliders.Limit;
-import me.winter.boing.testimpl.TestWorldImpl;
+import me.winter.boing.testimpl.TestPhysicsWorldImpl;
 import org.junit.Ignore;
 
 import javax.swing.JFrame;
@@ -33,7 +33,7 @@ public class BoingSimulator extends JFrame implements KeyListener, MouseListener
 	public static final Array<Consumer<Graphics>> __freeShapes = new Array<>();
 	public static BoingSimulator __last = null;
 
-	private TestWorldImpl world;
+	private TestPhysicsWorldImpl world;
 	private float frameRate;
 
 	private long frames = 0, framesRemaining = -1;
@@ -41,7 +41,7 @@ public class BoingSimulator extends JFrame implements KeyListener, MouseListener
 
 	private JPanel panel;
 
-	public BoingSimulator(TestWorldImpl world, float frameRate)
+	public BoingSimulator(TestPhysicsWorldImpl world, float frameRate)
 	{
 		this.world = world;
 		this.frameRate = frameRate;

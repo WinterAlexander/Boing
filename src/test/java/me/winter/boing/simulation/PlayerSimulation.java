@@ -6,7 +6,7 @@ import me.winter.boing.colliders.Box;
 import me.winter.boing.testimpl.PlayerImpl;
 import me.winter.boing.impl.BodyImpl;
 import me.winter.boing.testimpl.SpringImpl;
-import me.winter.boing.testimpl.TestWorldImpl;
+import me.winter.boing.testimpl.TestPhysicsWorldImpl;
 import me.winter.boing.simulation.simulator.BoingSimulator;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -23,7 +23,7 @@ public class PlayerSimulation
 	public void simpleSimul()
 	{
 		CollisionResolver resolver = new ReplaceResolver();
-		TestWorldImpl world = new TestWorldImpl(resolver);
+		TestPhysicsWorldImpl world = new TestPhysicsWorldImpl(resolver);
 
 		PlayerImpl player = new PlayerImpl();
 
@@ -44,7 +44,7 @@ public class PlayerSimulation
 	public void springSimul()
 	{
 		CollisionResolver resolver = new ReplaceResolver();
-		TestWorldImpl world = new TestWorldImpl(resolver);
+		TestPhysicsWorldImpl world = new TestPhysicsWorldImpl(resolver);
 
 		PlayerImpl player = new PlayerImpl();
 

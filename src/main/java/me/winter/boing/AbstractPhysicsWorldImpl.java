@@ -18,7 +18,7 @@ import me.winter.boing.util.Wrapper;
  * <p>
  * Created by Alexander Winter on 2017-05-08.
  */
-public abstract class AbstractWorld implements World
+public abstract class AbstractPhysicsWorldImpl implements PhysicsWorld
 {
 	/**
 	 * Collision pool to prevent creating new collisions objects.
@@ -38,12 +38,12 @@ public abstract class AbstractWorld implements World
 
 	private boolean refresh = true;
 
-	public AbstractWorld(CollisionResolver resolver)
+	public AbstractPhysicsWorldImpl(CollisionResolver resolver)
 	{
 		this(resolver, new CappedWeightResolver());
 	}
 
-	public AbstractWorld(CollisionResolver resolver, WeightResolver weightResolver)
+	public AbstractPhysicsWorldImpl(CollisionResolver resolver, WeightResolver weightResolver)
 	{
 		this.detector = new DetectionHandler(collisionPool, varInverter);
 		this.resolver = resolver;

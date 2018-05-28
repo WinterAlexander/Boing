@@ -16,7 +16,7 @@ import com.badlogic.gdx.utils.Pool;
  * <p>
  * Created by Alexander Winter on 2017-04-25.
  */
-public interface World
+public interface PhysicsWorld
 {
 	/**
 	 * Simulates the physics of the world for a frame

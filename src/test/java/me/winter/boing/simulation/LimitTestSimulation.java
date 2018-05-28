@@ -8,7 +8,7 @@ import me.winter.boing.impl.DynamicBodyImpl;
 import me.winter.boing.resolver.ReplaceResolver;
 import me.winter.boing.colliders.Limit;
 import me.winter.boing.testimpl.BouncingBallImpl;
-import me.winter.boing.testimpl.TestWorldImpl;
+import me.winter.boing.testimpl.TestPhysicsWorldImpl;
 import me.winter.boing.simulation.simulator.BoingSimulator;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -27,7 +27,7 @@ public class LimitTestSimulation
 	@Test
 	public void simpleLimitLimitY()
 	{
-		TestWorldImpl world = new TestWorldImpl(new ReplaceResolver());
+		TestPhysicsWorldImpl world = new TestPhysicsWorldImpl(new ReplaceResolver());
 
 		BouncingBallImpl ballImpl = new BouncingBallImpl();
 		ballImpl.getPosition().set(425, 200);
@@ -47,7 +47,7 @@ public class LimitTestSimulation
 	@Test
 	public void simpleLimitLimitX()
 	{
-		TestWorldImpl world = new TestWorldImpl(new ReplaceResolver());
+		TestPhysicsWorldImpl world = new TestPhysicsWorldImpl(new ReplaceResolver());
 
 		BouncingBallImpl ballImpl = new BouncingBallImpl();
 		ballImpl.getPosition().set(200, 425);
@@ -67,7 +67,7 @@ public class LimitTestSimulation
 	@Test
 	public void comingAtAAngleLimitLimitX()
 	{
-		TestWorldImpl world = new TestWorldImpl(new ReplaceResolver());
+		TestPhysicsWorldImpl world = new TestPhysicsWorldImpl(new ReplaceResolver());
 
 		BouncingBallImpl ballImpl = new BouncingBallImpl();
 		ballImpl.getPosition().set(200, 200);
@@ -89,7 +89,7 @@ public class LimitTestSimulation
 	@Test
 	public void limitCircle()
 	{
-		TestWorldImpl world = new TestWorldImpl(new ReplaceResolver());
+		TestPhysicsWorldImpl world = new TestPhysicsWorldImpl(new ReplaceResolver());
 
 		BouncingBallImpl ballImpl = new BouncingBallImpl(5f) {
 			@Override
@@ -116,7 +116,7 @@ public class LimitTestSimulation
 	@Test
 	public void limitBox()
 	{
-		TestWorldImpl world = new TestWorldImpl(new ReplaceResolver());
+		TestPhysicsWorldImpl world = new TestPhysicsWorldImpl(new ReplaceResolver());
 
 		DynamicBodyImpl ballImpl = new DynamicBodyImpl(5f);
 
@@ -137,7 +137,7 @@ public class LimitTestSimulation
 	@Test
 	public void limitFallingOnLimit()
 	{
-		TestWorldImpl world = new TestWorldImpl(new ReplaceResolver());
+		TestPhysicsWorldImpl world = new TestPhysicsWorldImpl(new ReplaceResolver());
 
 		DynamicBodyImpl ballImpl = new DynamicBodyImpl(4f);
 		ballImpl.getPosition().set(400, 100);
