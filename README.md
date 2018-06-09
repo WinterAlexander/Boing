@@ -25,7 +25,3 @@ I've roughly understood how their collision handling worked and wanted to implem
 
 ### LibGDX
 Since games that will use this physic engine will most likely be on LibGDX, I wasn't scared to use it as a math library. I'm not using LibGDX collision detection but I'm using Vector and MathUtils classes. If you wish to use Boing without LibGDX, you can but you will have to replace the method calls and create a 2D Vector class. (Or just download LibGDX's one). In short, Boing doesn't require LibGDX to run but only needs it's utilities.
-
-### SocialPlatformer
-
-The purpose of this physic engine is mainly to be used with my currently developped game, SocialPlatformer. Unfortunately, SocialPlatformer is a private repository for security reasons. It requires a central server and a database to run and those must not be open to public.
