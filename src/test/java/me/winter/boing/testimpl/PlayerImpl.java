@@ -1,14 +1,9 @@
 package me.winter.boing.testimpl;
 
-import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.utils.Array;
-import me.winter.boing.Body;
 import me.winter.boing.Collision;
 import me.winter.boing.UpdatableBody;
-import me.winter.boing.impl.BodyImpl;
 import me.winter.boing.impl.DynamicBodyImpl;
 
-import java.awt.KeyEventDispatcher;
 import java.awt.KeyboardFocusManager;
 import java.awt.event.KeyEvent;
 

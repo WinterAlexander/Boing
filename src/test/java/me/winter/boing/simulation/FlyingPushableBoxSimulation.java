@@ -5,9 +5,9 @@ import me.winter.boing.colliders.Limit;
 import me.winter.boing.impl.BodyImpl;
 import me.winter.boing.impl.DynamicBodyImpl;
 import me.winter.boing.resolver.ReplaceResolver;
+import me.winter.boing.simulation.simulator.BoingSimulator;
 import me.winter.boing.testimpl.FlyingPlayerImpl;
 import me.winter.boing.testimpl.TestPhysicsWorldImpl;
-import me.winter.boing.simulation.simulator.BoingSimulator;
 import org.junit.Ignore;
 import org.junit.Test;
 

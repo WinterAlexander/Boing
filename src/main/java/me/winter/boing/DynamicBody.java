@@ -2,10 +2,6 @@ package me.winter.boing;
 
 import com.badlogic.gdx.math.Vector2;
 
-import static java.lang.Math.abs;
-import static java.lang.Math.ulp;
-import static me.winter.boing.util.FloatUtil.max;
-
 /**
  * Represents a body that moves every frame.
  * <p>

@@ -1,13 +1,13 @@
 package me.winter.boing.simulation;
 
-import me.winter.boing.resolver.CollisionResolver;
-import me.winter.boing.resolver.VelocityResolver;
 import me.winter.boing.colliders.Box;
 import me.winter.boing.colliders.Circle;
-import me.winter.boing.testimpl.BouncingBallImpl;
 import me.winter.boing.impl.BodyImpl;
-import me.winter.boing.testimpl.TestPhysicsWorldImpl;
+import me.winter.boing.resolver.CollisionResolver;
+import me.winter.boing.resolver.VelocityResolver;
 import me.winter.boing.simulation.simulator.BoingSimulator;
+import me.winter.boing.testimpl.BouncingBallImpl;
+import me.winter.boing.testimpl.TestPhysicsWorldImpl;
 import org.junit.Ignore;
 import org.junit.Test;
 

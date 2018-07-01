@@ -4,10 +4,6 @@ import com.badlogic.gdx.math.Vector2;
 import me.winter.boing.Body;
 import me.winter.boing.PhysicsWorld;
 
-import static java.lang.Math.abs;
-import static java.lang.Math.ulp;
-import static me.winter.boing.util.FloatUtil.max;
-
 /**
  * Represents a shape that can enter in collision with another
  * <p>

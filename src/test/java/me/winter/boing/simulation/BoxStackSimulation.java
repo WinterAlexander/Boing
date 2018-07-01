@@ -1,15 +1,15 @@
 package me.winter.boing.simulation;
 
 import me.winter.boing.Collision;
+import me.winter.boing.colliders.Box;
+import me.winter.boing.colliders.Limit;
 import me.winter.boing.impl.BodyImpl;
 import me.winter.boing.impl.DynamicBodyImpl;
 import me.winter.boing.resolver.ReplaceResolver;
-import me.winter.boing.colliders.Box;
-import me.winter.boing.colliders.Limit;
+import me.winter.boing.simulation.simulator.BoingSimulator;
 import me.winter.boing.testimpl.GravityAffected;
 import me.winter.boing.testimpl.PlayerImpl;
 import me.winter.boing.testimpl.TestPhysicsWorldImpl;
-import me.winter.boing.simulation.simulator.BoingSimulator;
 import org.junit.Ignore;
 import org.junit.Test;
 

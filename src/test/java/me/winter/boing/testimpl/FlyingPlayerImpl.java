@@ -3,14 +3,13 @@ package me.winter.boing.testimpl;
 import me.winter.boing.UpdatableBody;
 import me.winter.boing.impl.DynamicBodyImpl;
 
-import java.awt.KeyEventDispatcher;
 import java.awt.KeyboardFocusManager;
 import java.awt.event.KeyEvent;
 
-import static me.winter.boing.testimpl.FlyingPlayerImpl.IsKeyPressed.sPressed;
-import static me.winter.boing.testimpl.FlyingPlayerImpl.IsKeyPressed.wPressed;
 import static me.winter.boing.testimpl.FlyingPlayerImpl.IsKeyPressed.aPressed;
 import static me.winter.boing.testimpl.FlyingPlayerImpl.IsKeyPressed.dPressed;
+import static me.winter.boing.testimpl.FlyingPlayerImpl.IsKeyPressed.sPressed;
+import static me.winter.boing.testimpl.FlyingPlayerImpl.IsKeyPressed.wPressed;
 
 /**
  * Undocumented :(

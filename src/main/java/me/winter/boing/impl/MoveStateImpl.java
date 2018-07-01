@@ -2,11 +2,11 @@ package me.winter.boing.impl;
 
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
+import me.winter.boing.Collision;
 import me.winter.boing.DynamicBody;
 import me.winter.boing.MoveState;
-import me.winter.boing.Collision;
-import me.winter.boing.UpdatableBody;
 import me.winter.boing.PhysicsWorld;
+import me.winter.boing.UpdatableBody;
 
 import static java.lang.Math.signum;
 import static me.winter.boing.util.VectorUtil.DOWN;

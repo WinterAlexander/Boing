@@ -3,7 +3,6 @@ package me.winter.boing.impl;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import me.winter.boing.Body;
-import me.winter.boing.colliders.Box;
 import me.winter.boing.colliders.Collider;
 
 /**

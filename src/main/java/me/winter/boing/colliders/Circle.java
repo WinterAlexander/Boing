@@ -2,10 +2,6 @@ package me.winter.boing.colliders;
 
 import me.winter.boing.Body;
 
-import static java.lang.Math.abs;
-import static java.lang.Math.ulp;
-import static me.winter.boing.util.FloatUtil.max;
-
 /**
  * A circle collider
  * <p>

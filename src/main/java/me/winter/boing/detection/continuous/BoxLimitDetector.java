@@ -9,15 +9,12 @@ import me.winter.boing.colliders.Limit;
 import me.winter.boing.detection.PooledDetector;
 
 import static java.lang.Math.abs;
-import static java.lang.Math.min;
 import static java.lang.Math.signum;
-import static me.winter.boing.detection.continuous.BoxBoxDetector.getContactSurface;
 import static me.winter.boing.util.FloatUtil.DEFAULT_ULPS;
 import static me.winter.boing.util.FloatUtil.areEqual;
 import static me.winter.boing.util.FloatUtil.getGreatestULP;
 import static me.winter.boing.util.FloatUtil.isGreaterOrEqual;
 import static me.winter.boing.util.FloatUtil.isSmallerOrEqual;
-import static me.winter.boing.util.FloatUtil.max;
 
 /**
  * Detects collisions between an Axis Aligned Bounding Box and a Limit

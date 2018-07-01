@@ -5,12 +5,12 @@ import com.badlogic.gdx.utils.Pool;
 import me.winter.boing.Collision;
 import me.winter.boing.CollisionDynamicVariable;
 import me.winter.boing.PhysicsWorld;
+import me.winter.boing.colliders.Box;
+import me.winter.boing.colliders.Collider;
+import me.winter.boing.colliders.Limit;
 import me.winter.boing.detection.continuous.BoxBoxDetector;
 import me.winter.boing.detection.continuous.BoxLimitDetector;
 import me.winter.boing.detection.continuous.LimitLimitDetector;
-import me.winter.boing.colliders.Box;
-import me.winter.boing.colliders.Limit;
-import me.winter.boing.colliders.Collider;
 import me.winter.boing.util.Wrapper;
 
 /**

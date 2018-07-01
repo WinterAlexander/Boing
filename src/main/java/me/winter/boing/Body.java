@@ -3,10 +3,6 @@ package me.winter.boing;
 import com.badlogic.gdx.math.Vector2;
 import me.winter.boing.colliders.Collider;
 
-import static java.lang.Math.abs;
-import static java.lang.Math.ulp;
-import static me.winter.boing.util.FloatUtil.max;
-
 /**
  * Represents a simple, static body. Cannot move but can prevent a DynamicSolid from moving.
  * <p>

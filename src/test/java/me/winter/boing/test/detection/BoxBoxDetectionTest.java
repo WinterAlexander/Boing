@@ -1,9 +1,9 @@
 package me.winter.boing.test.detection;
 
+import me.winter.boing.colliders.Box;
 import me.winter.boing.impl.DynamicBodyImpl;
 import me.winter.boing.impl.PhysicsWorldImpl;
 import me.winter.boing.resolver.CollisionResolver;
-import me.winter.boing.colliders.Box;
 import me.winter.boing.util.Counter;
 import org.junit.Test;
 

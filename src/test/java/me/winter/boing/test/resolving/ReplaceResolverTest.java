@@ -1,18 +1,17 @@
 package me.winter.boing.test.resolving;
 
 import com.badlogic.gdx.math.Vector2;
-import me.winter.boing.impl.PhysicsWorldImpl;
-import me.winter.boing.impl.BodyImpl;
-import me.winter.boing.impl.DynamicBodyImpl;
-import me.winter.boing.resolver.ReplaceResolver;
 import me.winter.boing.colliders.Box;
 import me.winter.boing.colliders.Limit;
+import me.winter.boing.impl.BodyImpl;
+import me.winter.boing.impl.DynamicBodyImpl;
+import me.winter.boing.impl.PhysicsWorldImpl;
+import me.winter.boing.resolver.ReplaceResolver;
 import org.junit.Test;
 
+import static me.winter.boing.util.VectorAssert.assertEquals;
 import static me.winter.boing.util.VectorUtil.LEFT;
 import static me.winter.boing.util.VectorUtil.UP;
-import static org.junit.Assert.assertEquals;
-import static me.winter.boing.util.VectorAssert.assertEquals;
 
 /**
  * Undocumented :(

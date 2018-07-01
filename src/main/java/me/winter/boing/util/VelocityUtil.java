@@ -5,7 +5,6 @@ import com.badlogic.gdx.math.Vector2;
 import static java.lang.Float.POSITIVE_INFINITY;
 import static java.lang.Float.floatToIntBits;
 import static java.lang.Float.intBitsToFloat;
-import static java.lang.Math.signum;
 
 /**
  * Offers useful methods to work with velocities and anything related

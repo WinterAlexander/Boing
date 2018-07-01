@@ -1,12 +1,10 @@
 package me.winter.boing.resolver;
 
 import com.badlogic.gdx.math.Vector2;
-import me.winter.boing.DynamicBody;
 import me.winter.boing.Collision;
+import me.winter.boing.DynamicBody;
 import me.winter.boing.PhysicsWorld;
 import me.winter.boing.util.VelocityUtil;
-
-import static java.lang.Math.signum;
 
 /**
  * CollisionResolver resolving collisions by changing the velocity of objects colliding

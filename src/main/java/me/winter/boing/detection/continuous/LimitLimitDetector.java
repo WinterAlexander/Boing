@@ -13,7 +13,6 @@ import static me.winter.boing.util.FloatUtil.areEqual;
 import static me.winter.boing.util.FloatUtil.getGreatestULP;
 import static me.winter.boing.util.FloatUtil.isGreaterOrEqual;
 import static me.winter.boing.util.FloatUtil.isSmallerOrEqual;
-import static me.winter.boing.util.FloatUtil.min;
 
 /**
  * Detects collisions between 2 Limits. This is the only

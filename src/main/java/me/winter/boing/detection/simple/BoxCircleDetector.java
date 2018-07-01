@@ -4,14 +4,13 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Pool;
 import me.winter.boing.Collision;
 import me.winter.boing.PhysicsWorld;
-import me.winter.boing.detection.PooledDetector;
 import me.winter.boing.colliders.Box;
 import me.winter.boing.colliders.Circle;
+import me.winter.boing.detection.PooledDetector;
 
 import static com.badlogic.gdx.math.MathUtils.clamp;
 import static java.lang.Math.abs;
 import static java.lang.Math.signum;
-import static me.winter.boing.util.VectorUtil.divide;
 
 /**
  * Detects collisions between an Axis Aligned Bounding Box and a Circle
