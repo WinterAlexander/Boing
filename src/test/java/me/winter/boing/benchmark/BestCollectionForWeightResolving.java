@@ -2,6 +2,7 @@ package me.winter.boing.benchmark;
 
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ObjectSet;
+import org.junit.Ignore;
 import org.junit.Test;
 
 /**
@@ -13,6 +14,7 @@ import org.junit.Test;
  * <p>
  * Created by Alexander Winter on 2017-07-12.
  */
+@Ignore
 public class BestCollectionForWeightResolving
 {
 
