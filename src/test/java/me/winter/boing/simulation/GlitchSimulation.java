@@ -10,6 +10,7 @@ import me.winter.boing.testimpl.BouncingBallImpl;
 import me.winter.boing.testimpl.GravityAffected;
 import me.winter.boing.testimpl.PlayerImpl;
 import me.winter.boing.testimpl.TestPhysicsWorldImpl;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import static me.winter.boing.util.VectorUtil.LEFT;
@@ -19,6 +20,7 @@ import static me.winter.boing.util.VectorUtil.LEFT;
  * <p>
  * Created by Alexander Winter on 2017-07-15.
  */
+@Ignore
 public class GlitchSimulation
 {
 	@Test
