@@ -120,19 +120,20 @@ public class LimitLimitDetector extends PooledDetector<Limit, Limit>
 		final float hsizeB = limitB.size / 2; // half size for B
 
 		// difference between their previous positions
-		final float diff = (prevBx - prevAx) * normalX + (prevBy - prevAy) * normalY;
+		final float diff = (prevAx - prevBx) * normalX + (prevAy - prevBy) * normalY;
 
 		// difference in their velocities
 		final float vecDiff = (vecBx - vecAx) * normalX + (vecBy - vecAy) * normalY;
 
 		// the "time" or ratio of dispatchment at which the the limits touch
-		final float collisionTime = vecDiff != 0 ? (diff + vecDiff) / vecDiff : 0f;
+		// if vecDiff is 0 they are moving at the same rate so any point would do
+		final float collisionTime = vecDiff != 0 ? diff / vecDiff : 0f;
 
 		// points at which the limits touch (or collide)
-		final float collAx = posAx - vecAx * collisionTime;
-		final float collAy = posAy - vecAy * collisionTime;
-		final float collBx = posBx - vecBx * collisionTime;
-		final float collBy = posBy - vecBy * collisionTime;
+		final float collAx = prevAx + vecAx * collisionTime;
+		final float collAy = prevAy + vecAy * collisionTime;
+		final float collBx = prevBx + vecBx * collisionTime;
+		final float collBy = prevBy + vecBy * collisionTime;
 
 		// contact surface, used to detect if limits are on the same plane and
 		// to fullfill the collision report
