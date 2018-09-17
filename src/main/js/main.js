@@ -9,8 +9,6 @@ $(function() {
 
     init();
     setInterval(update, 16);
-
-
 });
 
 function init() {
@@ -55,40 +53,82 @@ function update() {
 function tick(delta) {
     bodies = bodies.sort(function (a, b) {
         return a.weight - b.weight;
-    })
+    });
 
     bodies.forEach(function(body) {
         move(body, body.velX * delta, body.velY * delta)
-    })
+    });
 }
 
 function move(bodyA, x, y) {
-    bodies.forEach(function(bodyB) {
+    bodies.some(function(bodyB) {
         if(bodyA.weight > bodyB.weight) {
-
+            collision(bodyA, x, y, bodyB).forEach(function(coll) {
+                move(bodyB, coll.penetration * coll.normalX, coll.penetration * coll.normalY);
+            });
+            return false;
         } else {
+            var collided = false;
+            collision(bodyA, x, y, bodyB).forEach(function(coll) {
+                collided = true;
 
+                var displ = (1 - dot(x, y, coll.penetration * coll.normalX + coll.penetration * coll.normalY)
+                    / pow2(coll.penetration)) * coll.penetration;
+
+                x += displ * coll.normalX;
+                y += displ * coll.normalY;
+            });
+            if(!collided)
+                return false;
+
+            move(bodyA, x, y);
+            return true;
         }
-    })
+    });
+    bodyA.x += x;
+    bodyA.y += y;
 }
 
 function collision(bodyA, x, y, bodyB) {
+
+    var collisions = [];
+
     bodyA.edges.forEach(function(edgeA) {
         bodyB.edges.forEach(function(edgeB) {
             if(edgeA.normalX != -edgeB.normalX || edgeA.normalY != -edgeB.normalY)
-                return
+                return;
 
-            if((bodyA.x + edgeA.x) * edgeA.normalX > (bodyB.x + edgeB.x) * edgeA.normalX
-            || (bodyA.y + edgeA.y) * edgeA.normalY > (bodyB.y + edgeB.y) * edgeA.normalY)
-                return
+            var rAx = bodyA.x + edgeA.x;
+            var rAy = bodyA.y + edgeA.y;
+            var rBx = bodyB.x + edgeB.x;
+            var rBy = bodyB.y + edgeB.y;
 
+            if(rAx * edgeA.normalX > rBx * edgeA.normalX
+            || rAy * edgeA.normalY > rBy * edgeA.normalY)
+                return;
 
-            if((bodyA.x + edgeA.x + x) * edgeA.normalX < (bodyB.x + edgeB.x) * edgeA.normalX
-            || (bodyA.y + edgeA.y + y) * edgeA.normalY < (bodyB.y + edgeB.y) * edgeA.normalY)
-                return
+            if((rAx + x) * edgeA.normalX < rBx * edgeA.normalX
+            || (rBy + y) * edgeA.normalY < rBy * edgeA.normalY)
+                return;
 
-        })
-    })
+            var t = dot(rAx - rBx, rAy - rBy, edgeA.normalX, edgeA.normalY) /
+                dot(-x, -y, edgeA.normalX, edgeA.normalY);
+
+            var cAx = rAx + t * x;
+            var cAy = rAy + t * y;
+
+            if(contactSurface(cAx, cAy, edgeA.length, rBx, rBy, edgeB.length, edgeA.normalX, edgeA.normalY) <= 0)
+                return;
+
+            collisions.push({
+                penetration: dot(rAx - rBx, rAy - rBy, edgeA.normalX, edgeA.normalY),
+                normalX: edgeA.normalX,
+                normalY: edgeA.normalY
+            });
+        });
+    });
+
+    return collisions;
 }
 
 function render() {
@@ -113,4 +153,27 @@ function render() {
             ctx.closePath();
         })
     })
+}
+
+function contactSurface(ax, ay, sizeA, bx, by, sizeB, nx, ny) {
+    sizeA /= 2;
+    sizeB /= 2;
+
+    //we take the 2 extremities of the 2 limits
+    var limitA1 = ny * (ax + sizeA) + nx * (ay + sizeA);
+    var limitA2 = ny * (ax - sizeA) + nx * (ay - sizeA);
+    var limitB1 = ny * (bx + sizeB) + nx * (by + sizeB);
+    var limitB2 = ny * (bx - sizeB) + nx * (by - sizeB);
+
+    //yields the overlapping length
+    return Math.min(Math.max(limitA1, limitA2), Math.max(limitB1, limitB2)) //minimum of the maximums
+        - Math.max(Math.min(limitA1, limitA2), Math.min(limitB1, limitB2)); //maximum of the minimums
+}
+
+function dot(x1, y1, x2, y2) {
+    return x1 * x2 + y1 * y2;
+}
+
+function pow2(x) {
+    return x * x;
 }
