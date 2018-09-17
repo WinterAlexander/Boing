@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Game Physics Builder</title>
+	
+	<meta charset="utf-8">
+	
+	<link rel="stylesheet" href="lib/jQuery/jquery-ui-1.12.1.css">
+	<script src="lib/jQuery/jquery-3.2.1.min.js"></script>
+	<script src="lib/jQuery/jquery-ui-1.12.1.min.js"></script>
+	<script src="lib/Bootstrap/bootstrap-3.3.7.min.js"></script>
+	
+	<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+	<link rel="stylesheet" href="lib/Bootstrap/style.css">
+	
+	<link rel="stylesheet" href="style.css">
+	
+	<script src="frontend.js"></script>
+	<script src="main.js"></script>
+</head>
+<body>
+<div class="container">
+	<div class="section">
+		<div class="jumbotron">
+			<h1>Game Physics Builder</h1>
+			<p>Online tool to create and test physics for your platformer game !</p>
+		</div>
+		<div id="thankyou">
+			Thank you very much for your donation ! ❤
+		</div>
+		<div class="row">
+			<div class="col-md-3">
+				<div class="panel panel-info">
+					<div class="panel-heading">
+						<h3 class="panel-title">Parameters</h3>
+					</div>
+					<div class="panel-body">
+						<h4>Jump heights:</h4>
+						<span class="input-group input-group-sm">
+              <span class="input-group-addon">
+	              <span class="formula-input-label">Y1</span>
+              </span>
+              <label for="y1"></label><input id="y1" class="form-control formula-input" type="text">
+              <span class="input-group-btn">
+                <a id="y1Helper" class="btn" tabindex="0" role="button" data-container="body"
+                   data-placement="left" data-html="true">
+	                <i class="material-icons">help</i>
+                </a>
+              </span>
+            </span>
+						<span class="input-group input-group-sm">
+              <span class="input-group-addon">
+                  <span class="formula-input-label">Y2</span>
+              </span>
+              <label for="y2"></label><input id="y2" class="form-control formula-input" type="text">
+              <span class="input-group-btn">
+                <a id="y2Helper" class="btn" tabindex="0" role="button" data-container="body"
+                   data-placement="left" data-html="true">
+                    <i class="material-icons">help</i>
+                </a>
+              </span>
+            </span>
+						<span class="input-group input-group-sm">
+              <span class="input-group-addon">
+                  <span class="formula-input-label">Y3</span>
+              </span>
+              <label for="y3"></label><input id="y3" class="form-control formula-input" type="text">
+              <span class="input-group-btn">
+                <a id="y3Helper" class="btn" tabindex="0" role="button" data-container="body"
+                   data-placement="left" data-html="true">
+                    <i class="material-icons">help</i>
+                </a>
+              </span>
+            </span>
+						<h4>Jump duration:</h4>
+						<span class="input-group input-group-sm">
+              <span class="input-group-addon">
+                <span class="formula-input-label">L</span>
+              </span>
+              <label for="l"></label><input id="l" class="form-control formula-input" type="text">
+              <span class="input-group-btn">
+                <a id="lHelper" class="btn" tabindex="0" role="button" data-container="body"
+                   data-placement="left" data-html="true">
+                  <i class="material-icons">help</i>
+                </a>
+              </span>
+            </span>
+					</div>
+				</div>
+				<div class="panel panel-info">
+					<div class="panel-heading">
+						<h3 class="panel-title">Presets</h3>
+					</div>
+					<div id="presets" class="btn-group-vertical">
+					</div>
+				</div>
+			</div>
+			<div class="col-md-6">
+				<div class="panel panel-info">
+					<div class="panel-heading">
+						<h3 class="panel-title">Tester</h3>
+					</div>
+					<div class="panel-body canvas-container">
+						<canvas id="testEngine" width="480" height="320"></canvas>
+						<span class="setting-label">Scale: <span id="scaleVal">x1</span></span>
+						<div class="setting" id="scaleSlider"></div>
+						<div class="row">
+							<div class="col-md-6">
+								<span class="setting-label">Speed: <span id="speedVal">x1</span></span>
+								<div class="setting" id="speedSlider"></div>
+							</div>
+							<div class="col-md-6">
+								<span class="setting-label">Acceleration: <span id="accVal">x1</span></span>
+								<div class="setting" id="accSlider"></div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="panel panel-info">
+					<div class="panel-heading">
+						<h3 class="panel-title">About</h3>
+					</div>
+					<div class="panel-body" id="moreInfo">
+						This game physics builder has been made to illustrate the calculations I've made in a paper. This paper goes deep
+						into the specifics of the jump formula and how to apply it. If you have any question feel free to contact me at
+						<a href="mailto:winter_alexander@outlook.com">winter_alexander@outlook.com</a>.
+						<br />
+						<br />
+						<center>
+							<a class="mega_link" href="jump_formula.pdf">Click here to download the paper</a>
+						</center>
+						<br />
+						<br />
+						<a href="example.txt">Here</a>'s a very basic pseudo-code implementation offering the same behavior as this tool.
+						(Also in the paper). Alternatively, you can consult the source code of this Game Physics Builder available on
+						<a href="https://github.com/WinterAlexander/GamePhysicsBuilder">GitHub</a>.
+					</div>
+				</div>
+			</div>
+			<div class="col-md-3">
+				<div class="panel panel-info">
+					<div class="panel-heading">
+						<h3 class="panel-title">Output</h3>
+						<a id="OutputHelper" class="panel-title" tabindex="0" role="button" data-container="body"
+						   data-placement="left" data-html="true">
+							<i class="material-icons">help</i>
+						</a>
+					</div>
+					<div class="panel-body">
+						<span id="formula" style="display: block;"><!-- otherwise the following br not work -->
+							V(t) = V0 + R*s - G*t + F*t*j
+						</span>
+						<br />
+						<div class="input-group input-group-sm formula-input-group">
+							<span class="input-group-addon">
+								<span class="formula-input-label">V0</span>
+							</span>
+							<label for="v0_out"></label><input id="v0_out" class="form-control formula-input" type="text" readonly>
+						</div>
+						<div class="input-group input-group-sm formula-input-group">
+							<span class="input-group-addon">
+								<span class="formula-input-label">R</span>
+							</span>
+							<label for="r_out"></label><input id="r_out" class="form-control formula-input" type="text" readonly>
+						</div>
+						<div class="input-group input-group-sm formula-input-group">
+              <span class="input-group-addon">
+                <span class="formula-input-label">G</span>
+              </span>
+							<label for="g_out"></label><input id="g_out" class="form-control formula-input" type="text" readonly>
+						</div>
+						<div class="input-group input-group-sm formula-input-group">
+              <span class="input-group-addon">
+                <span class="formula-input-label">F</span>
+              </span>
+							<label for="f_out"></label><input id="f_out" class="form-control formula-input" type="text" readonly>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<footer>
+	<!-- I don't really want to copyright this page after all-->
+	<p>App and concept by <a href="https://github.com/WinterAlexander">Alexander Winter</a></p>
+	<br />
+	<p>
+		<form id="paypal" action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top">
+			<input type="hidden" name="cmd" value="_s-xclick">
+			<input type="hidden" name="hosted_button_id" value="9EAZZ26WHXXCC">
+			<input type="image" src="https://www.paypalobjects.com/en_US/i/btn/btn_donate_SM.gif" border="0" name="submit" alt="PayPal - The safer, easier way to pay online!">
+			<img alt="" border="0" src="https://www.paypalobjects.com/en_US/i/scr/pixel.gif" width="1" height="1">
+		</form>
+	or <a href="mailto:winter_alexander@outlook.com">Contact</a>
+	</p>
+	<br />
+	<br />
+	<p style="font-size: small">Thanks to <a href="https://github.com/PierreOlivierBrillant">Pierre-Olivier Brillant</a> for his contribution to the design of this
+		page.</p>
+</footer>
+</body>
+</html>
