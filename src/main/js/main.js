@@ -24,6 +24,27 @@ function init() {
                 length: 20,
                 normalX: 1,
                 normalY: 0
+            },
+            {
+                x: -20,
+                y: 0,
+                length: 20,
+                normalX: -1,
+                normalY: 0
+            },
+            {
+                x: -5,
+                y: 10,
+                length: 30,
+                normalX: 0,
+                normalY: 1
+            },
+            {
+                x: -5,
+                y: -10,
+                length: 30,
+                normalX: 0,
+                normalY: -1
             }
         ],
         weight: 1
@@ -36,9 +57,30 @@ function init() {
             {
                 x: -6,
                 y: 0,
-                length: 20,
+                length: 30,
                 normalX: -1,
                 normalY: 0
+            },
+            {
+                x: 12,
+                y: 0,
+                length: 30,
+                normalX: 1,
+                normalY: 0
+            },
+            {
+                x: 3,
+                y: 15,
+                length: 18,
+                normalX: 0,
+                normalY: 1
+            },
+            {
+                x: 3,
+                y: -15,
+                length: 18,
+                normalX: 0,
+                normalY: -1
             }
         ],
         weight: 2
@@ -46,25 +88,28 @@ function init() {
 }
 
 function update() {
-    tick(1 / 60);
+    tick(1 / 2);
     render();
 }
 
 function tick(delta) {
     bodies = bodies.sort(function (a, b) {
-        return a.weight - b.weight;
+        return b.weight - a.weight;
     });
 
     bodies.forEach(function(body) {
-        move(body, body.velX * delta, body.velY * delta)
+        move(body, body.velX * delta, body.velY * delta, body.weight)
     });
 }
 
-function move(bodyA, x, y) {
-    bodies.some(function(bodyB) {
-        if(bodyA.weight > bodyB.weight) {
+function move(bodyA, x, y, weight) {
+    if(!bodies.some(function(bodyB) {
+        if(bodyA == bodyB)
+            return false;
+
+        if(weight > bodyB.weight) {
             collision(bodyA, x, y, bodyB).forEach(function(coll) {
-                move(bodyB, coll.penetration * coll.normalX, coll.penetration * coll.normalY);
+                move(bodyB, coll.penetration * coll.normalX, coll.penetration * coll.normalY, weight);
             });
             return false;
         } else {
@@ -72,21 +117,19 @@ function move(bodyA, x, y) {
             collision(bodyA, x, y, bodyB).forEach(function(coll) {
                 collided = true;
 
-                var displ = (1 - dot(x, y, coll.penetration * coll.normalX + coll.penetration * coll.normalY)
-                    / pow2(coll.penetration)) * coll.penetration;
-
-                x += displ * coll.normalX;
-                y += displ * coll.normalY;
+                x -= coll.penetration * coll.normalX;
+                y -= coll.penetration * coll.normalY;
             });
-            if(!collided)
+            if(!collided || x * y === 0)
                 return false;
 
-            move(bodyA, x, y);
+            move(bodyA, x, y, bodyB.weight);
             return true;
         }
-    });
-    bodyA.x += x;
-    bodyA.y += y;
+    })) {
+        bodyA.x += x;
+        bodyA.y += y;
+    }
 }
 
 function collision(bodyA, x, y, bodyB) {
@@ -107,8 +150,9 @@ function collision(bodyA, x, y, bodyB) {
             || rAy * edgeA.normalY > rBy * edgeA.normalY)
                 return;
 
-            if((rAx + x) * edgeA.normalX < rBx * edgeA.normalX
-            || (rBy + y) * edgeA.normalY < rBy * edgeA.normalY)
+            var pene = dot(rAx - rBx + x, rAy - rBy + y, edgeA.normalX, edgeA.normalY);
+
+            if(pene <= 0)
                 return;
 
             var t = dot(rAx - rBx, rAy - rBy, edgeA.normalX, edgeA.normalY) /
@@ -117,11 +161,11 @@ function collision(bodyA, x, y, bodyB) {
             var cAx = rAx + t * x;
             var cAy = rAy + t * y;
 
-            if(contactSurface(cAx, cAy, edgeA.length, rBx, rBy, edgeB.length, edgeA.normalX, edgeA.normalY) <= 0)
+            if((contactSurface(cAx, cAy, edgeA.length, rBx, rBy, edgeB.length, edgeA.normalX, edgeA.normalY)) <= 0)
                 return;
 
             collisions.push({
-                penetration: dot(rAx - rBx, rAy - rBy, edgeA.normalX, edgeA.normalY),
+                penetration: pene,
                 normalX: edgeA.normalX,
                 normalY: edgeA.normalY
             });
@@ -176,8 +220,4 @@ function dot(x1, y1, x2, y2) {
 
 function pow2(x) {
     return x * x;
-}
-
-function test() {
-    var i = 0;
 }
