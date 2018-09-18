@@ -1,22 +1,22 @@
-var canvas;
-var ctx;
+let canvas;
+let ctx;
 
-var bodies;
+let bodies;
 
 $(function() {
     canvas = document.getElementById("testEngine");
     ctx = canvas.getContext("2d");
 
-    init();
+    initRandom();
     setInterval(update, 16);
 });
 
 function init() {
     bodies = [{
         x: 50,
-        y: 50,
+        y: 70,
         velX: 10,
-        velY: 0,
+        velY: -0.05,
         edges: [
             {
                 x: 10,
@@ -84,93 +84,226 @@ function init() {
             }
         ],
         weight: 2
+    },  {
+        x: 0,
+        y: 40,
+        velX: 2,
+        velY: 0.5,
+        edges: [
+            {
+                x: -6,
+                y: 0,
+                length: 30,
+                normalX: -1,
+                normalY: 0
+            },
+            {
+                x: 12,
+                y: 0,
+                length: 30,
+                normalX: 1,
+                normalY: 0
+            },
+            {
+                x: 3,
+                y: 15,
+                length: 18,
+                normalX: 0,
+                normalY: 1
+            },
+            {
+                x: 3,
+                y: -15,
+                length: 18,
+                normalX: 0,
+                normalY: -1
+            }
+        ],
+        weight: 3
     }];
 }
 
+function initRandom() {
+    bodies = [];
+    for(let i = 0; i < 200; i++) {
+        let body = {
+            x: Math.random() * 380 + 10,
+            y: Math.random() * 380 + 10,
+            velX: (Math.random() * 2 - 1) * 5,
+            velY: (Math.random() * 2 - 1) * 5,
+            edges: [
+                {
+                    x: -10,
+                    y: 0,
+                    length: 20,
+                    normalX: -1,
+                    normalY: 0
+                },
+                {
+                    x: 10,
+                    y: 0,
+                    length: 20,
+                    normalX: 1,
+                    normalY: 0
+                },
+                {
+                    x: 0,
+                    y: -10,
+                    length: 20,
+                    normalX: 0,
+                    normalY: -1
+                },
+                {
+                    x: 0,
+                    y: 10,
+                    length: 20,
+                    normalX: 0,
+                    normalY: 1
+                }
+            ],
+            weight: i
+        };
+
+        addIfNotColliding: {
+            for(let other of bodies)
+                if(Math.max(Math.abs(other.x - body.x), Math.abs(other.y - body.y)) < 20)
+                {
+                    i--;
+                    break addIfNotColliding;
+                }
+
+
+            bodies.push(body);
+        }
+    }
+
+    bodies.push({
+        x: 200,
+        y: 200,
+        velX: 0,
+        velY: 0,
+        edges: [
+            {
+                x: -200,
+                y: 0,
+                length: 400,
+                normalX: 1,
+                normalY: 0
+            },
+            {
+                x: 200,
+                y: 0,
+                length: 400,
+                normalX: -1,
+                normalY: 0
+            },
+            {
+                x: 0,
+                y: -200,
+                length: 400,
+                normalX: 0,
+                normalY: 1
+            },
+            {
+                x: 0,
+                y: 200,
+                length: 400,
+                normalX: 0,
+                normalY: -1
+            }
+        ],
+        weight: 1000
+    });
+}
+
 function update() {
-    tick(1 / 2);
+    tick(1 / 10);
     render();
 }
 
 function tick(delta) {
-    bodies = bodies.sort(function (a, b) {
+    bodies = bodies.sort((a, b) => {
         return b.weight - a.weight;
     });
 
-    bodies.forEach(function(body) {
-        move(body, body.velX * delta, body.velY * delta, body.weight)
-    });
-}
-
-function move(bodyA, x, y, weight) {
-    if(!bodies.some(function(bodyB) {
-        if(bodyA == bodyB)
-            return false;
-
-        if(weight > bodyB.weight) {
-            collision(bodyA, x, y, bodyB).forEach(function(coll) {
-                move(bodyB, coll.penetration * coll.normalX, coll.penetration * coll.normalY, weight);
-            });
-            return false;
-        } else {
-            var collided = false;
-            collision(bodyA, x, y, bodyB).forEach(function(coll) {
-                collided = true;
-
-                x -= coll.penetration * coll.normalX;
-                y -= coll.penetration * coll.normalY;
-            });
-            if(!collided || x * y === 0)
-                return false;
-
-            move(bodyA, x, y, bodyB.weight);
-            return true;
-        }
-    })) {
-        bodyA.x += x;
-        bodyA.y += y;
+    for(let body of bodies) {
+        move(body, body.velX * delta, body.velY * delta, body.weight);
     }
 }
 
+function move(bodyA, x, y, weight) {
+    for(let bodyB of bodies) {
+        if(bodyA == bodyB)
+            continue;
+
+        if(weight > bodyB.weight) {
+            let moved = true;
+            collision(bodyA, x, y, bodyB).forEach(coll => {
+                if(!move(bodyB, coll.penetration * coll.normalX, coll.penetration * coll.normalY, weight))
+                    moved = false;
+            });
+
+            if(moved)
+                continue;
+        }
+
+        let collided = false;
+        collision(bodyA, x, y, bodyB).forEach(coll => {
+            collided = true;
+
+            x -= coll.penetration * coll.normalX;
+            y -= coll.penetration * coll.normalY;
+        });
+        if(!collided || Math.abs(x) + Math.abs(y) === 0)
+            continue;
+
+        move(bodyA, x, y, bodyB.weight);
+        return false;
+    }
+
+    bodyA.x += x;
+    bodyA.y += y;
+    return true;
+}
+
 function collision(bodyA, x, y, bodyB) {
+    let collisions = [];
 
-    var collisions = [];
-
-    bodyA.edges.forEach(function(edgeA) {
-        bodyB.edges.forEach(function(edgeB) {
+    for(let edgeA of bodyA.edges) {
+        for(let edgeB of bodyB.edges) {
             if(edgeA.normalX != -edgeB.normalX || edgeA.normalY != -edgeB.normalY)
-                return;
+                continue;
 
-            var rAx = bodyA.x + edgeA.x;
-            var rAy = bodyA.y + edgeA.y;
-            var rBx = bodyB.x + edgeB.x;
-            var rBy = bodyB.y + edgeB.y;
+            let rAx = bodyA.x + edgeA.x;
+            let rAy = bodyA.y + edgeA.y;
+            let rBx = bodyB.x + edgeB.x;
+            let rBy = bodyB.y + edgeB.y;
 
             if(rAx * edgeA.normalX > rBx * edgeA.normalX
             || rAy * edgeA.normalY > rBy * edgeA.normalY)
-                return;
+                continue;
 
-            var pene = dot(rAx - rBx + x, rAy - rBy + y, edgeA.normalX, edgeA.normalY);
+            let pene = dot(rAx - rBx + x, rAy - rBy + y, edgeA.normalX, edgeA.normalY);
 
             if(pene <= 0)
-                return;
+                continue;
 
-            var t = dot(rAx - rBx, rAy - rBy, edgeA.normalX, edgeA.normalY) /
+            let t = dot(rAx - rBx, rAy - rBy, edgeA.normalX, edgeA.normalY) /
                 dot(-x, -y, edgeA.normalX, edgeA.normalY);
 
-            var cAx = rAx + t * x;
-            var cAy = rAy + t * y;
+            let cAx = rAx + t * x;
+            let cAy = rAy + t * y;
 
             if((contactSurface(cAx, cAy, edgeA.length, rBx, rBy, edgeB.length, edgeA.normalX, edgeA.normalY)) <= 0)
-                return;
+                continue;
 
             collisions.push({
                 penetration: pene,
                 normalX: edgeA.normalX,
                 normalY: edgeA.normalY
             });
-        });
-    });
+        }
+    }
 
     return collisions;
 }
@@ -178,14 +311,14 @@ function collision(bodyA, x, y, bodyB) {
 function render() {
 	ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-    bodies.forEach(function(body) {
+    for(let body of bodies) {
         ctx.beginPath();
         ctx.rect(body.x - 2, body.y - 2, 4, 4);
         ctx.fillStyle = "#50FF50";
         ctx.fill();
         ctx.closePath();
 
-        body.edges.forEach(function(edge){
+        for(let edge of body.edges) {
             ctx.beginPath();
             ctx.rect(body.x + edge.x - edge.length * Math.abs(edge.normalY) / 2,
                 body.y + edge.y - edge.length * Math.abs(edge.normalX) / 2,
@@ -195,8 +328,8 @@ function render() {
             ctx.fillStyle = "#FF5050";
             ctx.fill();
             ctx.closePath();
-        })
-    })
+        }
+    }
 }
 
 function contactSurface(ax, ay, sizeA, bx, by, sizeB, nx, ny) {
@@ -204,10 +337,10 @@ function contactSurface(ax, ay, sizeA, bx, by, sizeB, nx, ny) {
     sizeB /= 2;
 
     //we take the 2 extremities of the 2 limits
-    var limitA1 = ny * (ax + sizeA) + nx * (ay + sizeA);
-    var limitA2 = ny * (ax - sizeA) + nx * (ay - sizeA);
-    var limitB1 = ny * (bx + sizeB) + nx * (by + sizeB);
-    var limitB2 = ny * (bx - sizeB) + nx * (by - sizeB);
+    let limitA1 = ny * (ax + sizeA) + nx * (ay + sizeA);
+    let limitA2 = ny * (ax - sizeA) + nx * (ay - sizeA);
+    let limitB1 = ny * (bx + sizeB) + nx * (by + sizeB);
+    let limitB2 = ny * (bx - sizeB) + nx * (by - sizeB);
 
     //yields the overlapping length
     return Math.min(Math.max(limitA1, limitA2), Math.max(limitB1, limitB2)) //minimum of the maximums
