@@ -177,3 +177,7 @@ function dot(x1, y1, x2, y2) {
 function pow2(x) {
     return x * x;
 }
+
+function test() {
+    var i = 0;
+}
