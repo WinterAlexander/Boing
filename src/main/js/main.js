@@ -9,7 +9,7 @@ $(function() {
     canvas = document.getElementById("testEngine");
     ctx = canvas.getContext("2d");
 
-    initChain();
+    initRandom();
     setInterval(update, 16);
 });
 
@@ -184,7 +184,7 @@ function initRandom() {
 function initChain() {
     bodies = [];
 
-    for(let i = 0; i < 10; i++) {
+    for(let i = 0; i < 2; i++) {
         bodies.push({
             x: i * 25 + 50,
             y: 200,
@@ -305,7 +305,7 @@ function move(bodyA, x, y, weight) {
             y -= coll.penetration * coll.normalY;
         });
 
-        if(!collided || Math.abs(x) + Math.abs(y) === 0)
+        if(!collided)
             continue;
 
         if(weight == bodyB.weight) {
@@ -367,9 +367,11 @@ function render() {
 	ctx.clearRect(0, 0, canvas.width, canvas.height);
 
     for(let body of bodies) {
+        let color = randColor(body.weight);
+
         ctx.beginPath();
         ctx.rect(body.x - 2, body.y - 2, 4, 4);
-        ctx.fillStyle = "#50FF50";
+        ctx.fillStyle = color;
         ctx.fill();
         ctx.closePath();
 
@@ -380,7 +382,7 @@ function render() {
                 Math.max(2, edge.length * Math.abs(edge.normalY)),
                 Math.max(2, edge.length * Math.abs(edge.normalX)));
 
-            ctx.fillStyle = "#FF5050";
+            ctx.fillStyle = color;
             ctx.fill();
             ctx.closePath();
         }
@@ -411,6 +413,16 @@ function pow2(x) {
 }
 
 function random() {
-    let x = Math.sin(seed++) * 10000;
+    return rand(seed++);
+}
+
+function rand(seed) {
+    let x = Math.sin(seed) * 10000;
     return x - Math.floor(x);
+}
+
+function randColor(seed) {
+    return "rgb(" + (rand(seed) * 240) + ","
+        + (rand(seed * 8) * 240) + ","
+        + (rand(seed - 15) * 240) + ")";
 }
