@@ -9,8 +9,8 @@ $(function() {
     canvas = document.getElementById("testEngine");
     ctx = canvas.getContext("2d");
 
-    initRandom();
-    setInterval(update, 16);
+    initCornerCorner();
+    setInterval(update, 10);
 });
 
 function init() {
@@ -125,9 +125,9 @@ function init() {
     }];
 }
 
-function initRandom() {
+function initRandom(count) {
     bodies = [];
-    for(let i = 0; i < 200; i++) {
+    for(let i = 0; i < count; i++) {
         let body = {
             x: random() * 380 + 10,
             y: random() * 380 + 10,
@@ -227,6 +227,82 @@ function initChain() {
     makeBorder();
 }
 
+function initCornerCorner() {
+    bodies = [{
+        x: 100,
+        y: 100,
+        velX: 10,
+        velY: 10,
+        edges: [
+            {
+                x: 10,
+                y: 0,
+                length: 20,
+                normalX: 1,
+                normalY: 0
+            },
+            {
+                x: -10,
+                y: 0,
+                length: 20,
+                normalX: -1,
+                normalY: 0
+            },
+            {
+                x: 0,
+                y: 10,
+                length: 20,
+                normalX: 0,
+                normalY: 1
+            },
+            {
+                x: 0,
+                y: -10,
+                length: 20,
+                normalX: 0,
+                normalY: -1
+            }
+        ],
+        weight: 1
+    },  {
+        x: 300,
+        y: 300,
+        velX: -10,
+        velY: -10,
+        edges: [
+            {
+                x: 10,
+                y: 0,
+                length: 20,
+                normalX: 1,
+                normalY: 0
+            },
+            {
+                x: -10,
+                y: 0,
+                length: 20,
+                normalX: -1,
+                normalY: 0
+            },
+            {
+                x: 0,
+                y: 10,
+                length: 20,
+                normalX: 0,
+                normalY: 1
+            },
+            {
+                x: 0,
+                y: -10,
+                length: 20,
+                normalX: 0,
+                normalY: -1
+            }
+        ],
+        weight: 2
+    }];
+}
+
 function makeBorder() {
     bodies.push({
         x: 200,
@@ -268,7 +344,7 @@ function makeBorder() {
 }
 
 function update() {
-    tick(1 / 10);
+    tick(1 / 100);
     render();
 }
 
