@@ -3,11 +3,13 @@ let ctx;
 
 let bodies;
 
+let seed = 34352;
+
 $(function() {
     canvas = document.getElementById("testEngine");
     ctx = canvas.getContext("2d");
 
-    initRandom();
+    initChain();
     setInterval(update, 16);
 });
 
@@ -127,10 +129,10 @@ function initRandom() {
     bodies = [];
     for(let i = 0; i < 200; i++) {
         let body = {
-            x: Math.random() * 380 + 10,
-            y: Math.random() * 380 + 10,
-            velX: (Math.random() * 2 - 1) * 5,
-            velY: (Math.random() * 2 - 1) * 5,
+            x: random() * 380 + 10,
+            y: random() * 380 + 10,
+            velX: (random() * 2 - 1) * 5,
+            velY: (random() * 2 - 1) * 5,
             edges: [
                 {
                     x: -10,
@@ -176,7 +178,56 @@ function initRandom() {
             bodies.push(body);
         }
     }
+    makeBorder();
+}
 
+function initChain() {
+    bodies = [];
+
+    for(let i = 0; i < 10; i++) {
+        bodies.push({
+            x: i * 25 + 50,
+            y: 200,
+            velX: -10,
+            velY: 0,
+            edges: [
+                {
+                    x: -10,
+                    y: 0,
+                    length: 20,
+                    normalX: -1,
+                    normalY: 0
+                },
+                {
+                    x: 10,
+                    y: 0,
+                    length: 20,
+                    normalX: 1,
+                    normalY: 0
+                },
+                {
+                    x: 0,
+                    y: -10,
+                    length: 20,
+                    normalX: 0,
+                    normalY: -1
+                },
+                {
+                    x: 0,
+                    y: 10,
+                    length: 20,
+                    normalX: 0,
+                    normalY: 1
+                }
+            ],
+            weight: i
+        });
+    }
+
+    makeBorder();
+}
+
+function makeBorder() {
     bodies.push({
         x: 200,
         y: 200,
@@ -250,12 +301,16 @@ function move(bodyA, x, y, weight) {
         let collided = false;
         collision(bodyA, x, y, bodyB).forEach(coll => {
             collided = true;
-
             x -= coll.penetration * coll.normalX;
             y -= coll.penetration * coll.normalY;
         });
+
         if(!collided || Math.abs(x) + Math.abs(y) === 0)
             continue;
+
+        if(weight == bodyB.weight) {
+            console.log("warning, collided with pusher (" + x + "," + y + ")");
+        }
 
         move(bodyA, x, y, bodyB.weight);
         return false;
@@ -353,4 +408,9 @@ function dot(x1, y1, x2, y2) {
 
 function pow2(x) {
     return x * x;
+}
+
+function random() {
+    let x = Math.sin(seed++) * 10000;
+    return x - Math.floor(x);
 }
