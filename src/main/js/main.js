@@ -9,7 +9,7 @@ $(function() {
     canvas = document.getElementById("testEngine");
     ctx = canvas.getContext("2d");
 
-    initCornerCorner();
+    initPlayerAndTiles();
     setInterval(update, 10);
 });
 
@@ -303,6 +303,126 @@ function initCornerCorner() {
     }];
 }
 
+function initPlayerAndTiles() {
+    bodies = [];
+
+    for(let i = 0; i < 400; i += 20)
+    {
+        if(i == 200)
+            continue;
+
+        bodies.push({
+           x: i,
+           y: 300,
+           velX: 0,
+           velY: 0,
+           edges: [
+                {
+                    x: 10,
+                    y: 0,
+                    length: 20,
+                    normalX: 1,
+                    normalY: 0
+                },
+                {
+                    x: -10,
+                    y: 0,
+                    length: 20,
+                    normalX: -1,
+                    normalY: 0
+                },
+                {
+                    x: 0,
+                    y: 10,
+                    length: 20,
+                    normalX: 0,
+                    normalY: 1
+                },
+                {
+                    x: 0,
+                    y: -10,
+                    length: 20,
+                    normalX: 0,
+                    normalY: -1
+                }
+            ],
+            weight: 1000 + i
+        });
+    }
+
+    let player = {
+      x: 200,
+      y: 200,
+      velX: 0,
+      velY: 0,
+
+        edges: [
+            {
+                x: 10,
+                y: 0,
+                length: 20,
+                normalX: 1,
+                normalY: 0
+            },
+            {
+                x: -10,
+                y: 0,
+                length: 20,
+                normalX: -1,
+                normalY: 0
+            },
+            {
+                x: 0,
+                y: 10,
+                length: 20,
+                normalX: 0,
+                normalY: 1
+            },
+            {
+                x: 0,
+                y: -10,
+                length: 20,
+                normalX: 0,
+                normalY: -1
+            }
+        ],
+        weight: 1
+    };
+
+    document.addEventListener("keydown", function(e) {
+        if (e.keyCode == 39 || e.keyCode == 68) {
+            player.velX = 10;
+            e.preventDefault();
+        } else if (e.keyCode == 38 || e.keyCode == 87 || e.keyCode == 32) {
+            player.velY = -10;
+            e.preventDefault();
+        } else if (e.keyCode == 37 || e.keyCode == 65) {
+            player.velX = -10;
+            e.preventDefault();
+        } else if (e.keyCode == 40) {
+            player.velY = 10;
+            e.preventDefault();
+        }
+    }, false);
+    document.addEventListener("keyup", function(e) {
+        if(e.keyCode == 39 || e.keyCode == 68) {
+            player.velX = 0;
+            e.preventDefault();
+        } else if(e.keyCode == 38 || e.keyCode == 87 || e.keyCode == 32) {
+            player.velY = 0;
+            e.preventDefault();
+        } else if(e.keyCode == 37 || e.keyCode == 65) {
+            player.velX = 0;
+            e.preventDefault();
+        } else if(e.keyCode == 40) {
+            player.velY = 0;
+            e.preventDefault();
+        }
+    }, false);
+
+    bodies.push(player);
+}
+
 function makeBorder() {
     bodies.push({
         x: 200,
@@ -425,7 +545,9 @@ function collision(bodyA, x, y, bodyB) {
             let cAx = rAx + t * x;
             let cAy = rAy + t * y;
 
-            if((contactSurface(cAx, cAy, edgeA.length, rBx, rBy, edgeB.length, edgeA.normalX, edgeA.normalY)) <= 0)
+            let surface = contactSurface(cAx, cAy, edgeA.length, rBx, rBy, edgeB.length, edgeA.normalX, edgeA.normalY);
+
+            if(surface < 0 || !surface && ((x < y) ^ Math.abs(edgeA.normalX)))
                 continue;
 
             collisions.push({
