@@ -464,7 +464,7 @@ function makeBorder() {
 }
 
 function update() {
-    tick(1 / 50);
+    tick(1 / 10);
     render();
 }
 
@@ -536,8 +536,8 @@ function collision(bodyA, x, y, bodyB) {
             let rBx = bodyB.x + edgeB.x;
             let rBy = bodyB.y + edgeB.y;
 
-            if(rAx * edgeA.normalX > rBx * edgeA.normalX
-            || rAy * edgeA.normalY > rBy * edgeA.normalY)
+            if(rAx * edgeA.normalX - rBx * edgeA.normalX > 0.001
+            || rAy * edgeA.normalY - rBy * edgeA.normalY > 0.001)
                 continue;
 
             let pene = dot(rAx - rBx + x, rAy - rBy + y, edgeA.normalX, edgeA.normalY);
