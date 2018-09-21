@@ -9,7 +9,7 @@ $(function() {
     canvas = document.getElementById("testEngine");
     ctx = canvas.getContext("2d");
 
-    initPlayerAndTiles();
+    initRandom(100);
     setInterval(update, 10);
 });
 
@@ -464,7 +464,7 @@ function makeBorder() {
 }
 
 function update() {
-    tick(1 / 100);
+    tick(1 / 50);
     render();
 }
 
@@ -495,20 +495,26 @@ function move(bodyA, x, y, weight) {
         }
 
         let collided = false;
+
+        let pX = 0, pY = 0;
+
         collision(bodyA, x, y, bodyB).forEach(coll => {
             collided = true;
-            x -= coll.penetration * coll.normalX;
-            y -= coll.penetration * coll.normalY;
+            pX -= coll.penetration * coll.normalX;
+            pY -= coll.penetration * coll.normalY;
         });
 
-        if(!collided)
+        if(!collided || !(Math.abs(pX) + Math.abs(pY)))
             continue;
 
         if(weight == bodyB.weight) {
             console.log("warning, collided with pusher (" + x + "," + y + ")");
         }
 
-        move(bodyA, x, y, bodyB.weight);
+        move(bodyA, pX, pY, bodyB.weight);
+
+        if(Math.abs(x + pX) + Math.abs(y + pY))
+            move(bodyA, x + pX, y + pY, weight);
         return false;
     }
 
