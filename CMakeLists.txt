@@ -1,6 +1,10 @@
 cmake_minimum_required(VERSION 3.7)
 project(Boing)
 
+set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
+
 find_package(Threads REQUIRED)
 
 if(CMAKE_COMPILER_IS_GNUCXX)
@@ -10,13 +14,11 @@ endif()
 set(CMAKE_CXX_STANDARD 17)
 
 include_directories(include)
-file(GLOB SOURCE_FILES
+
+
+file(GLOB_RECURSE SOURCE_FILES
         ${PROJECT_SOURCE_DIR}/src/main/cpp/*.cpp
-        ${PROJECT_SOURCE_DIR}/include/*.h
-        ${PROJECT_SOURCE_DIR}/src/main/cpp/*/*.cpp
-        ${PROJECT_SOURCE_DIR}/include/*/*.h
-        ${PROJECT_SOURCE_DIR}/src/main/cpp/*/*/*.cpp
-        ${PROJECT_SOURCE_DIR}/include/*/*/*.h)
+        ${PROJECT_SOURCE_DIR}/include/*.h)
 
 add_library(Boing_lib ${SOURCE_FILES})
 add_executable(Boing ${SOURCE_FILES})

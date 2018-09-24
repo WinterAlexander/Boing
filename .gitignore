@@ -42,5 +42,3 @@ cmake-build-debug/
 
 lib/*/*
 !lib/*/CMakeLists.txt
-
-*_tests
