@@ -6,6 +6,8 @@
 
 namespace boing {
 	class describable;
+
+	std::ostream& operator<<(std::ostream& stream, const describable& describable);
 }
 
 /**
@@ -17,10 +19,5 @@ public:
 
 	virtual std::ostream& describe(std::ostream& stream) const = 0;
 };
-
-namespace boing {
-	std::ostream& operator<<(std::ostream& stream, const describable& describable);
-}
-
 #endif //BOING_DESCRIBABLE_H
 

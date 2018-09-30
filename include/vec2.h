@@ -2,6 +2,7 @@
 #define BOING_VEC2_H
 
 #include "describable.h"
+#include "boing.h"
 
 namespace boing {
     class vec2;
@@ -16,14 +17,16 @@ namespace boing {
  */
 class boing::vec2 : public boing::describable {
 public:
-	const int x, y;
+	static const vec2 ZERO;
+
+	scalar_t x, y;
 
     /**
      * Constructs a vec2 from x and y components
      * @param x x component of the vector
      * @param y y component of the vector
      */
-    vec2(int x, int y)
+    vec2(scalar_t x, scalar_t y)
         : x(x), y(y) {
 
     }
@@ -33,10 +36,15 @@ public:
      * @param vec vector to compute dot product with
      * @return dot product of this and specified vector
      */
-    int dot(const vec2& vec) const;
+    scalar_t dot(const vec2& vec) const;
 
-	std::ostream& describe(std::ostream& stream) const;
+	std::ostream& describe(std::ostream& stream) const override;
+
+	vec2 operator+(const vec2& addend) const;
+	vec2 operator-(const vec2& minuend) const;
+	vec2 operator-() const;
+	vec2 operator*(scalar_t scalar) const;
+	vec2 operator/(scalar_t scalar) const;
 };
-
 
 #endif //BOING_VEC2_H
