@@ -5,11 +5,13 @@ let bodies;
 
 let seed = 34352;
 
+let abs = Math.abs;
+
 $(function() {
     canvas = document.getElementById("testEngine");
     ctx = canvas.getContext("2d");
 
-    initCornerCorner(100);
+    initRandom(100);
     setInterval(update, 10);
 });
 
@@ -163,7 +165,7 @@ function initRandom(count) {
                     normalY: 1
                 }
             ],
-            weight: i
+            weight: Math.floor(i / 2)
         };
 
         addIfNotColliding: {
@@ -576,16 +578,12 @@ function move(bodyA, x, y, weight) {
             pY -= coll.penetration * coll.normalY;
         });
 
-        if(!collided || !(Math.abs(pX) + Math.abs(pY)))
+        if(!collided || Math.abs(pX) + Math.abs(pY) < 0.001)
             continue;
 
-        if(weight == bodyB.weight) {
-            console.log("warning, collided with pusher (" + x + "," + y + ")");
-        }
+        //move(bodyA, pX, pY, bodyB.weight);
 
-        move(bodyA, pX, pY, bodyB.weight);
-
-        if(Math.abs(x + pX) + Math.abs(y + pY))
+        if(Math.abs(x + pX) + Math.abs(y + pY) > 0.001)
             move(bodyA, x + pX, y + pY, weight);
         return false;
     }
@@ -625,7 +623,7 @@ function collision(bodyA, x, y, bodyB) {
 
             let surface = contactSurface(cAx, cAy, edgeA.length, rBx, rBy, edgeB.length, edgeA.normalX, edgeA.normalY);
 
-            if(surface < 0 || !surface && ((x < y) == (edgeA.normalX > edgeA.normalY)))
+            if(surface < 0 || !surface && ((abs(x) < abs(y)) ^ abs(edgeA.normalX)))
                 continue;
 
             collisions.push({
