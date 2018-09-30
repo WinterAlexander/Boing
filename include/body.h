@@ -2,11 +2,12 @@
 #ifndef BOING_BODY_H
 #define BOING_BODY_H
 
-#include "edge.h"
+#include "vec2.h"
 #include "vector"
 
 namespace boing {
 	class body;
+	class edge;
 }
 
 using boing::edge;
@@ -16,7 +17,7 @@ private:
 	std::vector<edge> edges;
 
 public:
-	const vec2& getPosition() const;
+	const vec2& get_position() const;
 };
 
 #endif //BOING_BODY_H

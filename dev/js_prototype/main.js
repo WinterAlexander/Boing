@@ -9,7 +9,7 @@ $(function() {
     canvas = document.getElementById("testEngine");
     ctx = canvas.getContext("2d");
 
-    initRandom(100);
+    initCornerCorner(100);
     setInterval(update, 10);
 });
 
@@ -300,6 +300,78 @@ function initCornerCorner() {
             }
         ],
         weight: 2
+    }, {
+        x: 300,
+        y: 100,
+        velX: -2,
+        velY: 2,
+        edges: [
+            {
+                x: 10,
+                y: 0,
+                length: 20,
+                normalX: 1,
+                normalY: 0
+            },
+            {
+                x: -10,
+                y: 0,
+                length: 20,
+                normalX: -1,
+                normalY: 0
+            },
+            {
+                x: 0,
+                y: 10,
+                length: 20,
+                normalX: 0,
+                normalY: 1
+            },
+            {
+                x: 0,
+                y: -10,
+                length: 20,
+                normalX: 0,
+                normalY: -1
+            }
+        ],
+        weight: 1
+    },  {
+        x: 100,
+        y: 300,
+        velX: 2,
+        velY: -2,
+        edges: [
+            {
+                x: 10,
+                y: 0,
+                length: 20,
+                normalX: 1,
+                normalY: 0
+            },
+            {
+                x: -10,
+                y: 0,
+                length: 20,
+                normalX: -1,
+                normalY: 0
+            },
+            {
+                x: 0,
+                y: 10,
+                length: 20,
+                normalX: 0,
+                normalY: 1
+            },
+            {
+                x: 0,
+                y: -10,
+                length: 20,
+                normalX: 0,
+                normalY: -1
+            }
+        ],
+        weight: 2
     }];
 }
 
@@ -553,7 +625,7 @@ function collision(bodyA, x, y, bodyB) {
 
             let surface = contactSurface(cAx, cAy, edgeA.length, rBx, rBy, edgeB.length, edgeA.normalX, edgeA.normalY);
 
-            if(surface < 0 || !surface && ((x < y) ^ Math.abs(edgeA.normalX)))
+            if(surface < 0 || !surface && ((x < y) == (edgeA.normalX > edgeA.normalY)))
                 continue;
 
             collisions.push({

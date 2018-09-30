@@ -6,5 +6,5 @@
 
 TEST(trivial, trivial_one_equal_one)
 {
-    ASSERT_EQ(1, 1);
+    ASSERT_EQ(1, (3 < 4) == (bool)-1);
 }

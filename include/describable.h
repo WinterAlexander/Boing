@@ -15,9 +15,14 @@ namespace boing {
  */
 class boing::describable {
 public:
-	virtual ~describable() {}
+	virtual ~describable() = default;
 
-	virtual std::ostream& describe(std::ostream& stream) const = 0;
+	/**
+	 * Makes the object describe itself into the specified stream by writing
+	 * a human readable representation of its content
+	 * @param stream to write the description in
+	 */
+	virtual void describe(std::ostream& stream) const = 0;
 };
 #endif //BOING_DESCRIBABLE_H
 
