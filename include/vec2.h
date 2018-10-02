@@ -25,15 +25,17 @@ public:
 
 	scalar_t x, y;
 
+	/**
+	 * Constructs a null vector
+	 */
+	vec2();
+
     /**
      * Constructs a vec2 from x and y components
      * @param x x component of the vector
      * @param y y component of the vector
      */
-    vec2(scalar_t x, scalar_t y)
-        : x(x), y(y) {
-
-    }
+    vec2(scalar_t x, scalar_t y);
 
 	void describe(std::ostream& stream) const override;
 

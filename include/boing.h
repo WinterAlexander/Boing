@@ -6,6 +6,7 @@
 
 namespace boing {
 	typedef int_fast32_t scalar_t;
+	typedef float weight_t;
 }
 
 

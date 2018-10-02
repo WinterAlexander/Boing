@@ -1,12 +1,18 @@
+#include <utility>
+
+#include <utility>
+
 
 #include <edge.h>
-
-#include "edge.h"
+#include "body.h"
 
 using std::min;
 using std::max;
 
-bool boing::edge::collision(const vec2& displ, const edge& other, boing::manifold& manifold) const
+boing::edge::edge(const boing::body& body, vec2 normal, scalar_t length, vec2 offset)
+		: body(body), normal(std::move(normal)), length(length), offset(std::move(offset)) {}
+
+bool boing::edge::collision(const vec2& displ, const edge& other, manifold& manifold) const
 {
 	if(normal != -other.normal)
 		return false;
@@ -38,7 +44,7 @@ bool boing::edge::collision(const vec2& displ, const edge& other, boing::manifol
 
 vec2 boing::edge::get_position() const
 {
-	return body.get_position() + offset;
+	return body.position + offset;
 }
 
 const vec2& boing::edge::get_offset() const
@@ -71,11 +77,11 @@ void boing::edge::set_length(boing::scalar_t length)
 	this->length = length;
 }
 
-boing::scalar_t boing::edge::contact_surface(vec2 posA,
+boing::scalar_t boing::edge::contact_surface(const vec2& posA,
 												scalar_t hLenA,
-												vec2 posB,
+                                                const vec2& posB,
 												scalar_t hLenB,
-												vec2 normal)
+                                                const vec2& normal)
 {
 	scalar_t maxA = normal.y * (posA.x + hLenA) + normal.x * (posA.y + hLenA);
 	scalar_t minA = normal.y * (posA.x - hLenA) + normal.x * (posA.y - hLenA);

@@ -6,7 +6,14 @@
 
 using boing::vec2;
 
-const vec2 vec2::ZERO = vec2(0, 0);
+const vec2 vec2::ZERO = vec2();
+
+boing::vec2::vec2() {}
+
+boing::vec2::vec2(boing::scalar_t x, boing::scalar_t y)
+		: x(x), y(y) {
+
+}
 
 boing::scalar_t boing::vec2::length() {
 	return scalar_t(sqrt(x * x + y * y));

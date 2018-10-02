@@ -2,11 +2,11 @@
 #define BOING_EDGE_H
 
 #include "vec2.h"
-#include "body.h"
 #include "manifold.h"
 
 namespace boing {
 	class edge;
+	class body;
 }
 
 using boing::body;
@@ -26,8 +26,7 @@ private:
 	scalar_t length;
 	vec2 offset;
 
-	edge(const boing::body& body, vec2 normal, scalar_t length, vec2 offset = vec2::ZERO)
-		: body(body), normal(normal), length(length), offset(offset) {}
+	edge(const boing::body& body, vec2 normal, scalar_t length, vec2 offset = vec2::ZERO);
 
 public:
 	bool collision(const vec2& displ, const edge& other, manifold& manifold) const;
@@ -44,7 +43,7 @@ public:
 	void set_length(scalar_t length);
 
 private:
-	static scalar_t contact_surface(vec2 posA, scalar_t hLenA, vec2 posB, scalar_t hLenB, vec2 normal);
+	static scalar_t contact_surface(const vec2& posA, scalar_t hLenA, const vec2& posB, scalar_t hLenB, const vec2& normal);
 };
 
 

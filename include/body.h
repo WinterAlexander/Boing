@@ -3,21 +3,21 @@
 #define BOING_BODY_H
 
 #include "vec2.h"
+#include "edge.h"
 #include "vector"
 
 namespace boing {
 	class body;
-	class edge;
 }
 
 using boing::edge;
 
-class boing::body {
-private:
+struct boing::body {
+	vec2 position, velocity;
 	std::vector<edge> edges;
+	weight_t weight;
 
-public:
-	const vec2& get_position() const;
+	body(vec2 position, vec2 velocity, const std::vector<edge>& edges, weight_t weight);
 };
 
 #endif //BOING_BODY_H

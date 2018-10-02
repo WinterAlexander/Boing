@@ -1,3 +1,5 @@
+#include <utility>
+
 #ifndef BOING_MANIFOLD_H
 #define BOING_MANIFOLD_H
 
@@ -14,10 +16,7 @@ struct boing::manifold {
 	vec2 penetration;
 	scalar_t surface;
 
-	manifold(vec2 penetration, scalar_t surface)
-		: penetration(penetration), surface(surface) {
-
-	}
+	manifold() : penetration(), surface() {}
 };
 
 #endif //BOING_MANIFOLD_H
