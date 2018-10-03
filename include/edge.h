@@ -21,7 +21,7 @@ using boing::vec2;
  */
 class boing::edge {
 private:
-	const body& body;
+	const boing::body& body;
 	vec2 normal;
 	scalar_t length;
 	vec2 offset;
