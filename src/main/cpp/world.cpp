@@ -5,8 +5,6 @@ using boing::world;
 using std::abs;
 
 void world::tick(float delta) {
-	std::sort(bodies.begin(), bodies.end(), greater_weight); // TODO sort on add
-
 	for(body& body : bodies)
 		move(body, body.velocity * delta, body.weight);
 }
@@ -51,6 +49,15 @@ bool world::move(body& bodyA, const vec2& displ, weight_t weight) {
 
 	bodyA.position += displ;
 	return true;
+}
+
+void boing::world::add_body(body&& body) {
+	bodies.push_back(std::move(body));
+	std::sort(bodies.begin(), bodies.end(), greater_weight);
+}
+
+const std::vector<body>& boing::world::get_bodies() const {
+	return bodies;
 }
 
 bool world::greater_weight(const body& i, const body& j) {

@@ -12,12 +12,16 @@ using boing::body;
 using boing::vec2;
 
 class boing::world {
-public:
 	std::vector<body> bodies;
 
+public:
 	void tick(float delta);
 
 	bool move(body& body, const vec2& displ, weight_t weight);
+
+	void add_body(body&& body);
+
+	const std::vector<body>& get_bodies() const;
 
 private:
 	static bool greater_weight(const body&, const body&);

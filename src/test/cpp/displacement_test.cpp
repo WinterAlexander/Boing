@@ -17,11 +17,11 @@ TEST(displacement_test, wall_crash)
 	bodyB.edges.push_back(edgeB);
 
 	world world;
-	world.bodies.push_back(bodyA);
-	world.bodies.push_back(bodyB);
+	world.add_body(std::move(bodyA));
+	world.add_body(std::move(bodyB));
 
 	world.tick(10.0f);
 
-	for(const body& body : world.bodies)
+	for(const body& body : world.get_bodies())
 		ASSERT_EQ(vec2(5, 0), body.position);
 }
