@@ -1,5 +1,6 @@
 
 #include <world.h>
+#include <algorithm>
 
 using boing::world;
 using std::abs;

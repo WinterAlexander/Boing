@@ -1,6 +1,7 @@
 
 #include <gtest/gtest.h>
 #include <boing.h>
+#include <vec2.h>
 
 using namespace boing;
 
