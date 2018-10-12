@@ -1,31 +1,23 @@
 #include "vec2.h"
-#include <sstream>
-#include <vec2.h>
-#include <cmath>
 
 
 using boing::vec2;
 
 const vec2 vec2::ZERO = vec2();
 
-boing::vec2::vec2() {}
+boing::vec2::vec2() = default;
 
 boing::vec2::vec2(boing::scalar_t x, boing::scalar_t y)
 		: x(x), y(y) {
 
 }
 
-boing::scalar_t boing::vec2::length() {
-	return scalar_t(sqrt(x * x + y * y));
+bool boing::vec2::is_zero() const {
+	return !x && !y;
 }
 
-boing::scalar_t boing::vec2::length_squared()
-{
-	return x * x + y * y;
-}
-
-void vec2::describe(std::ostream& stream) const {
-	stream << '(' << std::to_string(x) << ", " << std::to_string(y) << ')';
+std::ostream& boing::operator<<(std::ostream& stream, const vec2& vec) {
+	return stream << '(' << std::to_string(vec.x) << ", " << std::to_string(vec.y) << ')';
 }
 
 vec2 boing::vec2::operator+(const vec2& addend) const {
@@ -90,4 +82,32 @@ vec2 boing::operator*(boing::scalar_t scalar, const vec2& vector) {
 
 vec2 boing::operator/(boing::scalar_t scalar, const vec2& vector) {
 	return vector / scalar;
+}
+
+vec2 boing::vec2::operator*(float scalar) const {
+	return vec2((scalar_t)(x * scalar), (scalar_t)(y * scalar));
+}
+
+vec2 boing::vec2::operator/(float scalar) const {
+	return *this * (1.0f / scalar);
+}
+
+vec2 boing::operator*(float scalar, const vec2 &vector) {
+	return vector * scalar;
+}
+
+vec2 boing::operator/(float scalar, const vec2 &vector) {
+	return vector / scalar;
+}
+
+vec2 &boing::vec2::operator*=(float scalar) {
+	x = (scalar_t)(x * scalar);
+	y = (scalar_t)(y * scalar);
+	return *this;
+}
+
+vec2 &boing::vec2::operator/=(float scalar) {
+	x = (scalar_t)(x / scalar);
+	y = (scalar_t)(y / scalar);
+	return *this;
 }

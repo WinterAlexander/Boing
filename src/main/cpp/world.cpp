@@ -1,19 +1,20 @@
 
 #include <world.h>
-#include <algorithm>
 
 using boing::world;
+using std::abs;
 
 void world::tick(float delta) {
-	std::sort(bodies.begin(), bodies.end(), greater_weight);
-
-	const scalar_t t = scalar_t(1 / delta);
+	std::sort(bodies.begin(), bodies.end(), greater_weight); // TODO sort on add
 
 	for(body& body : bodies)
-		move(body, body.velocity / t, body.weight);
+		move(body, body.velocity * delta, body.weight);
 }
 
 bool world::move(body& bodyA, const vec2& displ, weight_t weight) {
+	if(displ.is_zero())
+		return false;
+
 	manifold manifold;
 	for(body& bodyB : bodies) {
 		if(&bodyA == &bodyB)

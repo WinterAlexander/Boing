@@ -1,8 +1,4 @@
 #include <utility>
-
-#include <utility>
-
-
 #include <edge.h>
 #include "body.h"
 
@@ -32,7 +28,7 @@ bool boing::edge::collision(const vec2& displ, const edge& other, manifold& mani
 
 	vec2 cA = posA + t * displ;
 
-	scalar_t surface = contact_surface(cA, length, posB, other.length, normal);
+	scalar_t surface = contact_surface(cA, length / 2, posB, other.length / 2, normal);
 
 	if(surface < 0 || (!surface && ((displ.x < displ.y) == (normal.y > normal.x))))
 		return false;

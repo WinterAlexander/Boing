@@ -1,6 +1,5 @@
 #include <iostream>
 #include "vec2.h"
-#include "describable.h"
 
 int main(int argc, char** argv) {
 	boing::vec2 vec(3, 1);

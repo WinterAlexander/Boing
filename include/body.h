@@ -7,7 +7,7 @@
 #include "vector"
 
 namespace boing {
-	class body;
+	struct body;
 }
 
 using boing::edge;
@@ -17,7 +17,9 @@ struct boing::body {
 	std::vector<edge> edges;
 	weight_t weight;
 
-	body(vec2 position, vec2 velocity, const std::vector<edge>& edges, weight_t weight);
+	body(vec2 position,
+			weight_t weight,
+			vec2 velocity = vec2::ZERO);
 };
 
 #endif //BOING_BODY_H

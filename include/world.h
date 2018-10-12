@@ -12,8 +12,9 @@ using boing::body;
 using boing::vec2;
 
 class boing::world {
-	std::vector<body> bodies;
 public:
+	std::vector<body> bodies;
+
 	void tick(float delta);
 
 	bool move(body& body, const vec2& displ, weight_t weight);

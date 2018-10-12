@@ -1,15 +1,19 @@
 #ifndef BOING_VEC2_H
 #define BOING_VEC2_H
 
-#include "describable.h"
 #include "boing.h"
+#include <ostream>
 
 namespace boing {
     class vec2;
 
 	vec2 operator*(scalar_t scalar, const vec2& vector);
-
 	vec2 operator/(scalar_t scalar, const vec2& vector);
+
+	vec2 operator*(float scalar, const vec2& vector);
+	vec2 operator/(float scalar, const vec2& vector);
+
+	std::ostream& operator<<(std::ostream& stream, const vec2& vec);
 }
 
 /**
@@ -19,7 +23,7 @@ namespace boing {
  *
  * Alexander Winter
  */
-class boing::vec2 : public boing::describable {
+class boing::vec2 {
 public:
 	static const vec2 ZERO;
 
@@ -37,11 +41,10 @@ public:
      */
     vec2(scalar_t x, scalar_t y);
 
-	void describe(std::ostream& stream) const override;
-
-    scalar_t length();
-
-    scalar_t length_squared();
+    /**
+     * @return true if all components are zero, otherwise false
+     */
+    bool is_zero() const;
 
     /**
      * Adds this vector and the specified vector from their components and
@@ -67,7 +70,7 @@ public:
 	vec2 operator-() const;
 
 	/**
-	 * Multiplies this vector by a scalar by multiplying each componentr
+	 * Multiplies this vector by a scalar by multiplying each component
 	 * @param scalar value to scale the vector with
 	 * @return scaled vector
 	 */
@@ -100,6 +103,12 @@ public:
 	vec2& operator-=(const vec2& minuend);
 	vec2& operator*=(scalar_t scalar);
 	vec2& operator/=(scalar_t scalar);
+
+	vec2 operator*(float scalar) const;
+	vec2 operator/(float scalar) const;
+
+	vec2& operator*=(float scalar);
+	vec2& operator/=(float scalar);
 };
 
 #endif //BOING_VEC2_H

@@ -6,7 +6,7 @@
 
 namespace boing {
 	class edge;
-	class body;
+	struct body;
 }
 
 using boing::body;
@@ -26,9 +26,9 @@ private:
 	scalar_t length;
 	vec2 offset;
 
+public:
 	edge(const boing::body& body, vec2 normal, scalar_t length, vec2 offset = vec2::ZERO);
 
-public:
 	bool collision(const vec2& displ, const edge& other, manifold& manifold) const;
 
 	vec2 get_position() const;
